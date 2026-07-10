@@ -54,6 +54,8 @@
 .blog__posts .article-card .card__information {
   padding-left: 2rem;
   padding-right: 2rem;
+  text-align: center;
+  grid-row-start: 1 !important;
 }
 
 .article-card__info {
@@ -139,4 +141,8 @@
       margin-bottom: 7rem;
     }
   }
+}
+
+.article-card__image .motion-reduce{
+  object-fit: cover !important;
 }

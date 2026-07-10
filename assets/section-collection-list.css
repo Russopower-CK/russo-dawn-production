@@ -1,6 +1,7 @@
 .collection-list {
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: .5;
+      border-bottom: 1.5px solid #cccccc;
 }
 
 .collection-list-title {

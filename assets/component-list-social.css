@@ -30,3 +30,6 @@
 .list-social__link:hover .icon {
   transform: scale(1.07);
 }
+.list-social__link:hover{
+  color: #be1e2d;
+}

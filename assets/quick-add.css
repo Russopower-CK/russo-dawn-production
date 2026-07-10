@@ -1,12 +1,13 @@
-.quick-add {
+.card-wrapper {
   position: relative;
-  grid-row-start: 4;
+  height: 100% !important;
+  min-height: unset !important;
+  flex: unset !important;
   margin: 0 0 1rem;
-  z-index: 1;
 }
 
 .card--card .quick-add {
-  margin: 0 1.3rem 1rem;
+  margin-top: auto;
 }
 
 .quick-add-modal {
@@ -267,7 +268,7 @@
 }
 
 .quick-add-modal__toggle:hover {
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgba(var(--color-foreground), 1);
 }
 
 .quick-add-modal__toggle .icon {
@@ -357,7 +358,7 @@ quick-add-modal .product-form__buttons {
 
 .quick-add__submit {
   padding: 0.8rem;
-  min-width: 100%;
+  min-width: 25%;
   box-sizing: border-box;
 }
 

@@ -72,15 +72,69 @@
         </div>
 
       {%- when 'share' -%}
-        <div
-          class="article-template__social-sharing page-width page-width--narrow{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          {{ block.shopify_attributes }}
-        >
-          {% assign share_url = request.origin | append: article.url %}
-          {% render 'share-button', block: block, share_link: share_url %}
+        <div class="article-sidebar">
+          <div
+            class="article-template__social-sharing page-width page-width--narrow{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {% assign share_url = request.origin | append: article.url %}
+            {% render 'share-button', block: block, share_link: share_url %}
+          </div>
         </div>
     {%- endcase -%}
   {%- endfor -%}
+  {% if blog.next_article or blog.previous_article %}
+    <div class="article--pagination page-width page-width--narrow">
+      {% assign current_found = false %}
+      {% assign done = false %}
+      {% for a in blog.articles %}
+        {% if current_found and done == false %}
+          {% assign next_article = a %}
+          {% assign done = true %}
+        {% endif %}
+
+        {% unless done %}
+          {% if a.id == article.id %}
+            {% assign current_found = true %}
+          {% else %}
+            {% assign prev_article = a %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+
+      {% if prev_article %}
+        <div class="article--pagination-item-left">
+          <a href="{{ prev_article.url }}">
+            <span class="article--pagination-chevron-left" aria-hidden="true">
+              {% render 'icon-chevron-down-small' %}
+            </span>
+            <span class="article--pagination-text">
+              {{ 'blogs.article.previous_article' | t }}
+              <span class="article--pagination-title">
+                {{ prev_article.title | escape }}
+              </span>
+            </span>
+          </a>
+        </div>
+      {% endif %}
+
+      {% if next_article %}
+        <div class="article--pagination-item-right">
+          <a href="{{ next_article.url }}">
+            <span class="article--pagination-text">
+              {{ 'blogs.article.next_article' | t }}
+              <span class="article--pagination-title">
+                {{ next_article.title | escape }}
+              </span>
+            </span>
+            <span class="article--pagination-chevron-right" aria-hidden="true">
+              {% render 'icon-chevron-down-small' %}
+            </span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
 
   <div class="article-template__back element-margin-top center{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
     <a href="{{ blog.url }}" class="article-template__link link animate-arrow">

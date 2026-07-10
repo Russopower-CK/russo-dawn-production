@@ -1,8 +1,5 @@
 slider-component {
-  --desktop-margin-left-first-item: max(
-    5rem,
-    calc((100vw - var(--page-width) + 10rem - var(--grid-desktop-horizontal-spacing)) / 2)
-  );
+
   position: relative;
   display: block;
 }
@@ -181,9 +178,6 @@ slider-component.slider-component-full-width {
     padding-left: 1.5rem;
   }
 
-  .slider--desktop.grid--5-col-desktop .grid__item {
-    width: calc((100% - var(--desktop-margin-left-first-item)) / 5 - var(--grid-desktop-horizontal-spacing) * 2);
-  }
 
   .slider--desktop.grid--4-col-desktop .grid__item {
     width: calc((100% - var(--desktop-margin-left-first-item)) / 4 - var(--grid-desktop-horizontal-spacing) * 3);
@@ -336,7 +330,7 @@ slider-component.slider-component-full-width {
 }
 
 .slider-button {
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgba(var(--color-forground), 1);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -348,11 +342,11 @@ slider-component.slider-component-full-width {
 }
 
 .slider-button:not([disabled]):hover {
-  color: rgb(var(--color-foreground));
+   transform: scale(1.05);
 }
 
 .slider-button .icon {
-  height: 0.6rem;
+  height: 100%;
 }
 
 .slider-button[disabled] .icon {

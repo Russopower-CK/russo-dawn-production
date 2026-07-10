@@ -159,6 +159,7 @@
 .facets {
   display: block;
   grid-column-start: span 2;
+  padding: 0;
 }
 
 .facets__form {
@@ -182,6 +183,7 @@
   color: rgba(var(--color-foreground), 0.85);
   font-size: 1.4rem;
   margin: -1.5rem 2rem 0 0;
+  font-weight: 600;
 }
 
 .facets__reset {
@@ -193,7 +195,7 @@
 }
 
 .facets__summary {
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgba(var(--color-foreground), 1);
   font-size: 1.4rem;
   padding: 0 1.75rem 0 0;
   margin-bottom: 1.5rem;
@@ -224,9 +226,14 @@
   transition: text-decoration var(--duration-short) ease;
 }
 
+.facets__summary-label {
+  display: inline-block;
+  transform-origin: left center;
+  transition: transform .2s ease;
+}
+
 .facets__summary:hover .facets__summary-label {
-  text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  transform: scale(1.1);
 }
 
 .facets__and-helptext {
@@ -1148,6 +1155,7 @@ input.mobile-facets__checkbox {
     padding-top: 1.5rem;
     margin-bottom: 0;
     padding-bottom: 1.5rem;
+    font-weight: 600;
   }
 
   .facets__heading--vertical {
@@ -1178,7 +1186,12 @@ input.mobile-facets__checkbox {
 
   .facets-vertical-form {
     display: flex;
-    justify-content: flex-end;
+  }
+  .facets .facets-vertical-sort{
+    justify-content: flex-start;
+    width: 100%;
+    padding:0;
+    text-align: left;
   }
 
   .product-count-vertical {

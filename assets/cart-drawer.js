@@ -5,6 +5,57 @@ class CartDrawer extends HTMLElement {
     this.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
     this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
     this.setHeaderCartIconAccessibility();
+
+    // ✅ NEW: delegate click for clear cart button
+    this.addEventListener('click', (event) => {
+      if (event.target.closest('.cart__checkout-button')) {
+        event.preventDefault();
+
+        if (!confirm('Are you sure you want to clear your cart?')) return;
+
+        this.clearCart();
+      }
+    });
+  }
+
+  // ✅ NEW METHOD
+  clearCart() {
+    const cartItems = this.querySelector('cart-drawer-items');
+    if (!cartItems) return;
+
+    const body = JSON.stringify({
+      sections: cartItems.getSectionsToRender().map((section) => section.section),
+      sections_url: window.location.pathname,
+    });
+
+    fetch('/cart/clear.js', { ...fetchConfig(), ...{ body } })
+      .then((response) => response.text())
+      .then((state) => {
+        const parsedState = JSON.parse(state);
+
+        // Mark empty UI state
+        this.classList.add('is-empty');
+
+        // Re-render sections (native Dawn pattern)
+        cartItems.getSectionsToRender().forEach((section) => {
+          const elementToReplace =
+            document.getElementById(section.id)?.querySelector(section.selector) ||
+            document.getElementById(section.id);
+
+          if (elementToReplace && parsedState.sections[section.section]) {
+            elementToReplace.innerHTML = new DOMParser()
+              .parseFromString(parsedState.sections[section.section], 'text/html')
+              .querySelector(section.selector).innerHTML;
+          }
+        });
+
+        // Notify rest of theme (updates icon bubble, etc.)
+        publish(PUB_SUB_EVENTS.cartUpdate, {
+          source: 'cart-clear',
+          cartData: parsedState,
+        });
+      })
+      .catch((e) => console.error('Cart clear failed:', e));
   }
 
   setHeaderCartIconAccessibility() {
@@ -26,11 +77,10 @@ class CartDrawer extends HTMLElement {
   }
 
   open(triggeredBy) {
-    if (this.classList.contains('active')) return;
     if (triggeredBy) this.setActiveElement(triggeredBy);
     const cartDrawerNote = this.querySelector('[id^="Details-"] summary');
     if (cartDrawerNote && !cartDrawerNote.hasAttribute('role')) this.setSummaryAccessibility(cartDrawerNote);
-    // here the animation doesn't seem to always get triggered. A timeout seem to help
+
     setTimeout(() => {
       this.classList.add('animate', 'active');
     });
@@ -44,15 +94,10 @@ class CartDrawer extends HTMLElement {
         const focusElement = this.querySelector('.drawer__inner') || this.querySelector('.drawer__close');
         trapFocus(containerToTrapFocusOn, focusElement);
       },
-      { once: true },
+      { once: true }
     );
 
     document.body.classList.add('overflow-hidden');
-
-    // cart-drawer-items is a CartItems subclass that extends createViewEventElement.
-    // Its `view-event-trigger="manual"` skips auto-dispatch on connect; we fire
-    // it here when the drawer opens, with `context: 'dialog'` from the payload attribute.
-    this.querySelector('cart-drawer-items')?.dispatchViewEvent();
   }
 
   close() {
@@ -70,7 +115,10 @@ class CartDrawer extends HTMLElement {
     }
 
     cartDrawerNote.addEventListener('click', (event) => {
-      event.currentTarget.setAttribute('aria-expanded', !event.currentTarget.closest('details').hasAttribute('open'));
+      event.currentTarget.setAttribute(
+        'aria-expanded',
+        !event.currentTarget.closest('details').hasAttribute('open')
+      );
     });
 
     cartDrawerNote.parentElement.addEventListener('keyup', onKeyUpEscape);
@@ -80,6 +128,7 @@ class CartDrawer extends HTMLElement {
     this.querySelector('.drawer__inner').classList.contains('is-empty') &&
       this.querySelector('.drawer__inner').classList.remove('is-empty');
     this.productId = parsedState.id;
+
     this.getSectionsToRender().forEach((section) => {
       const sectionElement = section.selector
         ? document.querySelector(section.selector)

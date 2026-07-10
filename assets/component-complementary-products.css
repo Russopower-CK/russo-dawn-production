@@ -116,7 +116,7 @@ product-recommendations.is-accordion + .accordion {
 }
 
 .complementary-products__container .quick-add__submit {
-  padding: 1.5rem 0;
+
   min-height: inherit;
 }
 
@@ -136,9 +136,7 @@ product-recommendations.is-accordion + .accordion {
   transition: transform var(--duration-short) ease;
 }
 
-.complementary-products__container .quick-add__submit:not(.animate-arrow):hover .icon-wrap {
-  transform: rotate(90deg);
-}
+
 
 .complementary-products__container .quick-add__submit:after,
 .complementary-products__container .quick-add__submit:hover:after {

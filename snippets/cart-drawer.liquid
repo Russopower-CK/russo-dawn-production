@@ -75,8 +75,6 @@
         </button>
       </div>
       <cart-drawer-items
-        view-event-payload="{{ cart | standard_event_data: 'view', context: 'dialog' | escape }}"
-        view-event-trigger="manual"
         {% if cart == empty %}
           class=" is-empty"
         {% endif %}
@@ -152,16 +150,9 @@
                             <p class="caption-with-letter-spacing light">{{ item.product.vendor }}</p>
                           {%- endif -%}
 
-                          <div class="cart-item__title">
-                            <a href="{{ item.url }}" class="cart-item__name h4 break">
-                              {{- item.product.title | escape -}}
-                            </a>
-                            {%- assign cart_disclosure_modal_id = 'CartDisclosureModal-drawer-' | append: item.key | replace: ':', '-' -%}
-                            {%- render 'cart-disclosure-indicator',
-                              product: item.product,
-                              modal_id: cart_disclosure_modal_id
-                            -%}
-                          </div>
+                          <a href="{{ item.url }}" class="cart-item__name h4 break">
+                            {{- item.product.title | escape -}}
+                          </a>
 
                           {%- if item.original_price != item.final_price -%}
                             <div class="cart-item__discounted-prices">
@@ -317,7 +308,6 @@
                                     class="quantity__input"
                                     type="number"
                                     data-quantity-variant-id="{{ item.variant.id }}"
-                                    data-quantity-line-key="{{ item.key }}"
                                     name="updates[]"
                                     value="{{ item.quantity }}"
                                     {% # theme-check-disable %}
@@ -587,6 +577,9 @@
           >
             {{ 'sections.cart.checkout' | t }}
           </button>
+          {% if cart.item_count > 0 %}
+            <button type="button" class="cart__checkout-button clear-cart button">Clear Cart</button>
+          {% endif %}
         </div>
       </div>
     </div>
