@@ -509,55 +509,6 @@
         "padding_bottom": 0
       }
     },
-    "1780355685d88cacff": {
-      "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_6496285_dGHJVW": {
-          "type": "ai_gen_block_6496285",
-          "settings": {
-            "desktop_width_percent": 100,
-            "columns_mobile": "2",
-            "gap": 30,
-            "padding": 25,
-            "background_color": "#000000",
-            "icon_size": 60,
-            "icon_spacing": 15,
-            "icon_color": "#cccccc",
-            "icon_hover_color": "#be1e2d",
-            "image_filter": "none",
-            "image_hover_filter": "brightness(0) saturate(100%) invert(18%) sepia(91%) saturate(2990%) hue-rotate(341deg) brightness(86%) contrast(96%)",
-            "title_size": 16,
-            "title_spacing": 10,
-            "title_color": "#ffffff",
-            "title_hover_color": "#be1e2d",
-            "text_size": 14,
-            "text_color": "#ffffff",
-            "text_hover_color": "#be1e2d",
-            "icon_1_content": "<svg class=\"icon-pin\" aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"44\" viewBox=\"0 0 30 44\" fill=\"none\" style=\"color: inherit; fill: none !important;\">\n  <path d=\"M29.0211 14.9787C29.0211 22.8819 23.5296 27.4279 19.4142 31.8298C16.9502 34.466 14.9786 43.0638 14.9786 43.0638C14.9786 43.0638 13.0126 34.4717 10.5542 31.8429C6.4351 27.4429 0.936035 22.8894 0.936035 14.9787C0.936035 11.2544 2.41551 7.68263 5.049 5.04914C7.68249 2.41565 11.2543 0.936172 14.9786 0.936172C18.7029 0.936172 22.2747 2.41565 24.9082 5.04914C27.5417 7.68263 29.0211 11.2544 29.0211 14.9787V14.9787Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M9.36182 14.9787C9.36182 16.4684 9.95361 17.8972 11.007 18.9506C12.0604 20.0039 13.4891 20.5957 14.9788 20.5957C16.4686 20.5957 17.8973 20.0039 18.9507 18.9506C20.0041 17.8972 20.5959 16.4684 20.5959 14.9787C20.5959 13.489 20.0041 12.0603 18.9507 11.0069C17.8973 9.95349 16.4686 9.36169 14.9788 9.36169C13.4891 9.36169 12.0604 9.95349 11.007 11.0069C9.95361 12.0603 9.36182 13.489 9.36182 14.9787Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>",
-            "icon_1_title": "Find a store near you",
-            "icon_1_text": "Find a store near you",
-            "icon_1_link": "shopify://pages/storelocator",
-            "icon_2_content": "<svg class=\"icon-delivery\" aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" xmlns=\"http://w3.org\" width=\"54\" height=\"44\" viewBox=\"0 0 54 44\" fill=\"none\" style=\"color: inherit; fill: none !important;\">\n  <path d=\"M5.5 22H18.7\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M6.6001 38.5C6.6001 39.667 7.06367 40.7861 7.88883 41.6113C8.71399 42.4364 9.83314 42.9 11.0001 42.9C12.167 42.9 13.2862 42.4364 14.1114 41.6113C14.9365 40.7861 15.4001 39.667 15.4001 38.5C15.4001 37.333 14.9365 36.2139 14.1114 35.3887C13.2862 34.5636 12.167 34.1 11.0001 34.1C9.83314 34.1 8.71399 34.5636 7.88883 35.3887C7.06367 36.2139 6.6001 37.333 6.6001 38.5V38.5Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M37.3999 38.5C37.3999 39.667 37.8635 40.7861 38.6886 41.6113C39.5138 42.4364 40.6329 42.9 41.7999 42.9C42.9669 42.9 44.086 42.4364 44.9112 41.6113C45.7363 40.7861 46.1999 39.667 46.1999 38.5C46.1999 37.333 45.7363 36.2139 44.9112 35.3887C44.086 34.5636 42.9669 34.1 41.7999 34.1C40.6329 34.1 39.5138 34.5636 38.6886 35.3887C37.8635 36.2139 37.3999 37.333 37.3999 38.5Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M6.6001 38.5H2.2001C1.90836 38.5 1.62857 38.3841 1.42228 38.1778C1.21599 37.9715 1.1001 37.6917 1.1001 37.4V26.8554C1.10016 26.5642 1.21567 26.285 1.4213 26.0788L5.5001 22L10.3709 13.2308C10.5615 12.888 10.8403 12.6025 11.1784 12.4036C11.5164 12.2048 11.9015 12.1 12.2937 12.1H18.7001V2.20001C18.7001 1.90827 18.816 1.62848 19.0223 1.42219C19.2286 1.2159 19.5084 1.10001 19.8001 1.10001H50.6001C50.8918 1.10001 51.1716 1.2159 51.3779 1.42219C51.5842 1.62848 51.7001 1.90827 51.7001 2.20001V37.4C51.7001 37.6917 51.5842 37.9715 51.3779 38.1778C51.1716 38.3841 50.8918 38.5 50.6001 38.5H46.2001\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M15.3999 38.5H37.3999\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M18.7002 12.1V34.1\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M1.1001 34.1H51.7001\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>",
-            "icon_2_title": "Schedule a demo",
-            "icon_2_text": "Test drive equipment",
-            "icon_2_link": "shopify://pages/request-demo",
-            "icon_3_content": "<div class=\"highlights-banner__icon\" style=\"width: 50px; height: 50px; display: inline-flex;\">\n  <img \n    src=\"//russopower.com/cdn/shop/files/Event-Calendar_150x155.png?v=1678985190\" \n    alt=\"Events Calendar\" \n    data-rimg=\"\" \n    srcset=\"//russopower.com/cdn/shop/files/Event-Calendar_150x155.png?v=1678985190 1x, //russopower.com/cdn/shop/files/Event-Calendar_180x186.png?v=1678985190 1.2x\" \n    class=\"highlights-banner__custom-icon\" \n    style=\"width: 100%; height: 100%; object-fit: contain;\"\n  >\n</div>",
-            "icon_3_title": "Events Calendar",
-            "icon_3_text": "Stay up-to-date on upcoming events.",
-            "icon_3_link": "shopify://pages/events",
-            "icon_4_content": "<div class=\"highlights-banner__icon\" style=\"width: 50px; height: 50px; display: inline-flex;\">\n  <img \n    src=\"//russopower.com/cdn/shop/files/Seasonal-Russo-Catalog_145x220.png?v=1678985170\" \n    alt=\"Russo Catalog\" \n    class=\"highlights-banner__custom-icon\" \n    style=\"width: 100%; height: 100%; object-fit: contain;\"\n  >\n</div>",
-            "icon_4_title": "Russo Catalog",
-            "icon_4_text": "Digital copy of our in-store catalog.",
-            "icon_4_link": "shopify://pages/seasonal-catalog"
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_6496285_dGHJVW"
-      ],
-      "settings": {}
-    },
     "image_with_text_yjidL3": {
       "type": "image-with-text",
       "blocks": {
@@ -840,7 +791,6 @@
     "collection_list_jGnyLK",
     "featured_collection",
     "multirow_9Bkf8d",
-    "1780355685d88cacff",
     "image_with_text_yjidL3",
     "image_with_text_zGqWLt",
     "russo_testimonial_4GEURr"
