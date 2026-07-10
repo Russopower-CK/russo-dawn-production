@@ -8,6 +8,8 @@
 .card {
   text-decoration: none;
   text-align: var(--text-alignment);
+    position: relative;
+  overflow: visible;
 }
 
 .card:not(.ratio) {
@@ -136,7 +138,6 @@
 
 .card__information {
   grid-row-start: 2;
-  padding: 1.3rem 1rem;
 }
 
 .card:not(.ratio) > .card__content {
@@ -146,7 +147,7 @@
 .card-information .card__information-volume-pricing-note {
   margin-top: 0.6rem;
   line-height: calc(0.5 + 0.4 / var(--font-body-scale));
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgba(var(--color-foreground), 1);
 }
 
 .card__information-volume-pricing-note--button,
@@ -265,8 +266,7 @@
 
 @media screen and (min-width: 750px) {
   .card__information {
-    padding-bottom: 1.7rem;
-    padding-top: 1.7rem;
+    align-content: flex-end;
   }
 }
 
@@ -291,7 +291,7 @@
 
 .card__media .media img {
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center center;
   width: 100%;
 }
@@ -402,8 +402,7 @@
   }
 
   .underline-links-hover:hover a {
-    text-decoration: underline;
-    text-underline-offset: 0.3rem;
+    color: var(--russo-red--dark);
   }
 }
 
@@ -479,7 +478,7 @@
 }
 
 .card--horizontal .card-information > .price {
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgba(var(--color-foreground), 1);
 }
 
 .card-information > .rating {

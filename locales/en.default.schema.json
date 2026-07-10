@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "settings_schema": {
     "global": {
@@ -266,6 +275,10 @@
           "label": "TikTok",
           "info": "https://tiktok.com/@shopify"
         },
+        "social_linkdin_link":{
+          "label": "Linkdin",
+          "info": "https://linkdin.com/company/shopify"
+        },
         "social_tumblr_link": {
           "label": "Tumblr",
           "info": "https://shopify.tumblr.com"
@@ -292,6 +305,10 @@
         },
         "predictive_search_show_vendor": {
           "label": "Product vendor",
+          "info": "Shown when search suggestions enabled"
+        },
+        "predictive_search_show_sku": {
+          "label": "Product SKU",
           "info": "Shown when search suggestions enabled"
         },
         "predictive_search_show_price": {
@@ -364,6 +381,154 @@
     }
   },
   "sections": {
+        "featured_collection": {
+      "name": "Featured collection",
+      "title": {
+        "label": "Heading"
+      },
+      "layout": {
+        "desktop_label": "Desktop layout",
+        "mobile_label": "Mobile layout",
+        "option_1": "Grid",
+        "option_2": "Slideshow"
+      },
+      "collection": {
+        "label": "Collection"
+      },
+      "product_count": {
+        "label": "Number of products"
+      },
+      "header_1": {
+        "content": "Call to action"
+      },
+      "cta_label": {
+        "label": "Label"
+      },
+      "cta_button_style": {
+        "label": "Button style",
+        "option_1": "Primary",
+        "option_2": "Secondary"
+      },
+      "blocks": {
+        "title_card": {
+          "name": "Title card",
+          "image": {
+            "desktop_label": "Image",
+            "mobile_label": "Mobile image",
+            "info": "500 x 750px .jpg recommended"
+          },
+          "horizontal_size": {
+            "label": "Horizontal state on desktop",
+            "option_1": "1 column",
+            "option_2": "2 columns",
+            "option_3": "3 columns"
+          },
+          "vertical_size": {
+            "label": "Vertical state on desktop",
+            "option_1": "1 row",
+            "option_2": "2 rows"
+          },
+          "text_alignment": {
+            "label": "Text alignment",
+            "option_1": "Top left",
+            "option_2": "Top center",
+            "option_3": "Top right",
+            "option_4": "Center left",
+            "option_5": "Center center",
+            "option_6": "Center right",
+            "option_7": "Bottom left",
+            "option_8": "Bottom center",
+            "option_9": "Bottom right"
+          },
+          "pre_heading": {
+            "label": "Pre-heading"
+          },
+          "heading": {
+            "label": "Heading"
+          },
+          "text_color": {
+            "label": "Text color"
+          },
+          "show_on_mobile": {
+            "label": "Show title card on mobile"
+          },
+          "enable_full_width_on_mobile": {
+            "label": "Enable full width on mobile"
+          },
+          "header_1": {
+            "content": "Call to action"
+          },
+          "cta_label": {
+            "label": "Label"
+          },
+          "header_2": {
+            "content": "Overlay"
+          },
+          "overlay_color": {
+            "label": "Color"
+          },
+          "overlay_opacity": {
+            "label": "Opacity"
+          },
+          "header_3": {
+            "content": "Grid layout"
+          }
+        },
+        "view_all_card": {
+          "name": "View all card",
+          "image": {
+            "desktop_label": "Image",
+            "mobile_label": "Mobile image",
+            "info": "500 x 750px .jpg recommended"
+          },
+          "text_alignment": {
+            "label": "Text alignment",
+            "option_1": "Top left",
+            "option_2": "Top center",
+            "option_3": "Top right",
+            "option_4": "Center left",
+            "option_5": "Center center",
+            "option_6": "Center right",
+            "option_7": "Bottom left",
+            "option_8": "Bottom center",
+            "option_9": "Bottom right"
+          },
+          "pre_heading": {
+            "label": "Pre-heading"
+          },
+          "heading": {
+            "label": "Heading"
+          },
+          "text_color": {
+            "label": "Text color"
+          },
+          "header_1": {
+            "content": "Overlay"
+          },
+          "overlay_color": {
+            "label": "Color"
+          },
+          "overlay_opacity": {
+            "label": "Opacity"
+          },
+          "header_2": {
+            "content": "Grid layout"
+          },
+          "show_on_mobile": {
+            "label": "Show view all card on mobile"
+          },
+          "enable_full_width_on_mobile": {
+            "label": "Enable full width on mobile"
+          }
+        }
+      },
+      "presets": {
+        "featured_collection": {
+          "name": "Featured collection",
+          "category": "Collection"
+        }
+      }
+    },
     "all": {
       "animation": {
         "content": "Animations",
@@ -684,6 +849,23 @@
         "name": "Custom Liquid"
       }
     },
+    "custom-html": {
+      "name": "Custom HTML",
+      "settings": {
+        "title": {
+          "label": "Heading"
+        },
+        "custom-html": {
+          "label": "HTML"
+        }
+      },
+      "presets": {
+        "custom-html": {
+          "name": "Custom HTML",
+          "category": "Advanced"
+        }
+      }
+    },
     "featured-blog": {
       "name": "Blog posts",
       "settings": {
@@ -810,6 +992,9 @@
         "show_vendor": {
           "label": "Vendor"
         },
+          "show_sku":{
+            "label": "SKU"
+          },
         "show_rating": {
           "label": "Product rating",
           "info": "An app is required for ratings. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#featured-collection-show-product-rating)"
@@ -1086,6 +1271,9 @@
         "menu": {
           "label": "Menu"
         },
+        "secondarymenu": {
+          "label": "Secondary Menu"
+        },
         "menu_type_desktop": {
           "label": "Menu type",
           "options__1": {
@@ -1148,6 +1336,10 @@
         "enable_customer_avatar": {
           "label": "Customer account avatar",
           "info": "Only visible when customers are signed in with Shop. [Manage customer accounts](/admin/settings/customer_accounts)"
+        },
+        "enable_store_selector": {
+          "label": "enable Russo Store Selector",
+          "info": "Display the store selector for the customer to choose which location they are shopping with."
         }
       }
     },
@@ -1808,6 +2000,9 @@
         "show_vendor": {
           "label": "Vendor"
         },
+        "show_sku": {
+          "label": "SKU"
+        },
         "show_rating": {
           "label": "Product rating",
           "info": "An app is required for product ratings. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/page-types/collection-pages#product-grid-show-product-rating)"
@@ -1950,6 +2145,9 @@
         },
         "price": {
           "name": "Price"
+        },
+        "vendor":{
+          "name": "Russo Vendor"
         },
         "inventory": {
           "name": "Inventory status",
@@ -2276,6 +2474,10 @@
                 "label": "Vertical"
               }
             },
+            "content":{
+              "info": "header",
+              "label": "header"
+            },
             "pairing_1": {
               "label": "Pairing 1",
               "info": "Choose an icon or add an image for each pairing"
@@ -2447,6 +2649,9 @@
         },
         "show_vendor": {
           "label": "Vendor"
+        },
+        "show_sku": {
+          "label": "SKU"
         },
         "show_rating": {
           "label": "Product rating",
@@ -2823,6 +3028,9 @@
         },
         "show_vendor": {
           "label": "Vendor"
+        },
+        "show_sku": {
+          "label": "SKU"
         },
         "show_rating": {
           "label": "Product rating",
@@ -3395,20 +3603,6 @@
       },
       "presets": {
         "name": "Collapsible content"
-      }
-    },
-    "disclosures": {
-      "name": "Disclosures",
-      "settings": {
-        "paragraph": {
-          "content": "Required safety warnings and regulatory disclosures for this product."
-        },
-        "heading": {
-          "label": "Heading"
-        },
-        "open_by_default": {
-          "label": "Open by default"
-        }
       }
     }
   }

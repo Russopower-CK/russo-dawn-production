@@ -1,30 +1,105 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-product",
       "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "vendor_y6mkmB": {
+          "type": "vendor",
+          "settings": {}
+        },
         "vendor": {
           "type": "text",
+          "disabled": true,
           "settings": {
             "text": "{{ product.vendor }}",
             "text_style": "uppercase"
           }
         },
-        "title": {
-          "type": "title"
+        "sku_fiQbh9": {
+          "type": "sku",
+          "settings": {
+            "text_style": "body"
+          }
+        },
+        "caption": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.metafields.descriptors.subtitle.value }}",
+            "text_style": "subtitle"
+          }
+        },
+        "rating_iJ8kYA": {
+          "type": "rating",
+          "settings": {}
         },
         "price": {
-          "type": "price"
+          "type": "price",
+          "settings": {}
+        },
+        "forms_inline_FfYkb4": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "467935",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        },
+        "custom_liquid_AU4r7J": {
+          "type": "custom_liquid",
+          "name": "Hide product URL in quote form",
+          "settings": {
+            "custom_liquid": "<script>\n  document.addEventListener(\"DOMContentLoaded\", function () {\n    console.log(\"🚀 Script started: Waiting for Shopify Forms app to load...\");\n\n    const maxAttempts = 30;\n    let attempts = 0;\n\n    const interval = setInterval(() => {\n      attempts++;\n      console.log(`🔄 Attempt ${attempts}/${maxAttempts}: Checking for <form-embed>...`);\n\n      const formEmbed = document.getElementById('app-embed'); \n\n      if (formEmbed && formEmbed.shadowRoot) {\n        console.log(\"✅ <form-embed> and shadowRoot found.\");\n\n        // --- Update custom#product with product ID ---\n        const productInput = formEmbed.shadowRoot.querySelector('input#custom\\\\#product_id_request_quote');\n        const productId = window.Shopify?.product?.id || window.meta?.product?.id || window.__st?.rid;\n        const productLabel = formEmbed.shadowRoot.querySelector('label[for=\"label-custom#product_id_request_quote\"]');\n        if (productInput && productId) {\n          productInput.value = productId;\n          productInput.dispatchEvent(new Event('input', { bubbles: true }));\n          productInput.style.display = 'none';\n         if (productLabel) productLabel.style.display = 'none';\n\n          console.log(\"✅ Updated 'custom#product' with product ID:\", productId);\n        } else {\n          console.warn(\"⚠️ Could not update 'custom#product'. Input or product ID missing.\");\n        }\n\n        // --- Update variant_id with current URL ---\n        const variantInput = formEmbed.shadowRoot.querySelector('input#custom\\\\#url_request_quote');\n        const currentUrl = window.location.href;\n        const urlLabel = formEmbed.shadowRoot.querySelector('label[for=\"label-custom#url_request_quote\"]');\n\n        if (variantInput) {\n          variantInput.value = currentUrl;\n          variantInput.dispatchEvent(new Event('input', { bubbles: true }));\n          variantInput.style.display = 'none';\n          if (urlLabel) urlLabel.style.display = 'none';\n          console.log(\"🌐 Stored current URL in 'variant_id':\", currentUrl);\n        } else {\n          console.warn(\"⚠️ Input 'variant_id' not found in shadow DOM.\");\n        }\n\n\n\n        clearInterval(interval);\n      } else {\n        console.log(\"⏳ <form-embed> or shadowRoot not ready yet.\");\n      }\n\n      if (attempts >= maxAttempts) {\n        console.warn(\"⛔ Max attempts reached. Stopping script.\");\n        clearInterval(interval);\n      }\n    }, 300);\n  });\n</script>"
+          }
+        },
+        "volume_discounts_V8EeCc": {
+          "type": "volume_discounts",
+          "settings": {}
+        },
+        "russo_inventory_TnT4xY": {
+          "type": "russo-inventory",
+          "settings": {
+            "text_style": "body",
+            "inventory_threshold": 10,
+            "show_inventory_quantity": true
+          }
         },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
-            "picker_type": "button",
+            "picker_type": "dropdown",
             "swatch_shape": "circle"
           }
         },
         "quantity_selector": {
-          "type": "quantity_selector"
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
         },
         "buy_buttons": {
           "type": "buy_buttons",
@@ -33,8 +108,58 @@
             "show_gift_card_recipient": true
           }
         },
-        "description": {
-          "type": "description"
+        "collapsible-row-0": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Materials",
+            "icon": "leather",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible-row-1": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "",
+            "page": "shipping-information"
+          }
+        },
+        "collapsible-row-2": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Dimensions",
+            "icon": "ruler",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible-row-3": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Care Instructions",
+            "icon": "heart",
+            "content": "",
+            "page": ""
+          }
+        },
+        "complementary_96fkpz": {
+          "type": "complementary",
+          "settings": {
+            "block_heading": "Frequently bought together",
+            "make_collapsible_row": true,
+            "icon": "price_tag",
+            "product_list_limit": 10,
+            "products_per_page": 3,
+            "pagination_style": "counter",
+            "image_ratio": "square",
+            "enable_quick_add": true
+          }
         },
         "share": {
           "type": "share",
@@ -44,60 +169,258 @@
         }
       },
       "block_order": [
-        "vendor",
         "title",
+        "vendor_y6mkmB",
+        "vendor",
+        "sku_fiQbh9",
+        "caption",
+        "rating_iJ8kYA",
         "price",
+        "forms_inline_FfYkb4",
+        "custom_liquid_AU4r7J",
+        "volume_discounts_V8EeCc",
+        "russo_inventory_TnT4xY",
         "variant_picker",
         "quantity_selector",
-        "buy_buttons",
         "description",
+        "buy_buttons",
+        "collapsible-row-0",
+        "collapsible-row-1",
+        "collapsible-row-2",
+        "collapsible-row-3",
+        "complementary_96fkpz",
         "share"
       ],
       "settings": {
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
-        "media_position": "left",
-        "gallery_layout": "stacked",
-        "media_size": "large",
+        "media_size": "small",
         "constrain_to_viewport": true,
-        "media_fit": "contain",
+        "media_fit": "cover",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "show",
+        "media_position": "left",
         "image_zoom": "lightbox",
-        "mobile_thumbnails": "hide",
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
         "padding_bottom": 12
       }
     },
-    "disclosures": {
-      "type": "disclosures",
+    "1780364975792bc26e": {
+      "type": "apps",
+      "blocks": {
+        "russo_power_app_order_form_buttons_block_Y87GGH": {
+          "type": "shopify://apps/russo-power-app/blocks/order-form-buttons-block/019cdf49-0784-7140-88d1-15f17e0a6eef",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "russo_power_app_order_form_buttons_block_Y87GGH"
+      ],
+      "custom_css": [
+        ".orderform-buttons {justify-content: flex-end;}"
+      ],
       "settings": {
+        "include_margins": true
+      }
+    },
+    "custom_liquid_NMXtdH": {
+      "type": "custom-liquid",
+      "custom_css": [
+        ".rte {padding-left: 25px; padding-right: 25px; margin-left: 25px; max-width: var(--page-width); align-content: center; justify-self: center;}"
+      ],
+      "name": "California Warning",
+      "settings": {
+        "custom_liquid": "<div class=\"rte\" data-rte=\"\">\n    <p><strong><img alt=\"⚠ #2\" data-entity-type=\"\" data-entity-uuid=\"\" src=\"https://cdn.shopify.com/s/files/1/0691/3340/2417/files/warning.svg?v=1707249648\" style=\"width: 20px; height: 18px; margin-bottom: 6px;\">&nbsp;WARNING</strong>: This product can expose you to chemicals, which are known to the State of California to cause cancer and, which are know to the the State of California to cause birth defects or other reproductive harm. For more information, go to <a href=\"https://www.P65Warnings.ca.gov\" target=\"_blank\">www.P65Warnings.ca.gov</a>.</p>\n  </div>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "blocks": {
+        "image-with-text-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image with text",
+            "heading_size": "h1"
+          }
+        },
+        "image-with-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "image-with-text-0",
+        "image-with-text-1"
+      ],
+      "disabled": true,
+      "settings": {
+        "height": "small",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "scheme-2",
         "padding_top": 36,
-        "padding_bottom": 0
+        "padding_bottom": 36
+      }
+    },
+    "multicolumn": {
+      "type": "multicolumn",
+      "blocks": {
+        "column-0": {
+          "type": "column",
+          "settings": {
+            "title": "Free Shipping",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column-1": {
+          "type": "column",
+          "settings": {
+            "title": "Hassle-Free Exchanges",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column-0",
+        "column-1"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "button_label": "",
+        "button_link": "",
+        "columns_desktop": 2,
+        "column_alignment": "left",
+        "background_style": "none",
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "related-products": {
       "type": "related-products",
+      "custom_css": [
+        ".related-products__heading {text-align: center;}"
+      ],
       "settings": {
         "heading": "You may also like",
         "heading_size": "h2",
-        "products_to_show": 4,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
+        "products_to_show": 5,
+        "columns_desktop": 5,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
         "image_ratio": "square",
         "image_shape": "default",
         "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "columns_mobile": "2",
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
         "padding_top": 36,
-        "padding_bottom": 28
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_Yrm3dA": {
+      "type": "featured-collection",
+      "custom_css": [
+        ".collection__title {text-align: center;}"
+      ],
+      "name": "Common Parts",
+      "settings": {
+        "collection": "{{ product.metafields.custom.model_parts.value }}",
+        "products_to_show": 10,
+        "title": "Common Parts",
+        "heading_size": "h2",
+        "description": "",
+        "hide_no_products": true,
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 5,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "recently_viewed_m4yx7i": {
+      "type": "recently-viewed",
+      "custom_css": [
+        ".recently-viewed-section-wrapper {text-align: center;}"
+      ],
+      "name": "Russo Recently Viewed",
+      "settings": {
+        "heading": "Recently Viewed",
+        "heading_size": "h2",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "1782321564694aabef": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_Ut837r": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "hide_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_Ut837r"
+      ],
+      "settings": {
+        "include_margins": true
       }
     }
   },
   "order": [
     "main",
-    "disclosures",
-    "related-products"
+    "1780364975792bc26e",
+    "custom_liquid_NMXtdH",
+    "image-with-text",
+    "multicolumn",
+    "related-products",
+    "featured_collection_Yrm3dA",
+    "recently_viewed_m4yx7i",
+    "1782321564694aabef"
   ]
 }

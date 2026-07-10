@@ -18,7 +18,7 @@
 }
 
 .article-template__hero-medium {
-  height: 22rem;
+  height: 500px;
 }
 
 .article-template__hero-large {
@@ -91,9 +91,55 @@
   margin-top: 3rem;
   margin-bottom: 3rem;
 }
+.article--pagination {
+  width: 100%;
+  margin-top: 4.25rem;
+}
+.article--pagination .article--pagination-item-right {
+  float: right;
+  text-align: right;
+}
+.article--pagination .article--pagination-text {
+  font-style: normal;
+  font-weight: 700;
+  font-size: var(--font-size-body);
+  display: inline-block;
+  width: calc(100% - (8px + 0.3125rem));
+  vertical-align: top;
+  color: var(--russo-red-dark);
+}
+.article--pagination .article--pagination-title {
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--font-size-body-small);
+  margin-top: 0.25rem;
+  line-height: 1.46;
+  color: #000000;
+}
+@media screen and (min-width: 680px) {
+  .article--pagination .article--pagination-chevron-left {
+    position: absolute;
+    left: calc(-8px - 0.3125rem);
+  }
+}
+.article--pagination .article--pagination-item-left,
+.article--pagination .article--pagination-item-right {
+  position: relative;
+  display: inline-block;
+  max-width: 40%;
+  width: 100%;
+}
 
-.article-template__social-sharing {
-  margin-top: 3rem;
+.article--pagination .article--pagination-chevron-right,
+.article--pagination .article--pagination-chevron-left {
+  margin-top: 0.5rem;
+}
+.article--pagination .article--pagination-chevron-left {
+  margin-right: 0.3125rem;
+  margin-left: 0;
+}
+.article--pagination .article--pagination-chevron-left svg {
+  transform: rotate(90deg);
 }
 
 .article-template__social-sharing + header,
@@ -132,7 +178,7 @@
 }
 
 .article-template__comments-comment {
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgba(var(--color-foreground), 1);
   background-color: rgb(var(--color-background));
   margin-bottom: 1.5rem;
   padding: 2rem 2rem 1.5rem;

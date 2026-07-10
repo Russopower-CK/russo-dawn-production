@@ -1,75 +1,848 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "slideshow_9myT39": {
+      "type": "slideshow",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "slide_8AYhjw": {
+          "type": "slide",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "image": "shopify://shop_images/EchoHC-2020-hedge-trimmer_IMGL3285.jpg",
+            "image_overlay_opacity": 40,
+            "heading": "<strong>Sculpt. Trim. Perfect.</strong>",
+            "heading_size": "h1",
+            "subheading": "<strong>Upgrade Your Crew’s Cutting Power.</strong>",
+            "button_label": "SHOP ECHO HEDGE TRIMMERS",
+            "link": "https://russopower.com/collections/hedge-trimmers?filter.p.vendor=ECHO",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
           }
         },
-        "button": {
-          "type": "buttons",
+        "slide_N3884K": {
+          "type": "slide",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "image": "shopify://shop_images/Toro-Grandstand.png",
+            "image_overlay_opacity": 30,
+            "heading": "Fast. Maneuverable. Productive.",
+            "heading_size": "h2",
+            "subheading": "Tough bumps and challenging terrain are all in a day’s work. Feeling them shouldn’t have to be. The Toro GrandStand combines the speed and comfort of a zero-turn rider with the on-and-off ease of a wide area walk-behind.",
+            "button_label": "SHOP NOW",
+            "link": "https://russopower.com/products/toro-72513-grandstand-60-in-stand-on-mower?_pos=3&_psq=72513&_ss=e&_v=1.0",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_hJGYwx": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BeltsValpo_1.jpg",
+            "image_overlay_opacity": 50,
+            "heading": "<strong>Don't Let a Snapped Belt Stall Your Crew!</strong>",
+            "heading_size": "h1",
+            "subheading": "<strong>Shop Essential Belts & Parts Today!</strong>",
+            "button_label": "SHOP MOWER PARTS",
+            "link": "shopify://collections/lawn-mower-parts",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_xTxXVX": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG_5301.heic",
+            "image_overlay_opacity": 20,
+            "heading": "<strong>Ready For A Test Drive?</strong>",
+            "heading_size": "h1",
+            "subheading": "<strong>We bring the power to you! Schedule an on-site demo today!</strong>",
+            "button_label": "REQUEST A DEMO",
+            "link": "shopify://pages/request-demo",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_z8LHbe": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/TrailerFleet20-6.png",
+            "image_overlay_opacity": 40,
+            "heading": "<strong>Powering the Progress: Power Fleet Program</strong>",
+            "heading_size": "h2",
+            "subheading": "<strong>Protect your crew and your profit! Russo offers custom fleet programs to help improve your efficiency, productivity, and quality of your business!</strong>",
+            "button_label": "LEARN MORE",
+            "link": "shopify://pages/power-fleet-program",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_Mephzj": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Russo-GrubPreventative.png",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>Step 3: Summer Fertilizer & Grub Prevention</strong>",
+            "heading_size": "h1",
+            "subheading": "<strong>Grub Control: How to Evict Lawn Pests Before They Move In</strong>",
+            "button_label": "LEARN MORE",
+            "link": "shopify://blogs/powering-productivity/grub-control-how-to-evict-lawn-pests-before-they-move-in",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_GwVcWP": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/sw21_4738s_22370_tx1300_boxrake_0578_proof-_1.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>0% for up to 60mo -OR- 1.99% for 72mo</strong>",
+            "heading_size": "h1",
+            "subheading": "<strong>Premium performance, now with better pricing on the powerful Toro Dingo, compact utility loader! Great for digging or hauling!</strong>",
+            "button_label": "SHOP DINGOS",
+            "link": "https://russopower.com/collections/compact-utility-loaders?filter.p.vendor=Toro&utm_source=website&utm_medium=slider&utm_campaign=toro-dingo",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_hfmrxN": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Trailer_Elgin_1.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>Haul More. Mow More. Earn More.</strong>",
+            "heading_size": "h1",
+            "subheading": "<strong>Trailers That Work as Hard as Your Crew.</strong>",
+            "button_label": "BROWSE IN-STOCK TRAILERS",
+            "link": "shopify://collections/trailers",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_ECbQFf": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ToolsSuppliesRusso-7.jpg",
+            "image_overlay_opacity": 40,
+            "heading": "Let's Talk Dirty",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "SHOP SHOVELS",
+            "link": "shopify://collections/shovels",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "slide_8AYhjw",
+        "slide_N3884K",
+        "slide_hJGYwx",
+        "slide_xTxXVX",
+        "slide_z8LHbe",
+        "slide_Mephzj",
+        "slide_GwVcWP",
+        "slide_hfmrxN",
+        "slide_ECbQFf"
       ],
+      "custom_css": [],
+      "name": "t:sections.slideshow.presets.name",
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
+        "layout": "full_bleed",
+        "slide_height": "small",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
         "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "show_text_below": false,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "russo_featured_collection_list_LWYBQQ": {
+      "type": "russo-featured-collection-list",
+      "blocks": {
+        "collection_VemmLD": {
+          "type": "collection",
+          "settings": {
+            "collection": "toro"
+          }
+        },
+        "collection_Mnci3Y": {
+          "type": "collection",
+          "settings": {
+            "collection": "echo"
+          }
+        },
+        "collection_gWkwPy": {
+          "type": "collection",
+          "settings": {
+            "collection": "stihl"
+          }
+        },
+        "collection_tPJGAn": {
+          "type": "collection",
+          "settings": {
+            "collection": "stinger-equipment"
+          }
+        },
+        "collection_3CwPhm": {
+          "type": "collection",
+          "settings": {
+            "collection": "redmax"
+          }
+        },
+        "collection_ErLjtD": {
+          "type": "collection",
+          "settings": {
+            "collection": "scag"
+          }
+        },
+        "collection_RWXBea": {
+          "type": "collection",
+          "settings": {
+            "collection": "wright"
+          }
+        },
+        "collection_dGYgnp": {
+          "type": "collection",
+          "settings": {
+            "collection": "exmark"
+          }
+        },
+        "collection_CLPpwt": {
+          "type": "collection",
+          "settings": {
+            "collection": "mean-green"
+          }
+        },
+        "collection_MQqNQx": {
+          "type": "collection",
+          "settings": {
+            "collection": "kawasaki-engines"
+          }
+        },
+        "collection_YRLCJb": {
+          "type": "collection",
+          "settings": {
+            "collection": "sterling-wheelbarrow"
+          }
+        },
+        "collection_4tfaTW": {
+          "type": "collection",
+          "settings": {
+            "collection": "kubota"
+          }
+        },
+        "collection_hmmeqE": {
+          "type": "collection",
+          "settings": {
+            "collection": "used-equipment"
+          }
+        },
+        "collection_hNt7HN": {
+          "type": "collection",
+          "settings": {
+            "collection": "brands"
+          }
+        }
+      },
+      "block_order": [
+        "collection_VemmLD",
+        "collection_Mnci3Y",
+        "collection_gWkwPy",
+        "collection_tPJGAn",
+        "collection_3CwPhm",
+        "collection_ErLjtD",
+        "collection_RWXBea",
+        "collection_dGYgnp",
+        "collection_CLPpwt",
+        "collection_MQqNQx",
+        "collection_YRLCJb",
+        "collection_4tfaTW",
+        "collection_hmmeqE",
+        "collection_hNt7HN"
+      ],
+      "name": "Russo Collection Img Grid",
+      "settings": {
+        "logo_height": 90,
+        "gap": 16
+      }
+    },
+    "collection_list_jGnyLK": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_7mLWrY": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "toro"
+          }
+        },
+        "featured_collection_6HFee3": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "echo"
+          }
+        },
+        "featured_collection_MMJm3P": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "stihl"
+          }
+        },
+        "featured_collection_wn8qt3": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "stinger-equipment"
+          }
+        },
+        "featured_collection_rz7mNT": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "redmax"
+          }
+        },
+        "featured_collection_aMEyTC": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "scag"
+          }
+        },
+        "featured_collection_txxpCH": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "wright"
+          }
+        },
+        "featured_collection_LmFprF": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "exmark"
+          }
+        },
+        "featured_collection_EwQ7Xa": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "mean-green"
+          }
+        },
+        "featured_collection_CdtDGf": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "kawasaki-engines"
+          }
+        },
+        "featured_collection_FkpmcY": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "sterling-wheelbarrow"
+          }
+        },
+        "featured_collection_pdpcnf": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "kubota"
+          }
+        },
+        "featured_collection_yNM6YL": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "used-equipment"
+          }
+        },
+        "featured_collection_cBrxbf": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "brands"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_7mLWrY",
+        "featured_collection_6HFee3",
+        "featured_collection_MMJm3P",
+        "featured_collection_wn8qt3",
+        "featured_collection_rz7mNT",
+        "featured_collection_aMEyTC",
+        "featured_collection_txxpCH",
+        "featured_collection_LmFprF",
+        "featured_collection_EwQ7Xa",
+        "featured_collection_CdtDGf",
+        "featured_collection_FkpmcY",
+        "featured_collection_pdpcnf",
+        "featured_collection_yNM6YL",
+        "featured_collection_cBrxbf"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "t:sections.collection-list.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h2",
+        "image_ratio": "adapt",
+        "columns_desktop": 14,
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 16,
+        "padding_bottom": 0
       }
     },
     "featured_collection": {
       "type": "featured-collection",
+      "custom_css": [
+        ".collection__title {text-align: center;}"
+      ],
       "settings": {
-        "title": "Featured products",
+        "collection": "featured-products",
+        "products_to_show": 10,
+        "title": "<strong>FEATURED MUST-HAVES</strong>",
         "heading_size": "h2",
         "description": "",
+        "hide_no_products": false,
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
         "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
+        "show_view_all": false,
+        "view_all_style": "outline",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "image_ratio": "square",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "multirow_9Bkf8d": {
+      "type": "multirow",
+      "blocks": {
+        "row_G8fznD": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Russo-Staff-BW.png",
+            "caption": "",
+            "heading": "<strong>YOUR PREMIER POWER EQUIPMENT DEALER</strong>",
+            "text": "<p>From humble beginnings, Russo has worked hard to build a vast network and true destination for nature's professionals. We are dedicated to forward thinking and being a beacon of leadership for landscapers, arborists, plant health care specialists, snow and ice removal warriors, municipalities, and landowners. We will always be known for our commitment to customer service through expert sales, service, and parts representatives as well as competitively priced inventory.</p>",
+            "button_label": "READ MORE ABOUT RUSSO",
+            "button_link": "shopify://pages/about-us"
+          }
+        },
+        "row_GJwTdg": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/4H5A4042-BW-resized.jpg",
+            "caption": "",
+            "heading": "<strong>BIG SAVINGS ON TOP BRANDS</strong>",
+            "text": "<p>Take advantage of exclusive discounts and promotions on equipment, parts, and supplies!</p>",
+            "button_label": "VIEW ALL CURRENT DEALS",
+            "button_link": "shopify://pages/current-deals"
+          }
+        }
+      },
+      "block_order": [
+        "row_G8fznD",
+        "row_GJwTdg"
+      ],
+      "name": "t:sections.multirow.presets.name",
+      "settings": {
+        "image_height": "small",
+        "desktop_image_width": "medium",
+        "image_layout": "alternate-right",
+        "heading_size": "h2",
+        "text_style": "body",
+        "button_style": "primary",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "center",
+        "mobile_content_alignment": "center",
+        "section_color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "row_color_scheme": "scheme-067bd914-d3f5-48a1-8748-057b7b5bba63",
+        "padding_top": 20,
+        "padding_bottom": 0
+      }
+    },
+    "1780355685d88cacff": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_6496285_dGHJVW": {
+          "type": "ai_gen_block_6496285",
+          "settings": {
+            "desktop_width_percent": 100,
+            "columns_mobile": "2",
+            "gap": 30,
+            "padding": 25,
+            "background_color": "#000000",
+            "icon_size": 60,
+            "icon_spacing": 15,
+            "icon_color": "#cccccc",
+            "icon_hover_color": "#be1e2d",
+            "image_filter": "none",
+            "image_hover_filter": "brightness(0) saturate(100%) invert(18%) sepia(91%) saturate(2990%) hue-rotate(341deg) brightness(86%) contrast(96%)",
+            "title_size": 16,
+            "title_spacing": 10,
+            "title_color": "#ffffff",
+            "title_hover_color": "#be1e2d",
+            "text_size": 14,
+            "text_color": "#ffffff",
+            "text_hover_color": "#be1e2d",
+            "icon_1_content": "<svg class=\"icon-pin\" aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"44\" viewBox=\"0 0 30 44\" fill=\"none\" style=\"color: inherit; fill: none !important;\">\n  <path d=\"M29.0211 14.9787C29.0211 22.8819 23.5296 27.4279 19.4142 31.8298C16.9502 34.466 14.9786 43.0638 14.9786 43.0638C14.9786 43.0638 13.0126 34.4717 10.5542 31.8429C6.4351 27.4429 0.936035 22.8894 0.936035 14.9787C0.936035 11.2544 2.41551 7.68263 5.049 5.04914C7.68249 2.41565 11.2543 0.936172 14.9786 0.936172C18.7029 0.936172 22.2747 2.41565 24.9082 5.04914C27.5417 7.68263 29.0211 11.2544 29.0211 14.9787V14.9787Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M9.36182 14.9787C9.36182 16.4684 9.95361 17.8972 11.007 18.9506C12.0604 20.0039 13.4891 20.5957 14.9788 20.5957C16.4686 20.5957 17.8973 20.0039 18.9507 18.9506C20.0041 17.8972 20.5959 16.4684 20.5959 14.9787C20.5959 13.489 20.0041 12.0603 18.9507 11.0069C17.8973 9.95349 16.4686 9.36169 14.9788 9.36169C13.4891 9.36169 12.0604 9.95349 11.007 11.0069C9.95361 12.0603 9.36182 13.489 9.36182 14.9787Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>",
+            "icon_1_title": "Find a store near you",
+            "icon_1_text": "Find a store near you",
+            "icon_1_link": "shopify://pages/storelocator",
+            "icon_2_content": "<svg class=\"icon-delivery\" aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" xmlns=\"http://w3.org\" width=\"54\" height=\"44\" viewBox=\"0 0 54 44\" fill=\"none\" style=\"color: inherit; fill: none !important;\">\n  <path d=\"M5.5 22H18.7\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M6.6001 38.5C6.6001 39.667 7.06367 40.7861 7.88883 41.6113C8.71399 42.4364 9.83314 42.9 11.0001 42.9C12.167 42.9 13.2862 42.4364 14.1114 41.6113C14.9365 40.7861 15.4001 39.667 15.4001 38.5C15.4001 37.333 14.9365 36.2139 14.1114 35.3887C13.2862 34.5636 12.167 34.1 11.0001 34.1C9.83314 34.1 8.71399 34.5636 7.88883 35.3887C7.06367 36.2139 6.6001 37.333 6.6001 38.5V38.5Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M37.3999 38.5C37.3999 39.667 37.8635 40.7861 38.6886 41.6113C39.5138 42.4364 40.6329 42.9 41.7999 42.9C42.9669 42.9 44.086 42.4364 44.9112 41.6113C45.7363 40.7861 46.1999 39.667 46.1999 38.5C46.1999 37.333 45.7363 36.2139 44.9112 35.3887C44.086 34.5636 42.9669 34.1 41.7999 34.1C40.6329 34.1 39.5138 34.5636 38.6886 35.3887C37.8635 36.2139 37.3999 37.333 37.3999 38.5Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M6.6001 38.5H2.2001C1.90836 38.5 1.62857 38.3841 1.42228 38.1778C1.21599 37.9715 1.1001 37.6917 1.1001 37.4V26.8554C1.10016 26.5642 1.21567 26.285 1.4213 26.0788L5.5001 22L10.3709 13.2308C10.5615 12.888 10.8403 12.6025 11.1784 12.4036C11.5164 12.2048 11.9015 12.1 12.2937 12.1H18.7001V2.20001C18.7001 1.90827 18.816 1.62848 19.0223 1.42219C19.2286 1.2159 19.5084 1.10001 19.8001 1.10001H50.6001C50.8918 1.10001 51.1716 1.2159 51.3779 1.42219C51.5842 1.62848 51.7001 1.90827 51.7001 2.20001V37.4C51.7001 37.6917 51.5842 37.9715 51.3779 38.1778C51.1716 38.3841 50.8918 38.5 50.6001 38.5H46.2001\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M15.3999 38.5H37.3999\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M18.7002 12.1V34.1\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M1.1001 34.1H51.7001\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>",
+            "icon_2_title": "Schedule a demo",
+            "icon_2_text": "Test drive equipment",
+            "icon_2_link": "shopify://pages/request-demo",
+            "icon_3_content": "<div class=\"highlights-banner__icon\" style=\"width: 50px; height: 50px; display: inline-flex;\">\n  <img \n    src=\"//russopower.com/cdn/shop/files/Event-Calendar_150x155.png?v=1678985190\" \n    alt=\"Events Calendar\" \n    data-rimg=\"\" \n    srcset=\"//russopower.com/cdn/shop/files/Event-Calendar_150x155.png?v=1678985190 1x, //russopower.com/cdn/shop/files/Event-Calendar_180x186.png?v=1678985190 1.2x\" \n    class=\"highlights-banner__custom-icon\" \n    style=\"width: 100%; height: 100%; object-fit: contain;\"\n  >\n</div>",
+            "icon_3_title": "Events Calendar",
+            "icon_3_text": "Stay up-to-date on upcoming events.",
+            "icon_3_link": "shopify://pages/events",
+            "icon_4_content": "<div class=\"highlights-banner__icon\" style=\"width: 50px; height: 50px; display: inline-flex;\">\n  <img \n    src=\"//russopower.com/cdn/shop/files/Seasonal-Russo-Catalog_145x220.png?v=1678985170\" \n    alt=\"Russo Catalog\" \n    class=\"highlights-banner__custom-icon\" \n    style=\"width: 100%; height: 100%; object-fit: contain;\"\n  >\n</div>",
+            "icon_4_title": "Russo Catalog",
+            "icon_4_text": "Digital copy of our in-store catalog.",
+            "icon_4_link": "shopify://pages/seasonal-catalog"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_6496285_dGHJVW"
+      ],
+      "settings": {}
+    },
+    "image_with_text_yjidL3": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_LhgFaF": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>More Power, More Problems?</strong>",
+            "heading_size": "h2"
+          }
+        },
+        "text_rPRMVQ": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Two-cycle equipment has long been favored for its high power-to-weight ratio. Found in chainsaws, leaf blowers, and trimmers, these machines deliver impressive performance in a compact design. However, that extra power comes with a trade-off—increased maintenance needs.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_pNaHbz": {
+          "type": "button",
+          "settings": {
+            "button_label": "LEARN MORE",
+            "button_link": "shopify://blogs/powering-productivity",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_LhgFaF",
+        "text_rPRMVQ",
+        "button_pNaHbz"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Russo-Service-TwCycle.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-067bd914-d3f5-48a1-8748-057b7b5bba63",
+        "padding_top": 0,
         "padding_bottom": 36
       }
+    },
+    "image_with_text_zGqWLt": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_VX6pci": {
+          "type": "heading",
+          "settings": {
+            "heading": "Grub Control: How to Evict Lawn Pests Before They Move In",
+            "heading_size": "h2"
+          }
+        },
+        "text_mBxPfk": {
+          "type": "text",
+          "settings": {
+            "text": "<p>A beautiful lawn takes work, but nothing ruins a lush green yard faster than a subterranean grub infestation. When it comes to grubs, timing is absolutely everything. Applying the wrong product at the wrong time is the number one reason lawn treatments fail.<br/><br/>Here is exactly when, what, and how to apply grub treatments to protect your lawn this season.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_XDQAra": {
+          "type": "button",
+          "settings": {
+            "button_label": "LEARN MORE",
+            "button_link": "shopify://blogs/powering-productivity/grub-control-how-to-evict-lawn-pests-before-they-move-in",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_VX6pci",
+        "text_mBxPfk",
+        "button_XDQAra"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Russo-GrubPreventative.png",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "ambient",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-3",
+        "color_scheme": "scheme-067bd914-d3f5-48a1-8748-057b7b5bba63",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "russo_testimonial_4GEURr": {
+      "type": "russo-testimonial",
+      "blocks": {
+        "review_NDAnD3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Highly recommended — by far one of the best small engine equipment stores I’ve experienced.Ryan and Justin both provided outstanding customer service and took the time to help me narrow down my options, ultimately helping me find the best package deal for my needs. Crissy was very helpful as well.Donavan was also extremely helpful, getting some of my equipment in quickly for service and taking the time to educate me on proper self-maintenance between service visits.Thank you all for the professionalism, knowledge, and excellent customer experience. You definitely did not disappoint.",
+            "author": "Conner Cuts - 5/28/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_JbtRwt": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Another great experience shopping and working with Russo Power Equipment. Their staff is also incredibly friendly and make sure my team and I get in and out quickly.Big shout out to Matt, Jeff and Edgar for keeping things moving smoothly and making sure we get what we need to continue growing.Johnny is also always a great help with information on equipment and making sure we get equipment back up and running our alternative options provided.DDR Outdoor Services wouldn’t be able to do what we do with out you guys!",
+            "author": "Danny Rodriguez - 5/25/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_VtV38M": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Excellent place to do business.  My Toro lawn mower was a good choice.  Service after the sale was top notch AND they support our Veterans!",
+            "author": "R Michael Flynn - 5/13/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_EtpcJr": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Always a pleasure to shop there for lawn equipment and turf supplies. Lots of choices and friendly staff. Parts, service or new equipment Russo is a great choice!",
+            "author": "Daniel Silverman - 3/25/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_376hm6": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Always a pleasure to shop there for lawn equipment and turf supplies. Lots of choices and friendly staff. Parts, service or new equipment Russo is a great choice!",
+            "author": "Daniel Silverman - 3/25/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_nHHYXE": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Had a very positive experience getting a tractor with Aaron. he is versed in their product line and knows a lot about kioti tractors. he was super easy to work with. If you're looking for a new kioti tractors their prices are very \"competitive\". I did a lot of looking everywhere online and was very pleased to find the best deal I could find was 5 miles away from home.",
+            "author": "James T Miller - 3/21/26",
+            "location": "Mooresville, IN",
+            "location_url": "shopify://pages/storelocator"
+          }
+        },
+        "review_Wpx6FT": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "We have been using Russo for the many years they have been in Elgin and throughout all that time no one has been better at their job than Jose Muneton at always getting us what we need in a quick, efficient, professional, and most importantly, respectful manner. His social media clips really highlight that commitment to the customer.",
+            "author": "Crown Tree Care - 3/18/26",
+            "location": "Elgin, IL",
+            "location_url": "shopify://pages/storelocator"
+          }
+        },
+        "review_HqGYHG": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "I just bought a zero turn from here, everyone i was dealing with was very nice. Luis did a great job. He had answers for all my questions and if he didnt have an answer.. he got one for me! The time I was waiting for my paperwork, I saw so many customers come in and they got great service just like I did! 10/5 starts!",
+            "author": "Chris Bilek - 3/13/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_JxgNrX": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Best dealer in the area I travel from Angola Indiana to Fort Wayne to purchase new echo and redmax equipment this summer I should buy two commercial Scag mowers from Russos highly recommended them!",
+            "author": "Adan Sanchez - 3/9/26",
+            "location": "Fort Wayne",
+            "location_url": "https://russopower.com/a/store-locator/fort-wayne-in"
+          }
+        },
+        "review_6PMWix": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Best place to buy Landscaping equipment, landscaping tools and replacement parts in the area. Highly recommended!",
+            "author": "Mr Aguilar - 2/12/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_nbmWje": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Very good people to know and be around with helpful courteous, professional down to earth people vary professional at every aspect.",
+            "author": "John Bukur - 2/7/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_WM8rRX": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Purchased Toro Electric Snowblower & Mower Great service, would highly recommend!",
+            "author": "Lynn Lee - 1/31/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_aQAq9L": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "I bought a large Toro snow thrower 4 years ago, pre-Russo. A weird thing happened - one of the tires had deflated in the cold and came off the rim! Russo said we can remount it. 7 min later it was done. I asked, \"what do I owe you?\" A: \"Nothing, you're good\". WOW! Old time customer satisfaction. Little acts like that build customer loyalty. Thanks!",
+            "author": "Gary VanMoffaert - 1/29/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_eqBTTy": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "I went for a load of salt. Inside staff were very friendly and helpful. Ordering and paying for salt was quick and easy.",
+            "author": "Damian Rosenbaum - 1/29/26",
+            "location": "",
+            "location_url": ""
+          }
+        },
+        "review_Ld6JzD": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review": "Been coming here since they opened the location. Sales staff are very good people who will go above and beyond to help customers. Forklift drivers work very hard and will do anything they can to help load product. Wouldn’t go anywhere else for salt / parts.",
+            "author": "Brendon Austin - 1/28/26",
+            "location": "",
+            "location_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "review_NDAnD3",
+        "review_JbtRwt",
+        "review_VtV38M",
+        "review_EtpcJr",
+        "review_376hm6",
+        "review_nHHYXE",
+        "review_Wpx6FT",
+        "review_HqGYHG",
+        "review_JxgNrX",
+        "review_6PMWix",
+        "review_nbmWje",
+        "review_WM8rRX",
+        "review_aQAq9L",
+        "review_eqBTTy",
+        "review_Ld6JzD"
+      ],
+      "custom_css": [
+        ".testimonial-card {text-align: center;}",
+        ".testimonial-location {white-space: nowrap;}"
+      ],
+      "name": "Russo Review Slider",
+      "settings": {}
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "slideshow_9myT39",
+    "russo_featured_collection_list_LWYBQQ",
+    "collection_list_jGnyLK",
+    "featured_collection",
+    "multirow_9Bkf8d",
+    "1780355685d88cacff",
+    "image_with_text_yjidL3",
+    "image_with_text_zGqWLt",
+    "russo_testimonial_4GEURr"
   ]
 }

@@ -1,5 +1,7 @@
 {% comment %}
-  Renders a megamenu for the header.
+  Renders header navigation.
+  Shop By Category version: 15.4.1  Shop By Category uses russo-style sidebar mega menu.
+  Locations & Russo Difference configured as multi-tier flyout nested lists.
 
   Usage:
   {% render 'header-mega-menu' %}
@@ -10,50 +12,144 @@
     {%- for link in section.settings.menu.links -%}
       <li>
         {%- if link.links != blank -%}
-          <header-menu>
-            <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
-              <summary
-                id="HeaderMenu-{{ link.handle }}"
-                class="header__menu-item list-menu__item link focus-inset"
-              >
-                <span
-                  {%- if link.child_active %}
-                    class="header__active-menu-item"
-                  {% endif %}
+          {%- if link.handle == 'shop-by-category' -%}
+            <header-menu>
+              <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu russo-sidebar-mega-menu">
+                <summary
+                  id="HeaderMenu-{{ link.handle }}"
+                  class="header__menu-item list-menu__item link focus-inset"
                 >
-                  {{- link.title | escape -}}
-                </span>
-                {{- 'icon-caret.svg' | inline_asset_content -}}
-              </summary>
-              <div
-                id="MegaMenu-Content-{{ forloop.index }}"
-                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
-                tabindex="-1"
-              >
+                  <span
+                    {%- if link.child_active %}
+                      class="header__active-menu-item"
+                    {% endif %}
+                  >
+                    {{- link.title | escape -}}
+                  </span>
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </summary>
+
+                <div
+                  id="MegaMenu-Content-{{ forloop.index }}"
+                  class="mega-menu__content russo-sidebar-mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+                  tabindex="-1"
+                >
+                  <div class="page-width russo-sidebar-mega-menu__inner">
+                    <div
+                      class="russo-sidebar-mega-menu__sidebar"
+                      role="tablist"
+                      aria-label="{{ link.title | escape }}"
+                    >
+                      {%- for childlink in link.links -%}
+                        <a
+                          href="{{ childlink.url }}"
+                          class="russo-sidebar-mega-menu__tab{% if forloop.first %} is-active{% endif %}"
+                          id="MegaMenuTab-{{ link.handle }}-{{ forloop.index }}"
+                          data-russo-mega-tab="{{ link.handle }}-panel-{{ forloop.index }}"
+                          data-href="{{ childlink.url }}"
+                          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                          role="tab"
+                          {% if childlink.current %}
+                            aria-current="page"
+                          {% endif %}
+                        >
+                          <span>{{ childlink.title | escape }}</span>
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </a>
+                      {%- endfor -%}
+                    </div>
+
+                    <div class="russo-sidebar-mega-menu__panels">
+                      {%- for childlink in link.links -%}
+                        <div
+                          id="MegaMenuPanel-{{ link.handle }}-{{ forloop.index }}"
+                          class="russo-sidebar-mega-menu__panel{% if forloop.first %} is-active{% endif %}"
+                          data-russo-mega-panel="{{ link.handle }}-panel-{{ forloop.index }}"
+                          role="tabpanel"
+                          aria-labelledby="MegaMenuTab-{{ link.handle }}-{{ forloop.index }}"
+                          {% unless forloop.first %}
+                            hidden
+                          {% endunless %}
+                        >
+                          {%- comment -%} Removed the panel-header (View All title) from here {%- endcomment -%}
+
+                          {%- if childlink.links != blank -%}
+                            <ul class="russo-sidebar-mega-menu__links list-unstyled" role="list">
+                              {%- for grandchildlink in childlink.links -%}
+                                <li>
+                                  <a
+                                    href="{{ grandchildlink.url }}"
+                                    class="russo-sidebar-mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                    {% if grandchildlink.current %}
+                                      aria-current="page"
+                                    {% endif %}
+                                  >
+                                    {{ grandchildlink.title | escape }}
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- else -%}
+                            <p class="russo-sidebar-mega-menu__empty">
+                              Browse all products in {{ childlink.title | escape }}.
+                            </p>
+                          {%- endif -%}
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </header-menu>
+
+          {%- comment -%}
+            ===================================================================
+            LOCATIONS & THE RUSSO DIFFERENCE NESTED FLYOUT DROPDOWNS
+            ===================================================================
+          {%- endcomment -%}
+          {%- elsif link.handle == 'locations' or link.handle == 'the-russo-difference' -%}
+            <header-menu>
+              <details id="Details-HeaderDropdown-{{ forloop.index }}" class="header-dropdown-menu header-dropdown-menu--flyout">
+                <summary
+                  id="HeaderMenu-{{ link.handle }}"
+                  class="header__menu-item list-menu__item link focus-inset"
+                >
+                  <span {%- if link.child_active %} class="header__active-menu-item" {% endif %}>
+                    {{- link.title | escape -}}
+                  </span>
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </summary>
+
                 <ul
-                  class="mega-menu__list page-width{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
+                  id="HeaderDropdown-Menu-{{ forloop.index }}"
+                  class="header-dropdown-menu__list list-unstyled color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
                   role="list"
+                  tabindex="-1"
                 >
                   {%- for childlink in link.links -%}
-                    <li>
+                    <li class="header-dropdown-menu__item{% if childlink.links != blank %} has-children{% endif %}">
                       <a
                         id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                         href="{{ childlink.url }}"
-                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                        class="header-dropdown-menu__link link{% if childlink.current %} header-dropdown-menu__link--active{% endif %}"
                         {% if childlink.current %}
                           aria-current="page"
                         {% endif %}
                       >
-                        {{ childlink.title | escape }}
+                        <span>{{ childlink.title | escape }}</span>
+                        {%- if childlink.links != blank -%}
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        {%- endif -%}
                       </a>
+
                       {%- if childlink.links != blank -%}
-                        <ul class="list-unstyled" role="list">
+                        <ul class="header-dropdown-menu__nested list-unstyled" role="list">
                           {%- for grandchildlink in childlink.links -%}
                             <li>
                               <a
                                 id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
                                 href="{{ grandchildlink.url }}"
-                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                class="header-dropdown-menu__nested-link link{% if grandchildlink.current %} header-dropdown-menu__link--active{% endif %}"
                                 {% if grandchildlink.current %}
                                   aria-current="page"
                                 {% endif %}
@@ -67,9 +163,48 @@
                     </li>
                   {%- endfor -%}
                 </ul>
-              </div>
-            </details>
-          </header-menu>
+              </details>
+            </header-menu>
+
+          {%- else -%}
+            {%- comment -%} Standard Dawn Dropdown Fallback {%- endcomment -%}
+            <header-menu>
+              <details id="Details-HeaderDropdown-{{ forloop.index }}" class="header-dropdown-menu">
+                <summary
+                  id="HeaderMenu-{{ link.handle }}"
+                  class="header__menu-item list-menu__item link focus-inset"
+                >
+                  <span {%- if link.child_active %} class="header__active-menu-item" {% endif %}>
+                    {{- link.title | escape -}}
+                  </span>
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </summary>
+
+                <ul
+                  id="HeaderDropdown-Menu-{{ forloop.index }}"
+                  class="header-dropdown-menu__list list-unstyled color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+                  role="list"
+                  tabindex="-1"
+                >
+                  {%- for childlink in link.links -%}
+                    <li>
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="header-dropdown-menu__link link{% if childlink.current %} header-dropdown-menu__link--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </details>
+            </header-menu>
+          {%- endif -%}
+
         {%- else -%}
           <a
             id="HeaderMenu-{{ link.handle }}"
@@ -79,11 +214,7 @@
               aria-current="page"
             {% endif %}
           >
-            <span
-              {%- if link.current %}
-                class="header__active-menu-item"
-              {% endif %}
-            >
+            <span {%- if link.current %} class="header__active-menu-item" {% endif %}>
               {{- link.title | escape -}}
             </span>
           </a>

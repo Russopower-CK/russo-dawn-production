@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "Dawn",
-    "theme_version": "15.5.0",
+    "theme_version": "15.4.1",
     "theme_author": "Shopify",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
@@ -32,6 +32,27 @@
         "info": "t:settings_schema.logo.settings.favicon.info"
       }
     ]
+  },
+  {
+    "name": "Custom Russo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "default_product_image",
+        "label": "Default product image"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_back_to_top",
+        "label": "Show Back to Top"       
+      },
+      {
+        "type": "checkbox",
+        "id": "show_kenect_widget",
+        "label": "Show Kenect Widget",
+        "default": false
+      }
+    ] 
   },
   {
     "name": "t:settings_schema.colors.name",
@@ -1329,6 +1350,12 @@
       },
       {
         "type": "text",
+        "id": "social_linkdin_link",
+        "label": "t:settings_schema.social-media.settings.social_linkdin_link.label",
+        "placeholder": "t:settings_schema.social-media.settings.social_linkdin_link.info"
+      },
+      {
+        "type": "text",
         "id": "social_twitter_link",
         "label": "t:settings_schema.social-media.settings.social_twitter_link.label",
         "placeholder": "t:settings_schema.social-media.settings.social_twitter_link.info"
@@ -1374,6 +1401,13 @@
         "default": false,
         "label": "t:settings_schema.search_input.settings.predictive_search_show_vendor.label",
         "info": "t:settings_schema.search_input.settings.predictive_search_show_vendor.info"
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_sku",
+        "default": false,
+        "label": "t:settings_schema.search_input.settings.predictive_search_show_sku.label",
+        "info": "t:settings_schema.search_input.settings.predictive_search_show_sku.info"
       },
       {
         "type": "checkbox",

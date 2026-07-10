@@ -93,7 +93,7 @@ cart-items {
   line-height: 1;
   height: 1.8rem;
   top: -3rem;
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgba(var(--color-foreground), 1);
 }
 
 .cart__note .field__input {
@@ -155,9 +155,10 @@ cart-items {
   width: 100%;
 }
 
-.cart__ctas > * + * {
-  margin-top: 1rem;
+.cart__checkout-button.clear-cart{
+  background: var(--russo-red);
 }
+
 
 .cart__update-button {
   margin-bottom: 1rem;
