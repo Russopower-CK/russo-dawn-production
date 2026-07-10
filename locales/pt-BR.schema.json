@@ -3396,20 +3396,6 @@
       "presets": {
         "name": "Lista de pedidos rápidos"
       }
-    },
-    "disclosures": {
-      "name": "Divulgações",
-      "settings": {
-        "paragraph": {
-          "content": "Avisos de segurança e divulgações regulatórias obrigatórios para este produto."
-        },
-        "heading": {
-          "label": "Título"
-        },
-        "open_by_default": {
-          "label": "Aberto por padrão"
-        }
-      }
     }
   }
 }
