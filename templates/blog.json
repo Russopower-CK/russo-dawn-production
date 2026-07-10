@@ -23,7 +23,7 @@
         "text_CWFPYF": {
           "type": "text",
           "settings": {
-            "text": "<p>Our blog powers your productivity through new product reviews, industry news, tips & tricks, business advice, and more!</p>",
+            "text": "<p>{{ blog.metafields.custom.blog_description | metafield_tag }}</p>",
             "text_style": "body"
           }
         },
@@ -68,6 +68,7 @@
       "settings": {
         "layout": "grid",
         "show_image": true,
+        "show_rss_link": true,
         "image_height": "medium",
         "show_date": true,
         "show_author": false,

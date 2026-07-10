@@ -47,7 +47,7 @@
       ],
       "name": "t:sections.image-with-text.presets.name",
       "settings": {
-        "image": "shopify://shop_images/Russo-Vibe-banner.jpg",
+        "image": "{{ blog.metafields.custom.blog_image.value }}",
         "height": "adapt",
         "desktop_image_width": "small",
         "layout": "image_first",
