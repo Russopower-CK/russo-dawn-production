@@ -23,7 +23,7 @@
         "text_CWFPYF": {
           "type": "text",
           "settings": {
-            "text": "<p>Our blog powers your productivity through new product reviews, industry news, tips & tricks, business advice, and more!</p>",
+            "text": "<p>Stay up-to-date on the latest company news and learn more about our history.</p>",
             "text_style": "body"
           }
         },
@@ -47,7 +47,7 @@
       ],
       "name": "t:sections.image-with-text.presets.name",
       "settings": {
-        "image": "shopify://shop_images/PoweringProductivity_Logo.jpg",
+        "image": "shopify://shop_images/Russo-Vibe-banner.jpg",
         "height": "adapt",
         "desktop_image_width": "small",
         "layout": "image_first",
@@ -68,6 +68,7 @@
       "settings": {
         "layout": "grid",
         "show_image": true,
+        "show_rss_link": true,
         "image_height": "medium",
         "show_date": true,
         "show_author": false,
