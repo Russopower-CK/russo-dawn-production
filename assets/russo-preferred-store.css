@@ -549,7 +549,7 @@
 @media (max-width: 749px) {
   .preferred-store-trigger--side-tab {
     right: -64px;
-    min-width: 160px;
+    min-width: 80px;
     font-size: 0.82rem;
   }
 }

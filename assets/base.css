@@ -2430,7 +2430,7 @@ input[type='checkbox'] {
   .header__icons {
     grid-row: 1 !important;
     grid-column: 2 !important;
-    gap: 2rem;
+    width: 100%;
   }
 
   /* Ensures any app block image/badge pushes beautifully to the left of the icons */
