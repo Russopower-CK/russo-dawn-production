@@ -1,0 +1,54 @@
+{{ 'back-to-top.css' | asset_url | stylesheet_tag }}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const container = document.querySelector('[data-back-to-top]');
+    const button = container?.querySelector('button');
+
+    if (button) {
+      button.addEventListener('click', function () {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      });
+    }
+
+    if (container) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          container.setAttribute('data-animation-state', 'visible');
+        } else {
+          container.setAttribute('data-animation-state', 'hidden');
+        }
+      });
+    }
+  });
+</script>
+<div
+  class="back-to-top"
+  data-back-to-top
+>
+  <button class="back-to-top__button button">
+    <span class="back-to-top__desktop-label-wrapper">
+      <span
+        class="
+          back-to-top__button-label button
+          back-to-top__button-label--desktop
+        "
+      >
+        {{- 'general.back_to_top_button.desktop_button_label' | t -}}
+      </span>
+    </span>
+
+    <span
+      class="
+        back-to-top__button-label
+        back-to-top__button-label--mobile
+      "
+    >
+      {{- 'general.back_to_top_button.mobile_button_label' | t -}}
+    </span>
+
+    {% render 'icon-chevron-down-small' %}
+  </button>
+</div>

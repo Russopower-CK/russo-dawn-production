@@ -1,0 +1,73 @@
+{% comment %}
+  App Embed: renders the global drawer markup and loads the small entry JS + CSS.
+{% endcomment %}
+{{ 'russo-preferred-store.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'russo-preferred-store-entry.js' | asset_url }}" defer="defer"></script>
+<button
+  type="button"
+  class="preferred-store-trigger preferred-store-trigger--side-tab"
+  data-preferred-store-open
+  aria-label="Open preferred store selector"
+>
+  <span data-preferred-store-current-label>Choose a Store</span>
+</button>
+
+{% render 'russo-preferred-store-drawer' %}
+
+<script>
+  window.__PreferredStoreConfig = {
+    locationsEndpoint: {{ block.settings.locations_endpoint | json }},
+    geoipEndpoint: {{ block.settings.geoip_endpoint | json }},
+    enableGeoipSort: {{ block.settings.enable_geoip_sort | json }},
+    headerTargetSelector: {{ block.settings.header_target_selector | json }},
+    headerAnchorPlacement: {{ block.settings.header_anchor_placement | json }}
+  };
+</script>
+
+{% schema %}
+{
+  "name": "Preferred store drawer",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_geoip_sort",
+      "label": "Sort by approximate location first (GeoIP)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "geoip_endpoint",
+      "label": "GeoIP endpoint (app proxy)",
+      "default": "/apps/russoAPI?RequestType=geoip"
+    },
+    {
+      "type": "text",
+      "id": "locations_endpoint",
+      "label": "Locations endpoint (app proxy)",
+      "default": "/apps/russoAPI?RequestType=pickuplocations"
+    },
+    {
+      "type": "text",
+      "id": "header_target_selector",
+      "label": "Header target selector (optional)",
+      "default": ".header__icons"
+    },
+    {
+      "type": "select",
+      "id": "header_anchor_placement",
+      "label": "Place preferred store button",
+      "default": "after",
+      "options": [
+        {
+          "value": "before",
+          "label": "Before target"
+        },
+        {
+          "value": "after",
+          "label": "After target"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

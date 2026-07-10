@@ -1,0 +1,241 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'quick-add.css' | asset_url | stylesheet_tag }}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const STORAGE_KEY = 'shopify_recently_viewed';
+    const MAX_ITEMS = 5; // Updated to 5 to match the 5-column layout
+
+    // 1. Capture the product handle on the product page
+    if (window.location.pathname.includes('/products/')) {
+      const pathArray = window.location.pathname.split('/');
+      const handleIndex = pathArray.indexOf('products') + 1;
+      const handle = pathArray[handleIndex] ? pathArray[handleIndex].split('?')[0] : null;
+
+      if (handle) {
+        let viewedProducts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        viewedProducts = viewedProducts.filter((item) => item !== handle);
+        viewedProducts.unshift(handle);
+
+        if (viewedProducts.length > MAX_ITEMS) {
+          viewedProducts.pop();
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(viewedProducts));
+      }
+    }
+
+    // 2. Fetch and render native HTML cards into the grid
+    const container = document.getElementById('recently-viewed-products');
+    if (container) {
+      const viewedProducts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+      // Hide section if no history exists
+      if (viewedProducts.length === 0) {
+        const parentSection = container.closest('.recently-viewed-section-wrapper');
+        if (parentSection) parentSection.style.display = 'none';
+        return;
+      }
+
+      // Convert stored handles into a searchable query string
+      const searchQuery = viewedProducts.map((handle) => `handle:${handle}`).join(' OR ');
+
+      // Request a clean view from the search endpoint bypassing sections entirely
+      fetch(`${window.Shopify.routes.root}search?q=${encodeURIComponent(searchQuery)}&view=recently-viewed`)
+        .then((response) => {
+          if (!response.ok) throw new Error('Failed to fetch cards');
+          return response.text();
+        })
+        .then((htmlString) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(htmlString, 'text/html');
+          const productItems = doc.querySelectorAll('.grid__item');
+
+          if (productItems.length > 0) {
+            productItems.forEach((item) => {
+              // Add mobile slider class to dynamically loaded elements
+              item.classList.add('slider-slide--mobile');
+              container.appendChild(item);
+            });
+          } else {
+            // Fallback layout removal if strings don't parse properly
+            const parentSection = container.closest('.recently-viewed-section-wrapper');
+            if (parentSection) parentSection.style.display = 'none';
+          }
+        })
+        .catch((err) => console.error('Error rendering recently viewed products:', err));
+    }
+
+    // 3. Clear button logic
+    const clearBtn = document.getElementById('clear-recently-viewed');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem(STORAGE_KEY);
+        const parentSection = container.closest('.recently-viewed-section-wrapper');
+        if (parentSection) parentSection.style.display = 'none';
+      });
+    }
+  });
+</script>
+
+<div class="recently-viewed-section-wrapper color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width product-recommendations section-{{ section.id }}-padding">
+    <div class="recently-viewed__header">
+      <h2 class="recently-viewed__heading product-recommendations__heading inline-richtext {{ section.settings.heading_size }}">
+        {{ section.settings.heading }}
+      </h2>
+      <a href="#" id="clear-recently-viewed" class="recently-viewed__clear-btn link">
+        Clear recently viewed
+      </a>
+    </div>
+    <ul
+      id="recently-viewed-products"
+      class="grid product-grid grid--2-col grid--5-col-desktop slider--mobile-carousel" 
+      role="list"
+    >
+    </ul>
+  </div>
+</div>
+
+{% style %}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (max-width: 749px) {
+    /* Mobile carousel swiping logic */
+    .section-{{ section.id }}-padding .slider--mobile-carousel {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none; /* Firefox */
+      margin-left: 0; 
+    }
+    .section-{{ section.id }}-padding .slider--mobile-carousel::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+    /* Fixed at 2 items visible at a time */
+    .section-{{ section.id }}-padding .slider-slide--mobile {
+      flex: 0 0 calc(100% / 2 - 1rem); 
+      scroll-snap-align: start;
+    }
+    .section-{{ section.id }}-padding .card-wrapper {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Background shading for the section */
+  .recently-viewed-section-wrapper {
+    background-color: #f6f6f6;
+  }
+
+  .recently-viewed__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .recently-viewed__heading {
+    margin: 0;
+  }
+
+  .recently-viewed__clear-btn {
+    color: #a04f4c;
+    text-decoration: none;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.2s;
+  }
+
+  .recently-viewed__clear-btn:hover {
+    color: #8c3a37;
+    text-decoration: underline;
+  }
+
+  /* Stripped container overrides to let theme native sizes and grid horizontal padding control card width */
+  #recently-viewed-products .grid__item {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* Theme price adjustments */
+  #recently-viewed-products .price {
+     color: #a04f4c;
+  }
+  #recently-viewed-products .price__regular {
+    color: #a04f4c;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Russo Recently Viewed",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Recently viewed",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Russo Recently Viewed"
+    }
+  ]
+}
+{% endschema %}

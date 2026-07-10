@@ -1,0 +1,32 @@
+{% comment %}
+  Renders quick order lists for a list of products.
+
+  Accepts:
+  - products: {Object} Product Liquid objects to render
+  - show_image: {Boolean} Shows image of the variant in each row (optional)
+  - show_sku: {Boolean} Shows SKU in each row (optional)
+  - is_modal: {Boolean} Defines if this snippet lives in a modal (optional)
+  - products_limit: {Number} Maximum number of products to render (optional)
+
+  Usage:
+  {% render 'order-form', products: collection.products, show_image: true, show_sku: true %}
+{% endcomment %}
+
+{%- assign order_form_products = products | default: blank -%}
+
+{%- if order_form_products != blank -%}
+  <div class="order-form">
+    {%- for order_form_product in order_form_products limit: products_limit -%}
+      {%- if order_form_product != blank -%}
+        <div class="order-form__product" data-product-id="{{ order_form_product.id }}">
+          {% render 'quick-order-list',
+            product: order_form_product,
+            show_image: show_image,
+            show_sku: show_sku,
+            is_modal: is_modal
+          %}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

@@ -1,0 +1,220 @@
+{% comment %}
+  Renders stock availability.
+  Accepts:
+  - product: {Object} passes in the block information.
+  - share_link: {String} url to be added to the input the user will get/copy.
+  - include_pickup: {Boolean} if the pickup should be included in the snippet.
+  - show_pickup_availability: {Boolean} for the pickup availability. If true the pickup availability is rendered, false - not rendered (optional).
+  - hide_view_other_stores: {Boolean} legacy option to hide the pickup availability button (optional).
+  - pickup_availability_components: {String} comma-separated list of pickup availability components to show.
+    Supported values: headline, time, button. Aliases: caption-large/title/location, caption/eta, stores/view-other-stores.
+    Examples: 'headline' (caption only), 'headline,time', 'all'.
+  Usage:
+  {% render 'share-button',
+    block: block,
+    share_link: share_url
+  %}
+{% endcomment %}
+{% assign showpickup = include_pickup %}
+
+<script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+<style>
+      .shipping-stock {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        width: 100%;
+      }
+      .pickup-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        width: 100%;
+        margin: 0;
+        min-width: 0;
+        text-align: left;
+      }
+
+      .label {
+        flex: 0 0 auto; /* do not shrink */
+        margin: 0;
+        font-size: 1.3rem;
+        white-space: nowrap;
+      }
+
+      .product__inventory_status {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        row-gap: 1px;
+      }
+
+      .product__inventory_status > * {
+        margin: 0;
+      }
+
+      .shipping-stock .product__inventory {
+        margin: 0;
+      }
+      .product__inventory .svg-wrapper {
+        align-content: center;
+        margin-left;
+        width: 10px;
+        height: 10px;
+      }
+      .shipping-stock .svg-wrapper{
+      width: 10px;
+    height: 10px;
+  padding: 1px;}
+</style>
+<div class="product__inventory_status">
+  <div class="shipping-stock">
+    <p
+      class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle {%else%} caption-with-letter-spacing{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
+      {{ block.shopify_attributes }}
+      id="Inventory-{{ section.id }}"
+      role="status"
+    >
+      {%- if product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
+        {%- unless product.tags contains 'pickup' %}
+          <div class="shipping-stock caption-with-letter-spacing">
+            Shipping:
+            {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
+              {%- if product.selected_or_first_available_variant.inventory_quantity
+                  <= block.settings.inventory_threshold
+              -%}
+                <span class="svg-wrapper" style="color: rgb(238, 148, 65)">
+                  {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+                </span>
+                {%- if block.settings.show_inventory_quantity -%}
+                  {{-
+                    'products.product.inventory_low_stock_show_count'
+                    | t: quantity: product.selected_or_first_available_variant.inventory_quantity
+                  -}}
+                {%- else -%}
+                  {{- 'products.product.inventory_low_stock' | t -}}
+                {%- endif -%}
+              {%- else -%}
+                <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
+                  {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+                </span>
+                {%- if block.settings.show_inventory_quantity -%}
+                  {{-
+                    'products.product.inventory_in_stock_show_count'
+                    | t: quantity: product.selected_or_first_available_variant.inventory_quantity
+                  -}}
+                {%- else -%}
+                  {{- 'products.product.inventory_in_stock' | t -}}
+                {%- endif -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- if product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
+                <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
+                  {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+                </span>
+                {{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}
+              {%- else -%}
+                <span class="svg-wrapper" style="color: rgb(200, 200, 200)">
+                  {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+                </span>
+                {{- 'products.product.inventory_out_of_stock' | t -}}
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          Shipping:
+          <span class="svg-wrapper" style="color: rgb(178, 17, 17)">
+            {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+          </span>
+          Pickup Only
+        {%- endunless -%}
+      {%- endif -%}
+    </p>
+  </div>
+
+  {% if showpickup %}
+    {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
+
+    {%- liquid
+      assign show_pickup_headline = true
+      assign show_pickup_time = true
+      assign show_pickup_button = true
+
+      assign normalized_pickup_components = pickup_availability_components | default: '' | downcase | replace: ' ', ''
+      assign pickup_component_tokens = normalized_pickup_components | split: ','
+
+      if normalized_pickup_components != blank
+        assign show_pickup_headline = false
+        assign show_pickup_time = false
+        assign show_pickup_button = false
+
+        for pickup_component_token in pickup_component_tokens
+          if pickup_component_token == 'all'
+            assign show_pickup_headline = true
+            assign show_pickup_time = true
+            assign show_pickup_button = true
+          endif
+
+          if pickup_component_token == 'headline' or pickup_component_token == 'title' or pickup_component_token == 'caption-with-letter-spacing' or pickup_component_token == 'location'
+            assign show_pickup_headline = true
+          endif
+
+          if pickup_component_token == 'time' or pickup_component_token == 'caption' or pickup_component_token == 'eta'
+            assign show_pickup_time = true
+          endif
+
+          if pickup_component_token == 'button' or pickup_component_token == 'stores' or pickup_component_token == 'view-other-stores'
+            assign show_pickup_button = true
+          endif
+        endfor
+      endif
+
+      if hide_view_other_stores
+        assign show_pickup_button = false
+      endif
+    -%}
+
+    {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
+      | where: 'pick_up_enabled', true
+    -%}
+    <div class="pickup-wrapper">
+      <pickup-availability
+        class="product__pickup-availabilities quick-add-hidden"
+        {% if product.selected_or_first_available_variant.available and pick_up_availabilities.size > 0 %}
+          available
+        {% endif %}
+        data-root-url="{{ routes.root_url }}"
+        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+        data-has-only-default-variant="{{ product.has_only_default_variant }}"
+        data-product-page-color-scheme="gradient color-{{ section.settings.color_scheme }}"
+        data-show-pickup-headline="{{ show_pickup_headline }}"
+        data-show-pickup-time="{{ show_pickup_time }}"
+        data-show-pickup-button="{{ show_pickup_button }}"
+      >
+        <template>
+          <pickup-availability-preview class="pickup-availability-preview">
+            <div class="pickup-availability-info">
+              {%- if show_pickup_headline -%}
+                <p class="pick-up-status caption-with-letter-spacing">
+                  {{ 'products.product.pickup_availability.pick_up_unavailable' | t }}
+                </p>
+              {%- endif -%}
+              {%- if show_pickup_button -%}
+                <button
+                  id="ShowPickupAvailabilityDrawer"
+                  class="pickup-availability-button link link--text underlined-link"
+                  aria-haspopup="dialog"
+                >
+                  {{ 'products.product.pickup_availability.refresh' | t }}
+                </button>
+              {%- endif -%}
+            </div>
+            <span class="svg-wrapper">
+              {{- 'icon-unavailable.svg' | inline_asset_content -}}
+            </span>
+          </pickup-availability-preview>
+        </template>
+      </pickup-availability>
+    </div>
+  {% endif %}
+</div>

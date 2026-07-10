@@ -1,0 +1,97 @@
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js" async></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('myInput').addEventListener('keyup', function () {
+        var value = this.value.toLowerCase();
+        document.querySelectorAll('#myTable tr').forEach(function (row) {
+          row.style.display = row.textContent.toLowerCase().includes(value) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .section-1 {
+      margin-left: 20px;
+    }
+    .responsive-table {
+      width: 95%;
+      font-family: roboto;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin: 20px;
+    }
+    .responsive-table td,
+    th {
+      border: 1px solid #eaeaea;
+      text-align: left;
+      padding: 8px;
+    }
+    .responsive-table tr:hover {
+      background-color: #eaeaea;
+    }
+    @media screen and (max-width: 719px) {
+      .responsive-table {
+        width: 80%;
+        margin: 8px;
+        font-size: var(--font-size-body-tiny);
+      }
+      .section-1 {
+        margin-left: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="section-1">
+    <h2>Equipment Asset List</h2>
+    <p>
+      <b>Here is your Equipment History, {{ customer.name }}</b>
+    </p>
+    <p>
+      Search your Serialized Units by item number, serial number, asset number, description, or manufacturer: <br>
+      <input id="myInput" type="text" placeholder="Search...">
+    </p>
+    <br>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="responsive-table">
+      <thead>
+        <tr>
+          <th>Item Number</th>
+          <th>MFR Item Number</th>
+          <th>Serial Number</th>
+          <th>Asset ID</th>
+          <th>Description</th>
+          <th>Manufacturer</th>
+          <th>Purchase Date</th>
+          <th>Service Status</th>
+        </tr>
+      </thead>
+      <tbody id="myTable">
+        {% comment %} switch to use company metafield if logged in as b2b {% endcomment %}
+        {% if customer.b2b? %}
+          {% assign equipmentlist = customer.current_company.metafields.custom.equipment_list %}
+        {% else %}
+          {% assign equipmentlist = customer.metafields.custom.equipment_list %}
+        {% endif %}
+
+        {% for equipment in equipmentlist.value %}
+          <h4 class="product-detail-heading">{{ equipment.name }}</h4>
+          <tr>
+            <td>{{ equipment.item_number }}</td>
+            <td>{{ equipment.item_vendor_item_no }}</td>
+            <td>{{ equipment.serial_number }}</td>
+            <td>{{ equipment.asset_tag }}</td>
+            <td>{{ equipment.unit_description }}</td>
+            <td>{{ equipment.manufacturer }}</td>
+            <td>{{ equipment.saleDate }}</td>
+            <td>{{ equipment.serviceStatus }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>

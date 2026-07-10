@@ -1,0 +1,16 @@
+{% schema %}
+{
+  "name": "Collapsible Form",
+  "tag": "section",
+  "settings": [{ "type": "text", "id": "tab_label", "label": "Tab Label", "default": "Request Info" }]
+}
+{% endschema %}
+
+<details>
+  <summary>{{ block.settings.tab_label }}</summary>
+  <div>
+    {% form 'contact' %}
+      {%- comment -%} your fields here {%- endcomment -%}
+    {% endform %}
+  </div>
+</details>

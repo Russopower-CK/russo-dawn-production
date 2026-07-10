@@ -1,0 +1,177 @@
+<div class="header__search">
+  {%- if settings.predictive_search_enabled -%}
+    <predictive-search class="search-modal__form" data-loading-text="{{ 'accessibility.loading' | t }}">
+  {%- else -%}
+    <search-form class="search-modal__form">
+  {%- endif -%}
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search">
+    <div class="field">
+      <input
+        class="search__input field__input"
+        id="Search-In-Header"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.search' | t }}"
+      >
+      <button
+        type="reset"
+        class="reset__button field__button{% if search.terms == blank %} hidden{% endif %}"
+        aria-label="{{ 'general.search.reset' | t }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-reset.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+    <button type="submit" class="search__button field__button" aria-label="{{ 'general.search.search' | t }}">
+      <svg
+        class="icon icon-search"
+        aria-hidden="true"
+        focusable="false"
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M11.9 10.9h-.6l-.2-.2c.7-.8 1.1-1.9 1.1-3 0-2.6-2.1-4.7-4.7-4.7S2.8 5.1 2.8 7.7s2.1 4.7 4.7 4.7c1.1 0 2.2-.4 3-1.1l.2.2v.6l3.6 3.6 1.1-1.1-3.5-3.7zm-4.3 0c-1.8 0-3.2-1.4-3.2-3.2s1.4-3.2 3.2-3.2 3.2 1.4 3.2 3.2-1.5 3.2-3.2 3.2z" fill="currentColor"/>
+      </svg>
+    </button>
+    {%- if settings.predictive_search_enabled -%}
+      <div class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search></div>
+
+      <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+    {%- endif -%}
+  </form>
+  {%- if settings.predictive_search_enabled -%}
+    </predictive-search>
+  {%- else -%}
+    </search-form>
+  {%- endif -%}
+</div>
+
+{%- style -%}
+  /* Visible search bar in header - Dawn Theme */
+  @media screen and (min-width: 750px) {
+    .header__search {
+      width: 100%;
+      max-width: 1200px;
+      justify-self: stretch;
+      border: none;
+    }
+
+    .header__search .field {
+      display: flex;
+      position: relative;
+      width: 100%;
+    }
+
+    .header__search .search__input {
+      padding: 10px 40px 10px 12px;
+      background: rgb(var(--color-foreground));
+      font-size: 14px;
+      width: 100%;
+      border: none;
+      color: rgb(var(--color-background));
+    }
+
+    .header__search .search__input::placeholder {
+      color: #6b7280;
+      opacity: 1;
+      font-size: 14px;
+    }
+
+    .header__search .search__input:focus {
+      border-color: rgb(var(--color-base-accent-1));
+      outline: none;
+    }
+
+    .header__search .search__button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      fill: rgb(var(--color-button));
+    }
+
+    .header__search .search__button svg {
+      width: 18px;
+      height: 18px;
+      fill: rgb(var(--color-button));
+    }
+
+    .predictive-search {
+      width: 100%;
+    }
+  }
+
+  /* Mobile: Responsive search bar (Dawn breakpoint: 749px) */
+  @media screen and (max-width: 749px) {
+    .header__search {
+      width: 100%;
+      flex: 1;
+      padding: 0 10px;
+    }
+    .header-search-mobile .header__search {
+      padding: 0;
+      margin: 0;
+    }
+    .header__search .field {
+      display: flex;
+      position: relative;
+      width: 100%;
+      min-width: 200px;
+    }
+
+    .header__search .search__input {
+      border: 1px solid rgba(var(--color-foreground), 0.2);
+      border-radius: 4px;
+      padding: 10px 30px 10px 12px !important;
+      background: rgb(var(--color-foreground));
+      color: rgb(var(--color-background));
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .header__search .search__input::placeholder {
+      color: #6b7280;
+      opacity: 1;
+      font-size: 14px;
+    }
+
+    .header__search .search__button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .header__search .search__button svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Hide the label - only show placeholder */
+    .header__search .field__label {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+  }
+{%- endstyle -%}

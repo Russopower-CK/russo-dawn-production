@@ -1,0 +1,40 @@
+<style>
+  .breadcrumb {
+    font-size: 14px;
+    margin-bottom: 1rem;
+    margin-top: 1.75rem;
+  }
+
+  .breadcrumb a {
+    text-decoration: none;
+    color: var(--russo-red-dark);
+  }
+
+  .breadcrumb span {
+    margin: 0 5px;
+  }
+</style>
+
+<nav class="breadcrumb page-width">
+  <a href="{{ routes.root_url }}">Home</a>
+
+  {% if template contains 'collection' and collection %}
+    <span> &gt; </span>
+    <span>{{ collection.title }}</span>
+  {% endif %}
+
+  {% if template contains 'product' %}
+    {% if collection %}
+      <span> &gt; </span>
+      <a href="{{ collection.url }}">{{ collection.title }}</a>
+    {% endif %}
+
+    <span> &gt; </span>
+    <span>{{ product.title }}</span>
+  {% endif %}
+
+  {% if template contains 'page' %}
+    <span> &gt; </span>
+    <span>{{ page.title }}</span>
+  {% endif %}
+</nav>

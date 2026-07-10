@@ -1,0 +1,298 @@
+{% comment %} sections/testimonial-slider.liquid {% endcomment %}
+
+<div class="testimonial-slider" id="testimonial-slider-{{ section.id }}">
+  <div class="testimonial-track-wrapper">
+    <button class="testimonial-arrow testimonial-arrow--prev" aria-label="Previous reviews">&#8592;</button>
+
+    <div class="testimonial-track">
+      <div class="testimonial-track-inner">
+        {% for block in section.blocks %}
+          <div class="testimonial-card" {{ block.shopify_attributes }}>
+            <div class="testimonial-stars">
+              {% assign rating = block.settings.rating %}
+              {% for i in (1..5) %}
+                {% if i <= rating %}
+                  <span class="star star--filled">&#9733;</span>
+                {% else %}
+                  <span class="star star--empty">&#9733;</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="testimonial-review">
+              {{ block.settings.review }}
+            </div>
+            <div class="testimonial-author">&mdash; {{ block.settings.author }}</div>
+            {% if block.settings.location != blank %}
+              <div class="testimonial-location">
+                <svg
+                  class="testimonial-location-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 14 6 14s6-8.75 6-14c0-3.314-2.686-6-6-6z"/>
+                  <circle cx="12" cy="8" r="2.5"/>
+                </svg>
+                {% if block.settings.location_url != blank %}
+                  <a
+                    href="{{ block.settings.location_url }}"
+                    class="testimonial-location-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ block.settings.location }}
+                  </a>
+                {% else %}
+                  <span>{{ block.settings.location }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button class="testimonial-arrow testimonial-arrow--next" aria-label="Next reviews">&#8594;</button>
+  </div>
+</div>
+
+<style>
+    .testimonial-slider {
+      width: 100%;
+      padding: 40px clamp(12px, 3vw, 32px);
+      overflow: hidden;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .testimonial-track-wrapper {
+      --arrow-size: 40px;
+      --arrow-gap: 12px;
+      --card-gap: 20px;
+      --card-radius: 8px;
+      --card-stroke: #e0e0e0;
+      display: grid;
+      grid-template-columns: var(--arrow-size) minmax(0, 1fr) var(--arrow-size);
+      align-items: center;
+      column-gap: var(--arrow-gap);
+      position: relative;
+    }
+
+    .testimonial-track {
+      overflow: hidden;
+      min-width: 0;
+      position: relative;
+      padding: 2px;
+    }
+  {%comment %}
+  align-items: flex-start makes it be different height versus all the same (max cards height)
+  {%endcomment %}
+    .testimonial-track-inner {
+      display: flex;
+      gap: var(--card-gap);
+      will-change: transform;
+
+      align-items: flex-start;
+    }
+
+    .testimonial-card {
+      flex: 0 0 calc((100% - (2 * var(--card-gap))) / 3);
+      background: #fff;
+      border: 0;
+      box-shadow: inset 0 0 0 1px var(--card-stroke);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      box-sizing: border-box;
+      min-width: 0;
+    }
+
+    .testimonial-stars {
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+    .star--filled {
+      color: #f5a623;
+    }
+    .star--empty {
+      color: #ddd;
+    }
+    .testimonial-review {
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      color: #333;
+    }
+    .testimonial-location {
+      display: flex;
+      align-items: center;
+      position: relative;
+      gap: 4px;
+      font-size: 12px;
+      color: #888;
+      padding-top: 1rem;
+    }
+    .testimonial-location-icon {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      color: #888;
+    }
+    .testimonial-location-link {
+      color: #888;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .testimonial-location-link:hover {
+      color: #555;
+    }
+    .testimonial-author {
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      padding-bottom: 1rem;
+    }
+    .testimonial-arrow {
+      width: var(--arrow-size);
+      height: var(--arrow-size);
+      background: none;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial-arrow:hover {
+      background: #f0f0f0;
+    }
+
+    @media (max-width: 768px) {
+      .testimonial-track-wrapper {
+        --arrow-size: 36px;
+        --arrow-gap: 8px;
+      }
+
+      .testimonial-card {
+        flex: 0 0 100%;
+      }
+    }
+</style>
+
+<script>
+  (function () {
+    var slider = document.getElementById('testimonial-slider-{{ section.id }}');
+    if (!slider) return;
+
+    var trackInner = slider.querySelector('.testimonial-track-inner');
+    var cards = Array.from(slider.querySelectorAll('.testimonial-card'));
+    var prevBtn = slider.querySelector('.testimonial-arrow--prev');
+    var nextBtn = slider.querySelector('.testimonial-arrow--next');
+    var currentIndex = 0;
+
+    function getVisibleCount() {
+      return window.innerWidth <= 768 ? 1 : 3;
+    }
+
+    function updateSlider() {
+      var visibleCount = getVisibleCount();
+      var maxIndex = Math.max(0, cards.length - visibleCount);
+      currentIndex = Math.min(currentIndex, maxIndex);
+
+      var firstCardOffset = cards.length ? cards[0].offsetLeft : 0;
+      var targetCardOffset = cards[currentIndex] ? cards[currentIndex].offsetLeft : 0;
+      var offset = targetCardOffset - firstCardOffset;
+      trackInner.style.transform = 'translateX(-' + offset + 'px)';
+      trackInner.style.transition = 'transform 0.4s ease';
+
+      prevBtn.style.opacity = currentIndex === 0 ? '0.3' : '1';
+      nextBtn.style.opacity = currentIndex >= maxIndex ? '0.3' : '1';
+    }
+
+    prevBtn.addEventListener('click', function () {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSlider();
+      }
+    });
+
+    nextBtn.addEventListener('click', function () {
+      var maxIndex = Math.max(0, cards.length - getVisibleCount());
+      if (currentIndex < maxIndex) {
+        currentIndex++;
+        updateSlider();
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      currentIndex = 0;
+      updateSlider();
+    });
+
+    updateSlider();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Russo Review Slider",
+  "tag": "section",
+  "class": "testimonial-slider-section",
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "review",
+          "label": "Review",
+          "default": "This product exceeded my expectations!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Happy Customer"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "placeholder": "e.g. Chicago, IL"
+        },
+        {
+          "type": "url",
+          "id": "location_url",
+          "label": "Location URL (optional)",
+          "info": "Add a link to open when the location is clicked (e.g. a Google Maps URL)."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Russo Review Slider",
+      "blocks": [{ "type": "review" }, { "type": "review" }, { "type": "review" }]
+    }
+  ]
+}
+{% endschema %}

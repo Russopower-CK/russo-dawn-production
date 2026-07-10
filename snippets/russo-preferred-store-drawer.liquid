@@ -1,0 +1,102 @@
+{% assign setup = shop.metafields['app--257135706113.russo_app_setup'].russo_app_setup.value %}
+<script>
+  window.__PreferredStoreGeoipEnabled = {{ shop.metafields['app--257135706113']['russo_app_setup'].value.storeSelectorSetup.geoipEnabled | json }};
+</script>
+<style>
+  .preferred-store-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.2rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid #ddd;
+  }
+  .store-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.8rem;
+    font-size: 1.3rem;
+  }
+  .preferred-store-item::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .store-right a {
+    text-decoration: underline;
+    color: inherit;
+  }
+</style>
+<dialog class="preferred-store-drawer" data-preferred-store-dialog>
+  <div class="preferred-store-drawer__overlay" data-preferred-store-close></div>
+
+  <div class="preferred-store-drawer__panel" role="document">
+    <header class="preferred-store-drawer__header">
+      <h2 class="preferred-store-drawer__title">
+        {{ setup.storeSelectorSetup.title | default: 'Select a store' }}
+      </h2>
+      <button
+        type="button"
+        class="preferred-store-drawer__close"
+        data-preferred-store-close
+        aria-label="Close"
+      >
+        ✕
+      </button>
+    </header>
+
+    <div class="preferred-store-drawer__body">
+      <p class="preferred-store-current-message" data-preferred-store-message>
+        {{ setup.storeSelectorSetup.message | default: 'Choose your store to see local pickup options.' }}
+      </p>
+
+      <div class="preferred-store-zip">
+        <label class="preferred-store-zip__label" for="preferredStoreZip">Find stores near ZIP</label>
+        <div class="preferred-store-container">
+          <!-- Row 1: Input and Go Button -->
+          <div class="preferred-store-zip__row">
+            <input
+              id="preferredStoreZip"
+              type="text"
+              class="field__input"
+              inputmode="numeric"
+              autocomplete="postal-code"
+              placeholder="Search by zip e.g., 60601"
+              data-preferred-store-zip
+            >
+            <button type="button" class="button button--primary" data-preferred-store-zip-btn>Go</button>
+          </div>
+
+          <!-- Row 2: Location Utility -->
+          <div class="geobutton">
+            <button type="button" class="geo-button" data-preferred-store-use-geo>
+              <span>Use my location</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="preferred-store-zip__status" data-preferred-store-zip-status></div>
+      </div>
+
+      <div class="preferred-store-search">
+        <label class="visually-hidden" for="preferred-store-search-input">Search stores</label>
+        <input
+          id="preferred-store-search-input"
+          type="search"
+          class="preferred-store-search__input"
+          placeholder="Search stores by name or city"
+          autocomplete="off"
+          data-preferred-store-search
+        >
+      </div>
+
+      <div class="preferred-store-list" data-preferred-store-list>
+        <p class="preferred-store-list__loading" data-preferred-store-loading>Loading stores…</p>
+      </div>
+    </div>
+  </div>
+</dialog>

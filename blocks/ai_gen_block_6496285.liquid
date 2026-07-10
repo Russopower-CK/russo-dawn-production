@@ -1,0 +1,452 @@
+{% doc %}
+  @prompt
+    one row of 4 svg icons with title and text under it, with hyperlink, make the background color changeable for the container, instead of it specifically having to be an svg can it be custom liquid snippet or html, The titles should share the same text color property
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+      .ai-icon-row-{{ ai_gen_id }} {
+        display: block;
+        width: {{ block.settings.desktop_width_percent }}%;
+        max-width: none;
+        margin-top: 1px;
+      }
+
+  .ai-icon-row-container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: {{ block.settings.gap }}px;
+
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: {{ block.settings.padding }}px;
+  }
+
+
+      .ai-icon-item-{{ ai_gen_id }} {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        text-decoration: none;
+      }
+    .ai-icon-row-wrapper-{{ai_gen_id }}{
+
+      background: {{ block.settings.background_color }};
+    }
+      .ai-icon-wrapper-{{ ai_gen_id }} {
+        width: {{ block.settings.icon_size }}px;
+        height: {{ block.settings.icon_size }}px;
+        margin-bottom: {{ block.settings.icon_spacing }}px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: {{ block.settings.icon_color }};
+      }
+
+      .ai-icon-wrapper-{{ ai_gen_id }} svg {
+        width: 100%;
+        height: 100%;
+        fill: {{ block.settings.icon_color }};
+        stroke: {{ block.settings.icon_color }};
+      }
+
+      .ai-icon-wrapper-{{ ai_gen_id }} img {
+        transition: none;
+        filter: {{ block.settings.image_filter | default: 'none' }};
+      }
+
+      .ai-icon-item-{{ ai_gen_id }}:hover .ai-icon-wrapper-{{ ai_gen_id }} {
+        color: {{ block.settings.icon_hover_color }};
+      }
+
+      .ai-icon-item-{{ ai_gen_id }}:hover .ai-icon-wrapper-{{ ai_gen_id }} svg {
+        fill: {{ block.settings.icon_hover_color }};
+        stroke: {{ block.settings.icon_hover_color }};
+      }
+
+      .ai-icon-item-{{ ai_gen_id }}:hover .ai-icon-wrapper-{{ ai_gen_id }} img {
+        filter: {{ block.settings.image_hover_filter | default: 'none' }};
+      }
+
+      .ai-icon-title-{{ ai_gen_id }} {
+        font-size: {{ block.settings.title_size }}px;
+        font-weight: 600;
+        margin: 0 0 {{ block.settings.title_spacing }}px;
+        color: {{ block.settings.title_color }};
+      }
+
+      .ai-icon-item-{{ ai_gen_id }}:hover .ai-icon-title-{{ ai_gen_id }} {
+        color: {{ block.settings.title_hover_color }};
+      }
+
+      .ai-icon-text-{{ ai_gen_id }} {
+        font-size: {{ block.settings.text_size }}px;
+        margin: 0;
+        color: {{ block.settings.text_color }};
+      }
+
+      .ai-icon-item-{{ ai_gen_id }}:hover .ai-icon-text-{{ ai_gen_id }} {
+        color: {{ block.settings.text_hover_color }};
+      }
+
+      @media screen and (max-width: 749px) {
+        .ai-icon-row-container-{{ ai_gen_id }} {
+          grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+        }
+      }
+{% endstyle %}
+
+<icon-row-{{ ai_gen_id }} class="ai-icon-row-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-icon-row-wrapper-{{ai_gen_id }}">
+    <div class="ai-icon-row-container-{{ ai_gen_id }}">
+      {% for i in (1..4) %}
+        {% liquid
+          assign title_key = 'icon_' | append: i | append: '_title'
+          assign text_key = 'icon_' | append: i | append: '_text'
+          assign link_key = 'icon_' | append: i | append: '_link'
+          assign content_key = 'icon_' | append: i | append: '_content'
+
+          assign title = block.settings[title_key]
+          assign text = block.settings[text_key]
+          assign link = block.settings[link_key]
+          assign content = block.settings[content_key]
+        %}
+
+        {% if link != blank %}
+          <a href="{{ link }}" class="ai-icon-item-{{ ai_gen_id }}">
+        {% else %}
+          <div class="ai-icon-item-{{ ai_gen_id }}">
+        {% endif %}
+
+        <div class="ai-icon-wrapper-{{ ai_gen_id }}">
+          {% if content != blank %}
+            {{ content }}
+          {% else %}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          {% endif %}
+        </div>
+
+        {% if title != blank %}
+          <h3 class="ai-icon-title-{{ ai_gen_id }}">{{ title }}</h3>
+        {% endif %}
+
+        {% if text != blank %}
+          <p class="ai-icon-text-{{ ai_gen_id }}">{{ text }}</p>
+        {% endif %}
+
+        {% if link != blank %}
+          </a>
+        {% else %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</icon-row-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class IconRow{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+
+    customElements.define('icon-row-{{ ai_gen_id }}', IconRow{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Icon row",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between items",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f3f3f3"
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 30,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "icon_spacing",
+      "label": "Space below icon",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "icon_hover_color",
+      "label": "Icon hover color",
+      "default": "#be1e2d"
+    },
+    {
+      "type": "text",
+      "id": "image_filter",
+      "label": "Image filter",
+      "default": "none",
+      "info": "CSS filter for image-based icons (e.g. grayscale(1))"
+    },
+    {
+      "type": "text",
+      "id": "image_hover_filter",
+      "label": "Image hover filter",
+      "default": "none",
+      "info": "CSS filter on hover for image-based icons"
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Space below title",
+      "min": 5,
+      "max": 20,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "title_hover_color",
+      "label": "Title hover color",
+      "default": "#be1e2d"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_hover_color",
+      "label": "Text hover color",
+      "default": "#be1e2d"
+    },
+    {
+      "type": "header",
+      "content": "Icon 1"
+    },
+    {
+      "type": "liquid",
+      "id": "icon_1_content",
+      "label": "Icon content"
+    },
+    {
+      "type": "text",
+      "id": "icon_1_title",
+      "label": "Title",
+      "default": "Free shipping"
+    },
+    {
+      "type": "text",
+      "id": "icon_1_text",
+      "label": "Text",
+      "default": "On orders over $50"
+    },
+    {
+      "type": "url",
+      "id": "icon_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Icon 2"
+    },
+    {
+      "type": "liquid",
+      "id": "icon_2_content",
+      "label": "Icon content"
+    },
+    {
+      "type": "text",
+      "id": "icon_2_title",
+      "label": "Title",
+      "default": "Expert support"
+    },
+    {
+      "type": "text",
+      "id": "icon_2_text",
+      "label": "Text",
+      "default": "Available 7 days a week"
+    },
+    {
+      "type": "url",
+      "id": "icon_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Icon 3"
+    },
+    {
+      "type": "liquid",
+      "id": "icon_3_content",
+      "label": "Icon content"
+    },
+    {
+      "type": "text",
+      "id": "icon_3_title",
+      "label": "Title",
+      "default": "Secure payment"
+    },
+    {
+      "type": "text",
+      "id": "icon_3_text",
+      "label": "Text",
+      "default": "Safe and encrypted"
+    },
+    {
+      "type": "url",
+      "id": "icon_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Icon 4"
+    },
+    {
+      "type": "liquid",
+      "id": "icon_4_content",
+      "label": "Icon content"
+    },
+    {
+      "type": "text",
+      "id": "icon_4_title",
+      "label": "Title",
+      "default": "Easy returns"
+    },
+    {
+      "type": "text",
+      "id": "icon_4_text",
+      "label": "Text",
+      "default": "30-day return policy"
+    },
+    {
+      "type": "url",
+      "id": "icon_4_link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon row"
+    }
+  ]
+}
+{% endschema %}

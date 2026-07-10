@@ -1,0 +1,111 @@
+{% schema %}
+{
+  "name": "Russo Collection Img Grid",
+  "max_blocks": 14,
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo max height (px)",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Spacing between logos",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Russo Collection Img Grid"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="page-width">
+  <ul class="logo-grid">
+    {% for block in section.blocks %}
+      {% assign col = block.settings.collection %}
+      {% if col != blank %}
+        <li class="logo-item">
+          <a href="{{ col.url }}">
+            <div class="logo-wrapper">
+              {% if col.featured_image %}
+                {{ col.featured_image | image_url: width: 550 | image_tag: loading: 'lazy' }}
+              {% endif %}
+            </div>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+
+<style>
+      .logo-grid {
+        margin: 1rem auto;
+        display: grid;
+        gap: {{ section.settings.gap }}px;
+        list-style: none;
+
+        max-width: var(--page-width);
+        padding: 2rem;
+        border-bottom: 1.5px solid #cccccc;
+      }
+
+      @media (min-width: 1024px) {
+        .logo-grid {
+          grid-template-columns: repeat({{ section.blocks.size }}, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 1023px) {
+        .logo-grid {
+          grid-template-columns: repeat(7, 1fr);
+          row-gap: 2px;
+        }
+
+      }
+
+      .logo-item {
+        display: flex;
+        align-items: center;
+        justify-self: center;
+         transition: transform 0.25s ease;
+      }
+
+      .logo-item img {
+        max-height: {{ section.settings.logo_height }}px;
+        width: 100%;
+        display: block;
+        object-fit: contain;
+          transition: transform 0.3s ease;
+          object-position:50.0% 50.0%;
+      }
+
+  .logo-item:hover img {
+    transform: scale(1.08);
+  }
+</style>

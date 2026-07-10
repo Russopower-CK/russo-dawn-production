@@ -1,0 +1,285 @@
+{% comment %}
+  Renders a standard dropdown style menu for the header.
+
+  Usage:
+  {% render 'russo-header-dropdown' %}
+{% endcomment %}
+<style>
+  /* Reset unwanted browser + broken inheritance styles */
+  .russoheader__menu-item {
+    font-weight: 200;
+    text-decoration: none;
+  }
+
+  .russoheader__menu-item.link--text {
+    text-decoration: none;
+  }
+
+  .russoheader__submenu summary {
+    font-weight: 200;
+    list-style: none; /* removes default summary arrow spacing */
+  }
+
+  /* Anchor positioning */
+  .russoheader__submenu li {
+    position: relative;
+    padding: 5px;
+  }
+
+  /* Keep layering clean */
+  .russoheader__submenu {
+    z-index: 5;
+  }
+
+  .russoheader__submenu .russoheader__submenu {
+    z-index: 10;
+  }
+
+  .russoheader__inline-menu {
+    grid-area: navigation;
+    margin-top: 0;
+  }
+
+  /* ✅ Third level (flyout) — FIXED */
+  .russoheader__submenu .russoheader__submenu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin: 0;
+    min-width: 220px;
+    width: max-content;
+  }
+
+  /* ✅ Let Dawn control visibility */
+  .russoheader__submenu details > .russoheader__submenu {
+    display: none;
+  }
+
+  .russoheader__submenu details[open] > .russoheader__submenu {
+    display: block;
+  }
+
+  /* ✅ Caret direction */
+  .russoheader__submenu summary svg.icon-caret {
+    transform: rotate(-90deg);
+    transition: transform var(--duration-short) ease;
+  }
+
+  .russoheader__submenu details[open] > summary svg.icon-caret {
+    transform: rotate(90deg);
+  }
+
+  /* ✅ Prevent right edge overflow */
+  .russoheader_secondary_wraper .russoheader__submenu .russoheader__submenu {
+    left: auto;
+    right: 100%;
+  }
+
+  /* Hover = bolder everywhere */
+  .russoheader__menu-item:hover,
+  .russoheader__submenu li:hover > a,
+  .russoheader__submenu li:hover > details > summary {
+    font-weight: 700;
+  }
+
+  /* Only non-first-layer hovered items turn red */
+  .russoheader__submenu .russoheader__menu-item:hover,
+  .russoheader__submenu li:hover > a.russoheader__menu-item,
+  .russoheader__submenu li:hover > details > summary.russoheader__menu-item {
+    color: #c40000;
+  }
+</style>
+
+<nav class="russoheader__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li>
+        {%- if link.links != blank -%}
+          <header-menu>
+            <details id="Details-HeaderMenu-{{ forloop.index }}">
+              <summary
+                id="HeaderMenu-{{ link.handle }}"
+                class="russoheader__menu-item list-menu__item link focus-inset"
+              >
+                <span
+                  {%- if link.child_active %}
+                    class="russoheader__active-menu-item"
+                  {% endif %}
+                >
+                  {{- link.title | escape -}}
+                </span>
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </summary>
+              <ul
+                id="HeaderMenu-MenuList-{{ forloop.index }}"
+                class="russoheader__submenu list-menu list-menu--disclosure color-{{ section.settings.menu_color_scheme }} gradient caption-large motion-reduce global-settings-popup"
+                role="list"
+                tabindex="-1"
+              >
+                {%- for childlink in link.links -%}
+                  <li>
+                    {%- if childlink.links == blank -%}
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="russoheader__menu-item list-menu__item link link--text focus-inset caption-large{% if childlink.current %} list-menu__item--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                      {%- if childlink.links != blank -%}
+                      {%- else -%}
+                      {%- endif -%}
+                    {%- else -%}
+                      <details id="Details-HeaderSubMenu-{{ link.handle }}-{{ childlink.handle }}">
+                        <summary
+                          id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                          class="russoheader__menu-item link link--text list-menu__item focus-inset caption-large"
+                        >
+                          <span>{{ childlink.title | escape }}</span>
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </summary>
+                        <ul
+                          id="HeaderMenu-SubMenuList-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                          class="russoheader__submenu list-menu motion-reduce color-{{ section.settings.menu_color_scheme }} gradient global-settings-popup"
+                        >
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="russoheader__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </details>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </details>
+          </header-menu>
+        {%- else -%}
+          <a
+            id="HeaderMenu-{{ link.handle }}"
+            href="{{ link.url }}"
+            class="russoheader__menu-item list-menu__item link link--text focus-inset"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span
+              {%- if link.current %}
+                class="russoheader__active-menu-item"
+              {% endif %}
+            >
+              {{- link.title | escape -}}
+            </span>
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const nav = document.querySelector('.russoheader__inline-menu');
+    if (!nav || nav.dataset.russoDropdownBound === 'true') return;
+
+    nav.dataset.russoDropdownBound = 'true';
+    const CLOSE_DELAY_MS = 220;
+    const closeTimers = new WeakMap();
+
+    function closeNestedMenus(rootDetail) {
+      rootDetail.querySelectorAll('details[open]').forEach(function (nestedDetail) {
+        nestedDetail.removeAttribute('open');
+      });
+    }
+
+    function openDetail(detail, peerDetails, closeNestedPeers) {
+      cancelClose(detail);
+
+      if (!detail.open) {
+        detail.setAttribute('open', '');
+      }
+
+      peerDetails.forEach(function (otherDetail) {
+        if (otherDetail !== detail) {
+          otherDetail.removeAttribute('open');
+          if (closeNestedPeers) closeNestedMenus(otherDetail);
+        }
+      });
+    }
+
+    function cancelClose(detail) {
+      const timer = closeTimers.get(detail);
+      if (!timer) return;
+      clearTimeout(timer);
+      closeTimers.delete(detail);
+    }
+
+    function scheduleClose(detail, closeNested) {
+      cancelClose(detail);
+
+      const timer = setTimeout(function () {
+        detail.removeAttribute('open');
+        if (closeNested) closeNestedMenus(detail);
+        closeTimers.delete(detail);
+      }, CLOSE_DELAY_MS);
+
+      closeTimers.set(detail, timer);
+    }
+
+    const topLevelDetails = nav.querySelectorAll('details[id^="Details-HeaderMenu-"]');
+    topLevelDetails.forEach(function (detail) {
+      detail.addEventListener('toggle', function () {
+        if (detail.open) {
+          openDetail(detail, topLevelDetails, true);
+        } else {
+          closeNestedMenus(detail);
+        }
+      });
+
+      detail.addEventListener('mouseenter', function () {
+        cancelClose(detail);
+        openDetail(detail, topLevelDetails, true);
+      });
+
+      detail.addEventListener('mouseleave', function () {
+        scheduleClose(detail, true);
+      });
+    });
+
+    const thirdLevelDetails = nav.querySelectorAll('details[id^="Details-HeaderSubMenu-"]');
+    thirdLevelDetails.forEach(function (detail) {
+      detail.addEventListener('toggle', function () {
+        if (!detail.open) return;
+        openDetail(detail, thirdLevelDetails, false);
+      });
+
+      detail.addEventListener('mouseenter', function () {
+        cancelClose(detail);
+        openDetail(detail, thirdLevelDetails, false);
+      });
+
+      detail.addEventListener('mouseleave', function () {
+        scheduleClose(detail, false);
+      });
+    });
+
+    nav.addEventListener('mouseleave', function () {
+      topLevelDetails.forEach(function (detail) {
+        scheduleClose(detail, true);
+      });
+    });
+  });
+</script>

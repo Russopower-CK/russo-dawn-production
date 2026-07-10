@@ -1,0 +1,32 @@
+{%- comment -%}
+  Preferred Store pickup availability block (Product pages)
+  - Renders a visible message + link that opens your drawer
+  - Exposes location availability from variant metafield to JS via window.__PreferredStoreProductContext
+{%- endcomment -%}
+
+<div class="preferred-store-pickup" data-preferred-store-pickup>
+  <div class="preferred-store-pickup__line" data-preferred-store-pickup-status>
+    Choose a store to see pickup availability.
+  </div>
+
+  <button
+    type="button"
+    class="preferred-store-pickup__link"
+    data-preferred-store-open
+  >
+    Check availability at other stores
+  </button>
+</div>
+
+<script>
+  window.__PreferredStoreProductContext = {
+    locations: {{ product.selected_or_first_available_variant.metafields.custom.location_availability.value | split: ',' | json }}
+  };
+</script>
+
+{% schema %}
+{
+  "name": "Pickup availability",
+  "settings": []
+}
+{% endschema %}

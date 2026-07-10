@@ -1,0 +1,10 @@
+{% layout none %}
+{% paginate search.results by 5 %}
+  {% for item in search.results %}
+    {% if item.object_type == 'product' %}
+      <li class="grid__item">
+        {% render 'recently-viewed-card', product: item %}
+      </li>
+    {% endif %}
+  {% endfor %}
+{% endpaginate %}

@@ -1,0 +1,987 @@
+{% liquid
+  assign performance_lazyload = false;
+%}
+{% liquid
+  assign order_form_favorites = customer.metafields.custom.order_form_favorites.value
+%}
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js" async></script>
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
+  {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
+  <style>
+    :root {
+      --primary-color: #000000;
+      --border-color: #e1e3e5;
+      --bg-hover: #f6f6f7;
+      --russo-red: #e31e24;
+      --russo-red-dark: #b21217;
+      --russo-black: #231f20;
+      --stock-green: #2e7d32;
+      --stock-red: #d32f2f;
+    }
+
+    /* Apply this to your product cells in the tbody */
+    .product-cell {
+      white-space: inherit;
+      text-overflow: ellipsis;
+    }
+
+    .order-form-container {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 10px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .order-form-header {
+      background: white;
+      padding: 0 0 20px 0;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .order-form-header h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 28px;
+      color: var(--primary-color);
+    }
+
+    .order-form-header-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    #order-form-search {
+      flex: 1 1 220px;
+      max-width: 400px;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .toggle-switch {
+      display: inline-flex;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .toggle-switch input {
+      display: none;
+    }
+
+    .toggle-switch label {
+      padding: 10px 16px;
+      cursor: pointer;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      color: #555;
+      white-space: nowrap;
+    }
+
+    .toggle-switch input:checked + label {
+      background: #000;
+      color: #fff;
+    }
+
+    .table-wrap {
+      background: white;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    table.sortable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table.sortable thead th {
+      background: #f9fafb;
+      padding: 12px 15px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    table.sortable thead th[data-sort] {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    table.sortable thead th[data-sort]:hover {
+      background: #f1f2f3;
+    }
+
+    table.sortable td {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+      transition: all 0.4s ease;
+    }
+
+    table.sortable tr:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .product-img {
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      object-fit: cover;
+    }
+
+    /* Sort icons */
+    .sort-icon {
+      width: 12px;
+      height: 12px;
+      margin-left: 6px;
+      opacity: 0.35;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      vertical-align: middle;
+    }
+
+    th.sort-asc .sort-icon,
+    th.sort-desc .sort-icon {
+      opacity: 1;
+    }
+
+    th.sort-asc .sort-icon {
+      transform: rotate(180deg);
+    }
+
+    th.sort-desc .sort-icon {
+      transform: rotate(0deg);
+    }
+
+    .qty-in-cart {
+      font-weight: 700;
+      text-align: center;
+      color: var(--primary-color);
+    }
+
+    .qty-available {
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .stock-low {
+      color: var(--stock-red);
+    }
+    .stock-ok {
+      color: var(--stock-green);
+    }
+
+    /* Remove button */
+    .orderform-btn.of-remove {
+      appearance: none;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 5px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: white;
+      background-color: var(--russo-red);
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    .orderform-btn.of-remove:hover:not(:disabled) {
+      background-color: var(--russo-red-dark);
+    }
+
+    .orderform-btn:disabled {
+      background-color: #e5e5e5 !important;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    /* Cart form */
+    .ajax-cart-form {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-input {
+      width: 50px;
+      padding: 10px 5px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .btn-add-cart {
+      background-color: var(--russo-black);
+      color: white;
+      border: none;
+      padding: 10px 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-add-cart:hover {
+      opacity: 0.8;
+    }
+
+    .row-fade-out {
+      opacity: 0;
+      transform: translateX(20px);
+      pointer-events: none;
+    }
+
+    /* Modal */
+    .russo-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .russo-modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .russo-modal {
+      background: white;
+      width: 420px;
+      max-width: 90%;
+      border-radius: 8px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      padding: 26px;
+      text-align: center;
+    }
+
+    .russo-modal h3 {
+      margin-top: 0;
+      color: var(--russo-black);
+    }
+
+    .russo-modal p {
+      margin: 10px 0 20px;
+      color: #555;
+    }
+
+    .russo-modal-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .russo-modal-btn {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .russo-modal-cancel {
+      background: #e5e5e5;
+    }
+
+    .russo-modal-confirm {
+      background: var(--russo-red);
+      color: white;
+    }
+
+    .russo-modal-confirm:hover {
+      background: var(--russo-red-dark);
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile devices */
+    }
+    /* Keep the table from squishing down too far */
+
+    /* Keep the table from squishing down too far */
+    .sortable.order-form-table {
+      table-layout: fixed;
+      width: 100%;
+    }
+
+    /* MOBILE OPTIMIZATION */
+    @media screen and (max-width: 768px) {
+      .table-wrap {
+        border: none;
+        background: transparent;
+      }
+      table.sortable,
+      .sortable tbody,
+      .sortable tr,
+      .sortable td {
+        display: block;
+        width: 100%;
+      }
+      .sortable thead {
+        display: none;
+      }
+      .sortable tr {
+        background: white;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      }
+      .sortable td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f2f3;
+      }
+      .sortable td:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .sortable td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--primary-color);
+        text-align: left;
+        margin-right: 15px;
+      }
+      .order-form-header-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #order-form-search {
+        max-width: 100%;
+      }
+      .toggle-switch {
+        justify-content: center;
+        width: 100%;
+      }
+      .toggle-switch label {
+        text-align: center;
+        flex: 1 1 50%;
+      }
+      .orderform-btn.of-remove {
+        width: auto;
+        align-content: center;
+        text-align: center;
+      }
+      .ajax-cart-form {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .btn-add-cart {
+        flex-grow: 1;
+      }
+    }
+  </style>
+</head>
+
+<div class="order-form-container">
+  <div class="order-form-header">
+    <h2>Quick Order Form</h2>
+    <p style="margin-top:0;color:#000;">
+      Welcome back, <strong>{{ customer.name | default: 'Valued Customer' }}</strong>
+    </p>
+
+    <div class="order-form-header-row">
+      <input id="order-form-search" type="text" placeholder="🔍 Search products, SKUs, or vendors...">
+      <div class="toggle-switch">
+        <input type="radio" id="view-favs" name="data-view" value="favorites" checked>
+        <label for="view-favs">Favorites</label>
+
+        <input type="radio" id="view-purchased" name="data-view" value="purchased">
+        <label for="view-purchased">Purchased</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="sortable order-form-table">
+      <thead>
+        <tr>
+          <th style="width: 60px;"></th>
+
+          <th data-sort="string" style="width: 35%; min-width: 200px; position: relative;">
+            <div class="th-content">Product</div>
+            <div class="resizer"></div>
+          </th>
+
+          <th data-sort="string" style="width: 10%; text-align: left; position: relative;">
+            <div class="th-content">Vendor</div>
+            <div class="resizer"></div>
+          </th>
+
+          <th data-sort="string" style="width: 12%; white-space: nowrap; text-align: left; position: relative;">
+            <div class="th-content">SKU</div>
+            <div class="resizer"></div>
+          </th>
+
+          <th style="width: 80px; text-align: left; position: relative;">
+            <div class="th-content">Price</div>
+            <div class="resizer"></div>
+          </th>
+
+          <th data-sort="number" style="width: 90px; text-align: center; position: relative;">
+            <div class="th-content">Available</div>
+            <div class="resizer"></div>
+          </th>
+
+          <th style="width: 100px; text-align: center; position: relative;">
+            <div class="th-content">Manage</div>
+            <div class="resizer"></div>
+          </th>
+
+          <th style="width: 160px; text-align: center; position: relative;">
+            <div class="th-content">Add to Cart</div>
+            <div class="resizer"></div>
+          </th>
+
+          <th data-sort="number" style="width: 100px; text-align: center; position: relative;">
+            <div class="th-content">In Cart</div>
+            <div class="resizer"></div>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="product-cell" id="data-favorites">
+        {% assign order_form_col_ref = customer.metafields.custom.order_form_collection.value %}
+        {% if order_form_col_ref != blank %}
+          {% assign resolved_col = collections[order_form_col_ref.handle] %}
+        {% else %}
+          {% assign resolved_col = collections.stihl %}
+        {% endif %}
+        {% if resolved_col and resolved_col.products.size > 0 %}
+          {% paginate resolved_col.products by 200 %}
+            {% for product in resolved_col.products %}
+              {% for variant in product.variants %}
+                {% assign qty_in_cart = cart | item_count_for_variant: variant.id %}
+
+                <tr class="table-row">
+                  <td data-label="Image">
+                    {% if product.featured_image %}
+                      {% assign image = product.featured_image | image_url: width: 50, height: 50, crop: 'center' %}
+
+                      <div class="variant-item__media">
+                        <div class="variant-item__image-container global-media-settings{% unless is_modal %} gradient{% endunless %}{% unless image %} variant-item__image-container--no-img{% endunless %}">
+                          {% if image %}
+                            {%- assign img_height = 43 | divided_by: image.aspect_ratio | ceil -%}
+                            {{
+                              image
+                              | image_url: width: 86
+                              | image_tag:
+                                loading: 'lazy',
+                                fetchpriority: 'low',
+                                decoding: 'async',
+                                class: 'variant-item__image',
+                                width: 43,
+                                height: img_height,
+                                widths: '86',
+                                alt: image.alt
+                              | escape
+                            }}
+                          {% endif %}
+                        </div>
+                      </div>
+                    {% else %}
+                      <svg width="50" height="50">
+                        <image xlink:href="{{ 'icon-clipboard.svg' | asset_url }}" width="100%" height="100%"/>
+                      </svg>
+                    {% endif %}
+                  </td>
+                  <td data-label="Product">
+                    <a href="{{ variant.url }}" style="text-decoration:none;color:#005bd3;font-weight:500;">
+                      {{ product.title }}
+                      {% unless variant.title contains 'Default' %} - {{ variant.title }}{% endunless %}
+                    </a>
+                  </td>
+                  <td data-label="Vendor">
+                    {%- assign vendor_name = product.vendor | strip -%}
+                    {%- assign vendor_handle = vendor_name | handleize -%}
+                    <a
+                      href="{{ routes.collections_url }}/{{ vendor_handle }}"
+                      style="color:#005bd3;text-decoration:none;"
+                    >
+                      {{ vendor_name }}
+                    </a>
+                  </td>
+                  <td data-label="SKU">
+                    <small>{{ variant.sku }}</small>
+                  </td>
+                  <td data-label="Price">{{ variant.price | money }}</td>
+                  <td
+                    data-label="Available"
+                    class="qty-available {% if variant.inventory_quantity <= 0 %}stock-low{% else %}stock-ok{% endif %}"
+                  >
+                    {% if variant.inventory_management == 'shopify' %}
+                      {{ variant.inventory_quantity }}
+                    {% else %}
+                      &infin;
+                    {% endif %}
+                  </td>
+                  <td data-label="Manage" style="text-align: center;">
+                    <div class="orderform-management-wrap" data-product-id="{{ product.id }}">
+                      <button type="button" class="orderform-btn of-remove">Remove</button>
+                    </div>
+                  </td>
+                  <td data-label="Add to Cart">
+                    <form class="ajax-cart-form">
+                      <input type="hidden" name="id" value="{{ variant.id }}">
+                      <input type="number" name="quantity" class="qty-input" value="1" min="1">
+                      <button type="submit" class="btn-add-cart">Add to Cart</button>
+                    </form>
+                  </td>
+                  <td data-label="Qty In Cart" class="qty-in-cart" data-variant-id="{{ variant.id }}">
+                    {{ qty_in_cart }}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endfor %}
+          {% endpaginate %}
+
+        {% else %}
+          {% assign order_form_favorites = customer.metafields.custom.order_form_favorites.value %}
+          {% paginate order_form_favorites by 200 %}
+            {% for product in order_form_favorites %}
+              {% for variant in product.variants %}
+                {% assign qty_in_cart = 0 %}
+                {% for cart_item in cart.items %}
+                  {% if cart_item.variant_id == variant.id %}
+                    {% assign qty_in_cart = qty_in_cart | plus: cart_item.quantity %}
+                  {% endif %}
+                {% endfor %}
+
+                <tr class="table-row">
+                  <td data-label="Image">
+                    {% if product.featured_image %}
+                      {% assign initial_image = product.featured_image
+                        | image_url: width: 50, height: 50, crop: 'center'
+                      %}
+                    {% else %}
+                      <svg width="50" height="50">
+                        <image xlink:href="{{ 'icon-clipboard.svg' | asset_url }}" width="100%" height="100%"/>
+                      </svg>
+                    {% endif %}
+                  </td>
+                  <td data-label="Product">
+                    <a href="{{ variant.url }}" style="text-decoration:none;color:#005bd3;font-weight:500;">
+                      {{ product.title }}
+                      {% unless variant.title contains 'Default' %} - {{ variant.title }}{% endunless %}
+                    </a>
+                  </td>
+                  <td data-label="Vendor">
+                    {%- assign vendor_name = product.vendor | strip -%}
+                    {%- assign vendor_handle = vendor_name | handleize -%}
+                    <a
+                      href="{{ routes.collections_url }}/{{ vendor_handle }}"
+                      style="color:#005bd3;text-decoration:none;"
+                    >
+                      {{ vendor_name }}
+                    </a>
+                  </td>
+                  <td data-label="SKU">
+                    <small>{{ variant.sku }}</small>
+                  </td>
+                  <td data-label="Price">{{ variant.price | money }}</td>
+                  <td
+                    data-label="Available"
+                    class="qty-available {% if variant.inventory_quantity <= 0 %}stock-low{% else %}stock-ok{% endif %}"
+                  >
+                    {% if variant.inventory_management == 'shopify' %}
+                      {{ variant.inventory_quantity }}
+                    {% else %}
+                      &infin;
+                    {% endif %}
+                  </td>
+                  <td data-label="Manage" style="text-align: center;">
+                    <div class="orderform-management-wrap" data-product-id="{{ product.id }}">
+                      <button type="button" class="orderform-btn of-remove">Remove</button>
+                    </div>
+                  </td>
+                  <td data-label="Add to Cart">
+                    <form class="ajax-cart-form">
+                      <input type="hidden" name="id" value="{{ variant.id }}">
+                      <input type="number" name="quantity" class="qty-input" value="1" min="1">
+                      <button type="submit" class="btn-add-cart">Add to Cart</button>
+                    </form>
+                  </td>
+                  <td data-label="Qty In Cart" class="qty-in-cart" data-variant-id="{{ variant.id }}">
+                    {{ qty_in_cart }}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endfor %}
+          {% endpaginate %}
+        {% endif %}
+      </tbody>
+
+      <tbody id="data-purchased" style="display: none;">
+        {% if customer.current_company and customer.current_company.metafields.custom.top_purchased_products %}
+          {% assign purchaselist = customer.current_company.metafields.custom.top_purchased_products.value %}
+          {% paginate purchaselist by 200 %}
+            {% for product in purchaselist %}
+              {% for variant in product.variants %}
+                {% assign qty_in_cart = 0 %}
+                {% for cart_item in cart.items %}
+                  {% if cart_item.variant_id == variant.id %}
+                    {% assign qty_in_cart = qty_in_cart | plus: cart_item.quantity %}
+                  {% endif %}
+                {% endfor %}
+
+                <tr class="table-row">
+                  <td data-label="Image">
+                    {% if product.featured_image %}
+                      {% assign image = product.featured_image | image_url: width: 50, height: 50, crop: 'center' %}
+
+                      <div class="variant-item__media">
+                        <div class="variant-item__image-container global-media-settings{% unless is_modal %} gradient{% endunless %}{% unless image %} variant-item__image-container--no-img{% endunless %}">
+                          {% if image %}
+                            {%- assign img_height = 43 | divided_by: image.aspect_ratio | ceil -%}
+                            {{
+                              image
+                              | image_url: width: 86
+                              | image_tag:
+                                loading: 'lazy',
+                                fetchpriority: 'low',
+                                decoding: 'async',
+                                class: 'variant-item__image',
+                                width: 43,
+                                height: img_height,
+                                widths: '86',
+                                alt: image.alt
+                              | escape
+                            }}
+                          {% endif %}
+                        </div>
+                      </div>
+                    {% else %}
+                      <svg width="50" height="50">
+                        <image xlink:href="{{ 'icon-clipboard.svg' | asset_url }}" width="100%" height="100%"/>
+                      </svg>
+                    {% endif %}
+                  </td>
+                  <td data-label="Product">
+                    <a href="{{ variant.url }}" style="text-decoration:none;color:#005bd3;font-weight:500;">
+                      {{ product.title }}
+                      {% unless variant.title contains 'Default' %} - {{ variant.title }}{% endunless %}
+                    </a>
+                  </td>
+                  <td data-label="Vendor">
+                    {%- assign vendor_name = product.vendor | strip -%}
+                    {%- assign vendor_handle = vendor_name | handleize -%}
+                    <a
+                      href="{{ routes.collections_url }}/{{ vendor_handle }}"
+                      style="color:#005bd3;text-decoration:none;"
+                    >
+                      {{ vendor_name }}
+                    </a>
+                  </td>
+                  <td data-label="SKU">
+                    <small>{{ variant.sku }}</small>
+                  </td>
+                  <td data-label="Price">{{ variant.price | money }}</td>
+                  <td
+                    data-label="Available"
+                    class="qty-available {% if variant.inventory_quantity <= 0 %}stock-low{% else %}stock-ok{% endif %}"
+                  >
+                    {% if variant.inventory_management == 'shopify' %}
+                      {{ variant.inventory_quantity }}
+                    {% else %}
+                      &infin;
+                    {% endif %}
+                  </td>
+                  <td data-label="Manage" style="display:none; text-align: center;"></td>
+                  <td data-label="Add to Cart">
+                    <form class="ajax-cart-form">
+                      <input type="hidden" name="id" value="{{ variant.id }}">
+                      <input type="number" name="quantity" class="qty-input" value="1" min="1">
+                      <button type="submit" class="btn-add-cart">Add to Cart</button>
+                    </form>
+                  </td>
+                  <td data-label="Qty In Cart" class="qty-in-cart" data-variant-id="{{ variant.id }}">
+                    {{ qty_in_cart }}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endfor %}
+          {% endpaginate %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="russo-modal-overlay" id="russoConfirm">
+  <div class="russo-modal">
+    <h3>Remove Product</h3>
+    <p>Are you sure you want to remove this item from your order form?</p>
+    <div class="russo-modal-buttons">
+      <button class="russo-modal-btn russo-modal-cancel">Cancel</button>
+      <button class="russo-modal-btn russo-modal-confirm">Remove</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // SEARCH FILTER
+  function filterTable() {
+    const input = document.getElementById('order-form-search');
+    if (!input) return;
+
+    const filter = input.value.toLowerCase();
+    const activeBodyId =
+      document.querySelector('input[name="data-view"]:checked').value === 'favorites'
+        ? 'data-favorites'
+        : 'data-purchased';
+
+    const tbody = document.getElementById(activeBodyId);
+    if (!tbody) return;
+
+    const rows = tbody.getElementsByClassName('table-row');
+    for (let i = 0; i < rows.length; i++) {
+      rows[i].style.display = rows[i].textContent.toLowerCase().includes(filter) ? '' : 'none';
+    }
+  }
+
+  function refreshQtyInCartCells() {
+    fetch('/cart.js')
+      .then((res) => res.json())
+      .then((cart) => {
+        const qtyMap = {};
+        (cart.items || []).forEach((item) => {
+          const variantId = String(item.variant_id);
+          qtyMap[variantId] = (qtyMap[variantId] || 0) + item.quantity;
+        });
+        document.querySelectorAll('.qty-in-cart').forEach((cell) => {
+          const variantId = cell.getAttribute('data-variant-id');
+          cell.textContent = qtyMap[variantId] || 0;
+        });
+      })
+      .catch((err) => console.error('Cart qty refresh error:', err));
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('order-form-search');
+    if (searchInput) searchInput.addEventListener('keyup', filterTable);
+
+    document.querySelectorAll('input[name="data-view"]').forEach((radio) => {
+      radio.addEventListener('change', (e) => {
+        const isFavs = e.target.value === 'favorites';
+        document.getElementById('data-favorites').style.display = isFavs ? 'table-row-group' : 'none';
+        document.getElementById('data-purchased').style.display = isFavs ? 'none' : 'table-row-group';
+
+        // Hide/Show "Manage" column header based on tab (it is the 7th column now)
+        const manageHeader = document.querySelector('th:nth-child(7)');
+        if (manageHeader) manageHeader.style.display = isFavs ? '' : 'none';
+
+        searchInput.value = '';
+        filterTable();
+      });
+    });
+
+    function sortTable(header) {
+      const table = header.closest('table');
+      const activeBodyId =
+        document.querySelector('input[name="data-view"]:checked').value === 'favorites'
+          ? 'data-favorites'
+          : 'data-purchased';
+
+      const tbody = table.querySelector('#' + activeBodyId);
+      if (!tbody) return;
+
+      const index = Array.from(header.parentElement.children).indexOf(header);
+      const sortType = header.dataset.sort || 'string';
+      const isAscending = header.classList.contains('sort-asc');
+
+      table.querySelectorAll('th').forEach((th) => th.classList.remove('sort-asc', 'sort-desc'));
+
+      const sortedRows = Array.from(tbody.querySelectorAll('tr')).sort((a, b) => {
+        let valA = a.children[index] ? a.children[index].innerText.trim() : '';
+        let valB = b.children[index] ? b.children[index].innerText.trim() : '';
+
+        if (sortType === 'number') {
+          valA = parseFloat(valA.replace(/[^0-9.-]/g, '')) || 0;
+          valB = parseFloat(valB.replace(/[^0-9.-]/g, '')) || 0;
+        } else {
+          valA = valA.toLowerCase();
+          valB = valB.toLowerCase();
+        }
+
+        if (valA < valB) return isAscending ? 1 : -1;
+        if (valA > valB) return isAscending ? -1 : 1;
+        return 0;
+      });
+
+      header.classList.toggle('sort-asc', !isAscending);
+      header.classList.toggle('sort-desc', isAscending);
+      tbody.append(...sortedRows);
+    }
+
+    document.querySelectorAll('th[data-sort]').forEach((header) => {
+      header.addEventListener('click', () => sortTable(header));
+    });
+
+    const ORDER_FORM_ENDPOINT = '/apps/russoAPI/v1/orderform';
+
+    document.addEventListener('click', async (evt) => {
+      const btn = evt.target.closest('.of-remove');
+      if (!btn || btn.disabled) return;
+
+      const row = btn.closest('tr');
+      const wrap = btn.closest('.orderform-management-wrap');
+      const productId = wrap.getAttribute('data-product-id');
+      const modal = document.getElementById('russoConfirm');
+      const confirmBtn = modal.querySelector('.russo-modal-confirm');
+      const cancelBtn = modal.querySelector('.russo-modal-cancel');
+
+      modal.classList.add('active');
+
+      const cleanup = () => {
+        modal.classList.remove('active');
+        confirmBtn.onclick = null;
+        cancelBtn.onclick = null;
+      };
+
+      cancelBtn.onclick = cleanup;
+
+      confirmBtn.onclick = async () => {
+        cleanup();
+        btn.disabled = true;
+        btn.textContent = '...';
+
+        try {
+          const res = await fetch(ORDER_FORM_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ actionType: 'remove', productId }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok && (data.success || data.ok)) {
+            row.classList.add('row-fade-out');
+            setTimeout(() => {
+              row.remove();
+            }, 400);
+          } else {
+            alert('Could not remove item. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Remove';
+          }
+        } catch (err) {
+          console.error('Order Form Error:', err);
+          btn.disabled = false;
+          btn.textContent = 'Remove';
+        }
+      };
+    });
+
+    document.querySelectorAll('.ajax-cart-form').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('.btn-add-cart');
+        const originalText = btn.innerText;
+
+        btn.innerText = '...';
+        btn.disabled = true;
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          body: new FormData(form),
+        })
+          .then((res) => res.json())
+          .then(() => {
+            btn.innerText = 'Added! ✓';
+            btn.style.backgroundColor = '#0a7d36';
+            refreshQtyInCartCells();
+            setTimeout(() => {
+              btn.innerText = originalText;
+              btn.disabled = false;
+              btn.style.backgroundColor = '';
+            }, 1500);
+          })
+          .catch((err) => {
+            console.error('Add to cart error:', err);
+            btn.innerText = originalText;
+            btn.disabled = false;
+            btn.style.backgroundColor = '';
+            alert('Could not add item to cart. Please try again.');
+          });
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const table = document.querySelector('.order-form-table');
+    if (!table) return;
+
+    const cols = table.querySelectorAll('th');
+
+    cols.forEach((col) => {
+      const resizer = col.querySelector('.resizer');
+      if (!resizer) return;
+
+      resizer.addEventListener('mousedown', initResize);
+
+      function initResize(e) {
+        e.preventDefault();
+
+        // Track initial mouse position and starting column width
+        const startX = e.clientX;
+        const startWidth = col.offsetWidth;
+
+        // Visual indicator that resizing is happening
+        resizer.classList.add('resizing');
+
+        function doResize(moveEvent) {
+          // Calculate new width based on mouse movement distance
+          const newWidth = startWidth + (moveEvent.clientX - startX);
+
+          // Enforce a sensible minimum width so columns don't vanish
+          if (newWidth > 50) {
+            col.style.width = `${newWidth}px`;
+          }
+        }
+
+        function stopResize() {
+          resizer.classList.remove('resizing');
+          window.removeEventListener('mousemove', doResize);
+          window.removeEventListener('mouseup', stopResize);
+        }
+
+        // Listen globally so the user can drag outside the header cell boundaries safely
+        window.addEventListener('mousemove', doResize);
+        window.addEventListener('mouseup', stopResize);
+      }
+    });
+  });
+</script>
