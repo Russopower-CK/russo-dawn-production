@@ -391,10 +391,6 @@
    Moved from russo-sidebar-mega-menu.js
 ========================================================= */
 
-[data-russo-desktop-nav-toggle] {
-  display: none;
-}
-
 @media screen and (min-width: 990px) {
   .section-header header-drawer,
   .section-header .menu-drawer-container {
