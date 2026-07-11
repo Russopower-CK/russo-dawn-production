@@ -49,6 +49,10 @@
     color: var(--russo-red-dark);
   }
 
+  /*
+   * Hide the drawer at desktop widths unless "Drawer" is explicitly
+   * selected as the desktop menu type in the Theme Editor.
+   */
   {%- if section.settings.menu_type_desktop != 'drawer' -%}
     @media screen and (min-width: 990px) {
       header-drawer {
@@ -57,23 +61,17 @@
     }
   {%- endif -%}
 
+  /*
+   * When "Reduce logo size" is selected, only resize the logo.
+   *
+   * Do not show the drawer or hide the desktop navigation when the
+   * header receives the .scrolled-past-header class.
+   */
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    .scrolled-past-header .header__heading-logo-wrapper {
-      width: 75%;
-      margin-left: 4rem;
-    }
-
-    .scrolled-past-header header-drawer {
-      display: flex;
-    }
-
-    .scrolled-past-header .header__menu_wrapper,
-    .scrolled-past-header .header_secondary_wraper {
-      display: none;
-    }
-
-    .scrolled-past-header .menu-drawer-container {
-      visibility: visible;
+    @media screen and (min-width: 990px) {
+      .scrolled-past-header .header__heading-logo-wrapper {
+        width: 75%;
+      }
     }
   {%- endif -%}
 
