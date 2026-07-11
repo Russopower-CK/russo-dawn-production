@@ -356,8 +356,24 @@
       '    width: 2.6rem;',
       '    height: 2.6rem;',
       '  }',
-      '  .scrolled-past-header [data-russo-desktop-nav-toggle] svg[hidden] { display: none !important; }',
-      '  .scrolled-past-header .header__heading { margin-left: -5rem; }',
+      '  .scrolled-past-header [data-russo-desktop-nav-toggle] .russo-desktop-nav-toggle__close { display: none !important; }',
+      '  .scrolled-past-header [data-russo-desktop-nav-toggle][aria-expanded="true"] .russo-desktop-nav-toggle__hamburger { display: none !important; }',
+      '  .scrolled-past-header [data-russo-desktop-nav-toggle][aria-expanded="true"] .russo-desktop-nav-toggle__close { display: block !important; }',
+      '  .scrolled-past-header .header__heading {',
+      '    width: max-content;',
+      '    max-width: max-content;',
+      '    margin-left: -5rem;',
+      '    justify-self: start;',
+      '  }',
+      '  .scrolled-past-header .header__heading-link {',
+      '    display: inline-flex;',
+      '    width: auto;',
+      '    max-width: max-content;',
+      '  }',
+      '  .scrolled-past-header .header__heading-logo-wrapper {',
+      '    display: inline-block;',
+      '    max-width: 100%;',
+      '  }',
       '  .scrolled-past-header header-drawer { display: none !important; }',
       '  .scrolled-past-header:not(.russo-desktop-nav-open) .header__menu_wrapper,',
       '  .scrolled-past-header:not(.russo-desktop-nav-open) .header_secondary_wraper {',
@@ -442,8 +458,8 @@
         sectionHeader.classList.toggle(DESKTOP_NAV_OPEN_CLASS, expanded);
         button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
         button.setAttribute('aria-label', expanded ? 'Close desktop navigation' : 'Open desktop navigation');
-        hamburgerIcon.hidden = expanded;
-        closeIcon.hidden = !expanded;
+        hamburgerIcon.removeAttribute('hidden');
+        closeIcon.removeAttribute('hidden');
 
         if (!expanded) {
           closeAllMegaMenus();
