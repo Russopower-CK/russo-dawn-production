@@ -356,6 +356,8 @@
       '    width: 2.6rem;',
       '    height: 2.6rem;',
       '  }',
+      '  .scrolled-past-header [data-russo-desktop-nav-toggle] svg[hidden] { display: none !important; }',
+      '  .scrolled-past-header .header__heading { margin-left: -5rem; }',
       '  .scrolled-past-header header-drawer { display: none !important; }',
       '  .scrolled-past-header:not(.russo-desktop-nav-open) .header__menu_wrapper,',
       '  .scrolled-past-header:not(.russo-desktop-nav-open) .header_secondary_wraper {',
