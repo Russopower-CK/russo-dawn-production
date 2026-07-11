@@ -57,7 +57,26 @@
     }
   {%- endif -%}
 
-  
+  {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
+    .scrolled-past-header .header__heading-logo-wrapper {
+      width: 75%;
+      margin-left: 4rem;
+    }
+
+    .scrolled-past-header header-drawer {
+      display: flex;
+    }
+
+    .scrolled-past-header .header__menu_wrapper,
+    .scrolled-past-header .header_secondary_wraper {
+      display: none;
+    }
+
+    .scrolled-past-header .menu-drawer-container {
+      visibility: visible;
+    }
+  {%- endif -%}
+
   .menu-drawer-container {
     display: flex;
   }
@@ -166,22 +185,6 @@
 
   <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
     <div class="header-left">
-
-<button
-  type="button"
-  class="russo-desktop-nav-toggle"
-  data-russo-desktop-nav-toggle
-  aria-label="Open desktop navigation"
-  aria-expanded="false"
-  aria-controls="RussoDesktopHeaderNavigation"
->
-  <span class="russo-desktop-nav-toggle__open svg-wrapper">
-    {{- 'icon-hamburger.svg' | inline_asset_content -}}
-  </span>
-  <span class="russo-desktop-nav-toggle__close svg-wrapper">
-    {{- 'icon-close.svg' | inline_asset_content -}}
-  </span>
-</button>
       {%- liquid
         if section.settings.menu != blank
           render 'header-drawer'
@@ -224,7 +227,7 @@
       </div>
     </div>
 
-    <div id="RussoDesktopHeaderNavigation" class="header__menu_wrapper">
+    <div class="header__menu_wrapper">
       {%- liquid
         if section.settings.menu != blank
           case section.settings.menu_type_desktop

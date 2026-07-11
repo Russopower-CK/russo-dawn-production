@@ -4,14 +4,15 @@
   var DESKTOP_MEDIA_QUERY = '(min-width: 990px)';
   var MEGA_MENU_CLOSE_DELAY = 220;
   var DROPDOWN_CLOSE_DELAY = 180;
-  var DESKTOP_NAV_OPEN_CLASS = 'russo-desktop-nav-open';
 
   function getDirectSummary(detailsElement) {
     var children = detailsElement.children;
     var index;
 
     for (index = 0; index < children.length; index += 1) {
-      if (children[index].tagName === 'SUMMARY') return children[index];
+      if (children[index].tagName === 'SUMMARY') {
+        return children[index];
+      }
     }
 
     return null;
@@ -31,7 +32,9 @@
       summary = getDirectSummary(menu);
       menu.removeAttribute('open');
 
-      if (summary) summary.setAttribute('aria-expanded', 'false');
+      if (summary) {
+        summary.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 
@@ -41,11 +44,6 @@
 
   function closeAllStandardDropdowns(excludedDropdown) {
     closeMenus('.header-dropdown-menu', excludedDropdown);
-  }
-
-  function closeAllHeaderMenus() {
-    closeAllMegaMenus();
-    closeAllStandardDropdowns();
   }
 
   function initRussoSidebarMegaMenus() {
@@ -96,7 +94,10 @@
         var targetPanel = null;
 
         panels.forEach(function (panel) {
-          if (!targetPanel && panel.getAttribute('data-russo-mega-panel') === targetId) {
+          if (
+            !targetPanel &&
+            panel.getAttribute('data-russo-mega-panel') === targetId
+          ) {
             targetPanel = panel;
           }
         });
@@ -115,6 +116,7 @@
 
         tabs.forEach(function (item) {
           var isActive = item === tab;
+
           item.classList.toggle('is-active', isActive);
           item.setAttribute('aria-selected', isActive ? 'true' : 'false');
           item.setAttribute('tabindex', isActive ? '0' : '-1');
@@ -122,6 +124,7 @@
 
         panels.forEach(function (panel) {
           var isActive = panel === targetPanel;
+
           panel.classList.toggle('is-active', isActive);
           panel.toggleAttribute('hidden', !isActive);
         });
@@ -135,9 +138,14 @@
 
         if (currentIndex === -1) return;
 
-        if (direction === 'first') nextIndex = 0;
-        else if (direction === 'last') nextIndex = tabList.length - 1;
-        else nextIndex = (currentIndex + direction + tabList.length) % tabList.length;
+        if (direction === 'first') {
+          nextIndex = 0;
+        } else if (direction === 'last') {
+          nextIndex = tabList.length - 1;
+        } else {
+          nextIndex =
+            (currentIndex + direction + tabList.length) % tabList.length;
+        }
 
         nextTab = tabList[nextIndex];
         if (!nextTab) return;
@@ -149,12 +157,14 @@
       tabs.forEach(function (tab) {
         tab.addEventListener('mouseenter', function () {
           if (!desktopQuery.matches) return;
+
           openMenu();
           activateTab(tab);
         });
 
         tab.addEventListener('focus', function () {
           if (!desktopQuery.matches) return;
+
           openMenu();
           activateTab(tab);
         });
@@ -163,6 +173,7 @@
           if (!desktopQuery.matches) return;
 
           activateTab(tab);
+
           if (tab.tagName === 'A' && tab.getAttribute('href')) return;
 
           event.preventDefault();
@@ -196,11 +207,17 @@
       });
 
       menu.addEventListener('toggle', function () {
-        summary.setAttribute('aria-expanded', menu.hasAttribute('open') ? 'true' : 'false');
+        summary.setAttribute(
+          'aria-expanded',
+          menu.hasAttribute('open') ? 'true' : 'false'
+        );
       });
 
       menu.addEventListener('mouseenter', openMenu);
-      menu.addEventListener('mouseleave', function () { closeMenu(false); });
+      menu.addEventListener('mouseleave', function () {
+        closeMenu(false);
+      });
+
       summary.addEventListener('mouseenter', openMenu);
       summary.addEventListener('focus', openMenu);
       summary.addEventListener('click', function (event) {
@@ -209,17 +226,25 @@
         event.preventDefault();
         window.clearTimeout(closeTimer);
 
-        if (menu.hasAttribute('open')) setMenuExpanded(menu, summary, false);
-        else openMenu();
+        if (menu.hasAttribute('open')) {
+          setMenuExpanded(menu, summary, false);
+        } else {
+          openMenu();
+        }
       });
 
       menu.addEventListener('focusout', function (event) {
-        if (!menu.contains(event.relatedTarget)) closeMenu(false);
+        if (!menu.contains(event.relatedTarget)) {
+          closeMenu(false);
+        }
       });
 
       desktopQuery.addEventListener('change', function (event) {
         window.clearTimeout(closeTimer);
-        if (!event.matches) closeMenu(true);
+
+        if (!event.matches) {
+          closeMenu(true);
+        }
       });
 
       activateTab(menu.querySelector('[data-russo-mega-tab].is-active') || tabs[0]);
@@ -266,11 +291,17 @@
       }
 
       dropdown.addEventListener('toggle', function () {
-        summary.setAttribute('aria-expanded', dropdown.hasAttribute('open') ? 'true' : 'false');
+        summary.setAttribute(
+          'aria-expanded',
+          dropdown.hasAttribute('open') ? 'true' : 'false'
+        );
       });
 
       dropdown.addEventListener('mouseenter', openDropdown);
-      dropdown.addEventListener('mouseleave', function () { closeDropdown(false); });
+      dropdown.addEventListener('mouseleave', function () {
+        closeDropdown(false);
+      });
+
       summary.addEventListener('mouseenter', openDropdown);
       summary.addEventListener('focus', openDropdown);
       summary.addEventListener('click', function (event) {
@@ -279,120 +310,72 @@
         event.preventDefault();
         window.clearTimeout(closeTimer);
 
-        if (dropdown.hasAttribute('open')) setMenuExpanded(dropdown, summary, false);
-        else openDropdown();
+        if (dropdown.hasAttribute('open')) {
+          setMenuExpanded(dropdown, summary, false);
+        } else {
+          openDropdown();
+        }
       });
 
       dropdown.addEventListener('focusout', function (event) {
-        if (!dropdown.contains(event.relatedTarget)) closeDropdown(false);
+        if (!dropdown.contains(event.relatedTarget)) {
+          closeDropdown(false);
+        }
       });
 
       desktopQuery.addEventListener('change', function (event) {
         window.clearTimeout(closeTimer);
-        if (!event.matches) closeDropdown(true);
-      });
-    });
-  }
 
-  function initDesktopNavigationToggle(root) {
-    var scope = root || document;
-    var toggles = scope.querySelectorAll('[data-russo-desktop-nav-toggle]');
-    var desktopQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
-
-    toggles.forEach(function (toggle) {
-      var sectionHeader;
-      var observer;
-
-      if (toggle.dataset.russoDesktopToggleInitialized === 'true') return;
-
-      sectionHeader = toggle.closest('.section-header');
-      if (!sectionHeader) return;
-
-      toggle.dataset.russoDesktopToggleInitialized = 'true';
-
-      function setExpanded(expanded, restoreFocus) {
-        sectionHeader.classList.toggle(DESKTOP_NAV_OPEN_CLASS, expanded);
-        toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        toggle.setAttribute('aria-label', expanded ? 'Close desktop navigation' : 'Open desktop navigation');
-
-        if (!expanded) closeAllHeaderMenus();
-        if (restoreFocus) toggle.focus();
-      }
-
-      toggle.addEventListener('click', function () {
-        if (!desktopQuery.matches) return;
-        setExpanded(toggle.getAttribute('aria-expanded') !== 'true', false);
-      });
-
-      toggle.addEventListener('keydown', function (event) {
-        if (event.key !== 'Escape' || toggle.getAttribute('aria-expanded') !== 'true') return;
-        event.preventDefault();
-        setExpanded(false, true);
-      });
-
-      desktopQuery.addEventListener('change', function (event) {
-        if (!event.matches) setExpanded(false, false);
-      });
-
-      observer = new MutationObserver(function () {
-        if (!sectionHeader.classList.contains('scrolled-past-header')) {
-          setExpanded(false, false);
+        if (!event.matches) {
+          closeDropdown(true);
         }
       });
-
-      observer.observe(sectionHeader, {
-        attributes: true,
-        attributeFilter: ['class']
-      });
     });
   }
 
-  function initHeaderMenus(root) {
+  function initHeaderMenus() {
     initRussoSidebarMegaMenus();
     initStandardHeaderDropdowns();
-    initDesktopNavigationToggle(root || document);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { initHeaderMenus(document); });
+    document.addEventListener('DOMContentLoaded', initHeaderMenus);
   } else {
-    initHeaderMenus(document);
+    initHeaderMenus();
   }
 
-  document.addEventListener('shopify:section:load', function (event) {
-    initHeaderMenus(event.target);
-  });
+  document.addEventListener('shopify:section:load', initHeaderMenus);
 
   document.addEventListener('keydown', function (event) {
     var activeElement;
     var focusTarget = null;
-    var openToggle;
 
     if (event.key !== 'Escape') return;
 
     activeElement = document.activeElement;
 
-    document.querySelectorAll('.russo-sidebar-mega-menu, .header-dropdown-menu').forEach(function (menu) {
-      var summary;
+    document
+      .querySelectorAll('.russo-sidebar-mega-menu, .header-dropdown-menu')
+      .forEach(function (menu) {
+        var summary;
 
-      if (!menu.hasAttribute('open')) return;
+        if (!menu.hasAttribute('open')) return;
 
-      summary = getDirectSummary(menu);
-      if (!focusTarget && summary && menu.contains(activeElement)) focusTarget = summary;
+        summary = getDirectSummary(menu);
 
-      menu.removeAttribute('open');
-      if (summary) summary.setAttribute('aria-expanded', 'false');
-    });
+        if (!focusTarget && summary && menu.contains(activeElement)) {
+          focusTarget = summary;
+        }
 
-    openToggle = document.querySelector('[data-russo-desktop-nav-toggle][aria-expanded="true"]');
-    if (openToggle) {
-      openToggle.closest('.section-header').classList.remove(DESKTOP_NAV_OPEN_CLASS);
-      openToggle.setAttribute('aria-expanded', 'false');
-      openToggle.setAttribute('aria-label', 'Open desktop navigation');
-      openToggle.focus();
-      return;
+        menu.removeAttribute('open');
+
+        if (summary) {
+          summary.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+    if (focusTarget) {
+      focusTarget.focus();
     }
-
-    if (focusTarget) focusTarget.focus();
   });
 })();
