@@ -49,6 +49,12 @@
     color: var(--russo-red-dark);
   }
 
+  /*
+   * DESKTOP HEADER DRAWER
+   *
+   * Hide the hamburger at the top of the page unless Drawer is selected
+   * as the permanent desktop menu type.
+   */
   {%- if section.settings.menu_type_desktop != 'drawer' -%}
     @media screen and (min-width: 990px) {
       header-drawer {
@@ -57,23 +63,51 @@
     }
   {%- endif -%}
 
+  /*
+   * EMPIRE-STYLE COMPACT STICKY HEADER
+   *
+   * When "Reduce logo size" is selected:
+   * - hide the full desktop navigation after scrolling;
+   * - show the hamburger drawer trigger;
+   * - reduce the logo size;
+   * - restore everything automatically at the top of the page.
+   */
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    .scrolled-past-header .header__heading-logo-wrapper {
-      width: 75%;
-      margin-left: 4rem;
-    }
+    @media screen and (min-width: 990px) {
+      .scrolled-past-header header-drawer {
+        display: flex;
+        align-items: center;
+        visibility: visible;
+      }
 
-    .scrolled-past-header header-drawer {
-      display: flex;
-    }
+      .scrolled-past-header .menu-drawer-container {
+        display: flex;
+        visibility: visible;
+      }
 
-    .scrolled-past-header .header__menu_wrapper,
-    .scrolled-past-header .header_secondary_wraper {
-      display: none;
-    }
+      .scrolled-past-header .header__menu_wrapper,
+      .scrolled-past-header .header_secondary_wraper {
+        display: none;
+      }
 
-    .scrolled-past-header .menu-drawer-container {
-      visibility: visible;
+      .scrolled-past-header .header__heading-logo-wrapper {
+        width: 75%;
+        transition: width 200ms ease;
+      }
+
+      .scrolled-past-header .header__heading-logo {
+        max-height: 5rem;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /*
+       * Make sure the drawer appears above the storefront when opened
+       * from the compact desktop header.
+       */
+      .scrolled-past-header .menu-drawer {
+        z-index: 100;
+      }
     }
   {%- endif -%}
 
