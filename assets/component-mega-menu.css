@@ -1,6 +1,12 @@
 /* =========================================================
-   1. GLOBAL DROPDOWN & MEGA MENU BASE 
+   1. Global Dropdown and Mega Menu Base
 ========================================================= */
+
+:root {
+  --russo-menu-accent: var(--russo-red-dark, #c8192e);
+  --russo-menu-accent-soft: #f7e8eb;
+  --russo-menu-focus-ring: var(--russo-menu-accent);
+}
 
 .mega-menu {
   position: static;
@@ -18,17 +24,30 @@
   overflow-y: auto;
   padding: 3rem 0;
   background-color: rgb(var(--color-background));
-  transform: translateY(-1.5rem);
+  overscroll-behavior: contain;
+}
+
+.js .mega-menu__content {
+  visibility: hidden;
+  pointer-events: none;
   opacity: 0;
+  transform: translateY(-1.5rem);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 0s linear 160ms;
+}
+
+.js .mega-menu[open] > .mega-menu__content {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0s;
 }
 
 .shopify-section-header-sticky .mega-menu__content {
   max-height: calc(100vh - var(--header-bottom-position-desktop, 20rem) - 4rem);
-}
-
-.mega-menu[open] .mega-menu__content {
-  transform: translateY(0);
-  opacity: 1;
 }
 
 .mega-menu__link,
@@ -47,8 +66,20 @@
   text-decoration: none !important;
 }
 
-/* ========================================================= 
-   2. RUSSO-STYLE SIDEBAR MEGA MENU — SHOP BY CATEGORY 
+.russo-sidebar-mega-menu__tab:focus {
+  outline: none;
+}
+
+.russo-sidebar-mega-menu__tab:focus-visible,
+.russo-sidebar-mega-menu__link:focus-visible,
+.header-dropdown-menu__link:focus-visible,
+.header-dropdown-menu__nested-link:focus-visible {
+  outline: 2px solid var(--russo-menu-focus-ring);
+  outline-offset: -2px;
+}
+
+/* =========================================================
+   2. Russo-Style Sidebar Mega Menu - Shop By Category
 ========================================================= */
 
 .russo-sidebar-mega-menu__content {
@@ -74,7 +105,6 @@
   flex-direction: column;
 }
 
-/* Underline Kill-Switch for Sidebar Tabs */
 .russo-sidebar-mega-menu__tab,
 .russo-sidebar-mega-menu__tab span {
   text-decoration: none !important;
@@ -106,8 +136,8 @@
 .russo-sidebar-mega-menu__tab:hover,
 .russo-sidebar-mega-menu__tab:focus,
 .russo-sidebar-mega-menu__tab.is-active {
-  background: #f7e8eb;
-  color: #c8192e;
+  background: var(--russo-menu-accent-soft);
+  color: var(--russo-menu-accent);
 }
 
 .russo-sidebar-mega-menu__tab svg {
@@ -117,11 +147,10 @@
   transform: rotate(-90deg);
 }
 
-/* ========================================================= 
-   3. DESKTOP CATEGORY ICONS 
+/* =========================================================
+   3. Desktop Category Icons
 ========================================================= */
 
-/* Desktop Sidebar Icon Positioning */
 .russo-sidebar-mega-menu__tab::before {
   content: "";
   display: block;
@@ -133,7 +162,6 @@
   background-size: 2rem;
 }
 
-/* Desktop Category Icons Image Mapping */
 .russo-sidebar-mega-menu__tab[data-href*="/collections/power-equipment"]::before {
   background-image: url("https://cdn.shopify.com/s/files/1/0691/3340/2417/files/OPE.png");
 }
@@ -174,58 +202,62 @@
   background-image: url("https://cdn.shopify.com/s/files/1/0691/3340/2417/files/Used_Equipment.png");
 }
 
-/* ========================================================= 
-   4. MEGA MENU PANELS 
+/* =========================================================
+   4. Mega Menu Panels
 ========================================================= */
 
 .russo-sidebar-mega-menu__panels {
   min-width: 0;
+  max-width: 100%;
   padding-top: 0.7rem;
+  overflow-x: auto;
 }
 
 .russo-sidebar-mega-menu__panel {
   display: none;
 }
 
+.russo-sidebar-mega-menu__panel.is-active:not([hidden]) {
+  display: block;
+  animation: russoSidebarMegaFadeIn 160ms ease-out;
+}
+
 .russo-sidebar-mega-menu__panel[hidden] {
   display: none !important;
 }
 
-.russo-sidebar-mega-menu__panel.is-active {
-  display: block !important;
-  animation: russoSidebarMegaFadeIn 160ms ease-out;
-}
-
-/* Use grid so that items overflow into a new column after 12 items,
-   with tight vertical spacing and columns hugging content */
 .russo-sidebar-mega-menu__links {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: max-content;
+  grid-auto-columns: minmax(18rem, 28rem);
   grid-template-rows: repeat(12, auto);
   justify-content: flex-start;
-  column-gap: 50px; /* 50px gap between columns on desktop */
+  column-gap: 5rem;
   row-gap: 0.3rem;
   margin: 0;
   padding: 0;
 }
 
 .russo-sidebar-mega-menu__links li {
+  min-width: 0;
   margin-bottom: 0;
 }
 
 .russo-sidebar-mega-menu__link {
   display: inline-block;
+  max-width: 28rem;
   color: #000;
   font-size: 1.55rem;
   font-weight: 400;
   line-height: 1.25;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .russo-sidebar-mega-menu__link:hover,
 .russo-sidebar-mega-menu__link:focus,
 .russo-sidebar-mega-menu__link--active {
-  color: #c8192e !important;
+  color: var(--russo-menu-accent) !important;
   font-weight: 700;
 }
 
@@ -235,15 +267,15 @@
   font-size: 1.55rem;
 }
 
-/* ========================================================= 
-   5. MULTI-TIER FLYOUT NESTED DROPDOWNS 
+/* =========================================================
+   5. Multi-Tier Flyout Nested Dropdowns
 ========================================================= */
 
 .header-dropdown-menu__list {
   position: absolute;
   top: calc(100% + 0.8rem);
   left: 0;
-  z-index: 5;
+  z-index: 20;
   min-width: 280px;
   margin: 0;
   padding: 1.6rem 0;
@@ -264,7 +296,6 @@
   white-space: nowrap;
 }
 
-/* Specific Flyout Layout Overrides */
 .header-dropdown-menu--flyout .header-dropdown-menu__item {
   position: relative;
 }
@@ -286,14 +317,14 @@
   position: absolute;
   top: 0;
   left: 100%;
-  z-index: 10;
+  z-index: 21;
+  display: none;
   min-width: 240px;
   margin: 0;
   padding: 1rem 0;
   background: #fff;
-  box-shadow: 0.8rem 1rem 2.5rem rgba(0, 0, 0, 0.12);
   border-left: 1px solid rgba(var(--color-foreground), 0.08);
-  display: none;
+  box-shadow: 0.8rem 1rem 2.5rem rgba(0, 0, 0, 0.12);
 }
 
 .header-dropdown-menu--flyout .header-dropdown-menu__nested-link {
@@ -303,33 +334,35 @@
   font-size: 1.45rem;
 }
 
-/* Hover Mechanics for Flyout States */
-.header-dropdown-menu--flyout .header-dropdown-menu__item:hover > .header-dropdown-menu__link {
-  color: #c8192e !important;
+.header-dropdown-menu--flyout .header-dropdown-menu__item:hover > .header-dropdown-menu__link,
+.header-dropdown-menu--flyout .header-dropdown-menu__item:focus-within > .header-dropdown-menu__link {
+  color: var(--russo-menu-accent) !important;
 }
 
-.header-dropdown-menu--flyout .header-dropdown-menu__nested-link:hover {
-  color: #c8192e !important;
+.header-dropdown-menu--flyout .header-dropdown-menu__nested-link:hover,
+.header-dropdown-menu--flyout .header-dropdown-menu__nested-link:focus {
+  color: var(--russo-menu-accent) !important;
   font-weight: 700;
 }
 
-.header-dropdown-menu--flyout .header-dropdown-menu__item.has-children:hover > .header-dropdown-menu__nested {
+.header-dropdown-menu--flyout .header-dropdown-menu__item.has-children:hover > .header-dropdown-menu__nested,
+.header-dropdown-menu--flyout .header-dropdown-menu__item.has-children:focus-within > .header-dropdown-menu__nested {
   display: block;
 }
 
-/* ========================================================= 
-   6. STANDARD DROPDOWN HOVER STATES — FALLBACK MENUS
+/* =========================================================
+   6. Standard Dropdown Hover States - Fallback Menus
 ========================================================= */
 
 .header-dropdown-menu:not(.header-dropdown-menu--flyout) .header-dropdown-menu__link:hover,
 .header-dropdown-menu:not(.header-dropdown-menu--flyout) .header-dropdown-menu__link:focus,
 .header-dropdown-menu__link.header-dropdown-menu__link--active {
-  color: #c8192e !important;
+  color: var(--russo-menu-accent) !important;
   font-weight: 700;
 }
 
-/* ========================================================= 
-   7. ANIMATIONS & RESPONSIVE BREAKPOINTS 
+/* =========================================================
+   7. Animations and Responsive Breakpoints
 ========================================================= */
 
 @keyframes russoSidebarMegaFadeIn {
@@ -345,6 +378,16 @@
 }
 
 @media screen and (min-width: 990px) {
+  .header__inline-menu {
+    position: relative;
+    z-index: 4;
+  }
+
+  .mega-menu__content {
+    z-index: 20;
+    max-height: calc(100vh - var(--header-height, 12rem));
+  }
+
   .russo-sidebar-mega-menu > summary {
     cursor: pointer;
   }
@@ -364,7 +407,7 @@
 
   .russo-sidebar-mega-menu__links {
     grid-template-rows: repeat(12, auto);
-    column-gap: 0.8rem;
+    column-gap: 2.4rem;
   }
 }
 
@@ -382,7 +425,23 @@
     display: block;
   }
 
+  .russo-sidebar-mega-menu__panel[hidden] {
+    display: none !important;
+  }
+
   .russo-sidebar-mega-menu__links {
     display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .mega-menu__content,
+  .russo-sidebar-mega-menu__tab {
+    transition: none;
+  }
+
+  .russo-sidebar-mega-menu__panel.is-active:not([hidden]),
+  .russo-sidebar-mega-menu[open] > .mega-menu__content {
+    animation: none;
   }
 }
