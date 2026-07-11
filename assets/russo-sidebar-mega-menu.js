@@ -4,9 +4,6 @@
   var DESKTOP_MEDIA_QUERY = '(min-width: 990px)';
   var MEGA_MENU_CLOSE_DELAY = 220;
   var DROPDOWN_CLOSE_DELAY = 180;
-  var DESKTOP_NAV_OPEN_CLASS = 'russo-desktop-nav-open';
-  var DESKTOP_TOGGLE_ATTRIBUTE = 'data-russo-desktop-nav-toggle';
-  var DESKTOP_STYLE_ID = 'RussoDesktopStickyNavigationStyles';
 
   function getDirectSummary(detailsElement) {
     var children = detailsElement.children;
@@ -97,7 +94,10 @@
         var targetPanel = null;
 
         panels.forEach(function (panel) {
-          if (!targetPanel && panel.getAttribute('data-russo-mega-panel') === targetId) {
+          if (
+            !targetPanel &&
+            panel.getAttribute('data-russo-mega-panel') === targetId
+          ) {
             targetPanel = panel;
           }
         });
@@ -143,7 +143,8 @@
         } else if (direction === 'last') {
           nextIndex = tabList.length - 1;
         } else {
-          nextIndex = (currentIndex + direction + tabList.length) % tabList.length;
+          nextIndex =
+            (currentIndex + direction + tabList.length) % tabList.length;
         }
 
         nextTab = tabList[nextIndex];
@@ -206,7 +207,10 @@
       });
 
       menu.addEventListener('toggle', function () {
-        summary.setAttribute('aria-expanded', menu.hasAttribute('open') ? 'true' : 'false');
+        summary.setAttribute(
+          'aria-expanded',
+          menu.hasAttribute('open') ? 'true' : 'false'
+        );
       });
 
       menu.addEventListener('mouseenter', openMenu);
@@ -287,7 +291,10 @@
       }
 
       dropdown.addEventListener('toggle', function () {
-        summary.setAttribute('aria-expanded', dropdown.hasAttribute('open') ? 'true' : 'false');
+        summary.setAttribute(
+          'aria-expanded',
+          dropdown.hasAttribute('open') ? 'true' : 'false'
+        );
       });
 
       dropdown.addEventListener('mouseenter', openDropdown);
@@ -326,186 +333,18 @@
     });
   }
 
-  function addDesktopStickyNavigationStyles() {
-    var style;
-
-    if (document.getElementById(DESKTOP_STYLE_ID)) return;
-
-    style = document.createElement('style');
-    style.id = DESKTOP_STYLE_ID;
-    style.textContent = [
-      '[data-russo-desktop-nav-toggle] { display: none; }',
-      '@media screen and (min-width: 990px) {',
-      '  .scrolled-past-header [data-russo-desktop-nav-toggle] {',
-      '    appearance: none;',
-      '    display: inline-flex;',
-      '    align-items: center;',
-      '    justify-content: center;',
-      '    flex: 0 0 auto;',
-      '    width: 4.4rem;',
-      '    height: 4.4rem;',
-      '    margin: 0 1.2rem 0 0;',
-      '    padding: 0;',
-      '    color: rgb(var(--color-foreground));',
-      '    background: transparent;',
-      '    border: 0;',
-      '    cursor: pointer;',
-      '  }',
-      '  .scrolled-past-header [data-russo-desktop-nav-toggle] svg {',
-      '    display: block;',
-      '    width: 2.6rem;',
-      '    height: 2.6rem;',
-      '  }',
-      '  .scrolled-past-header [data-russo-desktop-nav-toggle] svg[hidden] { display: none !important; }',
-      '  .scrolled-past-header .header__heading { margin-left: -5rem; }',
-      '  .scrolled-past-header header-drawer { display: none !important; }',
-      '  .scrolled-past-header:not(.russo-desktop-nav-open) .header__menu_wrapper,',
-      '  .scrolled-past-header:not(.russo-desktop-nav-open) .header_secondary_wraper {',
-      '    display: none !important;',
-      '  }',
-      '  .scrolled-past-header.russo-desktop-nav-open .header__menu_wrapper,',
-      '  .scrolled-past-header.russo-desktop-nav-open .header_secondary_wraper {',
-      '    display: block !important;',
-      '  }',
-      '  .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {',
-      '    width: 75%;',
-      '  }',
-      '  .header__heading-logo-wrapper { transition: width 200ms ease; }',
-      '}',
-      '@media screen and (max-width: 989px) {',
-      '  [data-russo-desktop-nav-toggle] { display: none !important; }',
-      '}'
-    ].join('\n');
-
-    document.head.appendChild(style);
-  }
-
-  function createDesktopNavigationToggle() {
-    var button = document.createElement('button');
-
-    button.type = 'button';
-    button.setAttribute(DESKTOP_TOGGLE_ATTRIBUTE, '');
-    button.setAttribute('aria-expanded', 'false');
-    button.setAttribute('aria-label', 'Open desktop navigation');
-    button.innerHTML = [
-      '<svg class="russo-desktop-nav-toggle__hamburger" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">',
-      '  <path d="M3 6H21M3 12H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
-      '</svg>',
-      '<svg class="russo-desktop-nav-toggle__close" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" hidden>',
-      '  <path d="M5 5L19 19M19 5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
-      '</svg>'
-    ].join('');
-
-    return button;
-  }
-
-  function initDesktopStickyNavigation(root) {
-    var scope = root || document;
-    var sectionHeaders = scope.matches && scope.matches('.section-header')
-      ? [scope]
-      : scope.querySelectorAll('.section-header');
-
-    addDesktopStickyNavigationStyles();
-
-    Array.prototype.forEach.call(sectionHeaders, function (sectionHeader) {
-      var headerLeft;
-      var desktopNavigation;
-      var secondaryNavigation;
-      var button;
-      var hamburgerIcon;
-      var closeIcon;
-      var desktopQuery;
-      var observer;
-
-      if (sectionHeader.dataset.russoDesktopNavigationInitialized === 'true') return;
-
-      headerLeft = sectionHeader.querySelector('.header-left');
-      desktopNavigation = sectionHeader.querySelector('.header__menu_wrapper');
-      secondaryNavigation = sectionHeader.querySelector('.header_secondary_wraper');
-
-      if (!headerLeft || !desktopNavigation) return;
-
-      sectionHeader.dataset.russoDesktopNavigationInitialized = 'true';
-      button = createDesktopNavigationToggle();
-      hamburgerIcon = button.querySelector('.russo-desktop-nav-toggle__hamburger');
-      closeIcon = button.querySelector('.russo-desktop-nav-toggle__close');
-      desktopQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
-
-      if (!desktopNavigation.id) {
-        desktopNavigation.id = 'RussoDesktopHeaderNavigation';
-      }
-
-      button.setAttribute('aria-controls', desktopNavigation.id);
-      headerLeft.insertBefore(button, headerLeft.firstChild);
-
-      function setExpanded(expanded, restoreFocus) {
-        sectionHeader.classList.toggle(DESKTOP_NAV_OPEN_CLASS, expanded);
-        button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        button.setAttribute('aria-label', expanded ? 'Close desktop navigation' : 'Open desktop navigation');
-        hamburgerIcon.hidden = expanded;
-        closeIcon.hidden = !expanded;
-
-        if (!expanded) {
-          closeAllMegaMenus();
-          closeAllStandardDropdowns();
-        }
-
-        if (restoreFocus) {
-          button.focus();
-        }
-      }
-
-      button.addEventListener('click', function () {
-        setExpanded(!sectionHeader.classList.contains(DESKTOP_NAV_OPEN_CLASS), false);
-      });
-
-      sectionHeader.addEventListener('keydown', function (event) {
-        if (event.key !== 'Escape') return;
-        if (!sectionHeader.classList.contains(DESKTOP_NAV_OPEN_CLASS)) return;
-
-        setExpanded(false, true);
-      });
-
-      desktopQuery.addEventListener('change', function (event) {
-        if (!event.matches) {
-          setExpanded(false, false);
-        }
-      });
-
-      observer = new MutationObserver(function () {
-        if (!sectionHeader.classList.contains('scrolled-past-header')) {
-          setExpanded(false, false);
-        }
-      });
-
-      observer.observe(sectionHeader, {
-        attributes: true,
-        attributeFilter: ['class']
-      });
-
-      if (secondaryNavigation) {
-        secondaryNavigation.setAttribute('data-russo-secondary-navigation', '');
-      }
-    });
-  }
-
-  function initHeaderMenus(root) {
+  function initHeaderMenus() {
     initRussoSidebarMegaMenus();
     initStandardHeaderDropdowns();
-    initDesktopStickyNavigation(root || document);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      initHeaderMenus(document);
-    });
+    document.addEventListener('DOMContentLoaded', initHeaderMenus);
   } else {
-    initHeaderMenus(document);
+    initHeaderMenus();
   }
 
-  document.addEventListener('shopify:section:load', function (event) {
-    initHeaderMenus(event.target);
-  });
+  document.addEventListener('shopify:section:load', initHeaderMenus);
 
   document.addEventListener('keydown', function (event) {
     var activeElement;
