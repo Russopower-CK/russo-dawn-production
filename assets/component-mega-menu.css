@@ -1,5 +1,5 @@
 /* =========================================================
-   1. GLOBAL DROPDOWN & MEGA MENU BASE 
+   1. GLOBAL DROPDOWN & MEGA MENU BASE
 ========================================================= */
 
 .mega-menu {
@@ -47,8 +47,8 @@
   text-decoration: none !important;
 }
 
-/* ========================================================= 
-   2. RUSSO-STYLE SIDEBAR MEGA MENU — SHOP BY CATEGORY 
+/* =========================================================
+   2. RUSSO-STYLE SIDEBAR MEGA MENU - SHOP BY CATEGORY
 ========================================================= */
 
 .russo-sidebar-mega-menu__content {
@@ -117,11 +117,10 @@
   transform: rotate(-90deg);
 }
 
-/* ========================================================= 
-   3. DESKTOP CATEGORY ICONS 
+/* =========================================================
+   3. DESKTOP CATEGORY ICONS
 ========================================================= */
 
-/* Desktop Sidebar Icon Positioning */
 .russo-sidebar-mega-menu__tab::before {
   content: "";
   display: block;
@@ -133,7 +132,6 @@
   background-size: 2rem;
 }
 
-/* Desktop Category Icons Image Mapping */
 .russo-sidebar-mega-menu__tab[data-href*="/collections/power-equipment"]::before {
   background-image: url("https://cdn.shopify.com/s/files/1/0691/3340/2417/files/OPE.png");
 }
@@ -174,8 +172,8 @@
   background-image: url("https://cdn.shopify.com/s/files/1/0691/3340/2417/files/Used_Equipment.png");
 }
 
-/* ========================================================= 
-   4. MEGA MENU PANELS 
+/* =========================================================
+   4. MEGA MENU PANELS
 ========================================================= */
 
 .russo-sidebar-mega-menu__panels {
@@ -196,15 +194,13 @@
   animation: russoSidebarMegaFadeIn 160ms ease-out;
 }
 
-/* Use grid so that items overflow into a new column after 12 items,
-   with tight vertical spacing and columns hugging content */
 .russo-sidebar-mega-menu__links {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   grid-template-rows: repeat(12, auto);
   justify-content: flex-start;
-  column-gap: 50px; /* 50px gap between columns on desktop */
+  column-gap: 50px;
   row-gap: 0.3rem;
   margin: 0;
   padding: 0;
@@ -235,8 +231,8 @@
   font-size: 1.55rem;
 }
 
-/* ========================================================= 
-   5. MULTI-TIER FLYOUT NESTED DROPDOWNS 
+/* =========================================================
+   5. MULTI-TIER FLYOUT NESTED DROPDOWNS
 ========================================================= */
 
 .header-dropdown-menu__list {
@@ -264,7 +260,6 @@
   white-space: nowrap;
 }
 
-/* Specific Flyout Layout Overrides */
 .header-dropdown-menu--flyout .header-dropdown-menu__item {
   position: relative;
 }
@@ -287,13 +282,13 @@
   top: 0;
   left: 100%;
   z-index: 10;
+  display: none;
   min-width: 240px;
   margin: 0;
   padding: 1rem 0;
   background: #fff;
-  box-shadow: 0.8rem 1rem 2.5rem rgba(0, 0, 0, 0.12);
   border-left: 1px solid rgba(var(--color-foreground), 0.08);
-  display: none;
+  box-shadow: 0.8rem 1rem 2.5rem rgba(0, 0, 0, 0.12);
 }
 
 .header-dropdown-menu--flyout .header-dropdown-menu__nested-link {
@@ -303,7 +298,6 @@
   font-size: 1.45rem;
 }
 
-/* Hover Mechanics for Flyout States */
 .header-dropdown-menu--flyout .header-dropdown-menu__item:hover > .header-dropdown-menu__link {
   color: #c8192e !important;
 }
@@ -317,8 +311,8 @@
   display: block;
 }
 
-/* ========================================================= 
-   6. STANDARD DROPDOWN HOVER STATES — FALLBACK MENUS
+/* =========================================================
+   6. STANDARD DROPDOWN HOVER STATES - FALLBACK MENUS
 ========================================================= */
 
 .header-dropdown-menu:not(.header-dropdown-menu--flyout) .header-dropdown-menu__link:hover,
@@ -328,8 +322,8 @@
   font-weight: 700;
 }
 
-/* ========================================================= 
-   7. ANIMATIONS & RESPONSIVE BREAKPOINTS 
+/* =========================================================
+   7. ANIMATIONS & RESPONSIVE BREAKPOINTS
 ========================================================= */
 
 @keyframes russoSidebarMegaFadeIn {
@@ -386,6 +380,7 @@
     display: block;
   }
 }
+
 /* =========================================================
    8. DESKTOP STICKY NAVIGATION
    Moved from russo-sidebar-mega-menu.js
@@ -499,6 +494,35 @@
   .header__menu_wrapper .header__menu-item {
     white-space: nowrap;
   }
+
+  /* Keep the top-level caret in normal flex flow so it cannot overlap text. */
+  .header__menu_wrapper summary.header__menu-item,
+  .header_secondary_wraper summary.header__menu-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.55rem;
+  }
+
+  .header__menu_wrapper summary.header__menu-item > span,
+  .header_secondary_wraper summary.header__menu-item > span {
+    display: block;
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .header__menu_wrapper summary.header__menu-item > .icon-caret,
+  .header_secondary_wraper summary.header__menu-item > .icon-caret,
+  .header__menu_wrapper summary.header__menu-item > .svg-wrapper,
+  .header_secondary_wraper summary.header__menu-item > .svg-wrapper {
+    position: static;
+    top: auto;
+    right: auto;
+    flex: 0 0 auto;
+    margin: 0;
+    transform: none;
+  }
 }
 
 @media screen and (min-width: 990px) and (max-width: 1300px) {
@@ -508,10 +532,17 @@
   }
 
   .header__menu_wrapper .header__menu-item {
-    padding-right: 0.8rem !important;
-    padding-left: 0.8rem !important;
-    font-size: 1.25rem !important;
+    padding-right: 0.65rem !important;
+    padding-left: 0.65rem !important;
+    font-size: 1.2rem !important;
     letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .header__menu_wrapper summary.header__menu-item,
+  .header_secondary_wraper summary.header__menu-item {
+    gap: 0.4rem;
+    padding-right: 0.65rem !important;
   }
 
   .header_secondary_wraper .list-menu--inline {
