@@ -386,3 +386,142 @@
     display: block;
   }
 }
+/* =========================================================
+   8. DESKTOP STICKY NAVIGATION
+   Moved from russo-sidebar-mega-menu.js
+========================================================= */
+
+[data-russo-desktop-nav-toggle] {
+  display: none;
+}
+
+@media screen and (min-width: 990px) {
+  .section-header header-drawer,
+  .section-header .menu-drawer-container {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .scrolled-past-header [data-russo-desktop-nav-toggle] {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 4.4rem;
+    height: 4.4rem;
+    margin: 0 0.8rem 0 0;
+    position: relative;
+    z-index: 5;
+    padding: 0;
+    color: rgb(var(--color-foreground));
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .scrolled-past-header [data-russo-desktop-nav-toggle] svg {
+    display: block;
+    width: 2.6rem;
+    height: 2.6rem;
+  }
+
+  .scrolled-past-header [data-russo-desktop-nav-toggle] .russo-desktop-nav-toggle__close {
+    display: none !important;
+  }
+
+  .scrolled-past-header [data-russo-desktop-nav-toggle][aria-expanded='true'] .russo-desktop-nav-toggle__hamburger {
+    display: none !important;
+  }
+
+  .scrolled-past-header [data-russo-desktop-nav-toggle][aria-expanded='true'] .russo-desktop-nav-toggle__close {
+    display: block !important;
+  }
+
+  .scrolled-past-header .header__heading {
+    width: max-content;
+    max-width: max-content;
+    margin-left: 0;
+    justify-self: start;
+  }
+
+  .scrolled-past-header .header__heading-link {
+    display: inline-flex;
+    width: auto;
+    max-width: max-content;
+  }
+
+  .scrolled-past-header .header__heading-logo-wrapper {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .scrolled-past-header:not(.russo-desktop-nav-open) .header__menu_wrapper,
+  .scrolled-past-header:not(.russo-desktop-nav-open) .header_secondary_wraper {
+    display: none !important;
+  }
+
+  .scrolled-past-header.russo-desktop-nav-open .header__menu_wrapper,
+  .scrolled-past-header.russo-desktop-nav-open .header_secondary_wraper {
+    display: block !important;
+  }
+
+  .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {
+    width: 75%;
+  }
+
+  .header__heading-logo-wrapper {
+    transition: width 200ms ease;
+  }
+
+  .header__menu_wrapper {
+    width: max-content !important;
+    min-width: max-content !important;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  .header__menu_wrapper .list-menu--inline {
+    display: inline-flex !important;
+    width: max-content !important;
+    min-width: max-content !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .header__menu_wrapper .list-menu--inline > li {
+    display: block;
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  .header__menu_wrapper .header__menu-item {
+    white-space: nowrap;
+  }
+}
+
+@media screen and (min-width: 990px) and (max-width: 1300px) {
+  .header__menu_wrapper .list-menu--inline {
+    gap: 0;
+    margin-left: 0.5rem;
+  }
+
+  .header__menu_wrapper .header__menu-item {
+    padding-right: 0.8rem !important;
+    padding-left: 0.8rem !important;
+    font-size: 1.25rem !important;
+    letter-spacing: 0;
+  }
+
+  .header_secondary_wraper .list-menu--inline {
+    flex-wrap: nowrap !important;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  [data-russo-desktop-nav-toggle] {
+    display: none !important;
+  }
+}

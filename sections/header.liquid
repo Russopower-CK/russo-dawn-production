@@ -9,9 +9,7 @@
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
-{%- if section.settings.menu_type_desktop == 'mega' -%}
-  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
+<link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 
 <style>
   header-drawer {
@@ -58,22 +56,8 @@
   {%- endif -%}
 
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    .scrolled-past-header .header__heading-logo-wrapper {
+    .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {
       width: 75%;
-      margin-left: 4rem;
-    }
-
-    .scrolled-past-header header-drawer {
-      display: flex;
-    }
-
-    .scrolled-past-header .header__menu_wrapper,
-    .scrolled-past-header .header_secondary_wraper {
-      display: none;
-    }
-
-    .scrolled-past-header .menu-drawer-container {
-      visibility: visible;
     }
   {%- endif -%}
 
@@ -185,6 +169,21 @@
 
   <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
     <div class="header-left">
+      <button
+        type="button"
+        class="russo-desktop-nav-toggle"
+        data-russo-desktop-nav-toggle
+        aria-expanded="false"
+        aria-controls="RussoDesktopHeaderNavigation"
+        aria-label="Open desktop navigation"
+      >
+        <span class="svg-wrapper russo-desktop-nav-toggle__hamburger">
+          {{- 'icon-hamburger.svg' | inline_asset_content -}}
+        </span>
+        <span class="svg-wrapper russo-desktop-nav-toggle__close">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </span>
+      </button>
       {%- liquid
         if section.settings.menu != blank
           render 'header-drawer'
@@ -227,7 +226,7 @@
       </div>
     </div>
 
-    <div class="header__menu_wrapper">
+    <div id="RussoDesktopHeaderNavigation" class="header__menu_wrapper">
       {%- liquid
         if section.settings.menu != blank
           case section.settings.menu_type_desktop
