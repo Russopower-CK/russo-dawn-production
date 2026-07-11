@@ -386,3 +386,133 @@
     display: block;
   }
 }
+/* Add this block at the end of assets/component-mega-menu.css. */
+
+.russo-desktop-nav-toggle {
+  display: none;
+}
+
+@media screen and (min-width: 990px) {
+  /* Dawn's drawer remains mobile-only. */
+  .section-header header-drawer,
+  .section-header .menu-drawer-container {
+    display: none !important;
+  }
+
+  /* Keep the logo anchor limited to the visible logo. */
+  .header-left .header__heading,
+  .header-left .header__heading-link,
+  .header-left .header__heading-logo-wrapper {
+    width: fit-content;
+    max-width: fit-content;
+  }
+
+  .header-left .header__heading-link {
+    display: inline-flex;
+  }
+
+  /* Preserve original menu controls, chevrons, hover, and click behavior. */
+  .header__menu_wrapper {
+    min-width: 0;
+  }
+
+  .header__menu_wrapper .list-menu--inline {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+    margin-left: 0;
+    white-space: nowrap;
+  }
+
+  .header__menu_wrapper .list-menu--inline > li {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .header__menu_wrapper summary.header__menu-item,
+  .header__menu_wrapper a.header__menu-item {
+    white-space: nowrap;
+  }
+
+  .header__menu_wrapper summary.header__menu-item > svg {
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Empire-style collapsed sticky header. */
+  .scrolled-past-header .russo-desktop-nav-toggle {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 4.4rem;
+    width: 4.4rem;
+    height: 4.4rem;
+    margin: 0 0.8rem 0 0;
+    padding: 0;
+    color: rgb(var(--color-foreground));
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .russo-desktop-nav-toggle .svg-wrapper,
+  .russo-desktop-nav-toggle svg {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .russo-desktop-nav-toggle__close {
+    display: none;
+  }
+
+  .russo-desktop-nav-toggle[aria-expanded='true'] .russo-desktop-nav-toggle__open {
+    display: none;
+  }
+
+  .russo-desktop-nav-toggle[aria-expanded='true'] .russo-desktop-nav-toggle__close {
+    display: flex;
+  }
+
+  .scrolled-past-header:not(.russo-desktop-nav-open) .header__menu_wrapper,
+  .scrolled-past-header:not(.russo-desktop-nav-open) .header_secondary_wraper {
+    display: none;
+  }
+
+  .scrolled-past-header.russo-desktop-nav-open .header__menu_wrapper,
+  .scrolled-past-header.russo-desktop-nav-open .header_secondary_wraper {
+    display: block;
+  }
+
+  .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {
+    width: 75%;
+    max-width: 75%;
+  }
+}
+
+@media screen and (min-width: 990px) and (max-width: 1299px) {
+  .header__menu_wrapper .list-menu--inline {
+    gap: 0;
+  }
+
+  .header__menu_wrapper summary.header__menu-item,
+  .header__menu_wrapper a.header__menu-item {
+    padding-right: 0.65rem;
+    padding-left: 0.65rem;
+    font-size: clamp(1.15rem, 1vw, 1.35rem);
+    letter-spacing: 0;
+  }
+
+  .header__menu_wrapper summary.header__menu-item > svg {
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-left: 0.2rem;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .russo-desktop-nav-toggle {
+    display: none !important;
+  }
+}
