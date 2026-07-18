@@ -3773,29 +3773,3 @@ details-disclosure > details {
 .product-block--collapsible-tab + .product-block--collapsible-tab {
   border-top: none;
 }
-/* Lock the outer Dawn select wrapper to a reliable baseline width */
-.facet-filters__field .select {
-  width: 100% !important;
-  min-width: 180px !important; /* Adjust this value if you want a wider/narrower overall field */
-  display: inline-flex !important;
-  align-items: center;
-  position: relative;
-}
-
-/* Force the actual native select element to fill the exact 100% boundary of the container */
-select#SortBy,
-.facet-filters__sort.select__select,
-.facet-filters__field .select select {
-  width: 100% !important;
-  min-width: 100% !important;
-  max-width: 100% !important;
-  display: block !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  bottom: 0 !important;
-  right: 0 !important;
-  opacity: 1 !important;
-  box-sizing: border-box !important;
-  padding-right: 3.5rem !important; /* Guarantees layout room for the custom SVG arrow */
-}
