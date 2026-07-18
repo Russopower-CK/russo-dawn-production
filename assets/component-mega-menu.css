@@ -149,7 +149,9 @@
 .russo-sidebar-mega-menu__tab[data-href*="/collections/turf"]::before {
   background-image: url("https://cdn.shopify.com/s/files/1/0691/3340/2417/files/Turf.png");
 }
-
+.russo-sidebar-mega-menu__tab[data-href*="/collections/irrigation"]::before {
+  background-image: url("https://cdn.shopify.com/s/files/1/0691/3340/2417/files/Irrigation.svg");
+}
 .russo-sidebar-mega-menu__tab[data-href*="/collections/supplies-tools"]::before {
   background-image: url("https://cdn.shopify.com/s/files/1/0691/3340/2417/files/Tools.png");
 }
