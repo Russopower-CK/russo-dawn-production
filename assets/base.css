@@ -3773,3 +3773,24 @@ details-disclosure > details {
 .product-block--collapsible-tab + .product-block--collapsible-tab {
   border-top: none;
 }
+/* Force the native select element to fill the exact outer width of its box wrapper */
+.facet-filters__field .select,
+.facet-filters__sort-wrapper .select {
+  display: inline-flex !important;
+  position: relative;
+}
+
+select#SortBy,
+.facet-filters__sort,
+.facet-filters__field .select__select {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure the option elements don't collapse the layout width */
+select#SortBy option {
+  width: 100%;
+  box-sizing: border-box;
+}
