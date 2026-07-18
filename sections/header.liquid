@@ -51,22 +51,63 @@
     color: var(--russo-red-dark);
   }
 
-  {%- if section.settings.menu_type_desktop != 'drawer' -%}
+  {%- if section.settings.menu_type_desktop != "drawer" -%}
     @media screen and (min-width: 990px) {
-      header-drawer {
+      header-drawer,
+      .header-drawer,
+      .menu-drawer-container {
         display: none;
       }
     }
   {%- endif -%}
 
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
+    /* DESKTOP / GENERAL:
+       Keep Russo behavior: shrink logo when scrolled, but not while desktop nav is open */
     .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {
       width: 75%;
+    }
+
+    /* MOBILE/TABLET:
+       Match first file behavior when scrolled:
+       - Add left margin to logo wrapper
+       - Show drawer, hide inline menus and secondary menu
+    */
+    @media screen and (max-width: 989px) {
+      .scrolled-past-header .header__heading-logo-wrapper {
+        margin-left: 4rem;
+      }
+
+      .scrolled-past-header header-drawer {
+        display: flex;
+      }
+
+      .scrolled-past-header .header-drawer {
+        display: block;
+      }
+
+      .scrolled-past-header .header__menu_wrapper {
+        display: none;
+      }
+
+      .scrolled-past-header .header_secondary_wraper {
+        display: none;
+      }
+
+      .scrolled-past-header .menu-drawer-container {
+        visibility: visible;
+      }
     }
   {%- endif -%}
 
   .menu-drawer-container {
-    display: flex;
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    .menu-drawer-container {
+      display: flex;
+    }
   }
 
   .list-menu {
@@ -133,39 +174,7 @@
     z-index: 3;
   }
 
-  /* MOBILE-ONLY LAYOUT */
-  @media screen and (max-width: 989px) {
-    /* 30% smaller promo lockup and pushed further left within the icons row */
-    .header__icons .header__custom-promo-image {
-      max-width: 175px;        /* 250px × 0.7 */
-      margin-right: auto;      /* push promo image to the left within the icons row */
-      padding-right: 0.5rem;   /* slightly tighter spacing to the cart */
-    }
 
-    .header__icons .header__custom-promo-logo {
-      max-width: 175px;
-    }
-
-    /* Center the main logo more strongly on mobile (when mobile_logo_position is 'center') */
-    .header--mobile-center .header-left {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .header--mobile-center .header__heading {
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
-    }
-
-    .header--mobile-center .header__heading-logo-wrapper {
-      margin-left: auto;
-      margin-right: auto;
-      transform: scale(0.9);   /* 10% smaller main logo on mobile */
-      transform-origin: center;
-    }
-  }
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
