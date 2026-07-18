@@ -16,7 +16,7 @@
     justify-self: start;
     margin-left: -1.2rem;
   }
-    /* Prevent Russo desktop nav toggle from flashing on initial paint */
+
   [data-russo-desktop-nav-toggle] {
     display: none;
   }
@@ -37,13 +37,13 @@
   }
 
   .header__custom-promo-logo {
-    display: block;
     width: 100%;
     max-width: 250px;
     height: auto;
+    display: block;
   }
 
-  .list-menu.list-menu--inline {
+  .list-menu .list-menu--inline {
     margin-left: 1rem;
   }
 
@@ -51,22 +51,58 @@
     color: var(--russo-red-dark);
   }
 
-  {%- if section.settings.menu_type_desktop != 'drawer' -%}
+  {%- if section.settings.menu_type_desktop != "drawer" -%}
     @media screen and (min-width: 990px) {
-      header-drawer {
+      header-drawer,
+      .header-drawer,
+      .menu-drawer-container {
         display: none;
       }
     }
   {%- endif -%}
 
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {
+    .scrolled-past-header .header__heading-logo-wrapper {
       width: 75%;
+      margin-left: 4rem;
+    }
+
+    @media screen and (max-width: 989px) {
+      .scrolled-past-header header-drawer {
+        display: flex;
+      }
+
+      .scrolled-past-header .header-drawer {
+        display: block;
+      }
+
+      .scrolled-past-header .header__menu_wrapper {
+        display: none;
+      }
+
+      .scrolled-past-header .header_secondary_wraper {
+        display: none;
+      }
+
+      .scrolled-past-header .menu-drawer-container {
+        visibility: visible;
+      }
+    }
+
+    @media screen and (min-width: 990px) {
+      .scrolled-past-header .header__menu_wrapper {
+      }
     }
   {%- endif -%}
 
   .menu-drawer-container {
-    display: flex;
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    .menu-drawer-container {
+      display: flex;
+    }
   }
 
   .list-menu {
@@ -164,9 +200,7 @@
       assign social_links = true
     endif
 
-    if section.settings.enable_country_selector and localization.available_countries.size > 1
-      assign localization_forms = true
-    elsif section.settings.enable_language_selector and localization.available_languages.size > 1
+    if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
       assign localization_forms = true
     endif
   -%}
@@ -211,7 +245,17 @@
                 {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
                 {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
                 {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-                {{ settings.logo | image_url: width: 600 | image_tag: class: 'header__heading-logo motion-reduce', widths: widths, height: logo_height, width: settings.logo_width, alt: logo_alt, sizes: sizes, preload: true }}
+                {{ settings.logo
+                  | image_url: width: 600
+                  | image_tag:
+                    class: 'header__heading-logo motion-reduce',
+                    widths: widths,
+                    height: logo_height,
+                    width: settings.logo_width,
+                    alt: logo_alt,
+                    sizes: sizes,
+                    preload: true
+                }}
               </div>
             {%- else -%}
               <span class="h2">{{ shop.name }}</span>
@@ -237,7 +281,6 @@
             when 'dropdown'
               render 'header-dropdown-menu'
             when 'drawer'
-              # The header drawer is rendered above.
             when 'russodropdown'
               render 'russo-header-dropdown'
             else
@@ -260,7 +303,17 @@
               {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
               {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
               {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-              {{ settings.logo | image_url: width: 600 | image_tag: class: 'header__heading-logo', widths: widths, height: logo_height, width: settings.logo_width, alt: logo_alt, sizes: sizes, preload: true }}
+              {{ settings.logo
+                | image_url: width: 600
+                | image_tag:
+                  class: 'header__heading-logo',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+              }}
             </div>
           {%- else -%}
             <span class="h2">{{ shop.name }}</span>
@@ -295,16 +348,15 @@
       </div>
     {% endif %}
 
-    <div class="header__icons{% if localization_forms %} header__icons--localization header-localization{% endif %}">
+    <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
       <div class="header__custom-promo-image">
         <a class="header__custom-promo" href="/pages/outdoor-power-plus">
           <img
-            src="https://russopower.com/cdn/shop/files/Outdoor-Power-Plus-Emblem-Hrz-White-RGB_60x9.svg?v=1748444813"
-            alt="Outdoor Power Plus"
+            src="//russopower.com/cdn/shop/files/Outdoor-Power-Plus-Emblem-Hrz-White-RGB_60x9.svg?v=1748444813"
+            alt="Outdoor Power Plus Logo"
             width="180"
             height="27"
-            loading="eager"
-            fetchpriority="high"
+            loading="lazy"
             class="header__custom-promo-logo"
           >
         </a>
@@ -325,7 +377,7 @@
 
       {%- if shop.customer_accounts_enabled -%}
         <a
-          href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+          href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif %}"
           class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
           rel="nofollow"
         >
@@ -360,7 +412,11 @@
       {%- endfor -%}
 
       <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
-        <span class="svg-wrapper">{{ 'icon-cart-russo.svg' | inline_asset_content }}</span>
+        {% if cart == empty %}
+          <span class="svg-wrapper">{{ 'icon-cart-russo.svg' | inline_asset_content }}</span>
+        {% else %}
+          <span class="svg-wrapper">{{ 'icon-cart-russo.svg' | inline_asset_content }}</span>
+        {% endif %}
         <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
         {%- if cart != empty -%}
           <div class="cart-count-bubble">
