@@ -16,7 +16,7 @@
     justify-self: start;
     margin-left: -1.2rem;
   }
-  /* Prevent Russo desktop nav toggle from flashing on initial paint */
+
   [data-russo-desktop-nav-toggle] {
     display: none;
   }
@@ -63,10 +63,42 @@
     .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {
       width: 75%;
     }
+
+    @media screen and (max-width: 989px) {
+      .scrolled-past-header .header__heading-logo-wrapper {
+        margin-left: 4rem;
+      }
+
+      .scrolled-past-header header-drawer {
+        display: flex;
+      }
+
+      .scrolled-past-header .header-drawer {
+        display: block;
+      }
+
+      .scrolled-past-header .header__menu_wrapper {
+        display: none;
+      }
+
+      .scrolled-past-header .header_secondary_wraper {
+        display: none;
+      }
+
+      .scrolled-past-header .menu-drawer-container {
+        visibility: visible;
+      }
+    }
   {%- endif -%}
 
   .menu-drawer-container {
-    display: flex;
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    .menu-drawer-container {
+      display: flex;
+    }
   }
 
   .list-menu {
@@ -235,7 +267,6 @@
             when 'dropdown'
               render 'header-dropdown-menu'
             when 'drawer'
-              # The header drawer is rendered above.
             when 'russodropdown'
               render 'russo-header-dropdown'
             else
