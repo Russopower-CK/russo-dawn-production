@@ -16,7 +16,7 @@
     justify-self: start;
     margin-left: -1.2rem;
   }
-    /* Prevent Russo desktop nav toggle from flashing on initial paint */
+
   [data-russo-desktop-nav-toggle] {
     display: none;
   }
@@ -37,13 +37,13 @@
   }
 
   .header__custom-promo-logo {
-    display: block;
     width: 100%;
     max-width: 250px;
     height: auto;
+    display: block;
   }
 
-  .list-menu.list-menu--inline {
+  .list-menu .list-menu--inline {
     margin-left: 1rem;
   }
 
@@ -51,22 +51,54 @@
     color: var(--russo-red-dark);
   }
 
-  {%- if section.settings.menu_type_desktop != 'drawer' -%}
+  {%- if section.settings.menu_type_desktop != "drawer" -%}
     @media screen and (min-width: 990px) {
-      header-drawer {
+      header-drawer,
+      .header-drawer,
+      .menu-drawer-container {
         display: none;
       }
     }
   {%- endif -%}
 
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
+    /* Match Russo behavior: shrink logo when scrolled, but not while desktop nav is open */
     .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {
       width: 75%;
+    }
+
+    /* Mobile / tablet behavior when scrolled: show drawer, hide inline menus */
+    @media screen and (max-width: 989px) {
+      .scrolled-past-header header-drawer {
+        display: flex;
+      }
+
+      .scrolled-past-header .header-drawer {
+        display: block;
+      }
+
+      .scrolled-past-header .header__menu_wrapper {
+        display: none;
+      }
+
+      .scrolled-past-header .header_secondary_wraper {
+        display: none;
+      }
+
+      .scrolled-past-header .menu-drawer-container {
+        visibility: visible;
+      }
     }
   {%- endif -%}
 
   .menu-drawer-container {
-    display: flex;
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    .menu-drawer-container {
+      display: flex;
+    }
   }
 
   .list-menu {
