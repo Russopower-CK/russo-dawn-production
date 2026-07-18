@@ -173,8 +173,39 @@
     align-items: center;
     z-index: 3;
   }
+  /* MOBILE-ONLY LAYOUT */
+  @media screen and (max-width: 989px) {
+    /* 30% smaller promo lockup and pushed further left within the icons row */
+    .header__icons .header__custom-promo-image {
+      max-width: 175px;        /* 250px × 0.7 */
+      margin-right: auto;      /* push promo image to the left within the icons row */
+      padding-right: 0.5rem;   /* slightly tighter spacing to the cart */
+    }
 
+    .header__icons .header__custom-promo-logo {
+      max-width: 175px;
+    }
 
+    /* Center the main logo more strongly on mobile (when mobile_logo_position is 'center') */
+    .header--mobile-center .header-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header--mobile-center .header__heading {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .header--mobile-center .header__heading-logo-wrapper {
+      margin-left: auto;
+      margin-right: auto;
+      transform: scale(0.9);   /* 10% smaller main logo on mobile */
+      transform-origin: center;
+    }
+  }
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
