@@ -132,6 +132,23 @@
     align-items: center;
     z-index: 3;
   }
+
+  /* MOBILE-ONLY ADJUSTMENTS */
+
+  @media screen and (max-width: 989px) {
+    /* 30% smaller promo lockup on mobile only */
+    .header__custom-promo-image,
+    .header__custom-promo-logo {
+      max-width: 175px; /* 250px × 0.7 */
+    }
+
+    /* Center main logo on mobile when mobile_logo_position is 'center' */
+    .header--mobile-center .header__heading {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+  }
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
