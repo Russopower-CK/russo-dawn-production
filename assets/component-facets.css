@@ -1268,17 +1268,3 @@ input.mobile-facets__checkbox {
     padding: 0 1rem 1rem;
   }
 }
-/* Force sort dropdown list to match the width of the parent container */
-.facet-filters__field .facets__display,
-.facet-filters__field .disclosure__list-wrapper,
-.facet-filters__sort-wrapper .facets__display {
-  min-width: 100%;
-  box-sizing: border-box;
-}
-
-/* Fallback: Ensure standard native selects also fill their wrapper completely */
-.facet-filters__field .select__select,
-.facet-filters__field .select {
-  min-width: 100%;
-  box-sizing: border-box;
-}
