@@ -53,7 +53,7 @@
       "settings": {
         "logo_position": "top-left",
         "mobile_logo_position": "center",
-        "menu": "main-menu-11-6-25",
+        "menu": "current-main-menu",
         "menu_type_desktop": "mega",
         "sticky_header_type": "reduce-logo-size",
         "show_line_separator": true,
