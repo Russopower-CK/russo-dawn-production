@@ -36,6 +36,13 @@
     max-width: 250px;
     height: auto;
   }
+  @media screen and (max-width: 989px) {
+    /* Mirrors base.css's desktop rule (header.header .header__icons > *:not(a):not(localization-form))
+       so the promo logo pins left and the store selector/cart group pins right below 990px too. */
+    .header__icons .header__custom-promo-image {
+      margin-right: auto;
+    }
+  }
   .list-menu.list-menu--inline {
     margin-left: 1rem;
   }
