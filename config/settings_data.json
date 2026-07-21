@@ -144,18 +144,6 @@
     },
     "content_for_index": [],
     "blocks": {
-      "15793589388086738598": {
-        "type": "shopify://apps/russo-ai-agent/blocks/chat-interface/019e4612-0a69-7108-9c0c-5c78732c535e",
-        "disabled": false,
-        "settings": {
-          "chat_bubble_color": "#BE1E2D",
-          "custom_icon_svg": "<svg xmlns=\"http://w3.org\" viewbox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z\"></path></svg>",
-          "welcome_message": "👋 Hi there! How can I help you today?",
-          "placeholder": "Type your message here...",
-          "display_option": "all",
-          "display_tag": ""
-        }
-      },
       "855628211100114053": {
         "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
         "disabled": false,
@@ -176,6 +164,40 @@
         "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
         "disabled": false,
         "settings": {}
+      },
+      "8812806695923387213": {
+        "type": "shopify://apps/russo-ai-chat/blocks/chat-interface/019f863b-0240-7a49-9c0c-fe6acee10339",
+        "disabled": false,
+        "settings": {
+          "chat_bubble_color": "#E44646",
+          "custom_icon_svg": "",
+          "welcome_message": "👋 Hi there! How can I help you today?",
+          "placeholder": "Type your message here...",
+          "system_prompt": "standardAssistant",
+          "display_option": "all",
+          "display_tag": "",
+          "quick_actions_display_mode": "bottom",
+          "quick_action_1_enabled": true,
+          "quick_action_1_label": "Text Our Team",
+          "quick_action_1_message": "Text our team directly",
+          "quick_action_1_action": "show_kenect_lead_form",
+          "quick_action_1_icon": "📲",
+          "quick_action_2_enabled": true,
+          "quick_action_2_label": "Financing Options",
+          "quick_action_2_message": "Show me financing options",
+          "quick_action_2_action": "template",
+          "quick_action_2_icon": "💲",
+          "quick_action_3_enabled": false,
+          "quick_action_3_label": "Book Service",
+          "quick_action_3_message": "I want to schedule service",
+          "quick_action_3_action": "template",
+          "quick_action_3_icon": "🛠",
+          "quick_action_4_enabled": false,
+          "quick_action_4_label": "Call Me Back",
+          "quick_action_4_message": "Please have someone call me back",
+          "quick_action_4_action": "template",
+          "quick_action_4_icon": "☎"
+        }
       }
     },
     "color_schemes": {
