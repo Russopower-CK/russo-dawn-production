@@ -169,7 +169,7 @@
         "type": "shopify://apps/russo-ai-chat/blocks/chat-interface/019f863b-0240-7a49-9c0c-fe6acee10339",
         "disabled": false,
         "settings": {
-          "chat_bubble_color": "#E44646",
+          "chat_bubble_color": "#B71414",
           "custom_icon_svg": "",
           "welcome_message": "👋 Hi there! How can I help you today?",
           "placeholder": "Type your message here...",
