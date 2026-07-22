@@ -1286,7 +1286,7 @@ input.mobile-facets__checkbox {
   content: none !important;
 }
 
-/* 2. Apply the live site's styles directly to the select element */
+/* 2. Apply Russo styles directly to the select element */
 .facet-filters__field .select select,
 .facet-filters__field .select .select__select,
 select#SortBy {
