@@ -1268,7 +1268,7 @@ input.mobile-facets__checkbox {
     padding: 0 1rem 1rem;
   }
 }
-/* 1. Reset the parent wrapper container to be borderless and transparent */
+/* 1. Reset the parent wrapper container and hide its border/focus layers */
 .facet-filters__field .select {
   border: none !important;
   background: transparent !important;
@@ -1276,6 +1276,14 @@ input.mobile-facets__checkbox {
   padding: 0 !important;
   width: auto !important; /* Let the container wrap the select tightly */
   display: inline-flex !important;
+  outline: none !important;
+}
+
+/* Hide Dawn's default border/focus pseudo-elements on the wrapper */
+.facet-filters__field .select:after,
+.facet-filters__field .select:before {
+  display: none !important;
+  content: none !important;
 }
 
 /* 2. Apply the live site's styles directly to the select element */
@@ -1310,7 +1318,19 @@ select#SortBy {
   -moz-appearance: none !important;
 }
 
-/* 3. Align the caret icon on top of the select box background */
+/* 3. Handle the focus state cleanly (darken the border slightly, remove the big outline) */
+.facet-filters__field .select select:focus,
+.facet-filters__field .select select:focus-visible,
+.facet-filters__field .select .select__select:focus,
+.facet-filters__field .select .select__select:focus-visible,
+select#SortBy:focus,
+select#SortBy:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #707070 !important; /* A clean, simple border-darkening on focus */
+}
+
+/* 4. Align the caret icon on top of the select box background */
 .facet-filters__field .select .icon-caret {
   right: 12px !important;
   position: absolute !important;
@@ -1323,7 +1343,7 @@ select#SortBy {
   color: #000000 !important;
 }
 
-/* 4. Ensure the label and select box align nicely inline */
+/* 5. Ensure the label and select box align nicely inline */
 .facet-filters__field {
   display: flex !important;
   align-items: center !important;
