@@ -1268,3 +1268,14 @@ input.mobile-facets__checkbox {
     padding: 0 1rem 1rem;
   }
 }
+/* Fix Sort By dropdown width alignment */
+.facet-filters__field .select {
+  width: 100%;
+}
+
+.facet-filters__sort.select__select,
+select#SortBy {
+  width: 100% !important;
+  min-width: 100% !important;
+  box-sizing: border-box !important;
+}
