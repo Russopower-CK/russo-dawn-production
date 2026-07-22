@@ -1268,3 +1268,69 @@ input.mobile-facets__checkbox {
     padding: 0 1rem 1rem;
   }
 }
+/* 1. Reset the parent wrapper container to be borderless and transparent */
+.facet-filters__field .select {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: auto !important; /* Let the container wrap the select tightly */
+  display: inline-flex !important;
+}
+
+/* 2. Apply the live site's styles directly to the select element */
+.facet-filters__field .select select,
+.facet-filters__field .select .select__select,
+select#SortBy {
+  border: 1px solid #ccc !important; /* Clean light gray border */
+  border-radius: 0px !important; /* Square corners */
+  background-color: #ffffff !important; /* White background */
+  color: #000000 !important; /* Black text */
+  
+  /* Sizing and layout */
+  width: auto !important;
+  min-width: 160px !important; /* Clean minimum width to match options */
+  box-sizing: border-box !important;
+  height: 38px !important; /* Compact, standard input height */
+  
+  /* Font styling */
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  
+  /* Padding spacing */
+  padding-left: 12px !important;
+  padding-right: 32px !important; /* Space for the chevron caret */
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+/* 3. Align the caret icon on top of the select box background */
+.facet-filters__field .select .icon-caret {
+  right: 12px !important;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  width: 10px !important;
+  height: 10px !important;
+  color: #000000 !important;
+}
+
+/* 4. Ensure the label and select box align nicely inline */
+.facet-filters__field {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.facet-filters__label {
+  margin-right: 8px !important;
+  margin-bottom: 0 !important;
+  white-space: nowrap !important;
+}
