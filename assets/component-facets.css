@@ -1268,3 +1268,29 @@ input.mobile-facets__checkbox {
     padding: 0 1rem 1rem;
   }
 }
+/* 1. Reset padding on the parent container and set a clean, fixed width */
+.facet-filters__field .select {
+  padding: 0 !important;
+  width: 180px !important; /* Sets a clean, standard width for the box */
+}
+
+/* 2. Force the actual select element to fill 100% of the box */
+.facet-filters__field .select select,
+.facet-filters__field .select .select__select,
+select#SortBy {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding-left: 15px !important;
+  padding-right: 40px !important; /* Leaves room for the caret icon */
+  margin: 0 !important;
+}
+
+/* 3. Keep the dropdown arrow icon properly aligned on the right */
+.facet-filters__field .select .icon-caret {
+  right: 15px !important;
+  position: absolute !important;
+  top: calc(50% - 3px) !important;
+  pointer-events: none !important;
+}
