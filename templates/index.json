@@ -823,6 +823,16 @@
         "missing_collection_message": "Select a collection in section settings to load products.",
         "missing_locations_message": "No company locations are available for your customer account."
       }
+    },
+    "custom_liquid_Whmaxx": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "{% render 'russo-5-step-calculator' %}",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
@@ -834,6 +844,7 @@
     "image_with_text_yjidL3",
     "image_with_text_zGqWLt",
     "russo_testimonial_4GEURr",
-    "russo_multi_location_order_form_VFwgDq"
+    "russo_multi_location_order_form_VFwgDq",
+    "custom_liquid_Whmaxx"
   ]
 }
