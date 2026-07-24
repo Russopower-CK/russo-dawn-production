@@ -1,20 +1,48 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "russo-multi-location-order-form",
       "settings": {
-        "heading": "B2B order form",
-        "description": "Set quantities for each destination location, then copy the payload JSON.",
-        "source_collection": "",
+        "heading": "Featured Product Order Form",
+        "description": "Shop our featured products to power your productivity!",
+        "source_collection": "featured-products",
+        "location_input_mode": "auto",
+        "location_column_threshold": 3,
+        "location_selector_label": "Destination location",
+        "quantity_column_label": "Quantity",
+        "summary_title": "Location Order Summary",
+        "summary_empty_message": "No quantities selected yet.",
         "products_per_page": 20,
         "show_product_image": true,
         "show_sku": true,
         "column_product_label": "Product",
         "column_sku_label": "SKU",
         "table_aria_label": "B2B order form quantity table",
+        "submit_button_label": "Submit order",
+        "submit_confirm_title": "Submit order?",
+        "submit_confirm_message": "Are you sure you want to submit this order?",
+        "submit_confirm_cancel_label": "Cancel",
+        "submit_confirm_submit_label": "Confirm submit",
+        "fake_submit_endpoint": "/apps/russoAPI/v1/submit-order-form",
+        "submit_in_progress_message": "Submitting order...",
+        "submit_success_message": "Order submitted. Draft cleared.",
+        "submit_error_message": "Could not submit order. Please try again.",
         "generate_payload_label": "Generate payload",
         "copy_payload_label": "Copy payload",
+        "show_developer_tools": false,
         "payload_label": "Payload preview (JSON)",
+        "order_total_label": "Order total",
+        "purchase_order_label": "Purchase Order No.",
+        "note_label": "Note",
         "login_required_message": "Please log in with your customer account to access this form.",
         "b2b_only_message": "This order form is only available for B2B customers.",
         "missing_collection_message": "Select a collection in section settings to load products.",
