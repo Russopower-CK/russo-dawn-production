@@ -1,0 +1,1348 @@
+{%- liquid
+  assign source_collection = section.settings.source_collection
+  assign locations_count = 0
+  assign use_dropdown_input = false
+  assign first_location = blank
+  if customer and customer.b2b?
+    assign locations_count = customer.company_available_locations_count
+    assign first_location = customer.company_available_locations | first
+    if section.settings.location_input_mode == 'dropdown'
+      assign use_dropdown_input = true
+    elsif section.settings.location_input_mode == 'auto' and locations_count > section.settings.location_column_threshold
+      assign use_dropdown_input = true
+    endif
+  endif
+-%}
+
+<section class="b2b-russo-order-form section-{{ section.id }}">
+  <div class="page-width">
+    <header class="b2b-russo-order-form__header">
+      <h2>{{ section.settings.heading }}</h2>
+      {%- if section.settings.description != blank -%}
+        <p>{{ section.settings.description }}</p>
+      {%- endif -%}
+    </header>
+
+    {%- if customer == blank -%}
+      <p>{{ section.settings.login_required_message }}</p>
+    {%- elsif customer.b2b? == false -%}
+      <p>{{ section.settings.b2b_only_message }}</p>
+    {%- elsif source_collection == blank -%}
+      <p>{{ section.settings.missing_collection_message }}</p>
+    {%- elsif locations_count == 0 -%}
+      <p>{{ section.settings.missing_locations_message }}</p>
+    {%- else -%}
+      <form
+        class="b2b-russo-order-form__form"
+        data-order-form-root
+        data-currency-code="{{ cart.currency.iso_code | default: shop.currency }}"
+        data-location-mode="{% if use_dropdown_input %}dropdown{% else %}columns{% endif %}"
+        data-summary-empty-message="{{ section.settings.summary_empty_message | escape }}"
+        data-storage-key="russo-order-form::{{ shop.permanent_domain }}::{{ customer.id }}::{{ section.id }}"
+        data-submit-endpoint="{{ section.settings.fake_submit_endpoint | escape }}"
+        data-submit-confirm-modal-id="OrderSubmitConfirmModal-{{ section.id }}"
+        data-submit-start-text="{{ section.settings.submit_in_progress_message | escape }}"
+        data-submit-success-text="{{ section.settings.submit_success_message | escape }}"
+        data-submit-error-text="{{ section.settings.submit_error_message | escape }}"
+      >
+        {%- if use_dropdown_input -%}
+          <div class="b2b-russo-order-form__location-picker">
+            <label for="location-picker-{{ section.id }}">{{ section.settings.location_selector_label }}</label>
+            <select id="location-picker-{{ section.id }}" data-location-select>
+              {%- for location in customer.company_available_locations -%}
+                <option
+                  value="{{ location.id }}"
+                  data-location-id="{{ location.id }}"
+                  data-location-name="{{ location.name | escape }}"
+                  {% if customer.current_location and customer.current_location.id == location.id %}
+                    selected
+                  {% endif %}
+                >
+                  {{ location.name }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+
+        <div class="b2b-russo-order-form__entry-layout{% if use_dropdown_input %} b2b-russo-order-form__entry-layout--with-summary{% endif %}">
+          <div class="b2b-russo-order-form__entry-main">
+            <div
+              class="b2b-russo-order-form__table-wrap"
+              role="region"
+              aria-label="{{ section.settings.table_aria_label }}"
+            >
+              {% paginate source_collection.products by section.settings.products_per_page %}
+                <table class="b2b-russo-order-form__table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{{ section.settings.column_product_label }}</th>
+                      {%- if section.settings.show_sku -%}
+                        <th scope="col">{{ section.settings.column_sku_label }}</th>
+                      {%- endif -%}
+                      <th scope="col" class="b2b-russo-order-form__numeric-heading">Price E/A</th>
+                      {%- if use_dropdown_input -%}
+                        <th scope="col" class="b2b-russo-order-form__quantity-heading">
+                          {{ section.settings.quantity_column_label }}
+                        </th>
+                      {%- else -%}
+                        {%- for location in customer.company_available_locations -%}
+                          <th scope="col" class="b2b-russo-order-form__location-heading">
+                            <span class="b2b-russo-order-form__location-title">{{ location.name }}</span>
+                          </th>
+                        {%- endfor -%}
+                      {%- endif -%}
+                      <th scope="col" class="b2b-russo-order-form__numeric-heading">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%- for product in source_collection.products -%}
+                      {%- assign order_variant = product.selected_or_first_available_variant -%}
+                      <tr
+                        data-order-form-row
+                        data-product-id="{{ product.id }}"
+                        data-product-handle="{{ product.handle }}"
+                        data-product-title="{{ product.title | escape }}"
+                        data-unit-price-cents="{{ order_variant.price }}"
+                      >
+                        <th scope="row" class="b2b-russo-order-form__product-row-heading">
+                          <div class="b2b-russo-order-form__product-cell">
+                            {%- if section.settings.show_product_image and product.featured_image != blank -%}
+                              {{
+                                product.featured_image
+                                | image_url: width: 80, height: 80
+                                | image_tag: loading: 'lazy', class: 'b2b-russo-order-form__product-image'
+                              }}
+                            {%- endif -%}
+                            <span>{{ product.title }}</span>
+                          </div>
+                        </th>
+                        {%- if section.settings.show_sku -%}
+                          <td data-label="{{ section.settings.column_sku_label | escape }}">
+                            {{ order_variant.sku | default: '-' }}
+                          </td>
+                        {%- endif -%}
+                        <td class="b2b-russo-order-form__money" data-label="Price E/A">
+                          {{ order_variant.price | money }}
+                        </td>
+                        {%- if use_dropdown_input -%}
+                          <td
+                            class="b2b-russo-order-form__quantity-cell"
+                            data-label="{{ section.settings.quantity_column_label | escape }}"
+                          >
+                            <label class="visually-hidden" for="qty-{{ section.id }}-{{ product.id }}-single">
+                              {{ product.title }} - {{ section.settings.quantity_column_label }}
+                            </label>
+                            <input
+                              id="qty-{{ section.id }}-{{ product.id }}-single"
+                              class="b2b-russo-order-form__qty b2b-russo-order-form__qty--single-location"
+                              type="number"
+                              min="0"
+                              step="1"
+                              value="0"
+                              data-product-id="{{ product.id }}"
+                              data-product-handle="{{ product.handle }}"
+                              data-product-title="{{ product.title | escape }}"
+                              data-location-id="{{ first_location.id }}"
+                              data-location-name="{{ first_location.name | escape }}"
+                            >
+                          </td>
+                        {%- else -%}
+                          {%- for location in customer.company_available_locations -%}
+                            <td class="b2b-russo-order-form__quantity-cell" data-label="{{ location.name | escape }}">
+                              <label
+                                class="visually-hidden"
+                                for="qty-{{ section.id }}-{{ product.id }}-{{ location.id }}"
+                              >
+                                {{ product.title }} - {{ location.name }}
+                              </label>
+                              <input
+                                id="qty-{{ section.id }}-{{ product.id }}-{{ location.id }}"
+                                class="b2b-russo-order-form__qty"
+                                type="number"
+                                min="0"
+                                step="1"
+                                value="0"
+                                data-product-id="{{ product.id }}"
+                                data-product-handle="{{ product.handle }}"
+                                data-product-title="{{ product.title | escape }}"
+                                data-location-id="{{ location.id }}"
+                                data-location-name="{{ location.name | escape }}"
+                              >
+                            </td>
+                          {%- endfor -%}
+                        {%- endif -%}
+                        <td class="b2b-russo-order-form__money" data-label="Total" data-row-total>{{ 0 | money }}</td>
+                      </tr>
+                    {%- endfor -%}
+                  </tbody>
+                </table>
+              {% endpaginate %}
+            </div>
+          </div>
+
+          {%- if use_dropdown_input -%}
+            <aside class="b2b-russo-order-form__summary-pane">
+              <h3>{{ section.settings.summary_title }}</h3>
+              <div class="b2b-russo-order-form__summary-list" data-location-summary-list></div>
+            </aside>
+          {%- endif -%}
+        </div>
+
+        <div class="b2b-russo-order-form__grand-total">
+          <span>{{ section.settings.order_total_label }}</span>
+          <strong data-grand-total>{{ 0 | money }}</strong>
+        </div>
+
+        <div class="b2b-russo-order-form__order-meta">
+          <div class="b2b-russo-order-form__order-meta-field">
+            <label for="purchase-order-{{ section.id }}">{{ section.settings.purchase_order_label }}</label>
+            <input
+              id="purchase-order-{{ section.id }}"
+              type="text"
+              data-purchase-order-number
+            >
+          </div>
+          <div class="b2b-russo-order-form__order-meta-field">
+            <label for="order-note-{{ section.id }}">{{ section.settings.note_label }}</label>
+            <input
+              id="order-note-{{ section.id }}"
+              type="text"
+              data-order-note
+            >
+          </div>
+        </div>
+
+        <div class="b2b-russo-order-form__top-actions">
+          <modal-opener data-modal="#OrderSubmitConfirmModal-{{ section.id }}">
+            <button type="button" class="button button--primary" data-submit-order aria-haspopup="dialog">
+              {{ section.settings.submit_button_label }}
+            </button>
+          </modal-opener>
+          <p class="b2b-russo-order-form__submit-status" data-submit-status aria-live="polite"></p>
+        </div>
+
+        {%- assign submit_confirm_modal_id = 'OrderSubmitConfirmModal-' | append: section.id -%}
+        {% render 'russo-confirm-modal',
+          modal_id: submit_confirm_modal_id,
+          title: section.settings.submit_confirm_title,
+          message: section.settings.submit_confirm_message,
+          confirm_label: section.settings.submit_confirm_submit_label,
+          cancel_label: section.settings.submit_confirm_cancel_label,
+          confirm_button_attributes: 'data-submit-confirm',
+          cancel_button_attributes: 'data-submit-cancel'
+        %}
+
+        {%- if section.settings.show_developer_tools -%}
+          <div class="b2b-russo-order-form__actions">
+            <button type="button" class="button button--secondary" data-build-payload>
+              {{ section.settings.generate_payload_label }}
+            </button>
+            <button type="button" class="button button--secondary" data-copy-payload>
+              {{ section.settings.copy_payload_label }}
+            </button>
+          </div>
+
+          <label for="payload-{{ section.id }}">{{ section.settings.payload_label }}</label>
+          <textarea
+            id="payload-{{ section.id }}"
+            class="b2b-russo-order-form__payload"
+            rows="12"
+            data-payload-output
+            readonly>{}</textarea>
+        {%- endif -%}
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .b2b-russo-order-form__header {
+    margin-bottom: 1.5rem;
+  }
+
+  .b2b-russo-order-form__entry-layout {
+    display: block;
+  }
+
+  .b2b-russo-order-form__top-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .b2b-russo-order-form__submit-status {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .b2b-russo-order-form__entry-layout--with-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 30rem;
+    gap: 1.2rem;
+    align-items: start;
+  }
+
+  .b2b-russo-order-form__location-picker {
+    margin-bottom: 0.9rem;
+    display: grid;
+    gap: 0.4rem;
+    max-width: 42rem;
+  }
+
+  .b2b-russo-order-form__location-picker select {
+    padding: 0.8rem;
+    width: 100%;
+  }
+
+  .b2b-russo-order-form__summary-pane {
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 0.8rem;
+    padding: 1rem;
+    background: rgba(var(--color-foreground), 0.02);
+    position: sticky;
+    top: 0;
+  }
+
+  .b2b-russo-order-form__summary-pane h3 {
+    margin: 0 0 0.8rem;
+  }
+
+  .b2b-russo-order-form__summary-list {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .b2b-russo-order-form__summary-item {
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 0.6rem;
+    background: rgb(var(--color-background));
+    overflow: hidden;
+  }
+
+  .b2b-russo-order-form__summary-header {
+    list-style: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 0.8rem;
+    align-items: center;
+    padding: 0.75rem;
+  }
+
+  .b2b-russo-order-form__summary-header::-webkit-details-marker {
+    display: none;
+  }
+
+  .b2b-russo-order-form__summary-caret {
+    font-size: 1.1rem;
+    transform: rotate(0deg);
+    transition: transform 0.2s ease;
+  }
+
+  .b2b-russo-order-form__summary-item[open] .b2b-russo-order-form__summary-caret {
+    transform: rotate(90deg);
+  }
+
+  .b2b-russo-order-form__summary-item-name {
+    font-weight: 600;
+  }
+
+  .b2b-russo-order-form__summary-item-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    font-size: 1.3rem;
+    white-space: nowrap;
+  }
+
+  .b2b-russo-order-form__summary-product-list {
+    margin: 0;
+    padding: 0.1rem 0.75rem 0.75rem;
+    list-style: none;
+    display: grid;
+    gap: 0.25rem;
+    font-size: 1.2rem;
+    border-top: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  .b2b-russo-order-form__summary-product-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  .b2b-russo-order-form__summary-empty {
+    color: rgba(var(--color-foreground), 0.7);
+  }
+
+  .b2b-russo-order-form__table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 0.8rem;
+  }
+
+  .b2b-russo-order-form__table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 48rem;
+  }
+
+  .b2b-russo-order-form__table th,
+  .b2b-russo-order-form__table td {
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    padding: 1rem;
+    vertical-align: middle;
+  }
+
+  .b2b-russo-order-form__location-heading {
+    text-align: left;
+    vertical-align: top;
+    min-width: 16rem;
+  }
+
+  .b2b-russo-order-form__numeric-heading {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .b2b-russo-order-form__location-title {
+    display: inline-block;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--color-foreground), 0.12);
+    background: rgba(var(--color-foreground), 0.04);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .b2b-russo-order-form__product-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .b2b-russo-order-form__product-image {
+    border-radius: 0.4rem;
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+  }
+
+  .b2b-russo-order-form__qty {
+    width: 7rem;
+    max-width: 100%;
+  }
+
+  .b2b-russo-order-form__quantity-heading,
+  .b2b-russo-order-form__quantity-cell {
+    text-align: center;
+  }
+
+  .b2b-russo-order-form__quantity-cell .b2b-russo-order-form__qty {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .b2b-russo-order-form__money {
+    text-align: right;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .b2b-russo-order-form__grand-total {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    gap: 0.8rem;
+    font-size: 1.7rem;
+  }
+
+  .b2b-russo-order-form__actions {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .b2b-russo-order-form__order-meta {
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .b2b-russo-order-form__order-meta-field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .b2b-russo-order-form__order-meta-field input {
+    width: 100%;
+    padding: 0.8rem;
+  }
+
+  .b2b-russo-order-form__payload {
+    width: 100%;
+    margin-top: 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+    font-size: 1.3rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    .b2b-russo-order-form__entry-layout--with-summary {
+      grid-template-columns: 1fr;
+    }
+
+    .b2b-russo-order-form__summary-pane {
+      position: static;
+    }
+
+    .b2b-russo-order-form__order-meta {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .b2b-russo-order-form .page-width {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .b2b-russo-order-form__top-actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.8rem;
+    }
+
+    .b2b-russo-order-form__top-actions .button {
+      width: 100%;
+    }
+
+    .b2b-russo-order-form__submit-status {
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .b2b-russo-order-form__location-picker {
+      max-width: none;
+    }
+
+    .b2b-russo-order-form__table-wrap {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table {
+      min-width: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table thead {
+      display: none;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table tbody {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table tr {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border: 1px solid rgba(var(--color-foreground), 0.1);
+      border-radius: 0.8rem;
+      background: rgb(var(--color-background));
+      overflow: hidden;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table th,
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table td {
+      border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+      padding: 0.8rem;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__product-row-heading {
+      grid-column: 1 / -1;
+      border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__product-cell {
+      align-items: flex-start;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__product-image {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table td {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table td::before {
+      content: attr(data-label);
+      font-size: 1.2rem;
+      color: rgba(var(--color-foreground), 0.7);
+      font-weight: 500;
+      white-space: normal;
+    }
+
+    .b2b-russo-order-form__form[data-location-mode='dropdown']
+      .b2b-russo-order-form__quantity-cell
+      .b2b-russo-order-form__qty {
+      width: 6rem;
+      margin: 0;
+    }
+
+    .b2b-russo-order-form__summary-header {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      align-items: start;
+    }
+
+    .b2b-russo-order-form__summary-item-meta {
+      width: 100%;
+    }
+
+    .b2b-russo-order-form__summary-caret {
+      display: none;
+    }
+
+    .b2b-russo-order-form__grand-total {
+      justify-content: space-between;
+      font-size: 1.5rem;
+    }
+
+    .b2b-russo-order-form__actions .button {
+      width: 100%;
+    }
+
+    .b2b-russo-order-form__payload {
+      font-size: 1.2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const roots = document.querySelectorAll('[data-order-form-root]');
+    if (!roots.length) return;
+
+    const formatMoney = (root, cents) => {
+      const currencyCode = root.dataset.currencyCode || 'USD';
+      return new Intl.NumberFormat(document.documentElement.lang || 'en-US', {
+        style: 'currency',
+        currency: currencyCode,
+      }).format(cents / 100);
+    };
+
+    const escapeHtml = (value) => {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    };
+
+    roots.forEach((root) => {
+      const output = root.querySelector('[data-payload-output]');
+      const buildButton = root.querySelector('[data-build-payload]');
+      const copyButton = root.querySelector('[data-copy-payload]');
+      const submitButton = root.querySelector('[data-submit-order]');
+      const submitStatus = root.querySelector('[data-submit-status]');
+      const purchaseOrderInput = root.querySelector('[data-purchase-order-number]');
+      const noteInput = root.querySelector('[data-order-note]');
+      if (!submitButton || !submitStatus || !purchaseOrderInput || !noteInput) return;
+
+      const isDropdownMode = root.dataset.locationMode === 'dropdown';
+      const locationSelect = root.querySelector('[data-location-select]');
+      const summaryList = root.querySelector('[data-location-summary-list]');
+      const rows = Array.from(root.querySelectorAll('[data-order-form-row]'));
+      const qtyInputs = Array.from(root.querySelectorAll('.b2b-russo-order-form__qty'));
+      const allocations = {};
+      const locationNamesById = {};
+      const storageKey = root.dataset.storageKey;
+      const submitEndpoint = root.dataset.submitEndpoint || '/apps/russoAPI/v1/submit-order-form';
+      const submitConfirmModalId = root.dataset.submitConfirmModalId;
+      const submitConfirmModal = submitConfirmModalId ? document.getElementById(submitConfirmModalId) : null;
+      const submitConfirmButton = submitConfirmModal
+        ? submitConfirmModal.querySelector('[data-submit-confirm]')
+        : root.querySelector('[data-submit-confirm]');
+      const submitCancelButton = submitConfirmModal
+        ? submitConfirmModal.querySelector('[data-submit-cancel]')
+        : root.querySelector('[data-submit-cancel]');
+      let summaryInitialized = false;
+
+      if (locationSelect) {
+        Array.from(locationSelect.options).forEach((option) => {
+          locationNamesById[option.dataset.locationId] = option.dataset.locationName;
+        });
+      }
+
+      const getSelectedLocation = () => {
+        if (!locationSelect) return null;
+        const option = locationSelect.options[locationSelect.selectedIndex];
+        if (!option) return null;
+        return {
+          id: option.dataset.locationId,
+          name: option.dataset.locationName,
+        };
+      };
+
+      const getRowAllocations = (row) => {
+        const productId = String(row.dataset.productId);
+        return allocations[productId] || {};
+      };
+
+      const getColumnQuantities = () => {
+        const quantities = {};
+        qtyInputs.forEach((input) => {
+          const key = `${input.dataset.productId}:${input.dataset.locationId}`;
+          quantities[key] = Number(input.value || 0);
+        });
+        return quantities;
+      };
+
+      const saveDraft = (payload) => {
+        if (!storageKey) return;
+        const draft = {
+          version: 1,
+          selectedLocationId: locationSelect ? locationSelect.value : null,
+          mode: isDropdownMode ? 'dropdown' : 'columns',
+          payload,
+        };
+
+        if (isDropdownMode) {
+          draft.allocations = allocations;
+        } else {
+          draft.columnQuantities = getColumnQuantities();
+        }
+
+        localStorage.setItem(storageKey, JSON.stringify(draft));
+      };
+
+      const clearAllocations = () => {
+        Object.keys(allocations).forEach((productId) => {
+          delete allocations[productId];
+        });
+      };
+
+      const clearFormValues = () => {
+        clearAllocations();
+        qtyInputs.forEach((input) => {
+          input.value = 0;
+        });
+        purchaseOrderInput.value = '';
+        noteInput.value = '';
+        if (isDropdownMode) {
+          syncInputsToSelectedLocation();
+        }
+      };
+
+      const restoreDraft = () => {
+        if (!storageKey) return;
+        const draftRaw = localStorage.getItem(storageKey);
+        if (!draftRaw) return;
+        const draft = JSON.parse(draftRaw);
+        if (!draft || typeof draft !== 'object') return;
+
+        if (isDropdownMode) {
+          if (locationSelect && draft.selectedLocationId) {
+            const optionMatch = Array.from(locationSelect.options).find((option) => {
+              return option.dataset.locationId === String(draft.selectedLocationId);
+            });
+            if (optionMatch) {
+              locationSelect.value = optionMatch.value;
+            }
+          }
+
+          if (draft.allocations && typeof draft.allocations === 'object') {
+            Object.entries(draft.allocations).forEach(([productId, locationMap]) => {
+              allocations[productId] = {};
+              if (locationMap && typeof locationMap === 'object') {
+                Object.entries(locationMap).forEach(([locationId, quantity]) => {
+                  allocations[productId][locationId] = Number(quantity || 0);
+                });
+              }
+            });
+          }
+          syncInputsToSelectedLocation();
+        } else if (draft.columnQuantities && typeof draft.columnQuantities === 'object') {
+          qtyInputs.forEach((input) => {
+            const key = `${input.dataset.productId}:${input.dataset.locationId}`;
+            if (Object.prototype.hasOwnProperty.call(draft.columnQuantities, key)) {
+              input.value = Number(draft.columnQuantities[key] || 0);
+            }
+          });
+        }
+
+        if (draft.payload && typeof draft.payload === 'object') {
+          purchaseOrderInput.value = draft.payload.purchase_order_number || '';
+          noteInput.value = draft.payload.note || '';
+        }
+      };
+
+      const syncInputsToSelectedLocation = () => {
+        if (!isDropdownMode) return;
+        const selected = getSelectedLocation();
+        if (!selected) return;
+        rows.forEach((row) => {
+          const productId = String(row.dataset.productId);
+          const input = row.querySelector('.b2b-russo-order-form__qty--single-location');
+          if (!input) return;
+          const productAllocations = allocations[productId] || {};
+          input.value = productAllocations[selected.id] || 0;
+          input.dataset.locationId = selected.id;
+          input.dataset.locationName = selected.name;
+        });
+      };
+
+      const getRowQuantityAcrossLocations = (row) => {
+        if (!isDropdownMode) {
+          return Array.from(row.querySelectorAll('.b2b-russo-order-form__qty')).reduce((sum, input) => {
+            return sum + Number(input.value || 0);
+          }, 0);
+        }
+        const productAllocations = getRowAllocations(row);
+        return Object.values(productAllocations).reduce((sum, quantity) => sum + Number(quantity || 0), 0);
+      };
+
+      const getRowQuantityForSelectedLocation = (row) => {
+        if (!isDropdownMode) {
+          return getRowQuantityAcrossLocations(row);
+        }
+        const selected = getSelectedLocation();
+        if (!selected) return 0;
+        const productAllocations = getRowAllocations(row);
+        return Number(productAllocations[selected.id] || 0);
+      };
+
+      const updateSummary = () => {
+        if (!summaryList) return;
+        const totalsByLocation = {};
+        const openLocations = {};
+        const selectedLocation = getSelectedLocation();
+
+        summaryList.querySelectorAll('details[data-location-id]').forEach((detailsElement) => {
+          openLocations[detailsElement.dataset.locationId] = detailsElement.open;
+        });
+
+        rows.forEach((row) => {
+          const unitPriceCents = Number(row.dataset.unitPriceCents || 0);
+          const productId = String(row.dataset.productId);
+          const productTitle = row.dataset.productTitle || productId;
+          const productAllocations = getRowAllocations(row);
+
+          Object.entries(productAllocations).forEach(([locationId, quantity]) => {
+            const qtyNumber = Number(quantity || 0);
+            if (qtyNumber <= 0) return;
+
+            if (!totalsByLocation[locationId]) {
+              totalsByLocation[locationId] = {
+                name: locationNamesById[locationId] || locationId,
+                quantity: 0,
+                totalCents: 0,
+                products: [],
+              };
+            }
+            totalsByLocation[locationId].quantity += qtyNumber;
+            totalsByLocation[locationId].totalCents += qtyNumber * unitPriceCents;
+            totalsByLocation[locationId].products.push({
+              title: productTitle,
+              quantity: qtyNumber,
+            });
+          });
+        });
+
+        const entries = Object.entries(totalsByLocation).map(([locationId, entry]) => {
+          return {
+            locationId,
+            ...entry,
+          };
+        });
+        if (!entries.length) {
+          summaryList.innerHTML = `<p class="b2b-russo-order-form__summary-empty">${
+            root.dataset.summaryEmptyMessage || ''
+          }</p>`;
+          return;
+        }
+
+        summaryList.innerHTML = entries
+          .map((entry) => {
+            const shouldOpen =
+              openLocations[entry.locationId] ||
+              (!summaryInitialized && selectedLocation && selectedLocation.id === entry.locationId);
+            const openAttribute = shouldOpen ? ' open' : '';
+            return `<details class="b2b-russo-order-form__summary-item" data-location-id="${
+              entry.locationId
+            }"${openAttribute}>
+              <summary class="b2b-russo-order-form__summary-header">
+                <span class="b2b-russo-order-form__summary-item-name">${escapeHtml(entry.name)}</span>
+                <span class="b2b-russo-order-form__summary-item-meta">
+                  <span>Qty: ${entry.quantity}</span>
+                  <span>${formatMoney(root, entry.totalCents)}</span>
+                </span>
+                <span class="b2b-russo-order-form__summary-caret" aria-hidden="true">▶</span>
+              </summary>
+              <ul class="b2b-russo-order-form__summary-product-list">
+                ${entry.products
+                  .map((productEntry) => {
+                    return `<li><span>${escapeHtml(productEntry.title)}</span><strong>${
+                      productEntry.quantity
+                    }</strong></li>`;
+                  })
+                  .join('')}
+              </ul>
+            </details>`;
+          })
+          .join('');
+        summaryInitialized = true;
+      };
+
+      const updateTotals = () => {
+        let grandTotalCents = 0;
+
+        rows.forEach((row) => {
+          const unitPriceCents = Number(row.dataset.unitPriceCents || 0);
+          const rowTotalDisplayCents = getRowQuantityForSelectedLocation(row) * unitPriceCents;
+          const rowTotalAllLocationsCents = getRowQuantityAcrossLocations(row) * unitPriceCents;
+          grandTotalCents += rowTotalAllLocationsCents;
+          const rowTotalTarget = row.querySelector('[data-row-total]');
+          if (rowTotalTarget) {
+            rowTotalTarget.textContent = formatMoney(root, rowTotalDisplayCents);
+          }
+        });
+
+        const grandTotalTarget = root.querySelector('[data-grand-total]');
+        if (grandTotalTarget) {
+          grandTotalTarget.textContent = formatMoney(root, grandTotalCents);
+        }
+
+        if (isDropdownMode) {
+          updateSummary();
+        }
+      };
+
+      const buildPayload = () => {
+        const lines = [];
+
+        if (isDropdownMode) {
+          rows.forEach((row) => {
+            const productId = Number(row.dataset.productId);
+            const productHandle = row.dataset.productHandle;
+            const productTitle = row.dataset.productTitle;
+            const productAllocations = allocations[String(row.dataset.productId)] || {};
+
+            Object.entries(productAllocations).forEach(([locationId, quantity]) => {
+              const qtyNumber = Number(quantity || 0);
+              if (qtyNumber <= 0) return;
+              lines.push({
+                product_id: productId,
+                product_handle: productHandle,
+                product_title: productTitle,
+                location_id: Number(locationId),
+                location_name: locationNamesById[locationId] || locationId,
+                quantity: qtyNumber,
+              });
+            });
+          });
+        } else {
+          qtyInputs.forEach((input) => {
+            const quantity = Number(input.value || 0);
+            if (quantity <= 0) return;
+            lines.push({
+              product_id: Number(input.dataset.productId),
+              product_handle: input.dataset.productHandle,
+              product_title: input.dataset.productTitle,
+              location_id: Number(input.dataset.locationId),
+              location_name: input.dataset.locationName,
+              quantity,
+            });
+          });
+        }
+
+        return {
+          created_at: new Date().toISOString(),
+          customer_id:
+            window.ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page
+              ? ShopifyAnalytics.meta.page.customerId
+              : null,
+          purchase_order_number: purchaseOrderInput.value.trim(),
+          note: noteInput.value.trim(),
+          lines,
+        };
+      };
+
+      const writePayload = (persistDraft = true) => {
+        const payload = buildPayload();
+        if (output) {
+          output.value = JSON.stringify(payload, null, 2);
+        }
+        if (persistDraft) {
+          saveDraft(payload);
+        }
+        return payload;
+      };
+
+      root.addEventListener('input', (event) => {
+        if (event.target.classList.contains('b2b-russo-order-form__qty')) {
+          if (isDropdownMode) {
+            const selected = getSelectedLocation();
+            if (selected) {
+              const productId = String(event.target.dataset.productId);
+              if (!allocations[productId]) allocations[productId] = {};
+              allocations[productId][selected.id] = Number(event.target.value || 0);
+              event.target.dataset.locationId = selected.id;
+              event.target.dataset.locationName = selected.name;
+            }
+          }
+          updateTotals();
+          writePayload();
+          return;
+        }
+
+        if (event.target === purchaseOrderInput || event.target === noteInput) {
+          writePayload();
+        }
+      });
+
+      if (isDropdownMode && locationSelect) {
+        locationSelect.addEventListener('change', () => {
+          syncInputsToSelectedLocation();
+          updateTotals();
+          writePayload();
+        });
+      }
+
+      if (buildButton) {
+        buildButton.addEventListener('click', writePayload);
+      }
+      if (copyButton && output) {
+        copyButton.addEventListener('click', async () => {
+          writePayload();
+          await navigator.clipboard.writeText(output.value);
+        });
+      }
+
+      const closeSubmitConfirmModal = () => {
+        if (!submitConfirmModal) return;
+        if (typeof submitConfirmModal.hide === 'function') {
+          submitConfirmModal.hide();
+          return;
+        }
+        submitConfirmModal.removeAttribute('open');
+      };
+
+      const runSubmit = async () => {
+        if (submitButton.disabled) return;
+
+        submitButton.disabled = true;
+        submitStatus.textContent = root.dataset.submitStartText || 'Submitting...';
+
+        try {
+          const payload = writePayload(false);
+          const response = await fetch(submitEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Submit failed with status ${response.status}`);
+          }
+
+          if (storageKey) {
+            localStorage.removeItem(storageKey);
+          }
+          closeSubmitConfirmModal();
+          clearFormValues();
+          updateTotals();
+          writePayload(false);
+          submitStatus.textContent = root.dataset.submitSuccessText || 'Submitted.';
+        } catch (error) {
+          submitStatus.textContent = root.dataset.submitErrorText || 'Submission failed.';
+          console.error('Order form submit error', error);
+        } finally {
+          submitButton.disabled = false;
+        }
+      };
+
+      if (submitCancelButton) {
+        submitCancelButton.addEventListener('click', closeSubmitConfirmModal);
+      }
+
+      if (submitConfirmButton) {
+        submitConfirmButton.addEventListener('click', runSubmit);
+      } else {
+        submitButton.addEventListener('click', runSubmit);
+      }
+
+      restoreDraft();
+      syncInputsToSelectedLocation();
+      writePayload();
+      updateTotals();
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Russo Multi-Location Form",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Russo Multi-Location Order Form"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Select quantities per destination location, then generate the JSON payload."
+    },
+    {
+      "type": "collection",
+      "id": "source_collection",
+      "label": "Product collection"
+    },
+    {
+      "type": "select",
+      "id": "location_input_mode",
+      "label": "Location input mode",
+      "default": "auto",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto switch"
+        },
+        {
+          "value": "columns",
+          "label": "Columns"
+        },
+        {
+          "value": "dropdown",
+          "label": "Single dropdown"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "location_column_threshold",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Auto switch threshold",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "location_selector_label",
+      "label": "Dropdown label",
+      "default": "Destination location"
+    },
+    {
+      "type": "text",
+      "id": "quantity_column_label",
+      "label": "Single quantity column label",
+      "default": "Quantity"
+    },
+    {
+      "type": "text",
+      "id": "summary_title",
+      "label": "Summary title",
+      "default": "Location Order Summary"
+    },
+    {
+      "type": "text",
+      "id": "summary_empty_message",
+      "label": "Empty summary message",
+      "default": "No quantities selected yet."
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 5,
+      "max": 50,
+      "step": 1,
+      "label": "Products per page",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_image",
+      "label": "Show product image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show SKU column",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "column_product_label",
+      "label": "Product column label",
+      "default": "Product"
+    },
+    {
+      "type": "text",
+      "id": "column_sku_label",
+      "label": "SKU column label",
+      "default": "SKU"
+    },
+    {
+      "type": "text",
+      "id": "table_aria_label",
+      "label": "Table accessibility label",
+      "default": "B2B order form quantity table"
+    },
+    {
+      "type": "text",
+      "id": "submit_button_label",
+      "label": "Submit button label",
+      "default": "Submit order"
+    },
+    {
+      "type": "text",
+      "id": "submit_confirm_title",
+      "label": "Submit confirmation title",
+      "default": "Submit order?"
+    },
+    {
+      "type": "textarea",
+      "id": "submit_confirm_message",
+      "label": "Submit confirmation message",
+      "default": "Are you sure you want to submit this order?"
+    },
+    {
+      "type": "text",
+      "id": "submit_confirm_cancel_label",
+      "label": "Submit confirmation cancel label",
+      "default": "Cancel"
+    },
+    {
+      "type": "text",
+      "id": "submit_confirm_submit_label",
+      "label": "Submit confirmation submit label",
+      "default": "Confirm submit"
+    },
+    {
+      "type": "text",
+      "id": "fake_submit_endpoint",
+      "label": "Submit endpoint URL",
+      "default": "/apps/russoAPI/v1/submit-order-form"
+    },
+    {
+      "type": "text",
+      "id": "submit_in_progress_message",
+      "label": "Submitting message",
+      "default": "Submitting order..."
+    },
+    {
+      "type": "text",
+      "id": "submit_success_message",
+      "label": "Submit success message",
+      "default": "Order submitted. Draft cleared."
+    },
+    {
+      "type": "text",
+      "id": "submit_error_message",
+      "label": "Submit error message",
+      "default": "Could not submit order. Please try again."
+    },
+    {
+      "type": "text",
+      "id": "generate_payload_label",
+      "label": "Generate payload button label",
+      "default": "Generate payload"
+    },
+    {
+      "type": "text",
+      "id": "copy_payload_label",
+      "label": "Copy payload button label",
+      "default": "Copy payload"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_developer_tools",
+      "label": "Show developer tools (JSON payload)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "payload_label",
+      "label": "Payload textarea label",
+      "default": "Payload preview (JSON)"
+    },
+    {
+      "type": "text",
+      "id": "order_total_label",
+      "label": "Order total label",
+      "default": "Order total"
+    },
+    {
+      "type": "text",
+      "id": "purchase_order_label",
+      "label": "Purchase order field label",
+      "default": "Purchase Order No."
+    },
+    {
+      "type": "text",
+      "id": "note_label",
+      "label": "Note field label",
+      "default": "Note"
+    },
+    {
+      "type": "text",
+      "id": "login_required_message",
+      "label": "Login required message",
+      "default": "Please log in with your customer account to access this form."
+    },
+    {
+      "type": "text",
+      "id": "b2b_only_message",
+      "label": "B2B only message",
+      "default": "This order form is only available for B2B customers."
+    },
+    {
+      "type": "text",
+      "id": "missing_collection_message",
+      "label": "Missing collection message",
+      "default": "Select a collection in section settings to load products."
+    },
+    {
+      "type": "text",
+      "id": "missing_locations_message",
+      "label": "Missing locations message",
+      "default": "No company locations are available for your customer account."
+    }
+  ],
+  "presets": [
+    {
+      "name": "B2B order form starter"
+    }
+  ]
+}
+{% endschema %}

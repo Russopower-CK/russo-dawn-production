@@ -1,0 +1,50 @@
+{%- liquid
+  assign modal_id = modal_id | default: 'RussoConfirmModal'
+  assign title = title | default: 'Please confirm'
+  assign message = message | default: 'Are you sure you want to continue?'
+  assign confirm_label = confirm_label | default: 'Confirm'
+  assign cancel_label = cancel_label | default: 'Cancel'
+-%}
+
+<modal-dialog id="{{ modal_id }}" class="russo-confirm-modal">
+  <div
+    role="dialog"
+    aria-label="{{ title | escape }}"
+    aria-modal="true"
+    class="russo-confirm-modal__content"
+    tabindex="-1"
+  >
+    <button
+      id="ModalClose-{{ modal_id }}"
+      type="button"
+      class="russo-confirm-modal__close"
+      aria-label="{{ 'accessibility.close' | t }}"
+    >
+      {{- 'icon-close.svg' | inline_asset_content -}}
+    </button>
+
+    <h3 class="russo-confirm-modal__title">{{ title }}</h3>
+    <p class="russo-confirm-modal__message">{{ message }}</p>
+
+    <div class="russo-confirm-modal__actions">
+      <button
+        type="button"
+        class="button button--secondary"
+        {% if cancel_button_attributes != blank %}
+          {{- cancel_button_attributes -}}
+        {% endif %}
+      >
+        {{ cancel_label }}
+      </button>
+      <button
+        type="button"
+        class="button button--primary"
+        {% if confirm_button_attributes != blank %}
+          {{- confirm_button_attributes -}}
+        {% endif %}
+      >
+        {{ confirm_label }}
+      </button>
+    </div>
+  </div>
+</modal-dialog>

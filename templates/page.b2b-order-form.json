@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "main": {
+      "type": "russo-multi-location-order-form",
+      "settings": {
+        "heading": "B2B order form",
+        "description": "Set quantities for each destination location, then copy the payload JSON.",
+        "source_collection": "",
+        "products_per_page": 20,
+        "show_product_image": true,
+        "show_sku": true,
+        "column_product_label": "Product",
+        "column_sku_label": "SKU",
+        "table_aria_label": "B2B order form quantity table",
+        "generate_payload_label": "Generate payload",
+        "copy_payload_label": "Copy payload",
+        "payload_label": "Payload preview (JSON)",
+        "login_required_message": "Please log in with your customer account to access this form.",
+        "b2b_only_message": "This order form is only available for B2B customers.",
+        "missing_collection_message": "Select a collection in section settings to load products.",
+        "missing_locations_message": "No company locations are available for your customer account."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

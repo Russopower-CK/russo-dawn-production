@@ -2080,6 +2080,86 @@ input[type='checkbox'] {
   cursor: initial;
 }
 
+/* reusable-confirm-modal */
+.russo-confirm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  padding: 1.5rem;
+}
+
+.russo-confirm-modal[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.russo-confirm-modal__content {
+  width: min(100%, 46rem);
+  border-radius: 0.8rem;
+  border: 1px solid rgba(var(--color-foreground), 0.08);
+  background: rgb(var(--color-background));
+  box-shadow: 0 1.2rem 3.6rem rgba(0, 0, 0, 0.18);
+  padding: 1.8rem;
+  position: relative;
+  display: grid;
+  gap: 1rem;
+}
+
+.russo-confirm-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 3.8rem;
+  height: 3.8rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgb(var(--color-foreground));
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.russo-confirm-modal__close .icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.russo-confirm-modal__title {
+  margin: 0;
+  padding-right: 3.6rem;
+}
+
+.russo-confirm-modal__message {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.8);
+}
+
+.russo-confirm-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 749px) {
+  .russo-confirm-modal {
+    padding: 1rem;
+  }
+
+  .russo-confirm-modal__content {
+    padding: 1.3rem;
+  }
+
+  .russo-confirm-modal__actions .button {
+    width: 100%;
+  }
+}
+
 /* component-cart-count-bubble */
 .cart-count-bubble:empty {
   display: none;
