@@ -1,0 +1,625 @@
+{% comment %}
+  ============================================
+  FERTILIZER PROGRAM CALCULATOR - Shopify Liquid
+  ============================================
+  Self-contained calculator with embedded product database
+  No Shopify collections or metafields required
+
+  FORMULAS:
+  - LBS Nitrogen per 1,000 sq ft = ((50 / bag_coverage) * nitrogen_percent) * 10
+  - Bags Needed = (43560 / bag_coverage) * acres
+  - Cost per Acre = price_per_bag * bags_needed
+{% endcomment %}
+
+<div class="fertilizer-calculator">
+  <h1>Fertilizer Program Calculator</h1>
+
+  {% comment %} ===== USER INPUT SECTION ===== {% endcomment %}
+  <div class="calculator-input">
+    <label for="acres-input">Acres being applied:</label>
+    <input type="number" id="acres-input" name="acres" value="3" min="0.1" step="0.1" onchange="calculateAll()">
+  </div>
+
+  <p class="calculator-note">***Fill in grey shaded areas first***</p>
+
+  {% comment %} ===== CALCULATOR TABLE ===== {% endcomment %}
+  <table class="program-table">
+    <thead>
+      <tr>
+        <th>Round</th>
+        <th>Description</th>
+        <th>Item #</th>
+        <th>Product</th>
+        <th>Bag Coverage (sq ft)</th>
+        <th>% of Nitrogen</th>
+        <th>Price per Bag</th>
+        <th>LBS of Nitrogen per 1,000 sq ft</th>
+        <th>Bags Needed</th>
+        <th>Cost per Acre</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% comment %} ===== ROUND 1: Pre-Emergent (March - April) ===== {% endcomment %}
+      <tr class="round-row" data-round="1">
+        <td class="round-label">
+          Round - 1<br>
+          <small>(March - April)</small>
+        </td>
+        <td>Pre-Emergent Crabgrass Prevention</td>
+        <td>
+          <select class="product-select" id="product-select-1" onchange="updateProduct(1)">
+            <option value="">-- Select Product --</option>
+          </select>
+        </td>
+        <td class="product-name" id="product-name-1">--</td>
+        <td class="bag-coverage" id="coverage-1">--</td>
+        <td>
+          <input
+            type="number"
+            class="nitrogen-input"
+            id="nitrogen-1"
+            value="18"
+            min="0"
+            max="100"
+            onchange="calculateRow(1)"
+          >
+        </td>
+        <td>
+          <input
+            type="number"
+            class="price-input"
+            id="price-1"
+            value="22.00"
+            min="0"
+            step="0.01"
+            onchange="calculateRow(1)"
+          >
+        </td>
+        <td class="lbs-nitrogen" id="lbs-nitrogen-1">--</td>
+        <td class="bags-needed" id="bags-needed-1">--</td>
+        <td class="cost-per-acre" id="cost-1">--</td>
+      </tr>
+
+      {% comment %} ===== ROUND 2: Late Spring (May - June) ===== {% endcomment %}
+      <tr class="round-row" data-round="2">
+        <td class="round-label">
+          Round - 2<br>
+          <small>(May - June)</small>
+        </td>
+        <td>Late Spring Feeding</td>
+        <td>
+          <select class="product-select" id="product-select-2" onchange="updateProduct(2)">
+            <option value="">-- Select Product --</option>
+          </select>
+        </td>
+        <td class="product-name" id="product-name-2">--</td>
+        <td class="bag-coverage" id="coverage-2">--</td>
+        <td>
+          <input
+            type="number"
+            class="nitrogen-input"
+            id="nitrogen-2"
+            value="18"
+            min="0"
+            max="100"
+            onchange="calculateRow(2)"
+          >
+        </td>
+        <td>
+          <input
+            type="number"
+            class="price-input"
+            id="price-2"
+            value="19.00"
+            min="0"
+            step="0.01"
+            onchange="calculateRow(2)"
+          >
+        </td>
+        <td class="lbs-nitrogen" id="lbs-nitrogen-2">--</td>
+        <td class="bags-needed" id="bags-needed-2">--</td>
+        <td class="cost-per-acre" id="cost-2">--</td>
+      </tr>
+
+      {% comment %} ===== ROUND 3: Summer (June - July) ===== {% endcomment %}
+      <tr class="round-row" data-round="3">
+        <td class="round-label">
+          Round - 3<br>
+          <small>(June - July)</small>
+        </td>
+        <td>Summer Fertilizer & Grub Prevention</td>
+        <td>
+          <select class="product-select" id="product-select-3" onchange="updateProduct(3)">
+            <option value="">-- Select Product --</option>
+          </select>
+        </td>
+        <td class="product-name" id="product-name-3">--</td>
+        <td class="bag-coverage" id="coverage-3">--</td>
+        <td>
+          <input
+            type="number"
+            class="nitrogen-input"
+            id="nitrogen-3"
+            value="15"
+            min="0"
+            max="100"
+            onchange="calculateRow(3)"
+          >
+        </td>
+        <td>
+          <input
+            type="number"
+            class="price-input"
+            id="price-3"
+            value="24.00"
+            min="0"
+            step="0.01"
+            onchange="calculateRow(3)"
+          >
+        </td>
+        <td class="lbs-nitrogen" id="lbs-nitrogen-3">--</td>
+        <td class="bags-needed" id="bags-needed-3">--</td>
+        <td class="cost-per-acre" id="cost-3">--</td>
+      </tr>
+
+      {% comment %} ===== ROUND 4: Late Summer (August - September) ===== {% endcomment %}
+      <tr class="round-row" data-round="4">
+        <td class="round-label">
+          Round - 4<br>
+          <small>(August - September)</small>
+        </td>
+        <td>Late Summer Feeding</td>
+        <td>
+          <select class="product-select" id="product-select-4" onchange="updateProduct(4)">
+            <option value="">-- Select Product --</option>
+          </select>
+        </td>
+        <td class="product-name" id="product-name-4">--</td>
+        <td class="bag-coverage" id="coverage-4">--</td>
+        <td>
+          <input
+            type="number"
+            class="nitrogen-input"
+            id="nitrogen-4"
+            value="24"
+            min="0"
+            max="100"
+            onchange="calculateRow(4)"
+          >
+        </td>
+        <td>
+          <input
+            type="number"
+            class="price-input"
+            id="price-4"
+            value="23.00"
+            min="0"
+            step="0.01"
+            onchange="calculateRow(4)"
+          >
+        </td>
+        <td class="lbs-nitrogen" id="lbs-nitrogen-4">--</td>
+        <td class="bags-needed" id="bags-needed-4">--</td>
+        <td class="cost-per-acre" id="cost-4">--</td>
+      </tr>
+
+      {% comment %} ===== ROUND 5: Winterizer (October - November) ===== {% endcomment %}
+      <tr class="round-row" data-round="5">
+        <td class="round-label">
+          Round - 5<br>
+          <small>(October - November)</small>
+        </td>
+        <td>Winterizer</td>
+        <td>
+          <select class="product-select" id="product-select-5" onchange="updateProduct(5)">
+            <option value="">-- Select Product --</option>
+          </select>
+        </td>
+        <td class="product-name" id="product-name-5">--</td>
+        <td class="bag-coverage" id="coverage-5">--</td>
+        <td>
+          <input
+            type="number"
+            class="nitrogen-input"
+            id="nitrogen-5"
+            value="32"
+            min="0"
+            max="100"
+            onchange="calculateRow(5)"
+          >
+        </td>
+        <td>
+          <input
+            type="number"
+            class="price-input"
+            id="price-5"
+            value="26.00"
+            min="0"
+            step="0.01"
+            onchange="calculateRow(5)"
+          >
+        </td>
+        <td class="lbs-nitrogen" id="lbs-nitrogen-5">--</td>
+        <td class="bags-needed" id="bags-needed-5">--</td>
+        <td class="cost-per-acre" id="cost-5">--</td>
+      </tr>
+    </tbody>
+
+    {% comment %} ===== TOTALS ROW ===== {% endcomment %}
+    <tfoot>
+      <tr class="totals-row">
+        <td colspan="7"><strong>Annual Totals</strong></td>
+        <td id="total-lbs-nitrogen">
+          --<br>
+          <small>Annual lbs of Nitrogen</small>
+        </td>
+        <td id="total-bags-needed">
+          --<br>
+          <small>Annual bags needed</small>
+        </td>
+        <td id="total-cost">
+          --<br>
+          <small>Annual cost</small>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+{% comment %} ===== CALCULATOR JAVASCRIPT WITH EMBEDDED PRODUCT DATA ===== {% endcomment %}
+<script>
+  // =============================================
+  // PRODUCT DATABASE - From Excel Products Sheet
+  // =============================================
+  const productDatabase = {
+    "Pre-Emergent / Fertilizer Combo's": [
+      { sku: '10000324SPR', name: '13-0-0 25% Regain 0.125% Dimension / 50 lb', coverage: 12500, nitrogen: 13 },
+      { sku: '10009856AND', name: '18-0-4 20% Fortify-N 0.38% Prodiamine (Barricade)', coverage: 12500, nitrogen: 18 },
+      { sku: '19000297SPR', name: '19-0-0 25% Regain 0.37% Prodiamine (Barricade)', coverage: 12500, nitrogen: 19 },
+      { sku: '10008159AND', name: '22-0-4 20% PCSCU 0.38% Prodiamine / 50 Lb', coverage: 12500, nitrogen: 22 },
+    ],
+    'Straight Fertilizer': [
+      { sku: '910230BCA', name: "15-0-3 20% PCSCU, 10% AS, Bio-Sold Organic + Micro's", coverage: 10000, nitrogen: 15 },
+      { sku: 'RUS187UFEB5AND', name: '18-0-3 40% Fortify-N, Bio-Solid Organic, Iron', coverage: 12000, nitrogen: 18 },
+      { sku: '902734TCS', name: '24-0-4 30% XCU, 2% FE / 50 lb', coverage: 12000, nitrogen: 24 },
+      { sku: '907080TCS', name: '25-0-5 40% XCU, 2% FE, 10% Bio-Solid Organic / 50 lb', coverage: 12500, nitrogen: 25 },
+      { sku: '907083TCS', name: '32-0-8 50% XCU, 2% FE / 50 lb', coverage: 16000, nitrogen: 32 },
+      { sku: '901976TCS', name: '33-0-4 20% XCU / 50 Lb', coverage: 16500, nitrogen: 33 },
+    ],
+    'Starter Fertilizer': [
+      { sku: '910048BCA', name: '10-10-10 (50% MinneGrow Organic)', coverage: 10000, nitrogen: 10 },
+      { sku: '907082TCS', name: '11-23-10 All Mineral Starter Fertilizer / 50 lb', coverage: 12000, nitrogen: 11 },
+      {
+        sku: '907081TCS',
+        name: '14-14-14 51% XCU, 1% FE, 25% Bio-Solid Organic / 50 lb',
+        coverage: 10000,
+        nitrogen: 14,
+      },
+      { sku: 'ASP21WMSFE4AND', name: '21-22-4 35% Mu W/0.08% Mesotrione', coverage: 9300, nitrogen: 21 },
+    ],
+    'Weed & Feed': [
+      { sku: '2078459SPR', name: '20-0-5 25% Slow W/ Trimec Herbicide', coverage: 12000, nitrogen: 20 },
+      { sku: '10000437SPR', name: '18-0-2 W/Regain W/ Surge Weed & Feed / 50 Lb', coverage: 12000, nitrogen: 18 },
+      { sku: '2078595SPR', name: '19-0-5 W/Regain W/ Viper Weed & Feed / 50 Lb', coverage: 12000, nitrogen: 19 },
+    ],
+    Organic: [
+      { sku: '900276BCA', name: '5-5-0 100% MinneGrow Biosolid 5%FE, 3%Ca,1%Mg 50lb', coverage: 5000, nitrogen: 5 },
+      { sku: 'ASP133HU5.40AND', name: '13-0-3 25% SCU 10% AS, Humic Acid, Bio-Solid', coverage: 12000, nitrogen: 13 },
+    ],
+    Insecticide: [
+      { sku: 'ASPK7GB5AND', name: '0-0-7 0.20% Grubout (Imidaclprid)', coverage: 12000, nitrogen: 0 },
+      { sku: 'ASP15UGB.40AND', name: '15-0-4 25% Fortify-N W/ 0.20% GrubOut', coverage: 12000, nitrogen: 15 },
+      { sku: 'ASP15UAC5.40AND', name: '15-0-5 50% Fortify-N 0.067% Acelepryn / 50 Lb', coverage: 11500, nitrogen: 15 },
+      {
+        sku: '2021300SPR',
+        name: '17-0-4 30% PPSCU / Protego Insecticide / 50 lb (Imidacloprid & Lambda)',
+        coverage: 12000,
+        nitrogen: 17,
+      },
+      {
+        sku: 'ASP21UGB5.40AND',
+        name: '21-0-4 50% Fortify-N 0.20% Grubout (Imidaclprid)',
+        coverage: 12000,
+        nitrogen: 21,
+      },
+    ],
+  };
+
+  // Flat list for easy lookup by SKU
+  const allProducts = {};
+  Object.values(productDatabase).forEach((categoryProducts) => {
+    categoryProducts.forEach((product) => {
+      allProducts[product.sku] = product;
+    });
+  });
+
+  // =============================================
+  // CONSTANTS (from Excel formulas)
+  // =============================================
+  const SQ_FT_PER_ACRE = 43560;
+  const BAG_WEIGHT_LBS = 50;
+  const NITROGEN_MULTIPLIER = 10;
+
+  // =============================================
+  // ROUND DATA STORAGE
+  // =============================================
+  let roundData = {
+    1: { coverage: 12500 },
+    2: { coverage: 12000 },
+    3: { coverage: 12000 },
+    4: { coverage: 12000 },
+    5: { coverage: 16000 },
+  };
+
+  // =============================================
+  // POPULATE DROPDOWNS ON PAGE LOAD
+  // =============================================
+  function populateDropdowns() {
+    for (let round = 1; round <= 5; round++) {
+      const select = document.getElementById(`product-select-${round}`);
+
+      // Add categories with products as optgroups
+      Object.keys(productDatabase).forEach((category) => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = category;
+
+        productDatabase[category].forEach((product) => {
+          const option = document.createElement('option');
+          option.value = product.sku;
+          option.textContent = `${product.sku} - ${product.name}`;
+          option.dataset.name = product.name;
+          option.dataset.coverage = product.coverage;
+          option.dataset.nitrogen = product.nitrogen;
+          optgroup.appendChild(option);
+        });
+
+        select.appendChild(optgroup);
+      });
+    }
+  }
+
+  // =============================================
+  // UPDATE PRODUCT WHEN SELECTION CHANGES
+  // =============================================
+  function updateProduct(round) {
+    const select = document.getElementById(`product-select-${round}`);
+    const sku = select.value;
+
+    if (sku && allProducts[sku]) {
+      const product = allProducts[sku];
+
+      // Update display fields
+      document.getElementById(`product-name-${round}`).textContent = product.name;
+      document.getElementById(`coverage-${round}`).textContent = product.coverage.toLocaleString();
+      document.getElementById(`nitrogen-${round}`).value = product.nitrogen;
+
+      // Store coverage for calculations
+      roundData[round].coverage = product.coverage;
+    } else {
+      // Clear if no selection
+      document.getElementById(`product-name-${round}`).textContent = '--';
+      document.getElementById(`coverage-${round}`).textContent = '--';
+    }
+
+    calculateRow(round);
+  }
+
+  // =============================================
+  // CALCULATE A SINGLE ROW
+  // Excel formulas:
+  //   H (LBS Nitrogen per 1,000 sq ft) = ((50 / E) * F) * 10
+  //   I (Bags needed) = 43560 / E * acres
+  //   J (Cost per acre) = G * I
+  // =============================================
+  function calculateRow(round) {
+    const acres = parseFloat(document.getElementById('acres-input').value) || 0;
+    const coverage = roundData[round].coverage || 12000;
+    const nitrogen = parseFloat(document.getElementById(`nitrogen-${round}`).value) || 0;
+    const price = parseFloat(document.getElementById(`price-${round}`).value) || 0;
+
+    // Formula: =((50/E)*F)*10
+    const lbsNitrogen = (BAG_WEIGHT_LBS / coverage) * nitrogen * NITROGEN_MULTIPLIER;
+
+    // Formula: =43560/E*acres
+    const bagsNeeded = (SQ_FT_PER_ACRE / coverage) * acres;
+
+    // Formula: =G*I
+    const costPerAcre = price * bagsNeeded;
+
+    // Update display
+    document.getElementById(`lbs-nitrogen-${round}`).textContent = lbsNitrogen.toFixed(2);
+    document.getElementById(`bags-needed-${round}`).textContent = bagsNeeded.toFixed(2);
+    document.getElementById(`cost-${round}`).textContent = '$' + costPerAcre.toFixed(2);
+
+    // Recalculate totals
+    calculateTotals();
+  }
+
+  // =============================================
+  // CALCULATE ALL TOTALS (SUM formulas from row 8)
+  // =============================================
+  function calculateTotals() {
+    let totalLbsNitrogen = 0;
+    let totalBagsNeeded = 0;
+    let totalCost = 0;
+
+    for (let round = 1; round <= 5; round++) {
+      const lbsNitrogen = parseFloat(document.getElementById(`lbs-nitrogen-${round}`).textContent) || 0;
+      const bagsNeeded = parseFloat(document.getElementById(`bags-needed-${round}`).textContent) || 0;
+      const costText = document.getElementById(`cost-${round}`).textContent.replace('$', '').replace(',', '');
+      const cost = parseFloat(costText) || 0;
+
+      totalLbsNitrogen += lbsNitrogen;
+      totalBagsNeeded += bagsNeeded;
+      totalCost += cost;
+    }
+
+    document.getElementById('total-lbs-nitrogen').innerHTML = `<strong>${totalLbsNitrogen.toFixed(
+      2
+    )}</strong><br><small>Annual lbs of Nitrogen</small>`;
+    document.getElementById('total-bags-needed').innerHTML = `<strong>${totalBagsNeeded.toFixed(
+      2
+    )}</strong><br><small>Annual bags needed</small>`;
+    document.getElementById('total-cost').innerHTML = `<strong>$${totalCost.toFixed(
+      2
+    )}</strong><br><small>Annual cost</small>`;
+  }
+
+  // =============================================
+  // CALCULATE ALL ROWS
+  // =============================================
+  function calculateAll() {
+    for (let round = 1; round <= 5; round++) {
+      calculateRow(round);
+    }
+  }
+
+  // =============================================
+  // INITIALIZE ON PAGE LOAD
+  // =============================================
+  document.addEventListener('DOMContentLoaded', function () {
+    populateDropdowns();
+    calculateAll();
+  });
+</script>
+
+{% comment %} ===== CALCULATOR STYLES ===== {% endcomment %}
+<style>
+  .fertilizer-calculator {
+    font-family: Arial, sans-serif;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .fertilizer-calculator h1 {
+    color: #2c5530;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .calculator-input {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .calculator-input label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  .calculator-input input {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 2px solid #2c5530;
+    border-radius: 4px;
+    width: 100px;
+    text-align: center;
+  }
+
+  .calculator-note {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 15px;
+  }
+
+  .program-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .program-table th,
+  .program-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .program-table thead th {
+    background: #2c5530;
+    color: white;
+    font-weight: bold;
+  }
+
+  .program-table .round-label {
+    background: #e8f5e9;
+    font-weight: bold;
+    text-align: left;
+    min-width: 120px;
+  }
+
+  .program-table .round-label small {
+    font-weight: normal;
+    color: #666;
+  }
+
+  .program-table select {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    max-width: 180px;
+  }
+
+  .program-table input {
+    width: 80px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .program-table .nitrogen-input,
+  .program-table .price-input {
+    background: #fffde7;
+    border: 2px solid #ffc107;
+  }
+
+  .program-table .product-name {
+    max-width: 200px;
+    font-size: 12px;
+    text-align: left;
+  }
+
+  .program-table .lbs-nitrogen,
+  .program-table .bags-needed,
+  .program-table .cost-per-acre {
+    background: #e3f2fd;
+    font-weight: bold;
+  }
+
+  .program-table .totals-row {
+    background: #2c5530;
+    color: white;
+    font-weight: bold;
+  }
+
+  .program-table .totals-row td {
+    padding: 15px;
+  }
+
+  .program-table .totals-row small {
+    font-weight: normal;
+    font-size: 11px;
+  }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .program-table {
+      font-size: 12px;
+      display: block;
+      overflow-x: auto;
+    }
+    .program-table th,
+    .program-table td {
+      padding: 6px;
+    }
+  }
+</style>

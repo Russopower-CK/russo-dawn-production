@@ -35,6 +35,7 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
   - collapsed: location name, total qty, total amount.
   - expanded: itemized products with qty.
 - Expanded state is preserved across summary re-renders.
+- Sticky summary pane is offset from the top by `var(--header-height)` to avoid overlap with the sticky site header.
 
 ### Payload behavior
 - Payload is rebuilt by `writePayload()` and rendered in `[data-payload-output]`.
