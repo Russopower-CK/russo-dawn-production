@@ -789,7 +789,7 @@
       "settings": {
         "heading": "Featured Product Order Form",
         "description": "Shop our featured products to power your productivity!",
-        "source_collection": "featured-products",
+        "source_collection": "bulk-ice-melts",
         "location_input_mode": "auto",
         "location_column_threshold": 3,
         "location_selector_label": "Destination location",
