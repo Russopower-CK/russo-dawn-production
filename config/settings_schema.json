@@ -51,6 +51,12 @@
         "id": "show_kenect_widget",
         "label": "Show Kenect Widget",
         "default": false
+      },
+      {
+        "type": "text",
+        "id": "predictive_search_fields",
+        "label": "Predictive Search Fields",
+        "default": "title,tag,variants.sku"
       }
     ] 
   },

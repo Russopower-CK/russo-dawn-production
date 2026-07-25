@@ -29,21 +29,21 @@
     <div class="russo-confirm-modal__actions">
       <button
         type="button"
-        class="button button--secondary"
-        {% if cancel_button_attributes != blank %}
-          {{- cancel_button_attributes -}}
-        {% endif %}
-      >
-        {{ cancel_label }}
-      </button>
-      <button
-        type="button"
         class="button button--primary"
         {% if confirm_button_attributes != blank %}
           {{- confirm_button_attributes -}}
         {% endif %}
       >
         {{ confirm_label }}
+      </button>
+      <button
+        type="button"
+        class="button button--secondary"
+        {% if cancel_button_attributes != blank %}
+          {{- cancel_button_attributes -}}
+        {% endif %}
+      >
+        {{ cancel_label }}
       </button>
     </div>
   </div>

@@ -610,7 +610,7 @@
     font-size: 11px;
   }
 
-  /* Responsive */
+  /* ===== TABLET: horizontal scroll ===== */
   @media (max-width: 1200px) {
     .program-table {
       font-size: 12px;
@@ -620,6 +620,152 @@
     .program-table th,
     .program-table td {
       padding: 6px;
+    }
+  }
+
+  /* ===== MOBILE: card layout ===== */
+  @media (max-width: 768px) {
+    .fertilizer-calculator {
+      padding: 12px;
+    }
+
+    .fertilizer-calculator h1 {
+      font-size: 20px;
+    }
+
+    /* Hide the table header on mobile */
+    .program-table thead {
+      display: none;
+    }
+
+    /* Reset table display so rows stack */
+    .program-table,
+    .program-table tbody,
+    .program-table tr,
+    .program-table td,
+    .program-table tfoot {
+      display: block;
+      width: 100%;
+      overflow-x: unset;
+    }
+
+    /* Each round row becomes a card */
+    .program-table .round-row {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Each cell stacks with a label prefix */
+    .program-table .round-row td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: none;
+      border-bottom: 1px solid #f0f0f0;
+      padding: 8px 4px;
+      text-align: right;
+      font-size: 13px;
+    }
+
+    .program-table .round-row td:last-child {
+      border-bottom: none;
+    }
+
+    /* Data labels via data-label attribute (add these to your HTML td tags) */
+    .program-table .round-row td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      color: #2c5530;
+      text-align: left;
+      flex: 1;
+      padding-right: 10px;
+      font-size: 12px;
+    }
+
+    /* Round label cell gets special treatment as card header */
+    .program-table .round-row td.round-label {
+      background: #2c5530;
+      color: white;
+      border-radius: 6px 6px 0 0;
+      margin: -12px -12px 8px -12px;
+      width: calc(100% + 24px);
+      padding: 10px 12px;
+      font-size: 14px;
+      border-bottom: none;
+      justify-content: flex-start;
+    }
+
+    .program-table .round-row td.round-label::before {
+      display: none;
+    }
+
+    .program-table .round-row td.round-label small {
+      color: #a5d6a7;
+      margin-left: 8px;
+    }
+
+    /* Inputs and selects go full width on mobile */
+    .program-table select,
+    .program-table input {
+      width: 100%;
+      max-width: 100%;
+      font-size: 14px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .program-table .product-name {
+      max-width: 100%;
+      text-align: right;
+    }
+
+    /* Calculated output cells */
+    .program-table .lbs-nitrogen,
+    .program-table .bags-needed,
+    .program-table .cost-per-acre {
+      background: #e3f2fd;
+      border-radius: 4px;
+    }
+
+    /* Totals row as its own card */
+    .program-table .totals-row {
+      display: block;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .program-table .totals-row td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 12px;
+      text-align: right;
+      font-size: 13px;
+    }
+
+    .program-table .totals-row td:first-child {
+      font-size: 15px;
+      justify-content: center;
+      background: #1b3a1e;
+    }
+
+    .program-table .totals-row td::before {
+      content: attr(data-label);
+      font-weight: normal;
+      font-size: 12px;
+      color: #a5d6a7;
+      text-align: left;
+      flex: 1;
+    }
+
+    .program-table .totals-row td:first-child::before {
+      display: none;
     }
   }
 </style>

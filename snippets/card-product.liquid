@@ -51,6 +51,52 @@
     .card__inner.ratio::before {
       padding-bottom: 75% !important;
     }
+    .hover-actions-enabled .card__actions {
+      display: none;
+    }
+
+    .hover-actions-enabled {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hover-actions-enabled.is-hover-active {
+      z-index: 99999;
+    }
+
+    .hover-actions-enabled.is-hover-active .card {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      border-bottom: 0;
+    }
+
+    #product-hover-panel {
+      position: fixed;
+      display: none;
+      z-index: 2147483646;
+
+      background: var(--gradient-background);
+
+      border-left: 1px solid #e5e5e5;
+      border-right: 1px solid #e5e5e5;
+      border-bottom: 1px solid #e5e5e5;
+      border-top: 0;
+
+      box-sizing: border-box;
+
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    #product-hover-panel .card__actions {
+      display: block !important;
+      margin: 0;
+      padding: 1rem;
+    }
+
+    #product-hover-panel .quick-add,
+    #product-hover-panel .product-form,
+    #product-hover-panel form {
+      margin: 0;
+    }
   </style>
 {%- endunless -%}
 {%- if card_product and card_product != empty -%}
@@ -67,7 +113,14 @@
 
     assign card_media = card_product.featured_media | default: settings.default_product_image
   -%}
-  <div class="card-wrapper product-card-wrapper underline-links-hover">
+  <div
+    class="
+      card-wrapper
+      product-card-wrapper
+      underline-links-hover
+      {% if enable_hover_actions %}hover-actions-enabled{% endif %}
+    "
+  >
     <div
       class="
         card card--{{ settings.card_style }}

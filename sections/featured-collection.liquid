@@ -26,66 +26,66 @@
 {%- endif -%}
 
 {%- style -%}
-      .section-{{ section.id }}-padding {
-        padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-        padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-        max-width: var(--page-width);
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-
-      @media screen and (min-width: 750px) {
-        .section-{{ section.id }}-padding {
-          padding-top: {{ section.settings.padding_top }}px;
-          padding-bottom: {{ section.settings.padding_bottom }}px;
-        }
-      }
-      #collection-{{ section.id }} card__information{
-    align-items: flex-end;
-      }
-        #collection-{{ section.id }} slider-component {
-        position: relative !important;
-        display: block;
-        /* Add padding to the sides so the outer products don't visually slide under the buttons */
-        overflow-x: hidden;
-        padding-left: 5rem !important;
-        padding-right: 5rem !important;
-      }
-
-      /* Position the control buttons on the extreme left and right sides */
-      #collection-{{ section.id }} .slider-buttons {
-        position: absolute !important;
-        top: 50% !important;
-        right: 0 !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        width: 100% !important;
-        pointer-events: none !important; /* Allows clicking behind the wrapper container */
-        z-index: 40 !important;
-      }
-
-      /* Reactivate clicking specifically for the buttons */
-      #collection-{{ section.id }} .slider-button {
-        pointer-events: auto !important;
-        background-color: rgb(var(--color-background)) !important;
-        border: 1px solid rgba(var(--color-foreground), 0.1) !important;
-        border-radius: 50% !important;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
-        width: 44px !important;
-        height: 44px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-      }
-      /* Optional: Hide the counter "1 of 4" since buttons are separated */
-      #collection-{{ section.id }} .slider-counter {
-        display: none !important;
-      }
-
-        .card-wrapper:hover .card__hover-image {
-      transform: scale(1.05);
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      max-width: var(--page-width);
+      margin-left: auto;
+      margin-right: auto;
     }
+
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+    #collection-{{ section.id }} card__information{
+  align-items: flex-end;
+    }
+      #collection-{{ section.id }} slider-component {
+      position: relative !important;
+      display: block;
+      /* Add padding to the sides so the outer products don't visually slide under the buttons */
+      overflow-x: hidden;
+      padding-left: 5rem !important;
+      padding-right: 5rem !important;
+    }
+
+    /* Position the control buttons on the extreme left and right sides */
+    #collection-{{ section.id }} .slider-buttons {
+      position: absolute !important;
+      top: 50% !important;
+      right: 0 !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      pointer-events: none !important; /* Allows clicking behind the wrapper container */
+      z-index: 40 !important;
+    }
+
+    /* Reactivate clicking specifically for the buttons */
+    #collection-{{ section.id }} .slider-button {
+      pointer-events: auto !important;
+      background-color: rgb(var(--color-background)) !important;
+      border: 1px solid rgba(var(--color-foreground), 0.1) !important;
+      border-radius: 50% !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+      width: 44px !important;
+      height: 44px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    /* Optional: Hide the counter "1 of 4" since buttons are separated */
+    #collection-{{ section.id }} .slider-counter {
+      display: none !important;
+    }
+
+      .card-wrapper:hover .card__hover-image {
+    transform: scale(1.05);
+  }
 {%- endstyle -%}
 
 {%- liquid
@@ -198,7 +198,8 @@
                     section_id: section.id,
                     quick_add: section.settings.quick_add,
                     show_stock: true,
-                    pickup_availability_components: 'headline'
+                    pickup_availability_components: 'headline',
+                    enable_hover_actions: true
                   %}
                 </li>
                 {%- assign skip_card_product_styles = true -%}
@@ -223,8 +224,7 @@
                   endcase
                 %}
                 {%- assign placeholder_image = 'product-apparel-' | append: ridx -%}
-                {%
-                  render 'card-product',
+                {% render 'card-product',
                   show_vendor: section.settings.show_vendor,
                   show_sku: section.settings.show_sku,
                   media_aspect_ratio: section.settings.image_ratio,
@@ -232,7 +232,7 @@
                   lazy_load: false,
                   placeholder_image: placeholder_image,
                   show_stock: true,
-                  pickup_availability_components: 'all';
+                  pickup_availability_components: 'all'
                 %}
               </li>
             {%- endfor -%}
