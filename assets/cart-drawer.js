@@ -6,16 +6,29 @@ class CartDrawer extends HTMLElement {
     this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
     this.setHeaderCartIconAccessibility();
 
-    // ✅ NEW: delegate click for clear cart button
-    this.addEventListener('click', (event) => {
-      if (event.target.closest('.cart__checkout-button')) {
-        event.preventDefault();
+    this.clearCartConfirmModal = document.getElementById('CartDrawerClearConfirmModal');
+    this.clearCartConfirmButton = this.clearCartConfirmModal?.querySelector('[data-clear-cart-confirm]');
+    this.clearCartCancelButton = this.clearCartConfirmModal?.querySelector('[data-clear-cart-cancel]');
 
-        if (!confirm('Are you sure you want to clear your cart?')) return;
-
-        this.clearCart();
-      }
+    this.clearCartConfirmButton?.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.closeClearCartConfirmModal();
+      this.clearCart();
     });
+
+    this.clearCartCancelButton?.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.closeClearCartConfirmModal();
+    });
+  }
+
+  closeClearCartConfirmModal() {
+    if (!this.clearCartConfirmModal) return;
+    if (typeof this.clearCartConfirmModal.hide === 'function') {
+      this.clearCartConfirmModal.hide();
+      return;
+    }
+    this.clearCartConfirmModal.removeAttribute('open');
   }
 
   // ✅ NEW METHOD

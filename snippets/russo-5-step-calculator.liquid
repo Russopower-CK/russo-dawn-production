@@ -2,8 +2,8 @@
   ============================================
   FERTILIZER PROGRAM CALCULATOR - Shopify Liquid
   ============================================
-  Self-contained calculator with embedded product database
-  No Shopify collections or metafields required
+  Product list comes from a passed collection handle
+  Price display uses snippet `price.liquid`
 
   FORMULAS:
   - LBS Nitrogen per 1,000 sq ft = ((50 / bag_coverage) * nitrogen_percent) * 10
@@ -11,23 +11,57 @@
   - Cost per Acre = price_per_bag * bags_needed
 {% endcomment %}
 
-<div class="fertilizer-calculator">
+{%- liquid
+  assign calculator_collection_handle = collection_handle | default: blank
+  assign calculator_email_endpoint = email_endpoint | default: '/apps/russoAPI/v1/fertilizer-calculator-email'
+  assign calculator_collection = blank
+  if calculator_collection_handle != blank
+    assign calculator_collection = collections[calculator_collection_handle]
+  endif
+-%}
+
+<div
+  class="fertilizer-calculator"
+  data-email-endpoint="{{ calculator_email_endpoint }}"
+  data-collection-handle="{{ calculator_collection_handle | escape }}"
+>
   <h1>Fertilizer Program Calculator</h1>
 
   {% comment %} ===== USER INPUT SECTION ===== {% endcomment %}
-  <div class="calculator-input">
-    <label for="acres-input">Acres being applied:</label>
-    <input type="number" id="acres-input" name="acres" value="3" min="0.1" step="0.1" onchange="calculateAll()">
+  <div class="calculator-input" style="display: grid; grid-template-columns: auto auto">
+    <div class="calculator-input-acres">
+      <label for="acres-input">Acres being applied:</label>
+      <input type="number" id="acres-input" name="acres" value="3" min="0.1" step="0.1" onchange="calculateAll()">
+    </div>
+    <div class="calculator-input-actions">
+      <button type="button" class="button button--primary" data-print-calculator aria-haspopup="dialog">Print</button>
+      <button type="button" class="button button--primary" data-email-calculator aria-haspopup="dialog">Email</button>
+    </div>
   </div>
 
-  <p class="calculator-note">***Fill in grey shaded areas first***</p>
+  <div class="calculator-email-panel" data-email-panel hidden style="justify-content: flex-end">
+    <label for="calculator-email-input">Send results to email:</label>
+    <div class="calculator-email-controls">
+      <input
+        type="email"
+        id="calculator-email-input"
+        data-email-input
+        placeholder="name@example.com"
+        autocomplete="email"
+      >
+      <button type="button" class="button button--primary" data-email-send>Send</button>
+      <button type="button" class="button" data-email-cancel>Cancel</button>
+    </div>
+    <p class="calculator-email-status" data-email-status aria-live="polite"></p>
+  </div>
+
+  <p class="calculator-note">***Prices may vary per location and quantities purchased***</p>
 
   {% comment %} ===== CALCULATOR TABLE ===== {% endcomment %}
   <table class="program-table">
     <thead>
       <tr>
         <th>Round</th>
-        <th>Description</th>
         <th>Item #</th>
         <th>Product</th>
         <th>Bag Coverage (sq ft)</th>
@@ -41,39 +75,53 @@
     <tbody>
       {% comment %} ===== ROUND 1: Pre-Emergent (March - April) ===== {% endcomment %}
       <tr class="round-row" data-round="1">
-        <td class="round-label">
+        <td class="round-label" onclick="toggleRound(1)" role="button" tabindex="0" aria-expanded="true">
           Round - 1<br>
           <small>(March - April)</small>
         </td>
-        <td>Pre-Emergent Crabgrass Prevention</td>
-        <td>
-          <select class="product-select" id="product-select-1" onchange="updateProduct(1)">
-            <option value="">-- Select Product --</option>
-          </select>
+        <td class="item-cell">
+          <div class="select">
+            <select class="product-select select__select" id="product-select-1" onchange="updateProduct(1)">
+              <option value="">-- Select Product --</option>
+              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                {%- for product in calculator_collection.products -%}
+                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                  {% capture volume_pricing_json %}
+                    [
+                      {% for price_break in selected_variant.quantity_price_breaks %}
+                        {
+                          "minimum_quantity": {{ price_break.minimum_quantity }},
+                          "price": {{ price_break.price }}
+                        }
+                        {% unless forloop.last %},{% endunless %}
+                      {% endfor %}
+                    ]
+                  {% endcapture %}
+                  <option
+                    value="{{ selected_variant.sku | default: selected_variant.id }}"
+                    data-name="{{ product.title | escape }}"
+                    data-url="{{ product.url }}"
+                    data-product-id="{{ product.id }}"
+                    data-price="{{ selected_variant.price | times: 0.01 }}"
+                    data-coverage="{{ product_coverage | default: '' }}"
+                    data-nitrogen="{{ product_nitrogen | default: '' }}"
+                    data-volume-pricing="{{ volume_pricing_json | strip_newlines | escape }}"
+                  >
+                    {{ product.title }}
+                  </option>
+                {%- endfor -%}
+              {%- endif -%}
+            </select>
+            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </div>
         </td>
         <td class="product-name" id="product-name-1">--</td>
         <td class="bag-coverage" id="coverage-1">--</td>
+        <td class="nitrogen-value" id="nitrogen-1">--</td>
         <td>
-          <input
-            type="number"
-            class="nitrogen-input"
-            id="nitrogen-1"
-            value="18"
-            min="0"
-            max="100"
-            onchange="calculateRow(1)"
-          >
-        </td>
-        <td>
-          <input
-            type="number"
-            class="price-input"
-            id="price-1"
-            value="22.00"
-            min="0"
-            step="0.01"
-            onchange="calculateRow(1)"
-          >
+          <div class="price-display" id="price-display-1">--</div>
         </td>
         <td class="lbs-nitrogen" id="lbs-nitrogen-1">--</td>
         <td class="bags-needed" id="bags-needed-1">--</td>
@@ -82,39 +130,41 @@
 
       {% comment %} ===== ROUND 2: Late Spring (May - June) ===== {% endcomment %}
       <tr class="round-row" data-round="2">
-        <td class="round-label">
+        <td class="round-label" onclick="toggleRound(2)" role="button" tabindex="0" aria-expanded="true">
           Round - 2<br>
           <small>(May - June)</small>
         </td>
-        <td>Late Spring Feeding</td>
-        <td>
-          <select class="product-select" id="product-select-2" onchange="updateProduct(2)">
-            <option value="">-- Select Product --</option>
-          </select>
+        <td class="item-cell">
+          <div class="select">
+            <select class="product-select select__select" id="product-select-2" onchange="updateProduct(2)">
+              <option value="">-- Select Product --</option>
+              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                {%- for product in calculator_collection.products -%}
+                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                  <option
+                    value="{{ selected_variant.sku | default: selected_variant.id }}"
+                    data-name="{{ product.title | escape }}"
+                    data-url="{{ product.url }}"
+                    data-product-id="{{ product.id }}"
+                    data-price="{{ selected_variant.price | times: 0.01 }}"
+                    data-coverage="{{ product_coverage | default: '' }}"
+                    data-nitrogen="{{ product_nitrogen | default: '' }}"
+                  >
+                    {{ product.title }}
+                  </option>
+                {%- endfor -%}
+              {%- endif -%}
+            </select>
+            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </div>
         </td>
         <td class="product-name" id="product-name-2">--</td>
         <td class="bag-coverage" id="coverage-2">--</td>
+        <td class="nitrogen-value" id="nitrogen-2">--</td>
         <td>
-          <input
-            type="number"
-            class="nitrogen-input"
-            id="nitrogen-2"
-            value="18"
-            min="0"
-            max="100"
-            onchange="calculateRow(2)"
-          >
-        </td>
-        <td>
-          <input
-            type="number"
-            class="price-input"
-            id="price-2"
-            value="19.00"
-            min="0"
-            step="0.01"
-            onchange="calculateRow(2)"
-          >
+          <div class="price-display" id="price-display-2">--</div>
         </td>
         <td class="lbs-nitrogen" id="lbs-nitrogen-2">--</td>
         <td class="bags-needed" id="bags-needed-2">--</td>
@@ -123,39 +173,41 @@
 
       {% comment %} ===== ROUND 3: Summer (June - July) ===== {% endcomment %}
       <tr class="round-row" data-round="3">
-        <td class="round-label">
+        <td class="round-label" onclick="toggleRound(3)" role="button" tabindex="0" aria-expanded="true">
           Round - 3<br>
           <small>(June - July)</small>
         </td>
-        <td>Summer Fertilizer & Grub Prevention</td>
-        <td>
-          <select class="product-select" id="product-select-3" onchange="updateProduct(3)">
-            <option value="">-- Select Product --</option>
-          </select>
+        <td class="item-cell">
+          <div class="select">
+            <select class="product-select select__select" id="product-select-3" onchange="updateProduct(3)">
+              <option value="">-- Select Product --</option>
+              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                {%- for product in calculator_collection.products -%}
+                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                  <option
+                    value="{{ selected_variant.sku | default: selected_variant.id }}"
+                    data-name="{{ product.title | escape }}"
+                    data-url="{{ product.url }}"
+                    data-product-id="{{ product.id }}"
+                    data-price="{{ selected_variant.price | times: 0.01 }}"
+                    data-coverage="{{ product_coverage | default: '' }}"
+                    data-nitrogen="{{ product_nitrogen | default: '' }}"
+                  >
+                    {{ product.title }}
+                  </option>
+                {%- endfor -%}
+              {%- endif -%}
+            </select>
+            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </div>
         </td>
         <td class="product-name" id="product-name-3">--</td>
         <td class="bag-coverage" id="coverage-3">--</td>
+        <td class="nitrogen-value" id="nitrogen-3">--</td>
         <td>
-          <input
-            type="number"
-            class="nitrogen-input"
-            id="nitrogen-3"
-            value="15"
-            min="0"
-            max="100"
-            onchange="calculateRow(3)"
-          >
-        </td>
-        <td>
-          <input
-            type="number"
-            class="price-input"
-            id="price-3"
-            value="24.00"
-            min="0"
-            step="0.01"
-            onchange="calculateRow(3)"
-          >
+          <div class="price-display" id="price-display-3">--</div>
         </td>
         <td class="lbs-nitrogen" id="lbs-nitrogen-3">--</td>
         <td class="bags-needed" id="bags-needed-3">--</td>
@@ -164,39 +216,41 @@
 
       {% comment %} ===== ROUND 4: Late Summer (August - September) ===== {% endcomment %}
       <tr class="round-row" data-round="4">
-        <td class="round-label">
+        <td class="round-label" onclick="toggleRound(4)" role="button" tabindex="0" aria-expanded="true">
           Round - 4<br>
           <small>(August - September)</small>
         </td>
-        <td>Late Summer Feeding</td>
-        <td>
-          <select class="product-select" id="product-select-4" onchange="updateProduct(4)">
-            <option value="">-- Select Product --</option>
-          </select>
+        <td class="item-cell">
+          <div class="select">
+            <select class="product-select select__select" id="product-select-4" onchange="updateProduct(4)">
+              <option value="">-- Select Product --</option>
+              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                {%- for product in calculator_collection.products -%}
+                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                  <option
+                    value="{{ selected_variant.sku | default: selected_variant.id }}"
+                    data-name="{{ product.title | escape }}"
+                    data-url="{{ product.url }}"
+                    data-product-id="{{ product.id }}"
+                    data-price="{{ selected_variant.price | times: 0.01 }}"
+                    data-coverage="{{ product_coverage | default: '' }}"
+                    data-nitrogen="{{ product_nitrogen | default: '' }}"
+                  >
+                    {{ product.title }}
+                  </option>
+                {%- endfor -%}
+              {%- endif -%}
+            </select>
+            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </div>
         </td>
         <td class="product-name" id="product-name-4">--</td>
         <td class="bag-coverage" id="coverage-4">--</td>
+        <td class="nitrogen-value" id="nitrogen-4">--</td>
         <td>
-          <input
-            type="number"
-            class="nitrogen-input"
-            id="nitrogen-4"
-            value="24"
-            min="0"
-            max="100"
-            onchange="calculateRow(4)"
-          >
-        </td>
-        <td>
-          <input
-            type="number"
-            class="price-input"
-            id="price-4"
-            value="23.00"
-            min="0"
-            step="0.01"
-            onchange="calculateRow(4)"
-          >
+          <div class="price-display" id="price-display-4">--</div>
         </td>
         <td class="lbs-nitrogen" id="lbs-nitrogen-4">--</td>
         <td class="bags-needed" id="bags-needed-4">--</td>
@@ -205,39 +259,41 @@
 
       {% comment %} ===== ROUND 5: Winterizer (October - November) ===== {% endcomment %}
       <tr class="round-row" data-round="5">
-        <td class="round-label">
+        <td class="round-label" onclick="toggleRound(5)" role="button" tabindex="0" aria-expanded="true">
           Round - 5<br>
           <small>(October - November)</small>
         </td>
-        <td>Winterizer</td>
-        <td>
-          <select class="product-select" id="product-select-5" onchange="updateProduct(5)">
-            <option value="">-- Select Product --</option>
-          </select>
+        <td class="item-cell">
+          <div class="select">
+            <select class="product-select select__select" id="product-select-5" onchange="updateProduct(5)">
+              <option value="">-- Select Product --</option>
+              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                {%- for product in calculator_collection.products -%}
+                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                  <option
+                    value="{{ selected_variant.sku | default: selected_variant.id }}"
+                    data-name="{{ product.title | escape }}"
+                    data-url="{{ product.url }}"
+                    data-product-id="{{ product.id }}"
+                    data-price="{{ selected_variant.price | times: 0.01 }}"
+                    data-coverage="{{ product_coverage | default: '' }}"
+                    data-nitrogen="{{ product_nitrogen | default: '' }}"
+                  >
+                    {{ product.title }}
+                  </option>
+                {%- endfor -%}
+              {%- endif -%}
+            </select>
+            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </div>
         </td>
         <td class="product-name" id="product-name-5">--</td>
         <td class="bag-coverage" id="coverage-5">--</td>
+        <td class="nitrogen-value" id="nitrogen-5">--</td>
         <td>
-          <input
-            type="number"
-            class="nitrogen-input"
-            id="nitrogen-5"
-            value="32"
-            min="0"
-            max="100"
-            onchange="calculateRow(5)"
-          >
-        </td>
-        <td>
-          <input
-            type="number"
-            class="price-input"
-            id="price-5"
-            value="26.00"
-            min="0"
-            step="0.01"
-            onchange="calculateRow(5)"
-          >
+          <div class="price-display" id="price-display-5">--</div>
         </td>
         <td class="lbs-nitrogen" id="lbs-nitrogen-5">--</td>
         <td class="bags-needed" id="bags-needed-5">--</td>
@@ -248,7 +304,7 @@
     {% comment %} ===== TOTALS ROW ===== {% endcomment %}
     <tfoot>
       <tr class="totals-row">
-        <td colspan="7"><strong>Annual Totals</strong></td>
+        <td colspan="6"><strong>Annual Totals</strong></td>
         <td id="total-lbs-nitrogen">
           --<br>
           <small>Annual lbs of Nitrogen</small>
@@ -264,75 +320,33 @@
       </tr>
     </tfoot>
   </table>
+
+  {%- if calculator_collection == blank or calculator_collection.products_count == 0 -%}
+    <p class="calculator-warning">
+      Calculator is missing a valid collection. Render with:
+      <code>{% raw %}{% render 'russo-5-step-calculator', collection_handle: 'your-handle' %}{% endraw %}</code>
+    </p>
+  {%- endif -%}
+
+  <div class="calculator-price-templates" aria-hidden="true" hidden>
+    {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+      {%- for product in calculator_collection.products -%}
+        <div id="price-template-{{ product.id }}">
+          {% render 'price',
+            product: product,
+            use_variant: true,
+            show_badges: false,
+            show_compare_at_price: false,
+            show_volume_pricing: true
+          %}
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
 </div>
 
-{% comment %} ===== CALCULATOR JAVASCRIPT WITH EMBEDDED PRODUCT DATA ===== {% endcomment %}
+{% comment %} ===== CALCULATOR JAVASCRIPT ===== {% endcomment %}
 <script>
-  // =============================================
-  // PRODUCT DATABASE - From Excel Products Sheet
-  // =============================================
-  const productDatabase = {
-    "Pre-Emergent / Fertilizer Combo's": [
-      { sku: '10000324SPR', name: '13-0-0 25% Regain 0.125% Dimension / 50 lb', coverage: 12500, nitrogen: 13 },
-      { sku: '10009856AND', name: '18-0-4 20% Fortify-N 0.38% Prodiamine (Barricade)', coverage: 12500, nitrogen: 18 },
-      { sku: '19000297SPR', name: '19-0-0 25% Regain 0.37% Prodiamine (Barricade)', coverage: 12500, nitrogen: 19 },
-      { sku: '10008159AND', name: '22-0-4 20% PCSCU 0.38% Prodiamine / 50 Lb', coverage: 12500, nitrogen: 22 },
-    ],
-    'Straight Fertilizer': [
-      { sku: '910230BCA', name: "15-0-3 20% PCSCU, 10% AS, Bio-Sold Organic + Micro's", coverage: 10000, nitrogen: 15 },
-      { sku: 'RUS187UFEB5AND', name: '18-0-3 40% Fortify-N, Bio-Solid Organic, Iron', coverage: 12000, nitrogen: 18 },
-      { sku: '902734TCS', name: '24-0-4 30% XCU, 2% FE / 50 lb', coverage: 12000, nitrogen: 24 },
-      { sku: '907080TCS', name: '25-0-5 40% XCU, 2% FE, 10% Bio-Solid Organic / 50 lb', coverage: 12500, nitrogen: 25 },
-      { sku: '907083TCS', name: '32-0-8 50% XCU, 2% FE / 50 lb', coverage: 16000, nitrogen: 32 },
-      { sku: '901976TCS', name: '33-0-4 20% XCU / 50 Lb', coverage: 16500, nitrogen: 33 },
-    ],
-    'Starter Fertilizer': [
-      { sku: '910048BCA', name: '10-10-10 (50% MinneGrow Organic)', coverage: 10000, nitrogen: 10 },
-      { sku: '907082TCS', name: '11-23-10 All Mineral Starter Fertilizer / 50 lb', coverage: 12000, nitrogen: 11 },
-      {
-        sku: '907081TCS',
-        name: '14-14-14 51% XCU, 1% FE, 25% Bio-Solid Organic / 50 lb',
-        coverage: 10000,
-        nitrogen: 14,
-      },
-      { sku: 'ASP21WMSFE4AND', name: '21-22-4 35% Mu W/0.08% Mesotrione', coverage: 9300, nitrogen: 21 },
-    ],
-    'Weed & Feed': [
-      { sku: '2078459SPR', name: '20-0-5 25% Slow W/ Trimec Herbicide', coverage: 12000, nitrogen: 20 },
-      { sku: '10000437SPR', name: '18-0-2 W/Regain W/ Surge Weed & Feed / 50 Lb', coverage: 12000, nitrogen: 18 },
-      { sku: '2078595SPR', name: '19-0-5 W/Regain W/ Viper Weed & Feed / 50 Lb', coverage: 12000, nitrogen: 19 },
-    ],
-    Organic: [
-      { sku: '900276BCA', name: '5-5-0 100% MinneGrow Biosolid 5%FE, 3%Ca,1%Mg 50lb', coverage: 5000, nitrogen: 5 },
-      { sku: 'ASP133HU5.40AND', name: '13-0-3 25% SCU 10% AS, Humic Acid, Bio-Solid', coverage: 12000, nitrogen: 13 },
-    ],
-    Insecticide: [
-      { sku: 'ASPK7GB5AND', name: '0-0-7 0.20% Grubout (Imidaclprid)', coverage: 12000, nitrogen: 0 },
-      { sku: 'ASP15UGB.40AND', name: '15-0-4 25% Fortify-N W/ 0.20% GrubOut', coverage: 12000, nitrogen: 15 },
-      { sku: 'ASP15UAC5.40AND', name: '15-0-5 50% Fortify-N 0.067% Acelepryn / 50 Lb', coverage: 11500, nitrogen: 15 },
-      {
-        sku: '2021300SPR',
-        name: '17-0-4 30% PPSCU / Protego Insecticide / 50 lb (Imidacloprid & Lambda)',
-        coverage: 12000,
-        nitrogen: 17,
-      },
-      {
-        sku: 'ASP21UGB5.40AND',
-        name: '21-0-4 50% Fortify-N 0.20% Grubout (Imidaclprid)',
-        coverage: 12000,
-        nitrogen: 21,
-      },
-    ],
-  };
-
-  // Flat list for easy lookup by SKU
-  const allProducts = {};
-  Object.values(productDatabase).forEach((categoryProducts) => {
-    categoryProducts.forEach((product) => {
-      allProducts[product.sku] = product;
-    });
-  });
-
   // =============================================
   // CONSTANTS (from Excel formulas)
   // =============================================
@@ -344,61 +358,64 @@
   // ROUND DATA STORAGE
   // =============================================
   let roundData = {
-    1: { coverage: 12500 },
-    2: { coverage: 12000 },
-    3: { coverage: 12000 },
-    4: { coverage: 12000 },
-    5: { coverage: 16000 },
+    1: { selected: false, coverage: 0, nitrogen: 0, price: 0 },
+    2: { selected: false, coverage: 0, nitrogen: 0, price: 0 },
+    3: { selected: false, coverage: 0, nitrogen: 0, price: 0 },
+    4: { selected: false, coverage: 0, nitrogen: 0, price: 0 },
+    5: { selected: false, coverage: 0, nitrogen: 0, price: 0 },
   };
-
-  // =============================================
-  // POPULATE DROPDOWNS ON PAGE LOAD
-  // =============================================
-  function populateDropdowns() {
-    for (let round = 1; round <= 5; round++) {
-      const select = document.getElementById(`product-select-${round}`);
-
-      // Add categories with products as optgroups
-      Object.keys(productDatabase).forEach((category) => {
-        const optgroup = document.createElement('optgroup');
-        optgroup.label = category;
-
-        productDatabase[category].forEach((product) => {
-          const option = document.createElement('option');
-          option.value = product.sku;
-          option.textContent = `${product.sku} - ${product.name}`;
-          option.dataset.name = product.name;
-          option.dataset.coverage = product.coverage;
-          option.dataset.nitrogen = product.nitrogen;
-          optgroup.appendChild(option);
-        });
-
-        select.appendChild(optgroup);
-      });
-    }
-  }
 
   // =============================================
   // UPDATE PRODUCT WHEN SELECTION CHANGES
   // =============================================
   function updateProduct(round) {
     const select = document.getElementById(`product-select-${round}`);
-    const sku = select.value;
-
-    if (sku && allProducts[sku]) {
-      const product = allProducts[sku];
+    const selectedOption = select.options[select.selectedIndex];
+    if (selectedOption && selectedOption.value) {
+      const coverageValue = parseFloat(selectedOption.dataset.coverage);
+      const nitrogenValue = parseFloat(selectedOption.dataset.nitrogen);
+      const priceValue = parseFloat(selectedOption.dataset.price) || 0;
+      const productId = selectedOption.dataset.productId;
+      const productUrl = selectedOption.dataset.url;
+      const priceTemplate = document.getElementById(`price-template-${productId}`);
 
       // Update display fields
-      document.getElementById(`product-name-${round}`).textContent = product.name;
-      document.getElementById(`coverage-${round}`).textContent = product.coverage.toLocaleString();
-      document.getElementById(`nitrogen-${round}`).value = product.nitrogen;
+      if (productUrl) {
+        document.getElementById(`product-name-${round}`).innerHTML = `<a href="${productUrl}">${
+          selectedOption.dataset.name || '--'
+        }</a>`;
+      } else {
+        document.getElementById(`product-name-${round}`).textContent = selectedOption.dataset.name || '--';
+      }
+      document.getElementById(`coverage-${round}`).textContent = Number.isFinite(coverageValue)
+        ? coverageValue.toLocaleString()
+        : '--';
+
+      document.getElementById(`nitrogen-${round}`).textContent = Number.isFinite(nitrogenValue)
+        ? nitrogenValue.toString()
+        : '--';
+
+      if (priceTemplate) {
+        document.getElementById(`price-display-${round}`).innerHTML = priceTemplate.innerHTML;
+      } else {
+        document.getElementById(`price-display-${round}`).textContent = '--';
+      }
 
       // Store coverage for calculations
-      roundData[round].coverage = product.coverage;
+      roundData[round].selected = true;
+      roundData[round].coverage = Number.isFinite(coverageValue) && coverageValue > 0 ? coverageValue : 0;
+      roundData[round].nitrogen = Number.isFinite(nitrogenValue) ? nitrogenValue : 0;
+      roundData[round].price = priceValue;
     } else {
       // Clear if no selection
       document.getElementById(`product-name-${round}`).textContent = '--';
       document.getElementById(`coverage-${round}`).textContent = '--';
+      document.getElementById(`nitrogen-${round}`).textContent = '--';
+      document.getElementById(`price-display-${round}`).textContent = '--';
+      roundData[round].selected = false;
+      roundData[round].coverage = 0;
+      roundData[round].nitrogen = 0;
+      roundData[round].price = 0;
     }
 
     calculateRow(round);
@@ -413,9 +430,18 @@
   // =============================================
   function calculateRow(round) {
     const acres = parseFloat(document.getElementById('acres-input').value) || 0;
-    const coverage = roundData[round].coverage || 12000;
-    const nitrogen = parseFloat(document.getElementById(`nitrogen-${round}`).value) || 0;
-    const price = parseFloat(document.getElementById(`price-${round}`).value) || 0;
+    const isSelected = roundData[round].selected;
+    const coverage = roundData[round].coverage;
+    const nitrogen = roundData[round].nitrogen || 0;
+    const price = roundData[round].price || 0;
+
+    if (!isSelected || !coverage) {
+      document.getElementById(`lbs-nitrogen-${round}`).textContent = '--';
+      document.getElementById(`bags-needed-${round}`).textContent = '--';
+      document.getElementById(`cost-${round}`).textContent = '--';
+      calculateTotals();
+      return;
+    }
 
     // Formula: =((50/E)*F)*10
     const lbsNitrogen = (BAG_WEIGHT_LBS / coverage) * nitrogen * NITROGEN_MULTIPLIER;
@@ -442,16 +468,29 @@
     let totalLbsNitrogen = 0;
     let totalBagsNeeded = 0;
     let totalCost = 0;
+    let selectedRows = 0;
 
     for (let round = 1; round <= 5; round++) {
       const lbsNitrogen = parseFloat(document.getElementById(`lbs-nitrogen-${round}`).textContent) || 0;
       const bagsNeeded = parseFloat(document.getElementById(`bags-needed-${round}`).textContent) || 0;
-      const costText = document.getElementById(`cost-${round}`).textContent.replace('$', '').replace(',', '');
+      const costCellText = document.getElementById(`cost-${round}`).textContent;
+      const costText = costCellText.replace('$', '').replace(',', '');
       const cost = parseFloat(costText) || 0;
+
+      if (roundData[round].selected) {
+        selectedRows += 1;
+      }
 
       totalLbsNitrogen += lbsNitrogen;
       totalBagsNeeded += bagsNeeded;
       totalCost += cost;
+    }
+
+    if (!selectedRows) {
+      document.getElementById('total-lbs-nitrogen').innerHTML = '--<br><small>Annual lbs of Nitrogen</small>';
+      document.getElementById('total-bags-needed').innerHTML = '--<br><small>Annual bags needed</small>';
+      document.getElementById('total-cost').innerHTML = '--<br><small>Annual cost</small>';
+      return;
     }
 
     document.getElementById('total-lbs-nitrogen').innerHTML = `<strong>${totalLbsNitrogen.toFixed(
@@ -475,10 +514,304 @@
   }
 
   // =============================================
+  // TOGGLE ROUND COLLAPSE/EXPAND
+  // =============================================
+  function isMobileView() {
+    return window.matchMedia('(max-width: 768px)').matches;
+  }
+
+  function expandAllRoundsForDesktop() {
+    const roundRows = document.querySelectorAll('.round-row');
+    roundRows.forEach((row) => {
+      row.classList.remove('is-collapsed');
+      const roundLabelCell = row.querySelector('.round-label');
+      if (roundLabelCell) {
+        roundLabelCell.removeAttribute('colspan');
+        roundLabelCell.setAttribute('aria-expanded', 'true');
+      }
+    });
+  }
+
+  function toggleRound(round) {
+    if (!isMobileView()) return;
+
+    const row = document.querySelector(`.round-row[data-round="${round}"]`);
+    if (!row) return;
+
+    const isCollapsed = row.classList.toggle('is-collapsed');
+    const roundLabelCell = row.querySelector('.round-label');
+    const totalColumns = row.cells.length;
+
+    if (roundLabelCell) {
+      if (isCollapsed) {
+        roundLabelCell.setAttribute('colspan', String(totalColumns));
+      } else {
+        roundLabelCell.removeAttribute('colspan');
+      }
+
+      roundLabelCell.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+    }
+  }
+
+  function setRoundCollapsedState(round, collapsed) {
+    const row = document.querySelector(`.round-row[data-round="${round}"]`);
+    if (!row) return;
+
+    const roundLabelCell = row.querySelector('.round-label');
+    const totalColumns = row.cells.length;
+
+    row.classList.toggle('is-collapsed', collapsed);
+
+    if (roundLabelCell) {
+      if (collapsed) {
+        roundLabelCell.setAttribute('colspan', String(totalColumns));
+      } else {
+        roundLabelCell.removeAttribute('colspan');
+      }
+
+      roundLabelCell.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    }
+  }
+
+  function handlePrintCalculator(event) {
+    const collapsedRounds = [];
+    const printRoot =
+      event?.currentTarget?.closest('.fertilizer-calculator') || document.querySelector('.fertilizer-calculator');
+
+    document.querySelectorAll('.round-row.is-collapsed').forEach((row) => {
+      collapsedRounds.push(row.dataset.round);
+    });
+
+    if (printRoot) {
+      document.querySelectorAll('.fertilizer-calculator.is-print-target').forEach((node) => {
+        node.classList.remove('is-print-target');
+      });
+      printRoot.classList.add('is-print-target');
+    }
+
+    document.body.classList.add('print-calculator-only');
+
+    expandAllRoundsForDesktop();
+
+    const restoreCollapsedRounds = function () {
+      if (isMobileView()) {
+        collapsedRounds.forEach((round) => setRoundCollapsedState(round, true));
+      }
+
+      document.body.classList.remove('print-calculator-only');
+      if (printRoot) {
+        printRoot.classList.remove('is-print-target');
+      }
+
+      window.removeEventListener('afterprint', restoreCollapsedRounds);
+    };
+
+    window.addEventListener('afterprint', restoreCollapsedRounds);
+    window.print();
+  }
+
+  function isValidEmailAddress(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function parseCurrencyValue(valueText) {
+    if (!valueText || valueText === '--') return 0;
+    return parseFloat(valueText.replace(/[^0-9.-]/g, '')) || 0;
+  }
+
+  function buildCalculatorEmailPayload(calculatorRoot, recipientEmail) {
+    const rows = [];
+
+    for (let round = 1; round <= 5; round++) {
+      if (!roundData[round].selected) continue;
+
+      const select = document.getElementById(`product-select-${round}`);
+      const option = select ? select.options[select.selectedIndex] : null;
+
+      rows.push({
+        round,
+        sku: option?.value || null,
+        productTitle: option?.dataset?.name || null,
+        productUrl: option?.dataset?.url || null,
+        coverageSqFt: roundData[round].coverage || 0,
+        nitrogenPercent: roundData[round].nitrogen || 0,
+        pricePerBag: roundData[round].price || 0,
+        lbsNitrogenPer1000SqFt: parseFloat(document.getElementById(`lbs-nitrogen-${round}`).textContent) || 0,
+        bagsNeeded: parseFloat(document.getElementById(`bags-needed-${round}`).textContent) || 0,
+        costPerAcre: parseCurrencyValue(document.getElementById(`cost-${round}`).textContent),
+      });
+    }
+
+    return {
+      recipientEmail,
+      collectionHandle: calculatorRoot?.dataset?.collectionHandle || null,
+      acres: parseFloat(document.getElementById('acres-input').value) || 0,
+      totals: {
+        annualLbsNitrogen: parseFloat(document.getElementById('total-lbs-nitrogen').textContent) || 0,
+        annualBagsNeeded: parseFloat(document.getElementById('total-bags-needed').textContent) || 0,
+        annualCost: parseCurrencyValue(document.getElementById('total-cost').textContent),
+      },
+      rows,
+      submittedAt: new Date().toISOString(),
+      source: {
+        pathname: window.location.pathname,
+        href: window.location.href,
+      },
+    };
+  }
+
+  function setEmailStatus(statusNode, message, isError) {
+    if (!statusNode) return;
+    statusNode.textContent = message || '';
+    statusNode.classList.remove('is-error', 'is-success');
+    if (message) {
+      statusNode.classList.add(isError ? 'is-error' : 'is-success');
+    }
+  }
+
+  async function handleSendCalculatorEmail() {
+    const calculatorRoot = document.querySelector('.fertilizer-calculator');
+    const emailPanel = calculatorRoot?.querySelector('[data-email-panel]');
+    const emailInput = calculatorRoot?.querySelector('[data-email-input]');
+    const emailStatus = calculatorRoot?.querySelector('[data-email-status]');
+    const sendButton = calculatorRoot?.querySelector('[data-email-send]');
+    const endpoint = calculatorRoot?.dataset?.emailEndpoint || '';
+
+    if (!emailInput || !emailPanel || !sendButton) return;
+
+    const email = emailInput.value.trim();
+    if (!isValidEmailAddress(email)) {
+      setEmailStatus(emailStatus, 'Enter a valid email address.', true);
+      emailInput.focus();
+      return;
+    }
+
+    if (!endpoint) {
+      setEmailStatus(emailStatus, 'Email endpoint is not configured.', true);
+      return;
+    }
+
+    const payload = buildCalculatorEmailPayload(calculatorRoot, email);
+    if (!payload.rows.length) {
+      setEmailStatus(emailStatus, 'Select at least one product round before sending.', true);
+      return;
+    }
+
+    sendButton.disabled = true;
+    setEmailStatus(emailStatus, 'Sending...', false);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const responseText = await response.text();
+        throw new Error(responseText || `Request failed (${response.status})`);
+      }
+
+      setEmailStatus(emailStatus, 'Email sent successfully.', false);
+      emailInput.value = '';
+      setTimeout(function () {
+        emailPanel.hidden = true;
+      }, 900);
+    } catch (error) {
+      setEmailStatus(emailStatus, error.message || 'Failed to send email.', true);
+    } finally {
+      sendButton.disabled = false;
+    }
+  }
+
+  document.addEventListener('keydown', function (event) {
+    if (!isMobileView()) return;
+    if (!event.target.classList || !event.target.classList.contains('round-label')) return;
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      const row = event.target.closest('.round-row');
+      if (!row) return;
+      const round = row.dataset.round;
+      toggleRound(round);
+    }
+  });
+
+  // =============================================
   // INITIALIZE ON PAGE LOAD
   // =============================================
   document.addEventListener('DOMContentLoaded', function () {
-    populateDropdowns();
+    const calculatorRoot = document.querySelector('.fertilizer-calculator');
+    const printButton = document.querySelector('[data-print-calculator]');
+    const emailButton = calculatorRoot?.querySelector('[data-email-calculator]');
+    const emailPanel = calculatorRoot?.querySelector('[data-email-panel]');
+    const emailInput = calculatorRoot?.querySelector('[data-email-input]');
+    const emailSendButton = calculatorRoot?.querySelector('[data-email-send]');
+    const emailCancelButton = calculatorRoot?.querySelector('[data-email-cancel]');
+    const emailStatus = calculatorRoot?.querySelector('[data-email-status]');
+
+    if (printButton) {
+      printButton.addEventListener('click', handlePrintCalculator);
+    }
+
+    if (emailButton && emailPanel && emailInput) {
+      emailButton.addEventListener('click', function () {
+        const isHidden = emailPanel.hidden;
+        emailPanel.hidden = !isHidden;
+        setEmailStatus(emailStatus, '', false);
+        if (isHidden) {
+          emailInput.focus();
+        }
+      });
+    }
+
+    if (emailSendButton) {
+      emailSendButton.addEventListener('click', handleSendCalculatorEmail);
+    }
+
+    if (emailCancelButton && emailPanel) {
+      emailCancelButton.addEventListener('click', function () {
+        emailPanel.hidden = true;
+        setEmailStatus(emailStatus, '', false);
+      });
+    }
+
+    if (emailInput) {
+      emailInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          handleSendCalculatorEmail();
+        }
+      });
+    }
+
+    expandAllRoundsForDesktop();
+
+    window.addEventListener('resize', function () {
+      if (!isMobileView()) {
+        expandAllRoundsForDesktop();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      const button = e.target.closest('.volume-pricing-button');
+
+      if (button) {
+        e.stopPropagation();
+
+        const popup = button.closest('.volume-pricing-wrapper').querySelector('.volume-pricing-popup');
+
+        popup.hidden = !popup.hidden;
+
+        return;
+      }
+
+      document.querySelectorAll('.volume-pricing-popup').forEach((popup) => {
+        popup.hidden = true;
+      });
+    });
     calculateAll();
   });
 </script>
@@ -524,19 +857,56 @@
     text-align: center;
     color: #666;
     font-style: italic;
-    margin-bottom: 15px;
+  }
+
+  .calculator-email-panel {
+    margin-bottom: 1rem;
+    padding: 0.9rem;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    background: #f9fbf9;
+  }
+
+  .calculator-email-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .calculator-email-panel input[type='email'] {
+    min-width: 240px;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .calculator-email-status {
+    margin: 0.6rem 0 0;
+    min-height: 1.2rem;
+    font-size: 0.92rem;
+  }
+
+  .calculator-email-status.is-success {
+    color: #1f6f43;
+  }
+
+  .calculator-email-status.is-error {
+    color: #a94442;
   }
 
   .program-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 1rem;
+    table-layout: fixed;
   }
 
   .program-table th,
   .program-table td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
   }
 
@@ -558,13 +928,36 @@
     color: #666;
   }
 
-  .program-table select {
+  .program-table .round-row.is-collapsed td:not(.round-label) {
+    display: none;
+  }
+
+  .program-table .round-row.is-collapsed .round-label {
+    text-align: left;
+  }
+
+  .program-table .select {
     width: 100%;
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 12px;
-    max-width: 180px;
+    max-width: 100%;
+  }
+
+  .program-table .item-cell {
+    width: 24%;
+  }
+
+  .program-table .product-select {
+    width: 100%;
+    max-width: 100%;
+    font-size: 13px;
+    padding-left: 1.2rem;
+    padding-right: 2.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .program-table .product-select option {
+    white-space: nowrap;
   }
 
   .program-table input {
@@ -576,10 +969,30 @@
     text-align: center;
   }
 
-  .program-table .nitrogen-input,
-  .program-table .price-input {
-    background: #fffde7;
-    border: 2px solid #ffc107;
+  .program-table .price-display {
+    background: transparent;
+    border: none;
+    padding: 0;
+    min-width: 0;
+    min-height: 0;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  .program-table .price-display .price,
+  .program-table .price-display .price-item,
+  .program-table .price-display .price-item--sale,
+  .program-table .price-display .price-item--regular {
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  .calculator-warning {
+    margin-top: 12px;
+    color: #a94442;
+    text-align: center;
   }
 
   .program-table .product-name {
@@ -621,6 +1034,10 @@
     .program-table td {
       padding: 6px;
     }
+
+    .program-table .item-cell {
+      width: auto;
+    }
   }
 
   /* ===== MOBILE: card layout ===== */
@@ -631,6 +1048,16 @@
 
     .fertilizer-calculator h1 {
       font-size: 20px;
+    }
+
+    .calculator-email-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .calculator-email-panel input[type='email'] {
+      min-width: 0;
+      width: 100%;
     }
 
     /* Hide the table header on mobile */
@@ -708,7 +1135,17 @@
       margin-left: 8px;
     }
 
+    .program-table .round-label {
+      cursor: pointer;
+    }
+
+    .program-table .round-label:focus {
+      outline: 2px solid #2c5530;
+      outline-offset: -2px;
+    }
+
     /* Inputs and selects go full width on mobile */
+    .program-table .select,
     .program-table select,
     .program-table input {
       width: 100%;
@@ -716,6 +1153,10 @@
       font-size: 14px;
       padding: 8px;
       box-sizing: border-box;
+    }
+
+    .program-table .item-cell {
+      width: auto;
     }
 
     .program-table .product-name {
@@ -767,5 +1208,105 @@
     .program-table .totals-row td:first-child::before {
       display: none;
     }
+  }
+
+  @media print {
+    body.print-calculator-only * {
+      visibility: hidden !important;
+    }
+
+    body.print-calculator-only .fertilizer-calculator.is-print-target,
+    body.print-calculator-only .fertilizer-calculator.is-print-target * {
+      visibility: visible !important;
+    }
+
+    body.print-calculator-only .fertilizer-calculator.is-print-target {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      margin: 0;
+      background: #fff;
+      z-index: 9999;
+    }
+
+    .calculator-input-actions,
+    .calculator-email-panel,
+    .calculator-warning {
+      display: none !important;
+    }
+
+    .fertilizer-calculator {
+      max-width: none;
+      padding: 0;
+    }
+
+    .program-table {
+      width: 100%;
+      table-layout: auto;
+      font-size: 11pt;
+    }
+
+    .program-table th,
+    .program-table td {
+      padding: 6pt;
+    }
+
+    .program-table .round-row {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+  }
+
+  .volume-pricing-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .volume-pricing-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .volume-pricing-popup {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 9999;
+
+    min-width: 240px;
+    padding: 1rem;
+
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+    white-space: normal;
+  }
+
+  .volume-pricing-popup ul {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .volume-pricing-popup li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.25rem 0;
+  }
+
+  .volume-pricing-popup[hidden] {
+    display: none !important;
   }
 </style>

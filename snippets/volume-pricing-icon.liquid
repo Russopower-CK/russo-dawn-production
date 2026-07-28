@@ -1,0 +1,38 @@
+{% assign price_breaks = variant.quantity_price_breaks %}
+
+{% if price_breaks.size > 0 %}
+  <quantity-popover>
+    <button
+      type="button"
+      aria-expanded="false"
+      aria-controls="quantity-popover-info-{{ variant.id }}"
+      class="quantity-popover__info-button quantity-popover__info-button--icon-only button button--tertiary"
+    >
+      {{ 'icon-info.svg' | inline_asset_content }}
+    </button>
+
+    <div
+      class="global-settings-popup quantity-popover__info"
+      hidden
+      id="quantity-popover-info-{{ variant.id }}"
+    >
+      <span class="volume-pricing-label caption"> Volume Pricing </span>
+
+      <volume-pricing>
+        <ul class="list-unstyled">
+          <li>
+            <span>1+</span>
+            <span>{{ variant.price | money_with_currency }}</span>
+          </li>
+
+          {% for price_break in price_breaks %}
+            <li>
+              <span>{{ price_break.minimum_quantity }}+</span>
+              <span>{{ price_break.price | money_with_currency }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </volume-pricing>
+    </div>
+  </quantity-popover>
+{% endif %}

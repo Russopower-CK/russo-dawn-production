@@ -578,10 +578,24 @@
             {{ 'sections.cart.checkout' | t }}
           </button>
           {% if cart.item_count > 0 %}
-            <button type="button" class="cart__checkout-button clear-cart button">Clear Cart</button>
+            <modal-opener data-modal="#CartDrawerClearConfirmModal">
+              <button type="button" class="cart__checkout-button clear-cart button" aria-haspopup="dialog">
+                Clear Cart
+              </button>
+            </modal-opener>
           {% endif %}
         </div>
       </div>
     </div>
   </div>
+
+  {% render 'russo-confirm-modal',
+    modal_id: 'CartDrawerClearConfirmModal',
+    title: 'Clear cart?',
+    message: 'Are you sure you want to remove all items from your cart?',
+    confirm_label: 'Clear cart',
+    cancel_label: 'Cancel',
+    confirm_button_attributes: 'data-clear-cart-confirm',
+    cancel_button_attributes: 'data-clear-cart-cancel'
+  %}
 </cart-drawer>
