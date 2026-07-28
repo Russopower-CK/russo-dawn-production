@@ -828,7 +828,7 @@
       "type": "custom-liquid",
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
-        "custom_liquid": "{% render 'russo-5-step-calculator', collection_handle: 'fertilizer-program' %}",
+        "custom_liquid": "{% render 'russo-5-step-calculator', collection_handle: 'lawn-care-program-products' %}",
         "color_scheme": "",
         "padding_top": 40,
         "padding_bottom": 52
