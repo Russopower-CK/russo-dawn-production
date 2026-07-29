@@ -19,76 +19,77 @@
     assign calculator_collection = collections[calculator_collection_handle]
   endif
 -%}
+<div class="page-width">
+  <div
+    class="fertilizer-calculator"
+    data-email-endpoint="{{ calculator_email_endpoint }}"
+    data-collection-handle="{{ calculator_collection_handle | escape }}"
+  >
+    <h1>Fertilizer Program Calculator</h1>
 
-<div
-  class="fertilizer-calculator"
-  data-email-endpoint="{{ calculator_email_endpoint }}"
-  data-collection-handle="{{ calculator_collection_handle | escape }}"
->
-  <h1>Fertilizer Program Calculator</h1>
+    {% comment %} ===== USER INPUT SECTION ===== {% endcomment %}
+    <div class="calculator-input" style="display: grid; grid-template-columns: auto auto">
+      <div class="calculator-input-actions">
+        <button type="button" class="button button--primary" data-print-calculator aria-haspopup="dialog">Print</button>
+        <button type="button" class="button button--primary" data-email-calculator aria-haspopup="dialog">Email</button>
+      </div>
 
-  {% comment %} ===== USER INPUT SECTION ===== {% endcomment %}
-  <div class="calculator-input" style="display: grid; grid-template-columns: auto auto">
-    <div class="calculator-input-acres">
-      <label for="acres-input">Acres being applied:</label>
-      <input type="number" id="acres-input" name="acres" value="3" min="0.1" step="0.1" onchange="calculateAll()">
+      <div class="calculator-input-acres">
+        <label for="acres-input">Acres being applied:</label>
+        <input type="number" id="acres-input" name="acres" value="3" min="0.1" step="0.1" onchange="calculateAll()">
+      </div>
     </div>
-    <div class="calculator-input-actions">
-      <button type="button" class="button button--primary" data-print-calculator aria-haspopup="dialog">Print</button>
-      <button type="button" class="button button--primary" data-email-calculator aria-haspopup="dialog">Email</button>
+
+    <div class="calculator-email-panel" data-email-panel hidden style="justify-content: flex-end">
+      <label for="calculator-email-input">Send results to email:</label>
+      <div class="calculator-email-controls">
+        <input
+          type="email"
+          id="calculator-email-input"
+          data-email-input
+          placeholder="name@example.com"
+          autocomplete="email"
+        >
+        <button type="button" class="button button--primary" data-email-send>Send</button>
+        <button type="button" class="button" data-email-cancel>Cancel</button>
+      </div>
+      <p class="calculator-email-status" data-email-status aria-live="polite"></p>
     </div>
-  </div>
 
-  <div class="calculator-email-panel" data-email-panel hidden style="justify-content: flex-end">
-    <label for="calculator-email-input">Send results to email:</label>
-    <div class="calculator-email-controls">
-      <input
-        type="email"
-        id="calculator-email-input"
-        data-email-input
-        placeholder="name@example.com"
-        autocomplete="email"
-      >
-      <button type="button" class="button button--primary" data-email-send>Send</button>
-      <button type="button" class="button" data-email-cancel>Cancel</button>
-    </div>
-    <p class="calculator-email-status" data-email-status aria-live="polite"></p>
-  </div>
+    <p class="calculator-note">***Prices may vary per location and quantities purchased***</p>
 
-  <p class="calculator-note">***Prices may vary per location and quantities purchased***</p>
-
-  {% comment %} ===== CALCULATOR TABLE ===== {% endcomment %}
-  <table class="program-table">
-    <thead>
-      <tr>
-        <th>Round</th>
-        <th>Item #</th>
-        <th>Product</th>
-        <th>Bag Coverage (sq ft)</th>
-        <th>% of Nitrogen</th>
-        <th>Price per Bag</th>
-        <th>LBS of Nitrogen per 1,000 sq ft</th>
-        <th>Bags Needed</th>
-        <th>Cost per Acre</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% comment %} ===== ROUND 1: Pre-Emergent (March - April) ===== {% endcomment %}
-      <tr class="round-row" data-round="1">
-        <td class="round-label" onclick="toggleRound(1)" role="button" tabindex="0" aria-expanded="true">
-          Round - 1<br>
-          <small>(March - April)</small>
-        </td>
-        <td class="item-cell">
-          <div class="select">
-            <select class="product-select select__select" id="product-select-1" onchange="updateProduct(1)">
-              <option value="">-- Select Product --</option>
-              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                {%- for product in calculator_collection.products -%}
-                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                  {% capture volume_pricing_json %}
+    {% comment %} ===== CALCULATOR TABLE ===== {% endcomment %}
+    <table class="program-table">
+      <thead>
+        <tr>
+          <th>Round</th>
+          <th>Item #</th>
+          <th>Product</th>
+          <th>Bag Coverage (sq ft)</th>
+          <th>% of Nitrogen</th>
+          <th>Price per Bag</th>
+          <th>LBS of Nitrogen per 1,000 sq ft</th>
+          <th>Bags Needed</th>
+          <th>Cost per Acre</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% comment %} ===== ROUND 1: Pre-Emergent (March - April) ===== {% endcomment %}
+        <tr class="round-row" data-round="1">
+          <td class="round-label" onclick="toggleRound(1)" role="button" tabindex="0" aria-expanded="true">
+            Round - 1<br>
+            <small>(March - April)</small>
+          </td>
+          <td class="item-cell">
+            <div class="select">
+              <select class="product-select select__select" id="product-select-1" onchange="updateProduct(1)">
+                <option value="">-- Select Product --</option>
+                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                  {%- for product in calculator_collection.products -%}
+                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                    {% capture volume_pricing_json %}
                     [
                       {% for price_break in selected_variant.quantity_price_breaks %}
                         {
@@ -99,252 +100,252 @@
                       {% endfor %}
                     ]
                   {% endcapture %}
-                  <option
-                    value="{{ selected_variant.sku | default: selected_variant.id }}"
-                    data-name="{{ product.title | escape }}"
-                    data-url="{{ product.url }}"
-                    data-product-id="{{ product.id }}"
-                    data-price="{{ selected_variant.price | times: 0.01 }}"
-                    data-coverage="{{ product_coverage | default: '' }}"
-                    data-nitrogen="{{ product_nitrogen | default: '' }}"
-                    data-volume-pricing="{{ volume_pricing_json | strip_newlines | escape }}"
-                  >
-                    {{ product.title }}
-                  </option>
-                {%- endfor -%}
-              {%- endif -%}
-            </select>
-            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-          </div>
-        </td>
-        <td class="product-name" id="product-name-1">--</td>
-        <td class="bag-coverage" id="coverage-1">--</td>
-        <td class="nitrogen-value" id="nitrogen-1">--</td>
-        <td>
-          <div class="price-display" id="price-display-1">--</div>
-        </td>
-        <td class="lbs-nitrogen" id="lbs-nitrogen-1">--</td>
-        <td class="bags-needed" id="bags-needed-1">--</td>
-        <td class="cost-per-acre" id="cost-1">--</td>
-      </tr>
+                    <option
+                      value="{{ selected_variant.sku | default: selected_variant.id }}"
+                      data-name="{{ product.title | escape }}"
+                      data-url="{{ product.url }}"
+                      data-product-id="{{ product.id }}"
+                      data-price="{{ selected_variant.price | times: 0.01 }}"
+                      data-coverage="{{ product_coverage | default: '' }}"
+                      data-nitrogen="{{ product_nitrogen | default: '' }}"
+                      data-volume-pricing="{{ volume_pricing_json | strip_newlines | escape }}"
+                    >
+                      {{ product.title }}
+                    </option>
+                  {%- endfor -%}
+                {%- endif -%}
+              </select>
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </div>
+          </td>
+          <td class="product-name" id="product-name-1">--</td>
+          <td class="bag-coverage" id="coverage-1">--</td>
+          <td class="nitrogen-value" id="nitrogen-1">--</td>
+          <td>
+            <div class="price-display" id="price-display-1">--</div>
+          </td>
+          <td class="lbs-nitrogen" id="lbs-nitrogen-1">--</td>
+          <td class="bags-needed" id="bags-needed-1">--</td>
+          <td class="cost-per-acre" id="cost-1">--</td>
+        </tr>
 
-      {% comment %} ===== ROUND 2: Late Spring (May - June) ===== {% endcomment %}
-      <tr class="round-row" data-round="2">
-        <td class="round-label" onclick="toggleRound(2)" role="button" tabindex="0" aria-expanded="true">
-          Round - 2<br>
-          <small>(May - June)</small>
-        </td>
-        <td class="item-cell">
-          <div class="select">
-            <select class="product-select select__select" id="product-select-2" onchange="updateProduct(2)">
-              <option value="">-- Select Product --</option>
-              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                {%- for product in calculator_collection.products -%}
-                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                  <option
-                    value="{{ selected_variant.sku | default: selected_variant.id }}"
-                    data-name="{{ product.title | escape }}"
-                    data-url="{{ product.url }}"
-                    data-product-id="{{ product.id }}"
-                    data-price="{{ selected_variant.price | times: 0.01 }}"
-                    data-coverage="{{ product_coverage | default: '' }}"
-                    data-nitrogen="{{ product_nitrogen | default: '' }}"
-                  >
-                    {{ product.title }}
-                  </option>
-                {%- endfor -%}
-              {%- endif -%}
-            </select>
-            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-          </div>
-        </td>
-        <td class="product-name" id="product-name-2">--</td>
-        <td class="bag-coverage" id="coverage-2">--</td>
-        <td class="nitrogen-value" id="nitrogen-2">--</td>
-        <td>
-          <div class="price-display" id="price-display-2">--</div>
-        </td>
-        <td class="lbs-nitrogen" id="lbs-nitrogen-2">--</td>
-        <td class="bags-needed" id="bags-needed-2">--</td>
-        <td class="cost-per-acre" id="cost-2">--</td>
-      </tr>
+        {% comment %} ===== ROUND 2: Late Spring (May - June) ===== {% endcomment %}
+        <tr class="round-row" data-round="2">
+          <td class="round-label" onclick="toggleRound(2)" role="button" tabindex="0" aria-expanded="true">
+            Round - 2<br>
+            <small>(May - June)</small>
+          </td>
+          <td class="item-cell">
+            <div class="select">
+              <select class="product-select select__select" id="product-select-2" onchange="updateProduct(2)">
+                <option value="">-- Select Product --</option>
+                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                  {%- for product in calculator_collection.products -%}
+                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                    <option
+                      value="{{ selected_variant.sku | default: selected_variant.id }}"
+                      data-name="{{ product.title | escape }}"
+                      data-url="{{ product.url }}"
+                      data-product-id="{{ product.id }}"
+                      data-price="{{ selected_variant.price | times: 0.01 }}"
+                      data-coverage="{{ product_coverage | default: '' }}"
+                      data-nitrogen="{{ product_nitrogen | default: '' }}"
+                    >
+                      {{ product.title }}
+                    </option>
+                  {%- endfor -%}
+                {%- endif -%}
+              </select>
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </div>
+          </td>
+          <td class="product-name" id="product-name-2">--</td>
+          <td class="bag-coverage" id="coverage-2">--</td>
+          <td class="nitrogen-value" id="nitrogen-2">--</td>
+          <td>
+            <div class="price-display" id="price-display-2">--</div>
+          </td>
+          <td class="lbs-nitrogen" id="lbs-nitrogen-2">--</td>
+          <td class="bags-needed" id="bags-needed-2">--</td>
+          <td class="cost-per-acre" id="cost-2">--</td>
+        </tr>
 
-      {% comment %} ===== ROUND 3: Summer (June - July) ===== {% endcomment %}
-      <tr class="round-row" data-round="3">
-        <td class="round-label" onclick="toggleRound(3)" role="button" tabindex="0" aria-expanded="true">
-          Round - 3<br>
-          <small>(June - July)</small>
-        </td>
-        <td class="item-cell">
-          <div class="select">
-            <select class="product-select select__select" id="product-select-3" onchange="updateProduct(3)">
-              <option value="">-- Select Product --</option>
-              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                {%- for product in calculator_collection.products -%}
-                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                  <option
-                    value="{{ selected_variant.sku | default: selected_variant.id }}"
-                    data-name="{{ product.title | escape }}"
-                    data-url="{{ product.url }}"
-                    data-product-id="{{ product.id }}"
-                    data-price="{{ selected_variant.price | times: 0.01 }}"
-                    data-coverage="{{ product_coverage | default: '' }}"
-                    data-nitrogen="{{ product_nitrogen | default: '' }}"
-                  >
-                    {{ product.title }}
-                  </option>
-                {%- endfor -%}
-              {%- endif -%}
-            </select>
-            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-          </div>
-        </td>
-        <td class="product-name" id="product-name-3">--</td>
-        <td class="bag-coverage" id="coverage-3">--</td>
-        <td class="nitrogen-value" id="nitrogen-3">--</td>
-        <td>
-          <div class="price-display" id="price-display-3">--</div>
-        </td>
-        <td class="lbs-nitrogen" id="lbs-nitrogen-3">--</td>
-        <td class="bags-needed" id="bags-needed-3">--</td>
-        <td class="cost-per-acre" id="cost-3">--</td>
-      </tr>
+        {% comment %} ===== ROUND 3: Summer (June - July) ===== {% endcomment %}
+        <tr class="round-row" data-round="3">
+          <td class="round-label" onclick="toggleRound(3)" role="button" tabindex="0" aria-expanded="true">
+            Round - 3<br>
+            <small>(June - July)</small>
+          </td>
+          <td class="item-cell">
+            <div class="select">
+              <select class="product-select select__select" id="product-select-3" onchange="updateProduct(3)">
+                <option value="">-- Select Product --</option>
+                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                  {%- for product in calculator_collection.products -%}
+                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                    <option
+                      value="{{ selected_variant.sku | default: selected_variant.id }}"
+                      data-name="{{ product.title | escape }}"
+                      data-url="{{ product.url }}"
+                      data-product-id="{{ product.id }}"
+                      data-price="{{ selected_variant.price | times: 0.01 }}"
+                      data-coverage="{{ product_coverage | default: '' }}"
+                      data-nitrogen="{{ product_nitrogen | default: '' }}"
+                    >
+                      {{ product.title }}
+                    </option>
+                  {%- endfor -%}
+                {%- endif -%}
+              </select>
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </div>
+          </td>
+          <td class="product-name" id="product-name-3">--</td>
+          <td class="bag-coverage" id="coverage-3">--</td>
+          <td class="nitrogen-value" id="nitrogen-3">--</td>
+          <td>
+            <div class="price-display" id="price-display-3">--</div>
+          </td>
+          <td class="lbs-nitrogen" id="lbs-nitrogen-3">--</td>
+          <td class="bags-needed" id="bags-needed-3">--</td>
+          <td class="cost-per-acre" id="cost-3">--</td>
+        </tr>
 
-      {% comment %} ===== ROUND 4: Late Summer (August - September) ===== {% endcomment %}
-      <tr class="round-row" data-round="4">
-        <td class="round-label" onclick="toggleRound(4)" role="button" tabindex="0" aria-expanded="true">
-          Round - 4<br>
-          <small>(August - September)</small>
-        </td>
-        <td class="item-cell">
-          <div class="select">
-            <select class="product-select select__select" id="product-select-4" onchange="updateProduct(4)">
-              <option value="">-- Select Product --</option>
-              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                {%- for product in calculator_collection.products -%}
-                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                  <option
-                    value="{{ selected_variant.sku | default: selected_variant.id }}"
-                    data-name="{{ product.title | escape }}"
-                    data-url="{{ product.url }}"
-                    data-product-id="{{ product.id }}"
-                    data-price="{{ selected_variant.price | times: 0.01 }}"
-                    data-coverage="{{ product_coverage | default: '' }}"
-                    data-nitrogen="{{ product_nitrogen | default: '' }}"
-                  >
-                    {{ product.title }}
-                  </option>
-                {%- endfor -%}
-              {%- endif -%}
-            </select>
-            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-          </div>
-        </td>
-        <td class="product-name" id="product-name-4">--</td>
-        <td class="bag-coverage" id="coverage-4">--</td>
-        <td class="nitrogen-value" id="nitrogen-4">--</td>
-        <td>
-          <div class="price-display" id="price-display-4">--</div>
-        </td>
-        <td class="lbs-nitrogen" id="lbs-nitrogen-4">--</td>
-        <td class="bags-needed" id="bags-needed-4">--</td>
-        <td class="cost-per-acre" id="cost-4">--</td>
-      </tr>
+        {% comment %} ===== ROUND 4: Late Summer (August - September) ===== {% endcomment %}
+        <tr class="round-row" data-round="4">
+          <td class="round-label" onclick="toggleRound(4)" role="button" tabindex="0" aria-expanded="true">
+            Round - 4<br>
+            <small>(August - September)</small>
+          </td>
+          <td class="item-cell">
+            <div class="select">
+              <select class="product-select select__select" id="product-select-4" onchange="updateProduct(4)">
+                <option value="">-- Select Product --</option>
+                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                  {%- for product in calculator_collection.products -%}
+                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                    <option
+                      value="{{ selected_variant.sku | default: selected_variant.id }}"
+                      data-name="{{ product.title | escape }}"
+                      data-url="{{ product.url }}"
+                      data-product-id="{{ product.id }}"
+                      data-price="{{ selected_variant.price | times: 0.01 }}"
+                      data-coverage="{{ product_coverage | default: '' }}"
+                      data-nitrogen="{{ product_nitrogen | default: '' }}"
+                    >
+                      {{ product.title }}
+                    </option>
+                  {%- endfor -%}
+                {%- endif -%}
+              </select>
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </div>
+          </td>
+          <td class="product-name" id="product-name-4">--</td>
+          <td class="bag-coverage" id="coverage-4">--</td>
+          <td class="nitrogen-value" id="nitrogen-4">--</td>
+          <td>
+            <div class="price-display" id="price-display-4">--</div>
+          </td>
+          <td class="lbs-nitrogen" id="lbs-nitrogen-4">--</td>
+          <td class="bags-needed" id="bags-needed-4">--</td>
+          <td class="cost-per-acre" id="cost-4">--</td>
+        </tr>
 
-      {% comment %} ===== ROUND 5: Winterizer (October - November) ===== {% endcomment %}
-      <tr class="round-row" data-round="5">
-        <td class="round-label" onclick="toggleRound(5)" role="button" tabindex="0" aria-expanded="true">
-          Round - 5<br>
-          <small>(October - November)</small>
-        </td>
-        <td class="item-cell">
-          <div class="select">
-            <select class="product-select select__select" id="product-select-5" onchange="updateProduct(5)">
-              <option value="">-- Select Product --</option>
-              {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                {%- for product in calculator_collection.products -%}
-                  {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                  {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                  {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                  <option
-                    value="{{ selected_variant.sku | default: selected_variant.id }}"
-                    data-name="{{ product.title | escape }}"
-                    data-url="{{ product.url }}"
-                    data-product-id="{{ product.id }}"
-                    data-price="{{ selected_variant.price | times: 0.01 }}"
-                    data-coverage="{{ product_coverage | default: '' }}"
-                    data-nitrogen="{{ product_nitrogen | default: '' }}"
-                  >
-                    {{ product.title }}
-                  </option>
-                {%- endfor -%}
-              {%- endif -%}
-            </select>
-            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-          </div>
-        </td>
-        <td class="product-name" id="product-name-5">--</td>
-        <td class="bag-coverage" id="coverage-5">--</td>
-        <td class="nitrogen-value" id="nitrogen-5">--</td>
-        <td>
-          <div class="price-display" id="price-display-5">--</div>
-        </td>
-        <td class="lbs-nitrogen" id="lbs-nitrogen-5">--</td>
-        <td class="bags-needed" id="bags-needed-5">--</td>
-        <td class="cost-per-acre" id="cost-5">--</td>
-      </tr>
-    </tbody>
+        {% comment %} ===== ROUND 5: Winterizer (October - November) ===== {% endcomment %}
+        <tr class="round-row" data-round="5">
+          <td class="round-label" onclick="toggleRound(5)" role="button" tabindex="0" aria-expanded="true">
+            Round - 5<br>
+            <small>(October - November)</small>
+          </td>
+          <td class="item-cell">
+            <div class="select">
+              <select class="product-select select__select" id="product-select-5" onchange="updateProduct(5)">
+                <option value="">-- Select Product --</option>
+                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                  {%- for product in calculator_collection.products -%}
+                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                    <option
+                      value="{{ selected_variant.sku | default: selected_variant.id }}"
+                      data-name="{{ product.title | escape }}"
+                      data-url="{{ product.url }}"
+                      data-product-id="{{ product.id }}"
+                      data-price="{{ selected_variant.price | times: 0.01 }}"
+                      data-coverage="{{ product_coverage | default: '' }}"
+                      data-nitrogen="{{ product_nitrogen | default: '' }}"
+                    >
+                      {{ product.title }}
+                    </option>
+                  {%- endfor -%}
+                {%- endif -%}
+              </select>
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </div>
+          </td>
+          <td class="product-name" id="product-name-5">--</td>
+          <td class="bag-coverage" id="coverage-5">--</td>
+          <td class="nitrogen-value" id="nitrogen-5">--</td>
+          <td>
+            <div class="price-display" id="price-display-5">--</div>
+          </td>
+          <td class="lbs-nitrogen" id="lbs-nitrogen-5">--</td>
+          <td class="bags-needed" id="bags-needed-5">--</td>
+          <td class="cost-per-acre" id="cost-5">--</td>
+        </tr>
+      </tbody>
 
-    {% comment %} ===== TOTALS ROW ===== {% endcomment %}
-    <tfoot>
-      <tr class="totals-row">
-        <td colspan="6"><strong>Annual Totals</strong></td>
-        <td id="total-lbs-nitrogen">
-          --<br>
-          <small>Annual lbs of Nitrogen</small>
-        </td>
-        <td id="total-bags-needed">
-          --<br>
-          <small>Annual bags needed</small>
-        </td>
-        <td id="total-cost">
-          --<br>
-          <small>Annual cost</small>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
+      {% comment %} ===== TOTALS ROW ===== {% endcomment %}
+      <tfoot>
+        <tr class="totals-row">
+          <td colspan="6"><strong>Annual Totals</strong></td>
+          <td id="total-lbs-nitrogen">
+            --<br>
+            <small>Annual lbs of Nitrogen</small>
+          </td>
+          <td id="total-bags-needed">
+            --<br>
+            <small>Annual bags needed</small>
+          </td>
+          <td id="total-cost">
+            --<br>
+            <small>Annual cost</small>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
 
-  {%- if calculator_collection == blank or calculator_collection.products_count == 0 -%}
-    <p class="calculator-warning">
-      Calculator is missing a valid collection. Render with:
-      <code>{% raw %}{% render 'russo-5-step-calculator', collection_handle: 'your-handle' %}{% endraw %}</code>
-    </p>
-  {%- endif -%}
-
-  <div class="calculator-price-templates" aria-hidden="true" hidden>
-    {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-      {%- for product in calculator_collection.products -%}
-        <div id="price-template-{{ product.id }}">
-          {% render 'price',
-            product: product,
-            use_variant: true,
-            show_badges: false,
-            show_compare_at_price: false,
-            show_volume_pricing: true
-          %}
-        </div>
-      {%- endfor -%}
+    {%- if calculator_collection == blank or calculator_collection.products_count == 0 -%}
+      <p class="calculator-warning">
+        Calculator is missing a valid collection. Render with:
+        <code>{% raw %}{% render 'russo-5-step-calculator', collection_handle: 'your-handle' %}{% endraw %}</code>
+      </p>
     {%- endif -%}
+
+    <div class="calculator-price-templates" aria-hidden="true" hidden>
+      {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+        {%- for product in calculator_collection.products -%}
+          <div id="price-template-{{ product.id }}">
+            {% render 'price',
+              product: product,
+              use_variant: true,
+              show_badges: false,
+              show_compare_at_price: false,
+              show_volume_pricing: true
+            %}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
   </div>
 </div>
-
 {% comment %} ===== CALCULATOR JAVASCRIPT ===== {% endcomment %}
 <script>
   // =============================================
@@ -865,6 +866,7 @@
     border: 1px solid #d9d9d9;
     border-radius: 8px;
     background: #f9fbf9;
+    align-content: end;
   }
 
   .calculator-email-controls {
@@ -899,7 +901,7 @@
   .program-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 1rem;
+    font-size: 12px;
     table-layout: fixed;
   }
 
