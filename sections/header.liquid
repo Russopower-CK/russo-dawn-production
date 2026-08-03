@@ -62,14 +62,20 @@
   {%- endif -%}
 
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
+    /* DESKTOP / GENERAL:
+       Keep Russo behavior: shrink logo when scrolled, but not while desktop nav is open */
     .scrolled-past-header:not(.russo-desktop-nav-open) .header__heading-logo-wrapper {
       width: 75%;
     }
 
+    /* MOBILE/TABLET:
+       Match first file behavior when scrolled:
+       - Add left margin to logo wrapper
+       - Show drawer, hide inline menus and secondary menu
+    */
     @media screen and (max-width: 989px) {
       .scrolled-past-header .header__heading-logo-wrapper {
-        margin-left: auto !important;
-        margin-right: auto !important;
+        margin-left: 4rem;
       }
 
       .scrolled-past-header header-drawer {
@@ -167,136 +173,37 @@
     align-items: center;
     z-index: 3;
   }
-
-  /* MOBILE 2-ROW HEADER OVERRIDES (MAX-WIDTH 989PX ONLY) */
+  /* MOBILE-ONLY LAYOUT */
   @media screen and (max-width: 989px) {
-    header-drawer {
-      margin-left: 0 !important;
-    }
-
-    .header {
-      display: flex !important;
-      flex-direction: column !important;
-      padding: 0 !important;
-    }
-
-    /* ROW 1: Compact Height, Hamburger (Left), Search (Right), Logo (Dead-Centered Horizontally & Vertically) */
-    .header-left {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      width: 100% !important;
-      min-height: 48px !important;
-      padding: 0.4rem 1rem !important;
-      position: relative !important;
-      box-sizing: border-box !important;
-    }
-
-    .header-left header-drawer {
-      display: flex !important;
-      align-items: center !important;
-      margin: 0 !important;
-      z-index: 2 !important;
-    }
-
-    .header-left .header__heading,
-    .scrolled-past-header .header-left .header__heading {
-      position: absolute !important;
-      left: 50% !important;
-      top: 50% !important;
-      transform: translate(-50%, -50%) !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      text-align: center !important;
-      width: auto !important;
-      z-index: 1 !important;
-    }
-
-    .header-left .header__heading-link {
-      display: inline-flex !important;
-      justify-content: center !important;
-      align-items: center !important;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
-
-    .header-left .header__heading-logo-wrapper,
-    .scrolled-past-header .header-left .header__heading-logo-wrapper {
-      display: flex !important;
-      justify-content: center !important;
-      align-items: center !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      width: auto !important;
-    }
-
-    .header-left .header__heading-logo {
-      max-width: 140px !important;
-      height: auto !important;
-      display: block !important;
-    }
-
-    .header-left .header-search-wrapper {
-      margin-left: auto !important;
-      z-index: 2 !important;
-    }
-
-    .header-left .header-search-desktop {
-      display: none !important;
-    }
-
-    .header-left .header-search-mobile {
-      display: flex !important;
-      justify-content: center !important;
-      align-items: center !important;
-    }
-
-    /* ROW 2: Outdoor Power Plus (Left), Choose a Store (Center), Cart (Far Right) */
-    .header__icons {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      width: 100% !important;
-      padding: 0.5rem 1rem !important;
-      background-color: #000000 !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
-      box-sizing: border-box !important;
-    }
-
+    /* 30% smaller promo lockup and pushed further left within the icons row */
     .header__icons .header__custom-promo-image {
-      max-width: 130px !important;
-      margin: 0 !important;
-      padding-right: 0 !important;
+      max-width: 175px;        /* 250px × 0.7 */
+      margin-right: auto;      /* push promo image to the left within the icons row */
+      padding-right: 0.5rem;   /* slightly tighter spacing to the cart */
     }
 
     .header__icons .header__custom-promo-logo {
-      max-width: 130px !important;
+      max-width: 175px;
     }
 
-    .header__icons .preferred-store-trigger {
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 0.4rem !important;
-      color: #ffffff !important;
-      font-size: 1.2rem !important;
-      font-weight: 600 !important;
-      text-decoration: none !important;
-      background: transparent !important;
-      border: none !important;
-      padding: 0 !important;
-      cursor: pointer !important;
+    /* Center the main logo more strongly on mobile (when mobile_logo_position is 'center') */
+    .header--mobile-center .header-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .header__icons .preferred-store-trigger::before {
-      content: '' !important;
-      display: inline-block !important;
-      width: 14px !important;
-      height: 14px !important;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'%3E%3C/path%3E%3Ccircle cx='12' cy='10' r='3'%3E%3C/circle%3E%3C/svg%3E") no-repeat center center / contain !important;
+    .header--mobile-center .header__heading {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
     }
 
-    .header__icons .header__icon--account {
-      display: none !important;
+    .header--mobile-center .header__heading-logo-wrapper {
+      margin-left: auto;
+      margin-right: auto;
+      transform: scale(0.9);   /* 10% smaller main logo on mobile */
+      transform-origin: center;
     }
   }
 {%- endstyle -%}
