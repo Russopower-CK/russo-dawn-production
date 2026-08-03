@@ -11,6 +11,16 @@
           behavior: 'smooth',
         });
       });
+
+      button.addEventListener('mouseenter', function () {
+        if (window.matchMedia('(min-width: 860px)').matches) {
+          button.setAttribute('data-top-hover', 'true');
+        }
+      });
+
+      button.addEventListener('mouseleave', function () {
+        button.removeAttribute('data-top-hover');
+      });
     }
 
     if (container) {
@@ -29,17 +39,6 @@
   data-back-to-top
 >
   <button class="back-to-top__button button">
-    <span class="back-to-top__desktop-label-wrapper">
-      <span
-        class="
-          back-to-top__button-label button
-          back-to-top__button-label--desktop
-        "
-      >
-        {{- 'general.back_to_top_button.desktop_button_label' | t -}}
-      </span>
-    </span>
-
     <span
       class="
         back-to-top__button-label
@@ -47,6 +46,14 @@
       "
     >
       {{- 'general.back_to_top_button.mobile_button_label' | t -}}
+    </span>
+
+    <span
+      data-back-to-top-hover-label
+      aria-hidden="true"
+      style="font-family: Roboto, sans-serif; font-size: 12px; font-style: normal; font-weight: 700; line-height: 1;"
+    >
+      TOP
     </span>
 
     {% render 'icon-chevron-down-small' %}

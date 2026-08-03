@@ -72,6 +72,27 @@
 .back-to-top__button svg {
   transform: rotate(180deg) scale(1.25);
 }
+
+.back-to-top__button [data-back-to-top-hover-label] {
+  display: inline-block;
+  max-width: 0;
+  margin-right: 0;
+  overflow: hidden;
+  opacity: 0;
+  white-space: nowrap;
+  transform: translateX(-4px);
+  transition: max-width 320ms cubic-bezier(0.4, 0, 0.2, 1), opacity 280ms ease, transform 320ms cubic-bezier(0.4, 0, 0.2, 1), margin-right 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media screen and (min-width: 860px) {
+  .back-to-top__button[data-top-hover='true'] [data-back-to-top-hover-label] {
+    max-width: 36px;
+    margin-right: 8px;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @media screen and (min-width: 860px) {
   .back-to-top__button svg {
     width: 16px;

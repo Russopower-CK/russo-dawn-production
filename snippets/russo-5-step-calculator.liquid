@@ -820,12 +820,15 @@
 {% comment %} ===== CALCULATOR STYLES ===== {% endcomment %}
 <style>
   .fertilizer-calculator {
-    font-family: Arial, sans-serif;
+    font-family: Roboto, sans-serif;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 5px;
   }
-
+  .program-table th:nth-child(1),
+  .program-table td:nth-child(1) {
+    width: 10%;
+  }
   .fertilizer-calculator h1 {
     color: #2c5530;
     text-align: center;
@@ -922,7 +925,6 @@
     background: #e8f5e9;
     font-weight: bold;
     text-align: left;
-    min-width: 120px;
   }
 
   .program-table .round-label small {
