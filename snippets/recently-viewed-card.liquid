@@ -1,7 +1,6 @@
 {% comment %} Renders standard card object structure without any wrappers {% endcomment %}
 {%- if product != blank -%}
-  {%
-    render 'card-product',
+  {% render 'card-product',
     card_product: product,
     media_aspect_ratio: 'square',
     show_secondary_image: true,
@@ -9,6 +8,7 @@
     show_sku: true,
     quick_add: 'standard',
     show_stock: true,
-    pickup_availability_components: 'headline';
+    pickup_availability_components: 'headline',
+    enable_hover_actions: true
   %}
 {%- endif -%}
