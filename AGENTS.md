@@ -17,9 +17,12 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
 
 ### Totals behavior
 - Price E/A shown from `product.selected_or_first_available_variant.price`.
+- Optional per-location freight charge can be enabled via section settings using company location metafield path `namespace.key` (default `custom.salt_zone_charge`).
+- Freight column is rendered at line level before Total and shows freight amount for that row's displayed scope (selected location in dropdown mode, all locations in columns mode).
 - Row total:
   - columns mode: sum of all location qty inputs for that row.
   - dropdown mode: qty for the **currently selected location** only.
+- When freight is enabled, row and grand totals include `quantity * (unit price + location freight charge)`.
 - Grand total: sum across all saved location allocations.
 
 ### Dropdown-mode allocation model
@@ -33,6 +36,7 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
 - Grouped by location.
 - Each group is a collapsible `<details>` card:
   - collapsed: location name, total qty, total amount.
+  - optional freight line: shown when freight total for that location is greater than 0.
   - expanded: itemized products with qty.
 - Expanded state is preserved across summary re-renders.
 - Sticky summary pane is offset from the top by `var(--header-height)` to avoid overlap with the sticky site header.
@@ -45,6 +49,8 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
   - manual generate/copy actions
 - On payload writes, a per-customer/per-section draft is persisted in `localStorage`.
 - Draft is restored on page load before totals/summary are recalculated.
+- Payload lines now include `unit_price_cents`, `freight_charge_per_quantity_cents`, `freight_charge_per_quantity`, and `line_total_cents`.
+- Payload root includes `includes_location_freight_charge`.
 
 ### Draft persistence and submit behavior
 - Storage key is isolated by store + customer + section (`data-storage-key`).
@@ -58,6 +64,7 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
 ### Safe edit rules for this file
 - Keep data attributes in sync with JS selectors (`data-order-form-row`, `data-location-select`, `data-location-summary-list`, etc.).
 - If changing row/summary math, keep row total and grand total semantics above intact.
+- If changing freight logic, maintain the optional toggle behavior: disabled must keep freight at 0 and preserve legacy totals semantics.
 - Preserve B2B gating checks (`customer`, `customer.b2b?`, location count checks).
 - Re-validate with Theme Check after edits.
 - If `sections/russo-multi-location-order-form.liquid` behavior, structure, selectors, settings, or payload logic changes, update this `AGENTS.md` section in the same change.

@@ -3,9 +3,25 @@
   assign locations_count = 0
   assign use_dropdown_input = false
   assign first_location = blank
+  assign use_location_freight_charge = section.settings.enable_location_freight_charge
+  assign location_freight_metafield_path = section.settings.location_freight_metafield | strip
+  assign location_freight_metafield_parts = location_freight_metafield_path | split: '.'
+  assign location_freight_metafield_namespace = ''
+  assign location_freight_metafield_key = ''
+  assign first_location_freight_charge = 0
+  if location_freight_metafield_parts.size >= 2
+    assign location_freight_metafield_namespace = location_freight_metafield_parts[0] | strip
+    assign location_freight_metafield_key = location_freight_metafield_parts[1] | strip
+  endif
   if customer and customer.b2b?
     assign locations_count = customer.company_available_locations_count
     assign first_location = customer.company_available_locations | first
+    if use_location_freight_charge and first_location != blank and location_freight_metafield_namespace != blank and location_freight_metafield_key != blank
+      assign first_location_metafield = first_location.metafields[location_freight_metafield_namespace][location_freight_metafield_key]
+      if first_location_metafield != blank
+        assign first_location_freight_charge = first_location_metafield.value | default: first_location_metafield | times: 1.0
+      endif
+    endif
     if section.settings.location_input_mode == 'dropdown'
       assign use_dropdown_input = true
     elsif section.settings.location_input_mode == 'auto' and locations_count > section.settings.location_column_threshold
@@ -37,6 +53,7 @@
         data-order-form-root
         data-currency-code="{{ cart.currency.iso_code | default: shop.currency }}"
         data-location-mode="{% if use_dropdown_input %}dropdown{% else %}columns{% endif %}"
+        data-use-freight-charge="{% if use_location_freight_charge %}true{% else %}false{% endif %}"
         data-summary-empty-message="{{ section.settings.summary_empty_message | escape }}"
         data-storage-key="russo-order-form::{{ shop.permanent_domain }}::{{ customer.id }}::{{ section.id }}"
         data-submit-endpoint="{{ section.settings.fake_submit_endpoint | escape }}"
@@ -46,14 +63,27 @@
         data-submit-error-text="{{ section.settings.submit_error_message | escape }}"
       >
         {%- if use_dropdown_input -%}
-          <div class="b2b-russo-order-form__location-picker">
-            <label for="location-picker-{{ section.id }}">{{ section.settings.location_selector_label }}</label>
+          <div class="b2b-russo-order-form__location-picker select">
+            <label class="location-picker-label caption-large" for="location-picker-{{ section.id }}">
+              {{- section.settings.location_selector_label -}}
+            </label>
             <select id="location-picker-{{ section.id }}" data-location-select>
               {%- for location in customer.company_available_locations -%}
+                {%- liquid
+                  assign location_freight_charge = 0
+                  if use_location_freight_charge and location_freight_metafield_namespace != blank and location_freight_metafield_key != blank
+                    assign location_metafield = location.metafields[location_freight_metafield_namespace][location_freight_metafield_key]
+                    if location_metafield != blank
+                      assign location_freight_charge = location_metafield.value | default: location_metafield | times: 1.0
+                    endif
+                  endif
+                -%}
                 <option
                   value="{{ location.id }}"
                   data-location-id="{{ location.id }}"
                   data-location-name="{{ location.name | escape }}"
+                  data-location-freight-charge="{{ location_freight_charge }}"
+                  data-location-freight-cents="{{ location_freight_charge | times: 100 | round }}"
                   {% if customer.current_location and customer.current_location.id == location.id %}
                     selected
                   {% endif %}
@@ -92,6 +122,7 @@
                           </th>
                         {%- endfor -%}
                       {%- endif -%}
+                      <th scope="col" class="b2b-russo-order-form__numeric-heading">Freight</th>
                       <th scope="col" class="b2b-russo-order-form__numeric-heading">Total</th>
                     </tr>
                   </thead>
@@ -145,10 +176,20 @@
                               data-product-title="{{ product.title | escape }}"
                               data-location-id="{{ first_location.id }}"
                               data-location-name="{{ first_location.name | escape }}"
+                              data-location-freight-cents="{{ first_location_freight_charge | times: 100 | round }}"
                             >
                           </td>
                         {%- else -%}
                           {%- for location in customer.company_available_locations -%}
+                            {%- liquid
+                              assign location_freight_charge = 0
+                              if use_location_freight_charge and location_freight_metafield_namespace != blank and location_freight_metafield_key != blank
+                                assign location_metafield = location.metafields[location_freight_metafield_namespace][location_freight_metafield_key]
+                                if location_metafield != blank
+                                  assign location_freight_charge = location_metafield.value | default: location_metafield | times: 1.0
+                                endif
+                              endif
+                            -%}
                             <td class="b2b-russo-order-form__quantity-cell" data-label="{{ location.name | escape }}">
                               <label
                                 class="visually-hidden"
@@ -168,10 +209,14 @@
                                 data-product-title="{{ product.title | escape }}"
                                 data-location-id="{{ location.id }}"
                                 data-location-name="{{ location.name | escape }}"
+                                data-location-freight-cents="{{ location_freight_charge | times: 100 | round }}"
                               >
                             </td>
                           {%- endfor -%}
                         {%- endif -%}
+                        <td class="b2b-russo-order-form__money" data-label="Freight" data-row-freight>
+                          {{ 0 | money }}
+                        </td>
                         <td class="b2b-russo-order-form__money" data-label="Total" data-row-total>{{ 0 | money }}</td>
                       </tr>
                     {%- endfor -%}
@@ -296,6 +341,14 @@
     padding: 0.8rem;
     width: 100%;
   }
+  .location-picker-label {
+    width: 30%;
+    align-content: center;
+  }
+
+  .b2b-russo-order-form__table thead th {
+    background-color: rgba(var(--color-foreground), 0.02);
+  }
 
   .b2b-russo-order-form__summary-pane {
     border: 1px solid rgba(var(--color-foreground), 0.1);
@@ -356,6 +409,20 @@
     gap: 0.8rem;
     font-size: 1.3rem;
     white-space: nowrap;
+  }
+
+  .b2b-russo-order-form__summary-item-freight {
+    margin: 0;
+    padding: 0 0.75rem 0.65rem;
+    font-size: 1.2rem;
+    color: rgba(var(--color-foreground), 0.75);
+  }
+  .b2b-russo-order-form__location-picker select:focus-visible {
+    outline: 0 !important;
+
+    outline-offset: 0;
+
+    box-shadow: none;
   }
 
   .b2b-russo-order-form__summary-product-list {
@@ -669,12 +736,14 @@
       if (!submitButton || !submitStatus || !purchaseOrderInput || !noteInput) return;
 
       const isDropdownMode = root.dataset.locationMode === 'dropdown';
+      const useFreightCharge = root.dataset.useFreightCharge === 'true';
       const locationSelect = root.querySelector('[data-location-select]');
       const summaryList = root.querySelector('[data-location-summary-list]');
       const rows = Array.from(root.querySelectorAll('[data-order-form-row]'));
       const qtyInputs = Array.from(root.querySelectorAll('.b2b-russo-order-form__qty'));
       const allocations = {};
       const locationNamesById = {};
+      const locationFreightCentsById = {};
       const storageKey = root.dataset.storageKey;
       const submitEndpoint = root.dataset.submitEndpoint || '/apps/russoAPI/v1/submit-order-form';
       const submitConfirmModalId = root.dataset.submitConfirmModalId;
@@ -690,8 +759,20 @@
       if (locationSelect) {
         Array.from(locationSelect.options).forEach((option) => {
           locationNamesById[option.dataset.locationId] = option.dataset.locationName;
+          locationFreightCentsById[option.dataset.locationId] = Number(option.dataset.locationFreightCents || 0);
+        });
+      } else {
+        qtyInputs.forEach((input) => {
+          const locationId = input.dataset.locationId;
+          if (!locationId) return;
+          locationFreightCentsById[locationId] = Number(input.dataset.locationFreightCents || 0);
         });
       }
+
+      const getFreightCentsForLocation = (locationId) => {
+        if (!useFreightCharge) return 0;
+        return Number(locationFreightCentsById[locationId] || 0);
+      };
 
       const getSelectedLocation = () => {
         if (!locationSelect) return null;
@@ -808,6 +889,7 @@
           input.value = productAllocations[selected.id] || 0;
           input.dataset.locationId = selected.id;
           input.dataset.locationName = selected.name;
+          input.dataset.locationFreightCents = String(getFreightCentsForLocation(selected.id));
         });
       };
 
@@ -829,6 +911,71 @@
         if (!selected) return 0;
         const productAllocations = getRowAllocations(row);
         return Number(productAllocations[selected.id] || 0);
+      };
+
+      const getRowTotalCentsAcrossLocations = (row) => {
+        const unitPriceCents = Number(row.dataset.unitPriceCents || 0);
+        if (!isDropdownMode) {
+          return Array.from(row.querySelectorAll('.b2b-russo-order-form__qty')).reduce((sum, input) => {
+            const qty = Number(input.value || 0);
+            if (qty <= 0) return sum;
+            const freightCents = getFreightCentsForLocation(input.dataset.locationId);
+            return sum + qty * (unitPriceCents + freightCents);
+          }, 0);
+        }
+
+        const productAllocations = getRowAllocations(row);
+        return Object.entries(productAllocations).reduce((sum, [locationId, quantity]) => {
+          const qty = Number(quantity || 0);
+          if (qty <= 0) return sum;
+          const freightCents = getFreightCentsForLocation(locationId);
+          return sum + qty * (unitPriceCents + freightCents);
+        }, 0);
+      };
+
+      const getRowFreightCentsAcrossLocations = (row) => {
+        if (!useFreightCharge) return 0;
+
+        if (!isDropdownMode) {
+          return Array.from(row.querySelectorAll('.b2b-russo-order-form__qty')).reduce((sum, input) => {
+            const qty = Number(input.value || 0);
+            if (qty <= 0) return sum;
+            const freightCents = getFreightCentsForLocation(input.dataset.locationId);
+            return sum + qty * freightCents;
+          }, 0);
+        }
+
+        const productAllocations = getRowAllocations(row);
+        return Object.entries(productAllocations).reduce((sum, [locationId, quantity]) => {
+          const qty = Number(quantity || 0);
+          if (qty <= 0) return sum;
+          const freightCents = getFreightCentsForLocation(locationId);
+          return sum + qty * freightCents;
+        }, 0);
+      };
+
+      const getRowFreightCentsForSelectedLocation = (row) => {
+        if (!isDropdownMode) {
+          return getRowFreightCentsAcrossLocations(row);
+        }
+
+        const selected = getSelectedLocation();
+        if (!selected) return 0;
+        const qty = getRowQuantityForSelectedLocation(row);
+        return qty * getFreightCentsForLocation(selected.id);
+      };
+
+      const getRowTotalCentsForSelectedLocation = (row) => {
+        if (!isDropdownMode) {
+          return getRowTotalCentsAcrossLocations(row);
+        }
+
+        const selected = getSelectedLocation();
+        if (!selected) return 0;
+        const qty = getRowQuantityForSelectedLocation(row);
+        const unitPriceCents = Number(row.dataset.unitPriceCents || 0);
+        const freightCents = getFreightCentsForLocation(selected.id);
+        return qty * (unitPriceCents + freightCents);
       };
 
       const updateSummary = () => {
@@ -859,8 +1006,11 @@
                 products: [],
               };
             }
+            const freightCents = getFreightCentsForLocation(locationId);
             totalsByLocation[locationId].quantity += qtyNumber;
-            totalsByLocation[locationId].totalCents += qtyNumber * unitPriceCents;
+            totalsByLocation[locationId].totalCents += qtyNumber * (unitPriceCents + freightCents);
+            totalsByLocation[locationId].freightCents =
+              Number(totalsByLocation[locationId].freightCents || 0) + qtyNumber * freightCents;
             totalsByLocation[locationId].products.push({
               title: productTitle,
               quantity: qtyNumber,
@@ -898,6 +1048,14 @@
                 </span>
                 <span class="b2b-russo-order-form__summary-caret" aria-hidden="true">▶</span>
               </summary>
+              ${
+                entry.freightCents > 0
+                  ? `<p class="b2b-russo-order-form__summary-item-freight">Freight: ${formatMoney(
+                      root,
+                      entry.freightCents
+                    )}</p>`
+                  : ''
+              }
               <ul class="b2b-russo-order-form__summary-product-list">
                 ${entry.products
                   .map((productEntry) => {
@@ -917,10 +1075,14 @@
         let grandTotalCents = 0;
 
         rows.forEach((row) => {
-          const unitPriceCents = Number(row.dataset.unitPriceCents || 0);
-          const rowTotalDisplayCents = getRowQuantityForSelectedLocation(row) * unitPriceCents;
-          const rowTotalAllLocationsCents = getRowQuantityAcrossLocations(row) * unitPriceCents;
+          const rowFreightDisplayCents = getRowFreightCentsForSelectedLocation(row);
+          const rowTotalDisplayCents = getRowTotalCentsForSelectedLocation(row);
+          const rowTotalAllLocationsCents = getRowTotalCentsAcrossLocations(row);
           grandTotalCents += rowTotalAllLocationsCents;
+          const rowFreightTarget = row.querySelector('[data-row-freight]');
+          if (rowFreightTarget) {
+            rowFreightTarget.textContent = formatMoney(root, rowFreightDisplayCents);
+          }
           const rowTotalTarget = row.querySelector('[data-row-total]');
           if (rowTotalTarget) {
             rowTotalTarget.textContent = formatMoney(root, rowTotalDisplayCents);
@@ -956,6 +1118,11 @@
                 product_title: productTitle,
                 location_id: Number(locationId),
                 location_name: locationNamesById[locationId] || locationId,
+                unit_price_cents: Number(row.dataset.unitPriceCents || 0),
+                freight_charge_per_quantity_cents: getFreightCentsForLocation(locationId),
+                freight_charge_per_quantity: getFreightCentsForLocation(locationId) / 100,
+                line_total_cents:
+                  qtyNumber * (Number(row.dataset.unitPriceCents || 0) + getFreightCentsForLocation(locationId)),
                 quantity: qtyNumber,
               });
             });
@@ -970,6 +1137,13 @@
               product_title: input.dataset.productTitle,
               location_id: Number(input.dataset.locationId),
               location_name: input.dataset.locationName,
+              unit_price_cents: Number(input.closest('[data-order-form-row]')?.dataset.unitPriceCents || 0),
+              freight_charge_per_quantity_cents: getFreightCentsForLocation(input.dataset.locationId),
+              freight_charge_per_quantity: getFreightCentsForLocation(input.dataset.locationId) / 100,
+              line_total_cents:
+                quantity *
+                (Number(input.closest('[data-order-form-row]')?.dataset.unitPriceCents || 0) +
+                  getFreightCentsForLocation(input.dataset.locationId)),
               quantity,
             });
           });
@@ -983,6 +1157,7 @@
               : null,
           purchase_order_number: purchaseOrderInput.value.trim(),
           note: noteInput.value.trim(),
+          includes_location_freight_charge: useFreightCharge,
           lines,
         };
       };
@@ -1008,6 +1183,7 @@
               allocations[productId][selected.id] = Number(event.target.value || 0);
               event.target.dataset.locationId = selected.id;
               event.target.dataset.locationName = selected.name;
+              event.target.dataset.locationFreightCents = String(getFreightCentsForLocation(selected.id));
             }
           }
           updateTotals();
@@ -1154,6 +1330,19 @@
       "step": 1,
       "label": "Auto switch threshold",
       "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_location_freight_charge",
+      "label": "Apply location freight charge",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "location_freight_metafield",
+      "label": "Company location freight metafield (namespace.key)",
+      "default": "custom.salt_zone_charge",
+      "info": "Optional decimal metafield on company location. Example: custom.salt_zone_charge"
     },
     {
       "type": "text",

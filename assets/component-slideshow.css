@@ -120,7 +120,7 @@ slideshow-component .slideshow.banner {
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 2 !important;
-  background: rgba(255, 255, 255, 0.25) !important;
+ 
   border-radius: 4px !important;
   padding: 4px 20px !important;
   display: flex !important;

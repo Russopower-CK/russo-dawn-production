@@ -264,10 +264,12 @@ slider-component.slider-component-full-width {
   border: 0.1rem solid rgba(var(--color-foreground), 0.5);
   padding: 0;
   display: block;
+   background-color: rgb(var(--color-background), 0.5);
+
 }
 
 .slider-counter__link--active.slider-counter__link--dots .dot {
-  background-color: rgb(var(--color-foreground));
+  background-color: rgb(var(--color-background));
 }
 
 @media screen and (forced-colors: active) {
