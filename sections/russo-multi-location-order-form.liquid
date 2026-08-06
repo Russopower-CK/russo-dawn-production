@@ -2,6 +2,7 @@
   assign source_collection = section.settings.source_collection
   assign locations_count = 0
   assign use_dropdown_input = false
+  assign use_location_rows_input = false
   assign first_location = blank
   assign use_location_freight_charge = section.settings.enable_location_freight_charge
   assign location_freight_metafield_path = section.settings.location_freight_metafield | strip
@@ -9,6 +10,8 @@
   assign location_freight_metafield_namespace = ''
   assign location_freight_metafield_key = ''
   assign first_location_freight_charge = 0
+  assign allow_note = section.settings.allow_note
+  assign show_pricing = section.settings.show_pricing
   if location_freight_metafield_parts.size >= 2
     assign location_freight_metafield_namespace = location_freight_metafield_parts[0] | strip
     assign location_freight_metafield_key = location_freight_metafield_parts[1] | strip
@@ -24,6 +27,8 @@
     endif
     if section.settings.location_input_mode == 'dropdown'
       assign use_dropdown_input = true
+    elsif section.settings.location_input_mode == 'location_rows'
+      assign use_location_rows_input = true
     elsif section.settings.location_input_mode == 'auto' and locations_count > section.settings.location_column_threshold
       assign use_dropdown_input = true
     endif
@@ -52,10 +57,12 @@
         class="b2b-russo-order-form__form"
         data-order-form-root
         data-currency-code="{{ cart.currency.iso_code | default: shop.currency }}"
-        data-location-mode="{% if use_dropdown_input %}dropdown{% else %}columns{% endif %}"
+        data-location-mode="{% if use_dropdown_input %}dropdown{% elsif use_location_rows_input %}location_rows{% else %}columns{% endif %}"
         data-use-freight-charge="{% if use_location_freight_charge %}true{% else %}false{% endif %}"
+        data-show-pricing="{% if show_pricing %}true{% else %}false{% endif %}"
         data-summary-empty-message="{{ section.settings.summary_empty_message | escape }}"
         data-storage-key="russo-order-form::{{ shop.permanent_domain }}::{{ customer.id }}::{{ section.id }}"
+        data-customer-email="{{ customer.email | escape }}"
         data-submit-endpoint="{{ section.settings.fake_submit_endpoint | escape }}"
         data-submit-confirm-modal-id="OrderSubmitConfirmModal-{{ section.id }}"
         data-submit-start-text="{{ section.settings.submit_in_progress_message | escape }}"
@@ -106,100 +113,151 @@
                 <table class="b2b-russo-order-form__table">
                   <thead>
                     <tr>
-                      <th scope="col">{{ section.settings.column_product_label }}</th>
-                      {%- if section.settings.show_sku -%}
-                        <th scope="col">{{ section.settings.column_sku_label }}</th>
-                      {%- endif -%}
-                      <th scope="col" class="b2b-russo-order-form__numeric-heading">Price E/A</th>
-                      {%- if use_dropdown_input -%}
-                        <th scope="col" class="b2b-russo-order-form__quantity-heading">
-                          {{ section.settings.quantity_column_label }}
-                        </th>
-                      {%- else -%}
-                        {%- for location in customer.company_available_locations -%}
+                      {%- if use_location_rows_input -%}
+                        <th scope="col">Location</th>
+                        {%- for product in source_collection.products -%}
                           <th scope="col" class="b2b-russo-order-form__location-heading">
-                            <span class="b2b-russo-order-form__location-title">{{ location.name }}</span>
+                            <span class="b2b-russo-order-form__location-title">{{ product.title }}</span>
                           </th>
                         {%- endfor -%}
+                        {%- if show_pricing and use_location_freight_charge -%}
+                          <th scope="col" class="b2b-russo-order-form__numeric-heading">Freight</th>
+                        {%- endif -%}
+                        {%- if show_pricing -%}
+                          <th scope="col" class="b2b-russo-order-form__numeric-heading">Total</th>
+                        {%- endif -%}
+                      {%- else -%}
+                        <th scope="col">{{ section.settings.column_product_label }}</th>
+                        {%- if section.settings.show_sku -%}
+                          <th scope="col">{{ section.settings.column_sku_label }}</th>
+                        {%- endif -%}
+                        {%- if show_pricing -%}
+                          <th scope="col" class="b2b-russo-order-form__numeric-heading">Price E/A</th>
+                        {%- endif -%}
+                        {%- if use_dropdown_input -%}
+                          <th scope="col" class="b2b-russo-order-form__quantity-heading">
+                            {{ section.settings.quantity_column_label }}
+                          </th>
+                        {%- else -%}
+                          {%- for location in customer.company_available_locations -%}
+                            <th scope="col" class="b2b-russo-order-form__location-heading">
+                              <span class="b2b-russo-order-form__location-title">{{ location.name }}</span>
+                            </th>
+                          {%- endfor -%}
+                        {%- endif -%}
+                        {%- if show_pricing and use_location_freight_charge -%}
+                          <th scope="col" class="b2b-russo-order-form__numeric-heading">Freight</th>
+                        {%- endif -%}
+                        {%- if show_pricing -%}
+                          <th scope="col" class="b2b-russo-order-form__numeric-heading">Total</th>
+                        {%- endif -%}
                       {%- endif -%}
-                      <th scope="col" class="b2b-russo-order-form__numeric-heading">Freight</th>
-                      <th scope="col" class="b2b-russo-order-form__numeric-heading">Total</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {%- for product in source_collection.products -%}
-                      {%- assign order_variant = product.selected_or_first_available_variant -%}
-                      <tr
-                        data-order-form-row
-                        data-product-id="{{ product.id }}"
-                        data-product-handle="{{ product.handle }}"
-                        data-product-title="{{ product.title | escape }}"
-                        data-unit-price-cents="{{ order_variant.price }}"
-                      >
-                        <th scope="row" class="b2b-russo-order-form__product-row-heading">
-                          <div class="b2b-russo-order-form__product-cell">
-                            {%- if section.settings.show_product_image and product.featured_image != blank -%}
-                              {{
-                                product.featured_image
-                                | image_url: width: 80, height: 80
-                                | image_tag: loading: 'lazy', class: 'b2b-russo-order-form__product-image'
-                              }}
-                            {%- endif -%}
-                            <span>{{ product.title }}</span>
-                          </div>
-                        </th>
-                        {%- if section.settings.show_sku -%}
-                          <td data-label="{{ section.settings.column_sku_label | escape }}">
-                            {{ order_variant.sku | default: '-' }}
-                          </td>
-                        {%- endif -%}
-                        <td class="b2b-russo-order-form__money" data-label="Price E/A">
-                          {{ order_variant.price | money }}
-                        </td>
-                        {%- if use_dropdown_input -%}
-                          <td
-                            class="b2b-russo-order-form__quantity-cell"
-                            data-label="{{ section.settings.quantity_column_label | escape }}"
-                          >
-                            <label class="visually-hidden" for="qty-{{ section.id }}-{{ product.id }}-single">
-                              {{ product.title }} - {{ section.settings.quantity_column_label }}
-                            </label>
-                            <input
-                              id="qty-{{ section.id }}-{{ product.id }}-single"
-                              class="b2b-russo-order-form__qty b2b-russo-order-form__qty--single-location"
-                              type="number"
-                              min="0"
-                              step="1"
-                              value="0"
-                              data-product-id="{{ product.id }}"
-                              data-product-handle="{{ product.handle }}"
-                              data-product-title="{{ product.title | escape }}"
-                              data-location-id="{{ first_location.id }}"
-                              data-location-name="{{ first_location.name | escape }}"
-                              data-location-freight-cents="{{ first_location_freight_charge | times: 100 | round }}"
-                            >
-                          </td>
-                        {%- else -%}
-                          {%- for location in customer.company_available_locations -%}
-                            {%- liquid
-                              assign location_freight_charge = 0
-                              if use_location_freight_charge and location_freight_metafield_namespace != blank and location_freight_metafield_key != blank
-                                assign location_metafield = location.metafields[location_freight_metafield_namespace][location_freight_metafield_key]
-                                if location_metafield != blank
-                                  assign location_freight_charge = location_metafield.value | default: location_metafield | times: 1.0
-                                endif
-                              endif
-                            -%}
-                            <td class="b2b-russo-order-form__quantity-cell" data-label="{{ location.name | escape }}">
+                    {%- if use_location_rows_input -%}
+                      {%- for location in customer.company_available_locations -%}
+                        {%- liquid
+                          assign location_freight_charge = 0
+                          if use_location_freight_charge and location_freight_metafield_namespace != blank and location_freight_metafield_key != blank
+                            assign location_metafield = location.metafields[location_freight_metafield_namespace][location_freight_metafield_key]
+                            if location_metafield != blank
+                              assign location_freight_charge = location_metafield.value | default: location_metafield | times: 1.0
+                            endif
+                          endif
+                        -%}
+                        <tr
+                          data-location-row
+                          data-location-id="{{ location.id }}"
+                          data-location-name="{{ location.name | escape }}"
+                          data-location-freight-cents="{{ location_freight_charge | times: 100 | round }}"
+                        >
+                          <th scope="row" class="b2b-russo-order-form__location-heading">
+                            <span class="b2b-russo-order-form__location-title">{{ location.name }}</span>
+                          </th>
+                          {%- for product in source_collection.products -%}
+                            {%- assign order_variant = product.selected_or_first_available_variant -%}
+                            <td class="b2b-russo-order-form__quantity-cell" data-label="{{ product.title | escape }}">
                               <label
                                 class="visually-hidden"
-                                for="qty-{{ section.id }}-{{ product.id }}-{{ location.id }}"
+                                for="qty-{{ section.id }}-locrow-{{ location.id }}-{{ product.id }}"
                               >
-                                {{ product.title }} - {{ location.name }}
+                                {{ location.name }} - {{ product.title }}
                               </label>
                               <input
-                                id="qty-{{ section.id }}-{{ product.id }}-{{ location.id }}"
-                                class="b2b-russo-order-form__qty"
+                                id="qty-{{ section.id }}-locrow-{{ location.id }}-{{ product.id }}"
+                                class="b2b-russo-order-form__qty b2b-russo-order-form__qty--location-row"
+                                type="number"
+                                min="0"
+                                step="1"
+                                value="0"
+                                pattern="[0-9]*"
+                                inputmode="numeric"
+                                data-product-id="{{ product.id }}"
+                                data-product-handle="{{ product.handle }}"
+                                data-product-title="{{ product.title | escape }}"
+                                data-unit-price-cents="{{ order_variant.price }}"
+                                data-location-id="{{ location.id }}"
+                                data-location-name="{{ location.name | escape }}"
+                                data-location-freight-cents="{{ location_freight_charge | times: 100 | round }}"
+                              >
+                            </td>
+                          {%- endfor -%}
+                          {%- if show_pricing and use_location_freight_charge -%}
+                            <td class="b2b-russo-order-form__money" data-label="Freight" data-location-row-freight>
+                              {{ 0 | money }}
+                            </td>
+                          {%- endif -%}
+                          {%- if show_pricing -%}
+                            <td class="b2b-russo-order-form__money" data-label="Total" data-location-row-total>
+                              {{ 0 | money }}
+                            </td>
+                          {%- endif -%}
+                        </tr>
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- for product in source_collection.products -%}
+                        {%- assign order_variant = product.selected_or_first_available_variant -%}
+                        <tr
+                          data-order-form-row
+                          data-product-id="{{ product.id }}"
+                          data-product-handle="{{ product.handle }}"
+                          data-product-title="{{ product.title | escape }}"
+                          data-unit-price-cents="{{ order_variant.price }}"
+                        >
+                          <th scope="row" class="b2b-russo-order-form__product-row-heading">
+                            <div class="b2b-russo-order-form__product-cell">
+                              {%- if section.settings.show_product_image and product.featured_image != blank -%}
+                                {{
+                                  product.featured_image
+                                  | image_url: width: 80, height: 80
+                                  | image_tag: loading: 'lazy', class: 'b2b-russo-order-form__product-image'
+                                }}
+                              {%- endif -%}
+                              <span>{{ product.title }}</span>
+                            </div>
+                          </th>
+                          {%- if section.settings.show_sku -%}
+                            <td data-label="{{ section.settings.column_sku_label | escape }}">
+                              {{ order_variant.sku | default: '-' }}
+                            </td>
+                          {%- endif -%}
+                          {%- if show_pricing -%}
+                            <td class="b2b-russo-order-form__money" data-label="Price E/A">
+                              {{ order_variant.price | money }}
+                            </td>
+                          {%- endif -%}
+                          {%- if use_dropdown_input -%}
+                            <td
+                              class="b2b-russo-order-form__quantity-cell"
+                              data-label="{{ section.settings.quantity_column_label | escape }}"
+                            >
+                              <label class="visually-hidden" for="qty-{{ section.id }}-{{ product.id }}-single">
+                                {{ product.title }} - {{ section.settings.quantity_column_label }}
+                              </label>
+                              <input
+                                id="qty-{{ section.id }}-{{ product.id }}-single"
+                                class="b2b-russo-order-form__qty b2b-russo-order-form__qty--single-location"
                                 type="number"
                                 min="0"
                                 step="1"
@@ -207,19 +265,63 @@
                                 data-product-id="{{ product.id }}"
                                 data-product-handle="{{ product.handle }}"
                                 data-product-title="{{ product.title | escape }}"
-                                data-location-id="{{ location.id }}"
-                                data-location-name="{{ location.name | escape }}"
-                                data-location-freight-cents="{{ location_freight_charge | times: 100 | round }}"
+                                data-unit-price-cents="{{ order_variant.price }}"
+                                data-location-id="{{ first_location.id }}"
+                                data-location-name="{{ first_location.name | escape }}"
+                                data-location-freight-cents="{{ first_location_freight_charge | times: 100 | round }}"
                               >
                             </td>
-                          {%- endfor -%}
-                        {%- endif -%}
-                        <td class="b2b-russo-order-form__money" data-label="Freight" data-row-freight>
-                          {{ 0 | money }}
-                        </td>
-                        <td class="b2b-russo-order-form__money" data-label="Total" data-row-total>{{ 0 | money }}</td>
-                      </tr>
-                    {%- endfor -%}
+                          {%- else -%}
+                            {%- for location in customer.company_available_locations -%}
+                              {%- liquid
+                                assign location_freight_charge = 0
+                                if use_location_freight_charge and location_freight_metafield_namespace != blank and location_freight_metafield_key != blank
+                                  assign location_metafield = location.metafields[location_freight_metafield_namespace][location_freight_metafield_key]
+                                  if location_metafield != blank
+                                    assign location_freight_charge = location_metafield.value | default: location_metafield | times: 1.0
+                                  endif
+                                endif
+                              -%}
+                              <td class="b2b-russo-order-form__quantity-cell" data-label="{{ location.name | escape }}">
+                                <label
+                                  class="visually-hidden"
+                                  for="qty-{{ section.id }}-{{ product.id }}-{{ location.id }}"
+                                >
+                                  {{ product.title }} - {{ location.name }}
+                                </label>
+                                <input
+                                  id="qty-{{ section.id }}-{{ product.id }}-{{ location.id }}"
+                                  class="b2b-russo-order-form__qty"
+                                  type="number"
+                                  min="0"
+                                  step="1"
+                                  value="0"
+                                  pattern="[0-9]*"
+                                  inputmode="numeric"
+                                  data-product-id="{{ product.id }}"
+                                  data-product-handle="{{ product.handle }}"
+                                  data-product-title="{{ product.title | escape }}"
+                                  data-unit-price-cents="{{ order_variant.price }}"
+                                  data-location-id="{{ location.id }}"
+                                  data-location-name="{{ location.name | escape }}"
+                                  data-location-freight-cents="{{ location_freight_charge | times: 100 | round }}"
+                                >
+                              </td>
+                            {%- endfor -%}
+                          {%- endif -%}
+                          {%- if show_pricing and use_location_freight_charge -%}
+                            <td class="b2b-russo-order-form__money" data-label="Freight" data-row-freight>
+                              {{ 0 | money }}
+                            </td>
+                          {%- endif -%}
+                          {%- if show_pricing -%}
+                            <td class="b2b-russo-order-form__money" data-label="Total" data-row-total>
+                              {{ 0 | money }}
+                            </td>
+                          {%- endif -%}
+                        </tr>
+                      {%- endfor -%}
+                    {%- endif -%}
                   </tbody>
                 </table>
               {% endpaginate %}
@@ -234,12 +336,24 @@
           {%- endif -%}
         </div>
 
-        <div class="b2b-russo-order-form__grand-total">
-          <span>{{ section.settings.order_total_label }}</span>
-          <strong data-grand-total>{{ 0 | money }}</strong>
-        </div>
+        {%- if show_pricing -%}
+          <div class="b2b-russo-order-form__grand-total">
+            <span>{{ section.settings.order_total_label }}</span>
+            <strong data-grand-total>{{ 0 | money }}</strong>
+          </div>
+        {%- endif -%}
 
         <div class="b2b-russo-order-form__order-meta">
+          {%- if allow_note -%}
+            <div class="b2b-russo-order-form__order-meta-field">
+              <label for="order-note-{{ section.id }}">{{ section.settings.note_label }}</label>
+              <input
+                id="order-note-{{ section.id }}"
+                type="text"
+                data-order-note
+              >
+            </div>
+          {%- endif -%}
           <div class="b2b-russo-order-form__order-meta-field">
             <label for="purchase-order-{{ section.id }}">{{ section.settings.purchase_order_label }}</label>
             <input
@@ -249,11 +363,18 @@
             >
           </div>
           <div class="b2b-russo-order-form__order-meta-field">
-            <label for="order-note-{{ section.id }}">{{ section.settings.note_label }}</label>
+            <div class="b2b-russo-order-form__field-label-row">
+              <label for="requested-delivery-date-{{ section.id }}">Requested Delivery Date</label>
+              {%- if section.settings.requested_delivery_date_disclaimer != blank -%}
+                <span class="b2b-russo-order-form__field-help">
+                  {{- section.settings.requested_delivery_date_disclaimer -}}
+                </span>
+              {%- endif -%}
+            </div>
             <input
-              id="order-note-{{ section.id }}"
-              type="text"
-              data-order-note
+              id="requested-delivery-date-{{ section.id }}"
+              type="date"
+              data-requested-delivery-date
             >
           </div>
         </div>
@@ -272,23 +393,19 @@
           modal_id: submit_confirm_modal_id,
           title: section.settings.submit_confirm_title,
           message: section.settings.submit_confirm_message,
-          confirm_label: section.settings.submit_confirm_submit_label,
-          cancel_label: section.settings.submit_confirm_cancel_label,
+          confirm_label: 'Confirm submit',
+          cancel_label: 'Cancel',
           confirm_button_attributes: 'data-submit-confirm',
           cancel_button_attributes: 'data-submit-cancel'
         %}
 
         {%- if section.settings.show_developer_tools -%}
           <div class="b2b-russo-order-form__actions">
-            <button type="button" class="button button--secondary" data-build-payload>
-              {{ section.settings.generate_payload_label }}
-            </button>
-            <button type="button" class="button button--secondary" data-copy-payload>
-              {{ section.settings.copy_payload_label }}
-            </button>
+            <button type="button" class="button button--secondary" data-build-payload>Generate payload</button>
+            <button type="button" class="button button--secondary" data-copy-payload>Copy payload</button>
           </div>
 
-          <label for="payload-{{ section.id }}">{{ section.settings.payload_label }}</label>
+          <label for="payload-{{ section.id }}">Payload preview (JSON)</label>
           <textarea
             id="payload-{{ section.id }}"
             class="b2b-russo-order-form__payload"
@@ -543,6 +660,7 @@
     margin-top: 1.25rem;
     display: grid;
     gap: 0.9rem;
+    width: 100%;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -551,9 +669,32 @@
     gap: 0.4rem;
   }
 
+  .b2b-russo-order-form__field-label-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    flex-wrap: nowrap;
+  }
+
+  .b2b-russo-order-form__field-label-row label {
+    margin: 0;
+  }
+
+  .b2b-russo-order-form__field-label-row .b2b-russo-order-form__field-help {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
   .b2b-russo-order-form__order-meta-field input {
     width: 100%;
     padding: 0.8rem;
+  }
+
+  .b2b-russo-order-form__field-help {
+    margin: 0;
+    font-size: 1.1rem;
+    color: rgba(var(--color-foreground), 0.7);
+    line-height: 1.4;
   }
 
   .b2b-russo-order-form__payload {
@@ -700,6 +841,15 @@
     .b2b-russo-order-form__payload {
       font-size: 1.2rem;
     }
+
+    .b2b-russo-order-form__field-label-row {
+      flex-wrap: wrap;
+    }
+
+    .b2b-russo-order-form__field-label-row .b2b-russo-order-form__field-help {
+      margin-left: 0;
+      white-space: normal;
+    }
   }
 {% endstylesheet %}
 
@@ -732,14 +882,18 @@
       const submitButton = root.querySelector('[data-submit-order]');
       const submitStatus = root.querySelector('[data-submit-status]');
       const purchaseOrderInput = root.querySelector('[data-purchase-order-number]');
+      const requestedDeliveryDateInput = root.querySelector('[data-requested-delivery-date]');
       const noteInput = root.querySelector('[data-order-note]');
-      if (!submitButton || !submitStatus || !purchaseOrderInput || !noteInput) return;
+      if (!submitButton || !submitStatus || !purchaseOrderInput) return;
 
       const isDropdownMode = root.dataset.locationMode === 'dropdown';
+      const isLocationRowsMode = root.dataset.locationMode === 'location_rows';
       const useFreightCharge = root.dataset.useFreightCharge === 'true';
+      const showPricing = root.dataset.showPricing !== 'false';
       const locationSelect = root.querySelector('[data-location-select]');
       const summaryList = root.querySelector('[data-location-summary-list]');
       const rows = Array.from(root.querySelectorAll('[data-order-form-row]'));
+      const locationRows = Array.from(root.querySelectorAll('[data-location-row]'));
       const qtyInputs = Array.from(root.querySelectorAll('.b2b-russo-order-form__qty'));
       const allocations = {};
       const locationNamesById = {};
@@ -755,6 +909,19 @@
         ? submitConfirmModal.querySelector('[data-submit-cancel]')
         : root.querySelector('[data-submit-cancel]');
       let summaryInitialized = false;
+
+      const getTodayIsoDate = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+
+      const todayIsoDate = getTodayIsoDate();
+      if (requestedDeliveryDateInput) {
+        requestedDeliveryDateInput.min = todayIsoDate;
+      }
 
       if (locationSelect) {
         Array.from(locationSelect.options).forEach((option) => {
@@ -828,7 +995,12 @@
           input.value = 0;
         });
         purchaseOrderInput.value = '';
-        noteInput.value = '';
+        if (requestedDeliveryDateInput) {
+          requestedDeliveryDateInput.value = '';
+        }
+        if (noteInput) {
+          noteInput.value = '';
+        }
         if (isDropdownMode) {
           syncInputsToSelectedLocation();
         }
@@ -873,7 +1045,14 @@
 
         if (draft.payload && typeof draft.payload === 'object') {
           purchaseOrderInput.value = draft.payload.purchase_order_number || '';
-          noteInput.value = draft.payload.note || '';
+          if (requestedDeliveryDateInput) {
+            const draftRequestedDate = String(draft.payload.requested_delivery_date || '');
+            requestedDeliveryDateInput.value =
+              draftRequestedDate && draftRequestedDate >= todayIsoDate ? draftRequestedDate : '';
+          }
+          if (noteInput) {
+            noteInput.value = draft.payload.note || '';
+          }
         }
       };
 
@@ -1044,12 +1223,12 @@
                 <span class="b2b-russo-order-form__summary-item-name">${escapeHtml(entry.name)}</span>
                 <span class="b2b-russo-order-form__summary-item-meta">
                   <span>Qty: ${entry.quantity}</span>
-                  <span>${formatMoney(root, entry.totalCents)}</span>
+                  ${showPricing ? `<span>${formatMoney(root, entry.totalCents)}</span>` : ''}
                 </span>
                 <span class="b2b-russo-order-form__summary-caret" aria-hidden="true">▶</span>
               </summary>
               ${
-                entry.freightCents > 0
+                showPricing && entry.freightCents > 0
                   ? `<p class="b2b-russo-order-form__summary-item-freight">Freight: ${formatMoney(
                       root,
                       entry.freightCents
@@ -1072,6 +1251,46 @@
       };
 
       const updateTotals = () => {
+        if (isLocationRowsMode) {
+          let grandTotalCents = 0;
+
+          locationRows.forEach((locationRow) => {
+            const locationId = locationRow.dataset.locationId;
+            const locationRowInputs = qtyInputs.filter((input) => input.dataset.locationId === locationId);
+            const locationFreightTotalCents = locationRowInputs.reduce((sum, input) => {
+              const qty = Number(input.value || 0);
+              if (qty <= 0) return sum;
+              return sum + qty * getFreightCentsForLocation(input.dataset.locationId);
+            }, 0);
+            const locationTotalCents = locationRowInputs.reduce((sum, input) => {
+              const qty = Number(input.value || 0);
+              if (qty <= 0) return sum;
+              const unitPriceCents = Number(input.dataset.unitPriceCents || 0);
+              const freightCents = getFreightCentsForLocation(input.dataset.locationId);
+              return sum + qty * (unitPriceCents + freightCents);
+            }, 0);
+
+            grandTotalCents += locationTotalCents;
+
+            const locationFreightTarget = locationRow.querySelector('[data-location-row-freight]');
+            if (locationFreightTarget) {
+              locationFreightTarget.textContent = formatMoney(root, locationFreightTotalCents);
+            }
+
+            const locationTotalTarget = locationRow.querySelector('[data-location-row-total]');
+            if (locationTotalTarget) {
+              locationTotalTarget.textContent = formatMoney(root, locationTotalCents);
+            }
+          });
+
+          const grandTotalTarget = root.querySelector('[data-grand-total]');
+          if (grandTotalTarget) {
+            grandTotalTarget.textContent = formatMoney(root, grandTotalCents);
+          }
+
+          return;
+        }
+
         let grandTotalCents = 0;
 
         rows.forEach((row) => {
@@ -1137,12 +1356,16 @@
               product_title: input.dataset.productTitle,
               location_id: Number(input.dataset.locationId),
               location_name: input.dataset.locationName,
-              unit_price_cents: Number(input.closest('[data-order-form-row]')?.dataset.unitPriceCents || 0),
+              unit_price_cents: Number(
+                input.dataset.unitPriceCents || input.closest('[data-order-form-row]')?.dataset.unitPriceCents || 0
+              ),
               freight_charge_per_quantity_cents: getFreightCentsForLocation(input.dataset.locationId),
               freight_charge_per_quantity: getFreightCentsForLocation(input.dataset.locationId) / 100,
               line_total_cents:
                 quantity *
-                (Number(input.closest('[data-order-form-row]')?.dataset.unitPriceCents || 0) +
+                (Number(
+                  input.dataset.unitPriceCents || input.closest('[data-order-form-row]')?.dataset.unitPriceCents || 0
+                ) +
                   getFreightCentsForLocation(input.dataset.locationId)),
               quantity,
             });
@@ -1155,8 +1378,10 @@
             window.ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page
               ? ShopifyAnalytics.meta.page.customerId
               : null,
+          customer_email: root.dataset.customerEmail || null,
           purchase_order_number: purchaseOrderInput.value.trim(),
-          note: noteInput.value.trim(),
+          requested_delivery_date: requestedDeliveryDateInput ? requestedDeliveryDateInput.value : '',
+          note: noteInput ? noteInput.value.trim() : '',
           includes_location_freight_charge: useFreightCharge,
           lines,
         };
@@ -1191,7 +1416,17 @@
           return;
         }
 
-        if (event.target === purchaseOrderInput || event.target === noteInput) {
+        if (
+          event.target === purchaseOrderInput ||
+          (requestedDeliveryDateInput && event.target === requestedDeliveryDateInput) ||
+          (noteInput && event.target === noteInput)
+        ) {
+          if (requestedDeliveryDateInput && event.target === requestedDeliveryDateInput) {
+            const pickedDate = String(requestedDeliveryDateInput.value || '');
+            if (pickedDate && pickedDate < todayIsoDate) {
+              requestedDeliveryDateInput.value = '';
+            }
+          }
           writePayload();
         }
       });
@@ -1277,6 +1512,12 @@
       updateTotals();
     });
   })();
+
+  document.addEventListener('input', (e) => {
+    if (e.target.classList.contains('b2b-russo-order-form__qty')) {
+      e.target.value = Math.max(0, Math.floor(Number(e.target.value) || 0));
+    }
+  });
 {% endjavascript %}
 
 {% schema %}
@@ -1319,6 +1560,10 @@
         {
           "value": "dropdown",
           "label": "Single dropdown"
+        },
+        {
+          "value": "location_rows",
+          "label": "Locations as rows"
         }
       ]
     },
@@ -1343,6 +1588,12 @@
       "label": "Company location freight metafield (namespace.key)",
       "default": "custom.salt_zone_charge",
       "info": "Optional decimal metafield on company location. Example: custom.salt_zone_charge"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_note",
+      "label": "Allow Note",
+      "info": "Specifies if the note field will be displayed for use."
     },
     {
       "type": "text",
@@ -1390,6 +1641,12 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "show_pricing",
+      "label": "Show Pricing",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "column_product_label",
       "label": "Product column label",
@@ -1427,18 +1684,6 @@
     },
     {
       "type": "text",
-      "id": "submit_confirm_cancel_label",
-      "label": "Submit confirmation cancel label",
-      "default": "Cancel"
-    },
-    {
-      "type": "text",
-      "id": "submit_confirm_submit_label",
-      "label": "Submit confirmation submit label",
-      "default": "Confirm submit"
-    },
-    {
-      "type": "text",
       "id": "fake_submit_endpoint",
       "label": "Submit endpoint URL",
       "default": "/apps/russoAPI/v1/submit-order-form"
@@ -1462,28 +1707,10 @@
       "default": "Could not submit order. Please try again."
     },
     {
-      "type": "text",
-      "id": "generate_payload_label",
-      "label": "Generate payload button label",
-      "default": "Generate payload"
-    },
-    {
-      "type": "text",
-      "id": "copy_payload_label",
-      "label": "Copy payload button label",
-      "default": "Copy payload"
-    },
-    {
       "type": "checkbox",
       "id": "show_developer_tools",
       "label": "Show developer tools (JSON payload)",
       "default": true
-    },
-    {
-      "type": "text",
-      "id": "payload_label",
-      "label": "Payload textarea label",
-      "default": "Payload preview (JSON)"
     },
     {
       "type": "text",
@@ -1496,6 +1723,12 @@
       "id": "purchase_order_label",
       "label": "Purchase order field label",
       "default": "Purchase Order No."
+    },
+    {
+      "type": "text",
+      "id": "requested_delivery_date_disclaimer",
+      "label": "Requested delivery date disclaimer",
+      "default": "Requested delivery date is not guaranteed."
     },
     {
       "type": "text",
