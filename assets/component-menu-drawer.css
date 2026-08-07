@@ -102,6 +102,9 @@ details[open].menu-opening > .menu-drawer__submenu {
   padding: 1.1rem 3rem;
   text-decoration: none;
   font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .menu-drawer summary.menu-drawer__menu-item {
@@ -131,6 +134,22 @@ details[open].menu-opening > .menu-drawer__submenu {
   right: 3rem;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.menu-drawer__item-label {
+  min-width: 0;
+}
+
+.menu-drawer__item-icon {
+  display: none;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-color: rgba(var(--color-foreground), 0.08);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .js .menu-drawer__submenu {
@@ -259,6 +278,32 @@ header-drawer[data-collapsible-layers='true'] .menu-drawer__inner-submenu {
   display: block;
 }
 
+.js header-drawer[data-collapsible-layers='true'] details > summary.menu-drawer__menu-item {
+  position: relative;
+}
+
+.js header-drawer[data-collapsible-layers='true'] details > summary.menu-drawer__menu-item .svg-wrapper {
+  display: none;
+}
+
+.js header-drawer[data-collapsible-layers='true'] details > summary.menu-drawer__menu-item::after {
+  content: '+';
+  position: absolute;
+  right: 2.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.js header-drawer[data-collapsible-layers='true'] details[open] > summary.menu-drawer__menu-item::after {
+  content: '-';
+}
+
 .js header-drawer[data-collapsible-layers='true'] .menu-drawer__submenu {
   position: static;
   top: auto;
@@ -276,6 +321,44 @@ header-drawer[data-collapsible-layers='true'] .menu-drawer__inner-submenu {
   overflow-y: visible;
 }
 
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__submenu .menu-drawer__menu-item {
+  position: relative;
+  padding-left: 5.8rem;
+}
+
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__submenu .menu-drawer__item-icon {
+  position: absolute;
+  left: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__submenu .menu-drawer__submenu .menu-drawer__menu-item {
+  padding-left: 8.6rem;
+}
+
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__submenu .menu-drawer__submenu .menu-drawer__item-icon {
+  left: 5.8rem;
+}
+
+.js
+  header-drawer[data-collapsible-layers='true']
+  .menu-drawer__submenu
+  .menu-drawer__submenu
+  .menu-drawer__submenu
+  .menu-drawer__menu-item {
+  padding-left: 11.4rem;
+}
+
+.js
+  header-drawer[data-collapsible-layers='true']
+  .menu-drawer__submenu
+  .menu-drawer__submenu
+  .menu-drawer__submenu
+  .menu-drawer__item-icon {
+  left: 8.6rem;
+}
+
 .js header-drawer[data-collapsible-layers='true'] details:not([open]) > .menu-drawer__submenu {
   display: none;
 }
@@ -284,4 +367,130 @@ header-drawer[data-collapsible-layers='true'] .menu-drawer__inner-submenu {
 .js header-drawer[data-collapsible-layers='true'] details[open].menu-opening > .menu-drawer__submenu {
   transform: none;
   visibility: visible;
+}
+
+.menu-drawer__item-icon--parts,.menu-drawer__item-icon--shop-all-parts {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/Parts.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.menu-drawer__item-icon--arbor, .menu-drawer__item-icon--shop-all-arbor {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/Arbor.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.menu-drawer__item-icon--turf,.menu-drawer__item-icon--shop-all-turf {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/Turf.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.menu-drawer__item-icon--irrigation {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/Irrigation.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.menu-drawer__item-icon--trailers, .menu-drawer__item-icon--shop-all-trailers {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/Trailer.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.menu-drawer__item-icon--tractors, .menu-drawer__item-icon--shop-all-tractors {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/tractors-and-vehicles.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.menu-drawer__item-icon--winter-goods,.menu-drawer__item-icon--salt-and-ice-melt-supply {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/De-Icer.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.menu-drawer__item-icon--used-equipment, .menu-drawer__item-icon--shop-all-used-equipment {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/Used_Equipment.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.menu-drawer__item-icon--power-equipment, .menu-drawer__item-icon--shop-all-outdoor-power-equipment {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/OPE.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.menu-drawer__item-icon--supplies-tools,.menu-drawer__item-icon--shop-all-tools-supplies {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/Tools.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.menu-drawer__item-icon--compact-utility-loaders, .menu-drawer__item-icon--shop-all-compact-utility-loaders {
+  display: inline-block;
+  width: 2.2rem;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background-image: url('/cdn/shop/files/COMPACT6.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
