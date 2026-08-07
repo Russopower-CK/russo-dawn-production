@@ -455,6 +455,7 @@ class MenuDrawer extends HTMLElement {
     const detailsElement = summaryElement.parentNode;
     const parentMenuElement = detailsElement.closest('.has-submenu');
     const isOpen = detailsElement.hasAttribute('open');
+    const isCollapsibleLayersDrawer = this.dataset.collapsibleLayers === 'true';
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     function addTrapFocus() {
@@ -470,6 +471,21 @@ class MenuDrawer extends HTMLElement {
         document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
       }
     } else {
+      if (isCollapsibleLayersDrawer) {
+        if (isOpen) {
+          event.preventDefault();
+          this.closeSubmenu(detailsElement);
+          return;
+        }
+
+        setTimeout(() => {
+          detailsElement.classList.add('menu-opening');
+          summaryElement.setAttribute('aria-expanded', true);
+        }, 100);
+
+        return;
+      }
+
       setTimeout(() => {
         detailsElement.classList.add('menu-opening');
         summaryElement.setAttribute('aria-expanded', true);

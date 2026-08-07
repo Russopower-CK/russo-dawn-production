@@ -5,7 +5,10 @@
   {% render 'header-drawer' %}
 {% endcomment %}
 
-<header-drawer data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}">
+<header-drawer
+  data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}"
+  data-collapsible-layers="true"
+>
   <details id="Details-menu-drawer-container" class="menu-drawer-container">
     <summary
       class="header__icon header__icon--menu header__icon--summary link focus-inset"
@@ -288,3 +291,9 @@
     </div>
   </details>
 </header-drawer>
+
+<style>
+  .menu-drawer__inner-submenu {
+    background: rgb(230, 230, 230);
+  }
+</style>

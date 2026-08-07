@@ -241,3 +241,47 @@ details[open].menu-opening > .menu-drawer__submenu {
     transition: none !important;
   }
 }
+
+header-drawer[data-collapsible-layers='true'] .menu-drawer__inner-submenu {
+  height: auto;
+  overflow: visible;
+}
+
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__navigation .submenu-open {
+  visibility: visible;
+}
+
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__menu-item .icon-arrow {
+  display: none;
+}
+
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__menu-item .icon-caret {
+  display: block;
+}
+
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__submenu {
+  position: static;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  width: 100%;
+  z-index: auto;
+  transform: none;
+  visibility: visible;
+  background-color: transparent;
+}
+
+.js header-drawer[data-collapsible-layers='true'] .menu-drawer__submenu .menu-drawer__submenu {
+  overflow-y: visible;
+}
+
+.js header-drawer[data-collapsible-layers='true'] details:not([open]) > .menu-drawer__submenu {
+  display: none;
+}
+
+.js header-drawer[data-collapsible-layers='true'] details[open] > .menu-drawer__submenu,
+.js header-drawer[data-collapsible-layers='true'] details[open].menu-opening > .menu-drawer__submenu {
+  transform: none;
+  visibility: visible;
+}

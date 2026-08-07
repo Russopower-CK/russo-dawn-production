@@ -1,0 +1,81 @@
+{% comment %}
+  Russo order quantity input control with plus/minus buttons.
+
+  Accepts:
+  - input_id: {String} required
+  - label_text: {String} required
+  - input_classes: {String} optional
+  - product_id: {String|Number} required
+  - product_handle: {String} required
+  - product_title: {String} required
+  - line_key: {String} required
+  - line_title: {String} required
+  - variant_id: {String|Number} optional
+  - variant_sku: {String} optional
+  - unit_price_cents: {String|Number} optional
+  - location_id: {String|Number} required
+  - location_name: {String} required
+  - location_freight_cents: {String|Number} optional
+  - min: {String|Number} optional (default 0)
+  - step: {String|Number} optional (default 1)
+  - value: {String|Number} optional (default 0)
+  - pattern: {String} optional
+  - inputmode: {String} optional
+{% endcomment %}
+
+{%- liquid
+  assign resolved_input_classes = 'b2b-russo-order-form__qty'
+  if input_classes != blank
+    assign resolved_input_classes = resolved_input_classes | append: ' ' | append: input_classes
+  endif
+  assign resolved_min = min | default: 0
+  assign resolved_step = step | default: 1
+  assign resolved_value = value | default: 0
+-%}
+
+<div class="b2b-russo-order-form__qty-control" data-qty-control>
+  <button
+    type="button"
+    class="b2b-russo-order-form__qty-button"
+    data-qty-action="decrease"
+    aria-label="Decrease quantity for {{ label_text | escape }}"
+  >
+    -
+  </button>
+
+  <label class="visually-hidden" for="{{ input_id }}">{{ label_text }}</label>
+  <input
+    id="{{ input_id }}"
+    class="{{ resolved_input_classes }}"
+    type="number"
+    min="{{ resolved_min }}"
+    step="{{ resolved_step }}"
+    value="{{ resolved_value }}"
+    {% if pattern != blank %}
+      pattern="{{ pattern }}"
+    {% endif %}
+    {% if inputmode != blank %}
+      inputmode="{{ inputmode }}"
+    {% endif %}
+    data-product-id="{{ product_id }}"
+    data-product-handle="{{ product_handle }}"
+    data-product-title="{{ product_title | escape }}"
+    data-line-key="{{ line_key }}"
+    data-line-title="{{ line_title | escape }}"
+    data-variant-id="{{ variant_id }}"
+    data-variant-sku="{{ variant_sku | escape }}"
+    data-unit-price-cents="{{ unit_price_cents }}"
+    data-location-id="{{ location_id }}"
+    data-location-name="{{ location_name | escape }}"
+    data-location-freight-cents="{{ location_freight_cents }}"
+  >
+
+  <button
+    type="button"
+    class="b2b-russo-order-form__qty-button"
+    data-qty-action="increase"
+    aria-label="Increase quantity for {{ label_text | escape }}"
+  >
+    +
+  </button>
+</div>
