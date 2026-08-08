@@ -60,15 +60,33 @@
 
     {% comment %} ===== CALCULATOR TABLE ===== {% endcomment %}
     <table class="program-table">
+      <colgroup>
+        <col class="col-round">
+        <col class="col-item">
+        <col class="col-coverage">
+        <col class="col-nitrogen">
+        <col class="col-price">
+        <col class="col-lbs">
+        <col class="col-bags">
+        <col class="col-cost">
+      </colgroup>
       <thead>
         <tr>
           <th>Round</th>
           <th>Item #</th>
-          <th>Product</th>
           <th>Bag Coverage (sq ft)</th>
           <th>% of Nitrogen</th>
           <th>Price per Bag</th>
-          <th>LBS of Nitrogen per 1,000 sq ft</th>
+          <th>
+            <span class="lbs-header-full"
+              >LBS of Nitrogen<br>
+              per 1,000 sq ft</span
+            >
+            <span class="lbs-header-compact"
+              >LBS N<br>
+              / 1,000 sq ft</span
+            >
+          </th>
           <th>Bags Needed</th>
           <th>Cost per Acre</th>
         </tr>
@@ -81,44 +99,56 @@
             <small>(March - April)</small>
           </td>
           <td class="item-cell">
-            <div class="select">
-              <select class="product-select select__select" id="product-select-1" onchange="updateProduct(1)">
-                <option value="">-- Select Product --</option>
-                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                  {%- for product in calculator_collection.products -%}
-                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                    {% capture volume_pricing_json %}
-                    [
-                      {% for price_break in selected_variant.quantity_price_breaks %}
-                        {
-                          "minimum_quantity": {{ price_break.minimum_quantity }},
-                          "price": {{ price_break.price }}
-                        }
-                        {% unless forloop.last %},{% endunless %}
-                      {% endfor %}
-                    ]
-                  {% endcapture %}
-                    <option
-                      value="{{ selected_variant.sku | default: selected_variant.id }}"
-                      data-name="{{ product.title | escape }}"
-                      data-url="{{ product.url }}"
-                      data-product-id="{{ product.id }}"
-                      data-price="{{ selected_variant.price | times: 0.01 }}"
-                      data-coverage="{{ product_coverage | default: '' }}"
-                      data-nitrogen="{{ product_nitrogen | default: '' }}"
-                      data-volume-pricing="{{ volume_pricing_json | strip_newlines | escape }}"
-                    >
-                      {{ product.title }}
-                    </option>
-                  {%- endfor -%}
-                {%- endif -%}
-              </select>
-              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            <div class="item-cell-controls">
+              <div class="select">
+                <select class="product-select select__select" id="product-select-1" onchange="updateProduct(1)">
+                  <option value="">-- Select Product --</option>
+                  {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                    {%- for product in calculator_collection.products -%}
+                      {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                      {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                      {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                      {% capture volume_pricing_json %}
+                      [
+                        {% for price_break in selected_variant.quantity_price_breaks %}
+                          {
+                            "minimum_quantity": {{ price_break.minimum_quantity }},
+                            "price": {{ price_break.price }}
+                          }
+                          {% unless forloop.last %},{% endunless %}
+                        {% endfor %}
+                      ]
+                    {% endcapture %}
+                      <option
+                        value="{{ selected_variant.sku | default: selected_variant.id }}"
+                        data-name="{{ product.title | escape }}"
+                        data-url="{{ product.url }}"
+                        data-product-id="{{ product.id }}"
+                        data-price="{{ selected_variant.price | times: 0.01 }}"
+                        data-coverage="{{ product_coverage | default: '' }}"
+                        data-nitrogen="{{ product_nitrogen | default: '' }}"
+                        data-volume-pricing="{{ volume_pricing_json | strip_newlines | escape }}"
+                      >
+                        {{ product.title }}
+                      </option>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </select>
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </div>
+              <a
+                href="#"
+                class="item-view-link"
+                id="product-link-1"
+                data-view-link
+                aria-disabled="true"
+                tabindex="-1"
+                onclick="if (this.getAttribute('aria-disabled') === 'true') { event.preventDefault(); }"
+              >
+                View
+              </a>
             </div>
           </td>
-          <td class="product-name" id="product-name-1">--</td>
           <td class="bag-coverage" id="coverage-1">--</td>
           <td class="nitrogen-value" id="nitrogen-1">--</td>
           <td>
@@ -136,32 +166,44 @@
             <small>(May - June)</small>
           </td>
           <td class="item-cell">
-            <div class="select">
-              <select class="product-select select__select" id="product-select-2" onchange="updateProduct(2)">
-                <option value="">-- Select Product --</option>
-                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                  {%- for product in calculator_collection.products -%}
-                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                    <option
-                      value="{{ selected_variant.sku | default: selected_variant.id }}"
-                      data-name="{{ product.title | escape }}"
-                      data-url="{{ product.url }}"
-                      data-product-id="{{ product.id }}"
-                      data-price="{{ selected_variant.price | times: 0.01 }}"
-                      data-coverage="{{ product_coverage | default: '' }}"
-                      data-nitrogen="{{ product_nitrogen | default: '' }}"
-                    >
-                      {{ product.title }}
-                    </option>
-                  {%- endfor -%}
-                {%- endif -%}
-              </select>
-              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            <div class="item-cell-controls">
+              <div class="select">
+                <select class="product-select select__select" id="product-select-2" onchange="updateProduct(2)">
+                  <option value="">-- Select Product --</option>
+                  {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                    {%- for product in calculator_collection.products -%}
+                      {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                      {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                      {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                      <option
+                        value="{{ selected_variant.sku | default: selected_variant.id }}"
+                        data-name="{{ product.title | escape }}"
+                        data-url="{{ product.url }}"
+                        data-product-id="{{ product.id }}"
+                        data-price="{{ selected_variant.price | times: 0.01 }}"
+                        data-coverage="{{ product_coverage | default: '' }}"
+                        data-nitrogen="{{ product_nitrogen | default: '' }}"
+                      >
+                        {{ product.title }}
+                      </option>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </select>
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </div>
+              <a
+                href="#"
+                class="item-view-link"
+                id="product-link-2"
+                data-view-link
+                aria-disabled="true"
+                tabindex="-1"
+                onclick="if (this.getAttribute('aria-disabled') === 'true') { event.preventDefault(); }"
+              >
+                View
+              </a>
             </div>
           </td>
-          <td class="product-name" id="product-name-2">--</td>
           <td class="bag-coverage" id="coverage-2">--</td>
           <td class="nitrogen-value" id="nitrogen-2">--</td>
           <td>
@@ -179,32 +221,44 @@
             <small>(June - July)</small>
           </td>
           <td class="item-cell">
-            <div class="select">
-              <select class="product-select select__select" id="product-select-3" onchange="updateProduct(3)">
-                <option value="">-- Select Product --</option>
-                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                  {%- for product in calculator_collection.products -%}
-                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                    <option
-                      value="{{ selected_variant.sku | default: selected_variant.id }}"
-                      data-name="{{ product.title | escape }}"
-                      data-url="{{ product.url }}"
-                      data-product-id="{{ product.id }}"
-                      data-price="{{ selected_variant.price | times: 0.01 }}"
-                      data-coverage="{{ product_coverage | default: '' }}"
-                      data-nitrogen="{{ product_nitrogen | default: '' }}"
-                    >
-                      {{ product.title }}
-                    </option>
-                  {%- endfor -%}
-                {%- endif -%}
-              </select>
-              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            <div class="item-cell-controls">
+              <div class="select">
+                <select class="product-select select__select" id="product-select-3" onchange="updateProduct(3)">
+                  <option value="">-- Select Product --</option>
+                  {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                    {%- for product in calculator_collection.products -%}
+                      {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                      {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                      {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                      <option
+                        value="{{ selected_variant.sku | default: selected_variant.id }}"
+                        data-name="{{ product.title | escape }}"
+                        data-url="{{ product.url }}"
+                        data-product-id="{{ product.id }}"
+                        data-price="{{ selected_variant.price | times: 0.01 }}"
+                        data-coverage="{{ product_coverage | default: '' }}"
+                        data-nitrogen="{{ product_nitrogen | default: '' }}"
+                      >
+                        {{ product.title }}
+                      </option>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </select>
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </div>
+              <a
+                href="#"
+                class="item-view-link"
+                id="product-link-3"
+                data-view-link
+                aria-disabled="true"
+                tabindex="-1"
+                onclick="if (this.getAttribute('aria-disabled') === 'true') { event.preventDefault(); }"
+              >
+                View
+              </a>
             </div>
           </td>
-          <td class="product-name" id="product-name-3">--</td>
           <td class="bag-coverage" id="coverage-3">--</td>
           <td class="nitrogen-value" id="nitrogen-3">--</td>
           <td>
@@ -222,32 +276,44 @@
             <small>(August - September)</small>
           </td>
           <td class="item-cell">
-            <div class="select">
-              <select class="product-select select__select" id="product-select-4" onchange="updateProduct(4)">
-                <option value="">-- Select Product --</option>
-                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                  {%- for product in calculator_collection.products -%}
-                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                    <option
-                      value="{{ selected_variant.sku | default: selected_variant.id }}"
-                      data-name="{{ product.title | escape }}"
-                      data-url="{{ product.url }}"
-                      data-product-id="{{ product.id }}"
-                      data-price="{{ selected_variant.price | times: 0.01 }}"
-                      data-coverage="{{ product_coverage | default: '' }}"
-                      data-nitrogen="{{ product_nitrogen | default: '' }}"
-                    >
-                      {{ product.title }}
-                    </option>
-                  {%- endfor -%}
-                {%- endif -%}
-              </select>
-              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            <div class="item-cell-controls">
+              <div class="select">
+                <select class="product-select select__select" id="product-select-4" onchange="updateProduct(4)">
+                  <option value="">-- Select Product --</option>
+                  {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                    {%- for product in calculator_collection.products -%}
+                      {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                      {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                      {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                      <option
+                        value="{{ selected_variant.sku | default: selected_variant.id }}"
+                        data-name="{{ product.title | escape }}"
+                        data-url="{{ product.url }}"
+                        data-product-id="{{ product.id }}"
+                        data-price="{{ selected_variant.price | times: 0.01 }}"
+                        data-coverage="{{ product_coverage | default: '' }}"
+                        data-nitrogen="{{ product_nitrogen | default: '' }}"
+                      >
+                        {{ product.title }}
+                      </option>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </select>
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </div>
+              <a
+                href="#"
+                class="item-view-link"
+                id="product-link-4"
+                data-view-link
+                aria-disabled="true"
+                tabindex="-1"
+                onclick="if (this.getAttribute('aria-disabled') === 'true') { event.preventDefault(); }"
+              >
+                View
+              </a>
             </div>
           </td>
-          <td class="product-name" id="product-name-4">--</td>
           <td class="bag-coverage" id="coverage-4">--</td>
           <td class="nitrogen-value" id="nitrogen-4">--</td>
           <td>
@@ -265,32 +331,44 @@
             <small>(October - November)</small>
           </td>
           <td class="item-cell">
-            <div class="select">
-              <select class="product-select select__select" id="product-select-5" onchange="updateProduct(5)">
-                <option value="">-- Select Product --</option>
-                {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
-                  {%- for product in calculator_collection.products -%}
-                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
-                    {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
-                    {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
-                    <option
-                      value="{{ selected_variant.sku | default: selected_variant.id }}"
-                      data-name="{{ product.title | escape }}"
-                      data-url="{{ product.url }}"
-                      data-product-id="{{ product.id }}"
-                      data-price="{{ selected_variant.price | times: 0.01 }}"
-                      data-coverage="{{ product_coverage | default: '' }}"
-                      data-nitrogen="{{ product_nitrogen | default: '' }}"
-                    >
-                      {{ product.title }}
-                    </option>
-                  {%- endfor -%}
-                {%- endif -%}
-              </select>
-              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            <div class="item-cell-controls">
+              <div class="select">
+                <select class="product-select select__select" id="product-select-5" onchange="updateProduct(5)">
+                  <option value="">-- Select Product --</option>
+                  {%- if calculator_collection != blank and calculator_collection.products_count > 0 -%}
+                    {%- for product in calculator_collection.products -%}
+                      {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                      {%- assign product_coverage = selected_variant.metafields.fertilizer.bag_coverage_sq_ft.value -%}
+                      {%- assign product_nitrogen = selected_variant.metafields.fertilizer.nitrogen.value -%}
+                      <option
+                        value="{{ selected_variant.sku | default: selected_variant.id }}"
+                        data-name="{{ product.title | escape }}"
+                        data-url="{{ product.url }}"
+                        data-product-id="{{ product.id }}"
+                        data-price="{{ selected_variant.price | times: 0.01 }}"
+                        data-coverage="{{ product_coverage | default: '' }}"
+                        data-nitrogen="{{ product_nitrogen | default: '' }}"
+                      >
+                        {{ product.title }}
+                      </option>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </select>
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </div>
+              <a
+                href="#"
+                class="item-view-link"
+                id="product-link-5"
+                data-view-link
+                aria-disabled="true"
+                tabindex="-1"
+                onclick="if (this.getAttribute('aria-disabled') === 'true') { event.preventDefault(); }"
+              >
+                View
+              </a>
             </div>
           </td>
-          <td class="product-name" id="product-name-5">--</td>
           <td class="bag-coverage" id="coverage-5">--</td>
           <td class="nitrogen-value" id="nitrogen-5">--</td>
           <td>
@@ -305,7 +383,7 @@
       {% comment %} ===== TOTALS ROW ===== {% endcomment %}
       <tfoot>
         <tr class="totals-row">
-          <td colspan="6"><strong>Annual Totals</strong></td>
+          <td colspan="5"><strong>Annual Totals</strong></td>
           <td id="total-lbs-nitrogen">
             --<br>
             <small>Annual lbs of Nitrogen</small>
@@ -379,14 +457,19 @@
       const productId = selectedOption.dataset.productId;
       const productUrl = selectedOption.dataset.url;
       const priceTemplate = document.getElementById(`price-template-${productId}`);
+      const productLink = document.getElementById(`product-link-${round}`);
 
       // Update display fields
-      if (productUrl) {
-        document.getElementById(`product-name-${round}`).innerHTML = `<a href="${productUrl}">${
-          selectedOption.dataset.name || '--'
-        }</a>`;
-      } else {
-        document.getElementById(`product-name-${round}`).textContent = selectedOption.dataset.name || '--';
+      if (productLink) {
+        if (productUrl) {
+          productLink.href = productUrl;
+          productLink.setAttribute('aria-disabled', 'false');
+          productLink.removeAttribute('tabindex');
+        } else {
+          productLink.href = '#';
+          productLink.setAttribute('aria-disabled', 'true');
+          productLink.setAttribute('tabindex', '-1');
+        }
       }
       document.getElementById(`coverage-${round}`).textContent = Number.isFinite(coverageValue)
         ? coverageValue.toLocaleString()
@@ -409,7 +492,12 @@
       roundData[round].price = priceValue;
     } else {
       // Clear if no selection
-      document.getElementById(`product-name-${round}`).textContent = '--';
+      const productLink = document.getElementById(`product-link-${round}`);
+      if (productLink) {
+        productLink.href = '#';
+        productLink.setAttribute('aria-disabled', 'true');
+        productLink.setAttribute('tabindex', '-1');
+      }
       document.getElementById(`coverage-${round}`).textContent = '--';
       document.getElementById(`nitrogen-${round}`).textContent = '--';
       document.getElementById(`price-display-${round}`).textContent = '--';
@@ -571,6 +659,36 @@
       }
 
       roundLabelCell.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    }
+  }
+
+  function applyMobileFieldCaptions() {
+    const headerCells = Array.from(document.querySelectorAll('.program-table thead th'));
+    if (!headerCells.length) return;
+
+    const headerLabels = headerCells.map((cell) => cell.textContent.replace(/\s+/g, ' ').trim());
+
+    document.querySelectorAll('.program-table .round-row').forEach((row) => {
+      Array.from(row.cells).forEach((cell, index) => {
+        const label = headerLabels[index] || '';
+        if (label) {
+          cell.setAttribute('data-label', label);
+        }
+      });
+    });
+
+    const totalsRow = document.querySelector('.program-table .totals-row');
+    if (!totalsRow) return;
+
+    const totalsCells = Array.from(totalsRow.cells);
+    if (totalsCells[1]) {
+      totalsCells[1].setAttribute('data-label', 'Annual lbs of Nitrogen');
+    }
+    if (totalsCells[2]) {
+      totalsCells[2].setAttribute('data-label', 'Annual bags needed');
+    }
+    if (totalsCells[3]) {
+      totalsCells[3].setAttribute('data-label', 'Annual cost');
     }
   }
 
@@ -789,6 +907,8 @@
       });
     }
 
+    applyMobileFieldCaptions();
+
     expandAllRoundsForDesktop();
 
     window.addEventListener('resize', function () {
@@ -825,10 +945,39 @@
     margin: 0 auto;
     padding: 5px;
   }
-  .program-table th:nth-child(1),
-  .program-table td:nth-child(1) {
-    width: 10%;
+
+  .program-table col.col-round {
+    width: 8.5%;
   }
+
+  .program-table col.col-item {
+    width: 40%;
+  }
+
+  .program-table col.col-coverage {
+    width: 8.5%;
+  }
+
+  .program-table col.col-nitrogen {
+    width: 6.5%;
+  }
+
+  .program-table col.col-price {
+    width: 8%;
+  }
+
+  .program-table col.col-lbs {
+    width: 11.5%;
+  }
+
+  .program-table col.col-bags {
+    width: 8%;
+  }
+
+  .program-table col.col-cost {
+    width: 9%;
+  }
+
   .fertilizer-calculator h1 {
     color: #2c5530;
     text-align: center;
@@ -919,6 +1068,12 @@
     background: #2c5530;
     color: white;
     font-weight: bold;
+    white-space: normal;
+    line-height: 1.25;
+  }
+
+  .program-table .lbs-header-compact {
+    display: none;
   }
 
   .program-table .round-label {
@@ -946,7 +1101,18 @@
   }
 
   .program-table .item-cell {
-    width: 24%;
+    width: auto;
+  }
+
+  .program-table .item-cell-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .program-table .item-cell-controls .select {
+    flex: 1;
+    min-width: 0;
   }
 
   .program-table .product-select {
@@ -962,6 +1128,21 @@
 
   .program-table .product-select option {
     white-space: nowrap;
+  }
+
+  .program-table .item-view-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2c5530;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+
+  .program-table .item-view-link[aria-disabled='true'] {
+    color: #8a8a8a;
+    pointer-events: none;
+    text-decoration: none;
+    cursor: default;
   }
 
   .program-table input {
@@ -999,12 +1180,6 @@
     text-align: center;
   }
 
-  .program-table .product-name {
-    max-width: 200px;
-    font-size: 12px;
-    text-align: left;
-  }
-
   .program-table .lbs-nitrogen,
   .program-table .bags-needed,
   .program-table .cost-per-acre {
@@ -1030,17 +1205,96 @@
   /* ===== TABLET: horizontal scroll ===== */
   @media (max-width: 1200px) {
     .program-table {
-      font-size: 12px;
-      display: block;
-      overflow-x: auto;
+      font-size: 11px;
+      display: table;
+      table-layout: fixed;
     }
+
     .program-table th,
     .program-table td {
-      padding: 6px;
+      padding: 5px 4px;
+    }
+
+    .program-table col.col-round {
+      width: 8%;
+    }
+
+    .program-table col.col-item {
+      width: 44%;
+    }
+
+    .program-table col.col-coverage {
+      width: 8%;
+    }
+
+    .program-table col.col-nitrogen {
+      width: 6%;
+    }
+
+    .program-table col.col-price {
+      width: 7%;
+    }
+
+    .program-table col.col-lbs {
+      width: 10%;
+    }
+
+    .program-table col.col-bags {
+      width: 8%;
+    }
+
+    .program-table col.col-cost {
+      width: 9%;
+    }
+
+    .program-table .lbs-header-full {
+      display: none;
+    }
+
+    .program-table .lbs-header-compact {
+      display: inline;
     }
 
     .program-table .item-cell {
       width: auto;
+    }
+
+    .program-table .item-cell-controls {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 1050px) {
+    .program-table col.col-round {
+      width: 8%;
+    }
+
+    .program-table col.col-item {
+      width: 47%;
+    }
+
+    .program-table col.col-coverage {
+      width: 7%;
+    }
+
+    .program-table col.col-nitrogen {
+      width: 5.5%;
+    }
+
+    .program-table col.col-price {
+      width: 6.5%;
+    }
+
+    .program-table col.col-lbs {
+      width: 9%;
+    }
+
+    .program-table col.col-bags {
+      width: 7.5%;
+    }
+
+    .program-table col.col-cost {
+      width: 9.5%;
     }
   }
 
@@ -1163,9 +1417,8 @@
       width: auto;
     }
 
-    .program-table .product-name {
-      max-width: 100%;
-      text-align: right;
+    .program-table .item-view-link {
+      font-size: 13px;
     }
 
     /* Calculated output cells */
@@ -1207,6 +1460,10 @@
       color: #a5d6a7;
       text-align: left;
       flex: 1;
+    }
+
+    .program-table .totals-row td:not(:first-child) small {
+      display: none;
     }
 
     .program-table .totals-row td:first-child::before {
