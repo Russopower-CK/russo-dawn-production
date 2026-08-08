@@ -8,6 +8,53 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "russo_multi_location_order_form_ARhmTT": {
+      "type": "russo-multi-location-order-form",
+      "name": "Russo Multi-Location Form",
+      "settings": {
+        "form_configuration_entry": "bulk-salt-order-form",
+        "heading": "Russo Multi-Location Order Form",
+        "description": "Select quantities per destination location, then generate the JSON payload.",
+        "source_collection": "",
+        "location_input_mode": "location_rows",
+        "location_column_threshold": 3,
+        "enable_location_freight_charge": false,
+        "location_freight_metafield": "custom.salt_zone_charge",
+        "allow_note": false,
+        "restricted_order_form": false,
+        "location_selector_label": "Destination location",
+        "quantity_column_label": "Quantity",
+        "summary_title": "Location Order Summary",
+        "summary_empty_message": "No quantities selected yet.",
+        "products_per_page": 20,
+        "show_product_image": true,
+        "show_sku": true,
+        "show_pricing": true,
+        "column_product_label": "Product",
+        "column_sku_label": "SKU",
+        "table_aria_label": "B2B order form quantity table",
+        "submit_button_label": "Submit order",
+        "submit_confirm_title": "Submit order?",
+        "submit_confirm_message": "Are you sure you want to submit this order?",
+        "fake_submit_endpoint": "/apps/russoAPI/v1/submit-order-form",
+        "submit_in_progress_message": "Submitting order...",
+        "submit_success_message": "Order submitted. Draft cleared.",
+        "submit_error_message": "Could not submit order. Please try again.",
+        "show_developer_tools": false,
+        "order_total_label": "Order total",
+        "purchase_order_label": "Purchase Order No.",
+        "requested_delivery_date_disclaimer": "Requested delivery date is not guaranteed.",
+        "note_label": "Note",
+        "login_required_message": "Please log in with your customer account to access this form.",
+        "b2b_only_message": "This order form is only available for B2B customers.",
+        "missing_collection_message": "Select a collection in section settings to load products.",
+        "missing_locations_message": "No company locations are available for your customer account.",
+        "restricted_order_form_message": "Your company is not authorized to access this order form."
+      }
+    }
+  },
+  "order": [
+    "russo_multi_location_order_form_ARhmTT"
+  ]
 }
