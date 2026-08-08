@@ -1,7 +1,12 @@
 <link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link
+  rel="stylesheet"
+  href="{{ 'component-cart-notification.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
 {{ 'russo-preferred-store.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'russo-preferred-store-entry.js' | asset_url }}" defer="defer"></script>
 
@@ -198,6 +203,12 @@
       margin-right: auto;
       text-align: center;
     }
+    .header__icon--menu .icon{
+      position: relative;
+    }
+    .header__custom-promo-image{
+      width: 50%;
+    }
 
     .header--mobile-center .header__heading-logo-wrapper {
       margin-left: auto;
@@ -225,7 +236,9 @@
 -%}
 
 <{{ header_tag }}
-  {% if header_tag == 'sticky-header' %}data-sticky-type="{{ section.settings.sticky_header_type }}"{% endif %}
+  {% if header_tag == 'sticky-header' %}
+    data-sticky-type="{{ section.settings.sticky_header_type }}"
+  {% endif %}
   class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}"
 >
   {%- liquid
@@ -283,7 +296,18 @@
                 {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
                 {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
                 {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-                {{ settings.logo | image_url: width: 600 | image_tag: class: 'header__heading-logo motion-reduce', widths: widths, height: logo_height, width: settings.logo_width, alt: logo_alt, sizes: sizes, preload: true }}
+                {{
+                  settings.logo
+                  | image_url: width: 600
+                  | image_tag:
+                    class: 'header__heading-logo motion-reduce',
+                    widths: widths,
+                    height: logo_height,
+                    width: settings.logo_width,
+                    alt: logo_alt,
+                    sizes: sizes,
+                    preload: true
+                }}
               </div>
             {%- else -%}
               <span class="h2">{{ shop.name }}</span>
@@ -332,7 +356,18 @@
               {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
               {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
               {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-              {{ settings.logo | image_url: width: 600 | image_tag: class: 'header__heading-logo', widths: widths, height: logo_height, width: settings.logo_width, alt: logo_alt, sizes: sizes, preload: true }}
+              {{
+                settings.logo
+                | image_url: width: 600
+                | image_tag:
+                  class: 'header__heading-logo',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+              }}
             </div>
           {%- else -%}
             <span class="h2">{{ shop.name }}</span>
@@ -465,7 +500,13 @@
                             aria-expanded="false"
                             aria-controls="HeaderMenu-MenuList-{{ block.id }}-{{ top_level_index }}"
                           >
-                            <span{% if link.child_active %} class="header__active-menu-item"{% endif %}>{{- link.title | escape -}}</span>
+                            <span
+                              {% if link.child_active %}
+                                class="header__active-menu-item"
+                              {% endif %}
+                            >
+                              {{- link.title | escape -}}
+                            </span>
                             {{- 'icon-caret.svg' | inline_asset_content -}}
                           </summary>
                           <ul
@@ -482,7 +523,9 @@
                                     id="HeaderMenu-{{ block.id }}-{{ link.handle }}-{{ childlink.handle }}-{{ top_level_index }}-{{ child_level_index }}"
                                     href="{{ childlink.url }}"
                                     class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if childlink.current %} list-menu__item--active{% endif %}"
-                                    {% if childlink.current %}aria-current="page"{% endif %}
+                                    {% if childlink.current %}
+                                      aria-current="page"
+                                    {% endif %}
                                   >
                                     {{ childlink.title | escape }}
                                   </a>
@@ -508,7 +551,9 @@
                                             id="HeaderMenu-{{ block.id }}-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}-{{ top_level_index }}-{{ child_level_index }}-{{ forloop.index }}"
                                             href="{{ grandchildlink.url }}"
                                             class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"
-                                            {% if grandchildlink.current %}aria-current="page"{% endif %}
+                                            {% if grandchildlink.current %}
+                                              aria-current="page"
+                                            {% endif %}
                                           >
                                             {{ grandchildlink.title | escape }}
                                           </a>
@@ -527,9 +572,17 @@
                         id="HeaderMenu-{{ block.id }}-{{ link.handle }}-{{ top_level_index }}"
                         href="{{ link.url }}"
                         class="header__menu-item list-menu__item link link--text focus-inset"
-                        {% if link.current %}aria-current="page"{% endif %}
+                        {% if link.current %}
+                          aria-current="page"
+                        {% endif %}
                       >
-                        <span{% if link.current %} class="header__active-menu-item"{% endif %}>{{- link.title | escape -}}</span>
+                        <span
+                          {% if link.current %}
+                            class="header__active-menu-item"
+                          {% endif %}
+                        >
+                          {{- link.title | escape -}}
+                        </span>
                       </a>
                     {%- endif -%}
                   </li>
@@ -544,7 +597,10 @@
 </{{ header_tag }}>
 
 {%- if settings.cart_type == 'notification' -%}
-  {%- render 'cart-notification', color_scheme: section.settings.color_scheme, desktop_menu_type: section.settings.menu_type_desktop -%}
+  {%- render 'cart-notification',
+    color_scheme: section.settings.color_scheme,
+    desktop_menu_type: section.settings.menu_type_desktop
+  -%}
 {%- endif -%}
 
 {% javascript %}

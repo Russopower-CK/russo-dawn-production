@@ -122,7 +122,7 @@
       color: #ddd;
     }
     .testimonial-review {
-      font-size: 15px;
+      font-size: clamp(14px, 1.1vw, 18px);
       line-height: 1.6;
       margin-bottom: 16px;
       color: #333;
@@ -184,6 +184,9 @@
 
       .testimonial-card {
         flex: 0 0 100%;
+      }
+      .testimonial-review {
+      -webkit-line-clamp: 10;
       }
     }
 </style>

@@ -39,7 +39,10 @@
                         class="menu-drawer__menu-item menu-drawer__menu-item--{{ link.handle | handleize }} list-menu__item link link--text focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}"
                         data-menu-handle="{{ link.handle | escape }}"
                       >
-                        <span class="menu-drawer__item-icon menu-drawer__item-icon--{{ link.handle | handleize }}" aria-hidden="true"></span>
+                        <span
+                          class="menu-drawer__item-icon menu-drawer__item-icon--{{ link.handle | handleize }}"
+                          aria-hidden="true"
+                        ></span>
                         <span class="menu-drawer__item-label">{{ link.title | escape }}</span>
                         <span class="svg-wrapper">
                           {{- 'icon-arrow.svg' | inline_asset_content -}}
@@ -70,7 +73,10 @@
                                       aria-current="page"
                                     {% endif %}
                                   >
-                                    <span class="menu-drawer__item-icon menu-drawer__item-icon--{{ childlink.handle | handleize }}" aria-hidden="true"></span>
+                                    <span
+                                      class="menu-drawer__item-icon menu-drawer__item-icon--{{ childlink.handle | handleize }}"
+                                      aria-hidden="true"
+                                    ></span>
                                     <span class="menu-drawer__item-label">{{ childlink.title | escape }}</span>
                                   </a>
                                 {%- else -%}
@@ -83,7 +89,10 @@
                                       class="menu-drawer__menu-item menu-drawer__menu-item--{{ childlink.handle | handleize }} link link--text list-menu__item focus-inset"
                                       data-menu-handle="{{ childlink.handle | escape }}"
                                     >
-                                      <span class="menu-drawer__item-icon menu-drawer__item-icon--{{ childlink.handle | handleize }}" aria-hidden="true"></span>
+                                      <span
+                                        class="menu-drawer__item-icon menu-drawer__item-icon--{{ childlink.handle | handleize }}"
+                                        aria-hidden="true"
+                                      ></span>
                                       <span class="menu-drawer__item-label">{{ childlink.title | escape }}</span>
                                       <span class="svg-wrapper">
                                         {{- 'icon-arrow.svg' | inline_asset_content -}}
@@ -115,8 +124,13 @@
                                                 aria-current="page"
                                               {% endif %}
                                             >
-                                              <span class="menu-drawer__item-icon menu-drawer__item-icon--{{ grandchildlink.handle | handleize }}" aria-hidden="true"></span>
-                                              <span class="menu-drawer__item-label">{{ grandchildlink.title | escape }}</span>
+                                              <span
+                                                class="menu-drawer__item-icon menu-drawer__item-icon--{{ grandchildlink.handle | handleize }}"
+                                                aria-hidden="true"
+                                              ></span>
+                                              <span class="menu-drawer__item-label">
+                                                {{- grandchildlink.title | escape -}}
+                                              </span>
                                             </a>
                                           </li>
                                         {%- endfor -%}
@@ -140,7 +154,10 @@
                         aria-current="page"
                       {% endif %}
                     >
-                      <span class="menu-drawer__item-icon menu-drawer__item-icon--{{ link.handle | handleize }}" aria-hidden="true"></span>
+                      <span
+                        class="menu-drawer__item-icon menu-drawer__item-icon--{{ link.handle | handleize }}"
+                        aria-hidden="true"
+                      ></span>
                       <span class="menu-drawer__item-label">{{ link.title | escape }}</span>
                     </a>
                   {%- endif -%}
