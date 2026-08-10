@@ -102,19 +102,26 @@
               </details>
             </header-menu>
 
-          {%- comment -%}
-            ===================================================================
-            LOCATIONS & THE RUSSO DIFFERENCE NESTED FLYOUT DROPDOWNS
-            ===================================================================
-          {%- endcomment -%}
+            {%- comment -%}
+              ===================================================================
+              LOCATIONS & THE RUSSO DIFFERENCE NESTED FLYOUT DROPDOWNS
+              ===================================================================
+            {%- endcomment -%}
           {%- elsif link.handle == 'locations' or link.handle == 'the-russo-difference' -%}
             <header-menu>
-              <details id="Details-HeaderDropdown-{{ forloop.index }}" class="header-dropdown-menu header-dropdown-menu--flyout">
+              <details
+                id="Details-HeaderDropdown-{{ forloop.index }}"
+                class="header-dropdown-menu header-dropdown-menu--flyout"
+              >
                 <summary
                   id="HeaderMenu-{{ link.handle }}"
                   class="header__menu-item list-menu__item link focus-inset"
                 >
-                  <span {%- if link.child_active %} class="header__active-menu-item" {% endif %}>
+                  <span
+                    {%- if link.child_active %}
+                      class="header__active-menu-item"
+                    {% endif %}
+                  >
                     {{- link.title | escape -}}
                   </span>
                   {{- 'icon-caret.svg' | inline_asset_content -}}
@@ -174,7 +181,11 @@
                   id="HeaderMenu-{{ link.handle }}"
                   class="header__menu-item list-menu__item link focus-inset"
                 >
-                  <span {%- if link.child_active %} class="header__active-menu-item" {% endif %}>
+                  <span
+                    {%- if link.child_active %}
+                      class="header__active-menu-item"
+                    {% endif %}
+                  >
                     {{- link.title | escape -}}
                   </span>
                   {{- 'icon-caret.svg' | inline_asset_content -}}
@@ -185,6 +196,9 @@
                   class="header-dropdown-menu__list list-unstyled color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
                   role="list"
                   tabindex="-1"
+                  {% if link.handle == 'brands' %}
+                    style="max-height:calc(100dvh - 180px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;"
+                  {% endif %}
                 >
                   {%- for childlink in link.links -%}
                     <li>
@@ -195,8 +209,24 @@
                         {% if childlink.current %}
                           aria-current="page"
                         {% endif %}
+                        {% if link.handle == 'brands' %}
+                          style="padding-top:6px;padding-bottom:6px;line-height:1.2;"
+                        {% endif %}
                       >
-                        {{ childlink.title | escape }}
+                        {%- if childlink.type == 'collection_link' and childlink.object and childlink.object.image -%}
+                          {{
+                            childlink.object.image
+                            | image_url: width: 96
+                            | image_tag:
+                              alt: childlink.title,
+                              loading: 'lazy',
+                              class: 'header-dropdown-menu__collection-thumb',
+                              widths: '30,48,72,96',
+                              sizes: '30px',
+                              style: 'width:30px;height:30px;object-fit:contain;border-radius:5px;margin-right:8px;vertical-align:middle;background:#fff;padding:2px;border:1px solid rgba(0,0,0,0.08);'
+                          }}
+                        {%- endif -%}
+                        <span>{{ childlink.title | escape }}</span>
                       </a>
                     </li>
                   {%- endfor -%}
@@ -214,7 +244,11 @@
               aria-current="page"
             {% endif %}
           >
-            <span {%- if link.current %} class="header__active-menu-item" {% endif %}>
+            <span
+              {%- if link.current %}
+                class="header__active-menu-item"
+              {% endif %}
+            >
               {{- link.title | escape -}}
             </span>
           </a>

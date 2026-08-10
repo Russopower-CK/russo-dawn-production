@@ -266,7 +266,7 @@
 
 @media screen and (min-width: 750px) {
   .card__information {
-    align-content: flex-end;
+    align-content: flex-start;
   }
 }
 

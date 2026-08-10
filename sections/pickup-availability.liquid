@@ -1,6 +1,6 @@
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
 {%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
-{% assign location_availability = product_variant.metafields.custom.location_availability.value %}
+{% assign location_availability = product_variant.metafields.custom.location_availability.value %}}
 {%- if pick_up_availabilities.size > 0 -%}
   {% assign preferred_store_location_name = cart.attributes.preferred_store_location_name | default: '' | strip %}
 
