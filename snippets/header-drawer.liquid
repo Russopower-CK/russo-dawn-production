@@ -4,7 +4,30 @@
   Usage:
   {% render 'header-drawer' %}
 {% endcomment %}
+<style>
+  .secondary-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
+  .secondary-menu-list li {
+    margin-bottom: 12px;
+  }
+
+  .mobile-nav-content__border {
+    display: block;
+    margin: 0.75rem 25px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  }
+
+  .secondary-menu-list a {
+    color: #000;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+  }
+</style>
 <header-drawer
   data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}"
   data-collapsible-layers="true"
@@ -165,10 +188,33 @@
               {%- endfor -%}
             </ul>
           </nav>
+          <span class="mobile-nav-content__border"></span>
+          <div class="menu-drawer__secondary_menu">
+            {% assign secondary_menu = linklists['b2b-customer-resources'] %}
+
+            {% if secondary_menu.links.size > 0 %}
+              <ul class="list-menu" role="list">
+                {% for link in secondary_menu.links %}
+                  <li>
+                    <a
+                      href="{{ link.url }}"
+                      class="menu-drawer__menu-item secondary_menu list-menu__item link link--text focus-inset"
+                      style="color:grey;"
+                    >
+                      {{ link.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {%- endif %}
+          </div>
+
           <div class="menu-drawer__utility-links">
             {%- if shop.customer_accounts_enabled -%}
               <a
-                href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+                href="
+                                                                                                                                                              {%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}
+                "
                 class="menu-drawer__account link focus-inset h5 medium-hide large-up-hide"
                 rel="nofollow"
               >
@@ -228,7 +274,13 @@
             <ul class="list list-social list-unstyled" role="list">
               {%- if settings.social_twitter_link != blank -%}
                 <li class="list-social__item">
-                  <a href="{{ settings.social_twitter_link }}" class="list-social__link link">
+                  <a
+                    href="{{ settings.social_twitter_link }}"
+                    class="
+                      list-social__link
+                      link
+                    "
+                  >
                     <span class="svg-wrapper">
                       {{- 'icon-twitter.svg' | inline_asset_content -}}
                     </span>
@@ -238,7 +290,13 @@
               {%- endif -%}
               {%- if settings.social_facebook_link != blank -%}
                 <li class="list-social__item">
-                  <a href="{{ settings.social_facebook_link }}" class="list-social__link link">
+                  <a
+                    href="{{ settings.social_facebook_link }}"
+                    class="
+                      list-social__link
+                      link
+                    "
+                  >
                     <span class="svg-wrapper">
                       {{- 'icon-facebook.svg' | inline_asset_content -}}
                     </span>
@@ -248,7 +306,13 @@
               {%- endif -%}
               {%- if settings.social_pinterest_link != blank -%}
                 <li class="list-social__item">
-                  <a href="{{ settings.social_pinterest_link }}" class="list-social__link link">
+                  <a
+                    href="{{ settings.social_pinterest_link }}"
+                    class="
+                      list-social__link
+                      link
+                    "
+                  >
                     <span class="svg-wrapper">
                       {{- 'icon-pinterest.svg' | inline_asset_content -}}
                     </span>
@@ -258,7 +322,13 @@
               {%- endif -%}
               {%- if settings.social_instagram_link != blank -%}
                 <li class="list-social__item">
-                  <a href="{{ settings.social_instagram_link }}" class="list-social__link link">
+                  <a
+                    href="{{ settings.social_instagram_link }}"
+                    class="
+                      list-social__link
+                      link
+                    "
+                  >
                     <span class="svg-wrapper">
                       {{- 'icon-instagram.svg' | inline_asset_content -}}
                     </span>
@@ -278,7 +348,13 @@
               {%- endif -%}
               {%- if settings.social_linkdin_link != blank -%}
                 <li class="list-social__item">
-                  <a href="{{ settings.social_linkdin_link }}" class="list-social__link link">
+                  <a
+                    href="{{ settings.social_linkdin_link }}"
+                    class="
+                      list-social__link
+                      link
+                    "
+                  >
                     <span class="svg-wrapper">
                       {{- 'icon-linkdin.svg' | inline_asset_content -}}
                     </span>
@@ -298,7 +374,13 @@
               {%- endif -%}
               {%- if settings.social_snapchat_link != blank -%}
                 <li class="list-social__item">
-                  <a href="{{ settings.social_snapchat_link }}" class="list-social__link link">
+                  <a
+                    href="{{ settings.social_snapchat_link }}"
+                    class="
+                      list-social__link
+                      link
+                    "
+                  >
                     <span class="svg-wrapper">
                       {{- 'icon-snapchat.svg' | inline_asset_content -}}
                     </span>
@@ -308,7 +390,13 @@
               {%- endif -%}
               {%- if settings.social_youtube_link != blank -%}
                 <li class="list-social__item">
-                  <a href="{{ settings.social_youtube_link }}" class="list-social__link link">
+                  <a
+                    href="{{ settings.social_youtube_link }}"
+                    class="
+                      list-social__link
+                      link
+                    "
+                  >
                     <span class="svg-wrapper">
                       {{- 'icon-youtube.svg' | inline_asset_content -}}
                     </span>

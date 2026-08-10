@@ -16,6 +16,10 @@
     .section-1 {
       margin-left: 20px;
     }
+    .asset-list-wrapper {
+      max-width: var(--page-width);
+      padding: 5rem;
+    }
     .responsive-table {
       width: 95%;
       font-family: roboto;
@@ -45,53 +49,55 @@
   </style>
 </head>
 <body>
-  <div class="section-1">
-    <h2>Equipment Asset List</h2>
-    <p>
-      <b>Here is your Equipment History, {{ customer.name }}</b>
-    </p>
-    <p>
-      Search your Serialized Units by item number, serial number, asset number, description, or manufacturer: <br>
-      <input id="myInput" type="text" placeholder="Search...">
-    </p>
-    <br>
-  </div>
-  <div style="overflow-x:auto;">
-    <table class="responsive-table">
-      <thead>
-        <tr>
-          <th>Item Number</th>
-          <th>MFR Item Number</th>
-          <th>Serial Number</th>
-          <th>Asset ID</th>
-          <th>Description</th>
-          <th>Manufacturer</th>
-          <th>Purchase Date</th>
-          <th>Service Status</th>
-        </tr>
-      </thead>
-      <tbody id="myTable">
-        {% comment %} switch to use company metafield if logged in as b2b {% endcomment %}
-        {% if customer.b2b? %}
-          {% assign equipmentlist = customer.current_company.metafields.custom.equipment_list %}
-        {% else %}
-          {% assign equipmentlist = customer.metafields.custom.equipment_list %}
-        {% endif %}
-
-        {% for equipment in equipmentlist.value %}
-          <h4 class="product-detail-heading">{{ equipment.name }}</h4>
+  <div class="asset-list-wrapper page-width">
+    <div class="section-1">
+      <h2>Equipment Asset List</h2>
+      <p>
+        <b>Here is your Equipment History, {{ customer.name }}</b>
+      </p>
+      <p>
+        Search your Serialized Units by item number, serial number, asset number, description, or manufacturer: <br>
+        <input id="myInput" type="text" placeholder="Search...">
+      </p>
+      <br>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="responsive-table">
+        <thead>
           <tr>
-            <td>{{ equipment.item_number }}</td>
-            <td>{{ equipment.item_vendor_item_no }}</td>
-            <td>{{ equipment.serial_number }}</td>
-            <td>{{ equipment.asset_tag }}</td>
-            <td>{{ equipment.unit_description }}</td>
-            <td>{{ equipment.manufacturer }}</td>
-            <td>{{ equipment.saleDate }}</td>
-            <td>{{ equipment.serviceStatus }}</td>
+            <th>Item Number</th>
+            <th>MFR Item Number</th>
+            <th>Serial Number</th>
+            <th>Asset ID</th>
+            <th>Description</th>
+            <th>Manufacturer</th>
+            <th>Purchase Date</th>
+            <th>Service Status</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody id="myTable">
+          {% comment %} switch to use company metafield if logged in as b2b {% endcomment %}
+          {% if customer.b2b? %}
+            {% assign equipmentlist = customer.current_company.metafields.custom.equipment_list %}
+          {% else %}
+            {% assign equipmentlist = customer.metafields.custom.equipment_list %}
+          {% endif %}
+
+          {% for equipment in equipmentlist.value %}
+            <h4 class="product-detail-heading">{{ equipment.name }}</h4>
+            <tr>
+              <td>{{ equipment.item_number }}</td>
+              <td>{{ equipment.item_vendor_item_no }}</td>
+              <td>{{ equipment.serial_number }}</td>
+              <td>{{ equipment.asset_tag }}</td>
+              <td>{{ equipment.unit_description }}</td>
+              <td>{{ equipment.manufacturer }}</td>
+              <td>{{ equipment.saleDate }}</td>
+              <td>{{ equipment.serviceStatus }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </body>

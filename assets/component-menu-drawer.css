@@ -54,7 +54,7 @@ menu-drawer > details[open] > summary::before {
 
 .js details[open].menu-opening > .menu-drawer,
 details[open].menu-opening > .menu-drawer__submenu {
-  transform: translateX(0);
+  transform: translateX(-5%);
   visibility: visible;
 }
 
@@ -85,7 +85,7 @@ details[open].menu-opening > .menu-drawer__submenu {
 }
 
 .menu-drawer__navigation {
-  padding: 3rem 0;
+  padding: .5rem 0;
 }
 
 .menu-drawer__inner-submenu {
@@ -287,7 +287,7 @@ header-drawer[data-collapsible-layers='true'] .menu-drawer__inner-submenu {
 }
 
 .js header-drawer[data-collapsible-layers='true'] details > summary.menu-drawer__menu-item::after {
-  content: '+';
+  content: '\2304';
   position: absolute;
   right: 2.8rem;
   top: 50%;
