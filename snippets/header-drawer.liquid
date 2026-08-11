@@ -100,6 +100,22 @@
                                       class="menu-drawer__item-icon menu-drawer__item-icon--{{ childlink.handle | handleize }}"
                                       aria-hidden="true"
                                     ></span>
+                                    {%- if childlink.type == 'collection_link'
+                                      and childlink.object
+                                      and childlink.object.image
+                                    -%}
+                                      {{
+                                        childlink.object.image
+                                        | image_url: width: 96
+                                        | image_tag:
+                                          alt: childlink.title,
+                                          loading: 'lazy',
+                                          class: 'header-dropdown-menu__collection-thumb',
+                                          widths: '30,48,72,96',
+                                          sizes: '30px',
+                                          style: 'width:30px;height:30px;object-fit:contain;border-radius:5px;margin-right:8px;vertical-align:middle;background:#fff;padding:2px;border:1px solid rgba(0,0,0,0.08);'
+                                      }}
+                                    {%- endif -%}
                                     <span class="menu-drawer__item-label">{{ childlink.title | escape }}</span>
                                   </a>
                                 {%- else -%}
@@ -213,7 +229,7 @@
             {%- if shop.customer_accounts_enabled -%}
               <a
                 href="
-                                                                                                                                                              {%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}
+                                                                                                                                                                                {%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}
                 "
                 class="menu-drawer__account link focus-inset h5 medium-hide large-up-hide"
                 rel="nofollow"

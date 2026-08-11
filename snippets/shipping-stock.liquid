@@ -70,14 +70,14 @@
 <div class="product__inventory_status">
   <div class="shipping-stock">
     <p
-      class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle {%else%} caption-with-letter-spacing{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
+      class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption{% elsif block.settings.text_style == 'subtitle' %} subtitle {%else%} caption{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
       {{ block.shopify_attributes }}
       id="Inventory-{{ section.id }}"
       role="status"
     >
       {%- if product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
         {%- unless product.tags contains 'pickup' %}
-          <div class="shipping-stock caption-with-letter-spacing">
+          <div class="shipping-stock caption">
             Shipping:
             {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
               {%- if product.selected_or_first_available_variant.inventory_quantity
@@ -155,7 +155,7 @@
             assign show_pickup_button = true
           endif
 
-          if pickup_component_token == 'headline' or pickup_component_token == 'title' or pickup_component_token == 'caption-with-letter-spacing' or pickup_component_token == 'location'
+          if pickup_component_token == 'headline' or pickup_component_token == 'title' or pickup_component_token == 'caption' or pickup_component_token == 'location'
             assign show_pickup_headline = true
           endif
 

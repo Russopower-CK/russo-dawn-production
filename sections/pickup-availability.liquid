@@ -1,6 +1,7 @@
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
 {%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
-{% assign location_availability = product_variant.metafields.custom.location_availability.value %}}
+{% assign location_availability = product_variant.metafields.custom.location_availability.value %}
+
 {%- if pick_up_availabilities.size > 0 -%}
   {% assign preferred_store_location_name = cart.attributes.preferred_store_location_name | default: '' | strip %}
 
@@ -97,7 +98,7 @@
           {{- 'icon-close.svg' | inline_asset_content -}}
         </button>
       </div>
-
+      {{ pick_up_quantities }}
       {%- unless product_variant.product.has_only_default_variant -%}
         <p class="pickup-availability-variant">
           {%- for product_option in product_variant.product.options_with_values -%}
@@ -111,11 +112,11 @@
           {%- endfor -%}
         </p>
       {%- endunless -%}
-
       <ul class="pickup-availability-list list-unstyled" role="list" data-store-availability-drawer-content>
         {%- for availability in pick_up_availabilities -%}
           <li class="pickup-availability-list__item">
             <h3 class="h4">{{ availability.location.name | escape }}</h3>
+            <p class="pickup-availability-quantity">Available: {{ availability.quantityAvailable }}</p>
             <p class="pickup-availability-preview caption-large">
               {%- if availability.available -%}
                 <span class="svg-wrapper">
