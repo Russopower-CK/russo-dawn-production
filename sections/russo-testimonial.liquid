@@ -6,54 +6,123 @@
 
     <div class="testimonial-track">
       <div class="testimonial-track-inner">
-        {% for block in section.blocks %}
-          <div class="testimonial-card" {{ block.shopify_attributes }}>
-            <div class="testimonial-stars">
-              {% assign rating = block.settings.rating %}
-              {% for i in (1..5) %}
-                {% if i <= rating %}
-                  <span class="star star--filled">&#9733;</span>
-                {% else %}
-                  <span class="star star--empty">&#9733;</span>
-                {% endif %}
-              {% endfor %}
-            </div>
-            <div class="testimonial-review">
-              {{ block.settings.review }}
-            </div>
-            <div class="testimonial-author">&mdash; {{ block.settings.author }}</div>
-            {% if block.settings.location != blank %}
-              <div class="testimonial-location">
-                <svg
-                  class="testimonial-location-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 14 6 14s6-8.75 6-14c0-3.314-2.686-6-6-6z"/>
-                  <circle cx="12" cy="8" r="2.5"/>
-                </svg>
-                {% if block.settings.location_url != blank %}
-                  <a
-                    href="{{ block.settings.location_url }}"
-                    class="testimonial-location-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {{ block.settings.location }}
-                  </a>
-                {% else %}
-                  <span>{{ block.settings.location }}</span>
-                {% endif %}
+        {% assign metaobject_entries = blank %}
+        {% if section.settings.use_metaobject_entries %}
+          {% assign metaobject_type = section.settings.metaobject_type | strip %}
+          {% if metaobject_type != blank and shop.metaobjects[metaobject_type] != blank %}
+            {% assign metaobject_entries = shop.metaobjects[metaobject_type].values %}
+          {% endif %}
+        {% endif %}
+
+        {% if metaobject_entries != blank %}
+          {% assign sorted_testimonials = metaobject_entries | sort: 'testimonial_date.value' | reverse %}
+          {% for testimonial in sorted_testimonials %}
+            {% assign rating = testimonial.rating.value | default: 0 | plus: 0 %}
+            {% assign review = testimonial.testimonial.value %}
+            {% assign author = testimonial.author.value %}
+            {% assign testimonial_date = testimonial.testimonial_date.value %}
+            {% assign location_label = testimonial.location_link.value.text %}
+            {% assign location_url = testimonial.location_link.value.url %}
+
+            <div class="testimonial-card">
+              <div class="testimonial-stars">
+                {% for i in (1..5) %}
+                  {% if i <= rating %}
+                    <span class="star star--filled">&#9733;</span>
+                  {% else %}
+                    <span class="star star--empty">&#9733;</span>
+                  {% endif %}
+                {% endfor %}
               </div>
-            {% endif %}
-          </div>
-        {% endfor %}
+              <div class="testimonial-review">
+                {{ review }}
+              </div>
+              <div class="testimonial-author">&mdash; {{ author }}</div>
+              {% if testimonial_date != blank %}
+                <div class="testimonial-date">{{ testimonial_date | date: '%b %d, %Y' }}</div>
+              {% endif %}
+              {% if location_label != blank %}
+                <div class="testimonial-location">
+                  <svg
+                    class="testimonial-location-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 14 6 14s6-8.75 6-14c0-3.314-2.686-6-6-6z"/>
+                    <circle cx="12" cy="8" r="2.5"/>
+                  </svg>
+                  {% if location_url != blank %}
+                    <a
+                      href="{{ location_url }}"
+                      class="testimonial-location-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ location_label }}
+                    </a>
+                  {% else %}
+                    <span>{{ location_label }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% else %}
+          {% for block in section.blocks %}
+            <div class="testimonial-card" {{ block.shopify_attributes }}>
+              <div class="testimonial-stars">
+                {% assign rating = block.settings.rating %}
+                {% for i in (1..5) %}
+                  {% if i <= rating %}
+                    <span class="star star--filled">&#9733;</span>
+                  {% else %}
+                    <span class="star star--empty">&#9733;</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <div class="testimonial-review">
+                {{ block.settings.review }}
+              </div>
+              <div class="testimonial-author">&mdash; {{ block.settings.author }}</div>
+              {% if block.settings.location != blank %}
+                <div class="testimonial-location">
+                  <svg
+                    class="testimonial-location-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 14 6 14s6-8.75 6-14c0-3.314-2.686-6-6-6z"/>
+                    <circle cx="12" cy="8" r="2.5"/>
+                  </svg>
+                  {% if block.settings.location_url != blank %}
+                    <a
+                      href="{{ block.settings.location_url }}"
+                      class="testimonial-location-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ block.settings.location }}
+                    </a>
+                  {% else %}
+                    <span>{{ block.settings.location }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
 
@@ -154,7 +223,12 @@
       font-size: 13px;
       font-weight: 600;
       color: #666;
-      padding-bottom: 1rem;
+      margin-bottom: 0.35rem;
+    }
+    .testimonial-date {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 0.75rem;
     }
     .testimonial-arrow {
       width: var(--arrow-size);
@@ -250,6 +324,22 @@
   "name": "Russo Review Slider",
   "tag": "section",
   "class": "testimonial-slider-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "use_metaobject_entries",
+      "label": "Use metaobject entries",
+      "default": false,
+      "info": "When enabled, testimonials are loaded from all entries in the metaobject type below."
+    },
+    {
+      "type": "text",
+      "id": "metaobject_type",
+      "label": "Metaobject type",
+      "default": "russo_testimonials",
+      "info": "Example: russo_testimonials"
+    }
+  ],
   "blocks": [
     {
       "type": "review",
