@@ -391,7 +391,6 @@
       "view_addresses": "Se adresser",
       "return": "Tilbage til kontooplysninger"
     },
-    "account_fallback": "Konto",
     "activate_account": {
       "title": "Aktivér konto",
       "subtext": "Opret en adgangskode, så du kan aktivere din konto.",

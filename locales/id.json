@@ -391,7 +391,6 @@
       "view_addresses": "Lihat alamat",
       "return": "Kembali ke detail Akun"
     },
-    "account_fallback": "Akun",
     "activate_account": {
       "title": "Aktifkan akun",
       "subtext": "Buat sandi untuk mengaktifkan akunmu.",

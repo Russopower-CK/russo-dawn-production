@@ -391,7 +391,6 @@
       "view_addresses": "Näytä osoitteet",
       "return": "Palaa tilin tietoihin"
     },
-    "account_fallback": "Tili",
     "activate_account": {
       "title": "Aktivoi tili",
       "subtext": "Aktivoi tili luomalla salasana.",

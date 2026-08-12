@@ -391,7 +391,6 @@
       "view_addresses": "Címek megtekintése",
       "return": "Vissza a fiókadatokhoz"
     },
-    "account_fallback": "Fiók",
     "activate_account": {
       "title": "Fiók aktiválása",
       "subtext": "A fiók aktiválásához hozz létre egy jelszót.",

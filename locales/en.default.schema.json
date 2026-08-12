@@ -162,6 +162,17 @@
         }
       }
     },
+    "customer_accounts": {
+      "name": "Customer accounts",
+      "settings": {
+        "paragraph": {
+          "content": "[Manage visibility](/admin/settings/customer_accounts) in customer account settings."
+        },
+        "customer_account_menu": {
+          "label": "Menu"
+        }
+      }
+    },
     "brand_information": {
       "name": "Brand information",
       "settings": {
@@ -1340,6 +1351,9 @@
         "enable_store_selector": {
           "label": "enable Russo Store Selector",
           "info": "Display the store selector for the customer to choose which location they are shopping with."
+        },
+        "customer_account_menu": {
+          "content": "Manage customer accounts in [theme settings](/editor?context=theme&category=customer%20accounts)."
         }
       }
     },
@@ -1831,15 +1845,6 @@
         "name": "Multirow"
       }
     },
-    "main-account": {
-      "name": "Account"
-    },
-    "main-activate-account": {
-      "name": "Account activation"
-    },
-    "main-addresses": {
-      "name": "Addresses"
-    },
     "main-article": {
       "name": "Blog post",
       "blocks": {
@@ -2092,15 +2097,6 @@
           }
         }
       }
-    },
-    "main-login": {
-      "name": "Login",
-      "shop_login_button": {
-        "enable": "Enable Sign in with Shop"
-      }
-    },
-    "main-order": {
-      "name": "Order"
     },
     "main-page": {
       "name": "Page"
@@ -2610,12 +2606,6 @@
           "label": "Loop video"
         }
       }
-    },
-    "main-register": {
-      "name": "Registration"
-    },
-    "main-reset-password": {
-      "name": "Password reset"
     },
     "main-search": {
       "name": "Search results",

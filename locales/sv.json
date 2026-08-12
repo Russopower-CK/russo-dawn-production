@@ -391,7 +391,6 @@
       "view_addresses": "Visa adresser",
       "return": "Återgå till kontouppgifter"
     },
-    "account_fallback": "Konto",
     "activate_account": {
       "title": "Aktivera konto",
       "subtext": "Skapa ditt lösenord för att aktivera ditt konto.",

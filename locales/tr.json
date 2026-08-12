@@ -391,7 +391,6 @@
       "view_addresses": "Adresi görüntüle",
       "return": "Hesap bilgilerine geri dön"
     },
-    "account_fallback": "Hesap",
     "activate_account": {
       "title": "Hesabı etkinleştirin",
       "subtext": "Hesabınızı etkinleştirmek için parolanızı oluşturun.",

@@ -391,7 +391,6 @@
       "view_addresses": "주소 보기",
       "return": "계정 세부 정보로 돌아가기"
     },
-    "account_fallback": "계정",
     "activate_account": {
       "title": "계정 활성화",
       "subtext": "계정을 활성화하려면 비밀번호를 생성하십시오.",

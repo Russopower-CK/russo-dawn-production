@@ -391,7 +391,6 @@
       "view_addresses": "住所を確認",
       "return": "アカウントの詳細に戻る"
     },
-    "account_fallback": "アカウント",
     "activate_account": {
       "title": "アカウントを有効にする",
       "subtext": "パスワードを作成してアカウントを有効にしてください。",

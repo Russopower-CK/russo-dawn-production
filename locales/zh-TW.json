@@ -391,7 +391,6 @@
       "view_addresses": "查看地址",
       "return": "返回帳號詳細資訊"
     },
-    "account_fallback": "帳號",
     "activate_account": {
       "title": "啟用帳號",
       "subtext": "建立密碼以啟用帳戶。",
