@@ -1,0 +1,511 @@
+{%- comment -%}
+  Usage:
+    {% render 'russo-preferred-store-variant-trigger', variant: product.selected_or_first_available_variant %}
+
+  Optional params:
+    button_label: override status fallback label when no preferred store is selected
+    show_status_display: render the status line (default true)
+    show_launcher_button: render the open-selector button/link (default true)
+    launcher_button_label: launcher button text (default "Check availability at other stores")
+
+    Responsibility split for this snippet:
+  1) Status-only button label:
+      - updateButtonLabel() updates the button text from cookie + live getStockLevels data.
+      - Uses variant metafield locations only as legacy fallback when live data is unavailable.
+  2) Click/open + stock fetch:
+     - Click handler sets window.__PreferredStoreProductContext and opens drawer via
+       window.__PreferredStoreOpen(...) or window.__PreferredStoreAPI.open().
+     - Main stock truth for per-store quantity/status is fetched in
+       assets/russo-preferred-store-main.js (loadProxyStockForVariant -> getStockLevels).
+     - This file also includes a direct "probe" fetch for debugging visibility on click.
+{%- endcomment -%}
+<style>
+  .preferred-store-pickup__status-default-label {
+    width: 100%;
+  }
+  .preffered-store-pickup__display {
+    display: flex;
+    align-items: center;
+  }
+  .preferred-store-pickup__status-label {
+    text-decoration: underline;
+  }
+  .preferred-store-pickup__status-label:hover {
+    text-decoration-thickness: 0.2rem;
+  }
+</style>
+{%- liquid
+  assign preferred_store_variant = variant | default: product.selected_or_first_available_variant
+  assign preferred_store_locations_raw = preferred_store_variant.metafields.custom.location_availability.value
+  assign preferred_store_default_label = button_label | default: 'Choose a Store'
+  assign preferred_store_show_status_label = show_status_label | default: true
+  assign preferred_store_show_status_display = show_status_display | default: true
+  assign preferred_store_show_launcher_button = show_launcher_button | default: false
+  assign preferred_store_launcher_button_label = launcher_button_label | default: 'Check availability at other stores'
+  assign preferred_store_instance_id = 'preferred-store-variant-' | append: section.id | append: '-' | append: preferred_store_variant.id
+-%}
+
+<div
+  class="pickup-availability-preview"
+  data-preferred-store-variant-trigger
+  data-instance-id="{{ preferred_store_instance_id }}"
+>
+  {%- if preferred_store_show_status_display -%}
+    <div class="preffered-store-pickup__display">
+      <p class="preferred-store-pickup__status-line caption" style="padding-right: 3px;margin: 0 0 0.50rem;">Pickup:</p>
+      <div class="preffered-store-pickup__status-icon"></div>
+      <span class="preferred-store-pickup__status-default-label caption" data-preferred-store-product-label>
+        {{- preferred_store_default_label -}}
+      </span>
+    </div>
+  {%- endif -%}
+
+  {%- if preferred_store_show_launcher_button -%}
+    <button
+      type="button"
+      class="preferred-store-pickup__status-button"
+      data-preferred-store-open
+      data-preferred-store-direct="true"
+      data-preferred-store-variant-id="{{ preferred_store_variant.id }}"
+      aria-label="Open preferred store selector"
+      style="display:block; width:100%; margin-top:0.25rem; font-size: 1rem !important;"
+    >
+      <span class="preferred-store-pickup__status-label caption">
+        {{- preferred_store_launcher_button_label -}}
+      </span>
+    </button>
+  {%- endif -%}
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-instance-id="{{ preferred_store_instance_id }}"]');
+    if (!root) return;
+
+    var raw = {{ preferred_store_locations_raw | json }};
+    var locations = [];
+
+    if (Array.isArray(raw)) {
+      locations = raw
+        .map(function (item) { return String(item || '').trim(); })
+        .filter(Boolean);
+    } else if (typeof raw === 'string') {
+      locations = raw
+        .split(',')
+        .map(function (item) { return String(item || '').trim(); })
+        .filter(Boolean);
+    }
+
+    window.__PreferredStoreProductContext = {
+      variantId: {{ preferred_store_variant.id | json }},
+      locations: locations
+    };
+
+    function normalizeKey(s) {
+      return String(s || '')
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, ' ')
+        .replace(/[^\w\s]/g, '');
+    }
+
+    function getCookie(name) {
+      var value = '; ' + document.cookie;
+      var parts = value.split('; ' + name + '=');
+      if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+      return null;
+    }
+
+    function setButtonLabel(text) {
+      var label = root.querySelector('[data-preferred-store-product-label]');
+      if (!label) return;
+      label.textContent = text;
+    }
+
+    function setStatusIcon(inStock) {
+      var iconRoot = root.querySelector('.preffered-store-pickup__status-icon');
+      if (!iconRoot) return;
+
+      if (inStock === true) {
+        iconRoot.innerHTML =
+          '<svg class="surface-pick-up-embed__in-stock-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">' +
+          '<path d="M4.33346 10.5625L3.80311 11.0928L4.33344 11.6232L4.86379 11.0928L4.33346 10.5625ZM0.191824 7.48134L3.80311 11.0928L4.8638 10.0322L1.25251 6.4207L0.191824 7.48134ZM4.86379 11.0928L12.9888 2.96783L11.9281 1.90717L3.80313 10.0322L4.86379 11.0928Z"></path>' +
+          '</svg>';
+        return;
+      }
+
+      if (inStock === false) {
+        iconRoot.innerHTML =
+          '<svg class="surface-pick-up-embed__out-of-stock-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">' +
+          '<path d="M1.46967 2.53033L5.96967 7.03033L7.03033 5.96967L2.53033 1.46967L1.46967 2.53033ZM5.96967 7.03033L10.4697 11.5303L11.5303 10.4697L7.03033 5.96967L5.96967 7.03033ZM7.03033 7.03033L11.5303 2.53033L10.4697 1.46967L5.96967 5.96967L7.03033 7.03033ZM10.4697 1.46967L1.46967 10.4697L2.53033 11.5303L11.5303 2.53033L10.4697 1.46967Z"></path>' +
+          '</svg>';
+        return;
+      }
+
+      iconRoot.innerHTML = '';
+    }
+
+    function toUniqueList(items) {
+      var out = [];
+      (items || []).forEach(function (item) {
+        var value = String(item || '').trim();
+        if (!value) return;
+        if (out.indexOf(value) === -1) out.push(value);
+      });
+      return out;
+    }
+
+    function buildStockEndpointCandidates(primary) {
+      var p = String(primary || '').trim();
+      var v1 = '/apps/russoAPI/v1/getStockLevels';
+      var legacy = '/apps/russoAPI?RequestType=getStockLevels';
+
+      if (p.indexOf('/apps/russoAPI/v1/') !== -1) return toUniqueList([p, legacy]);
+      if (p.indexOf('/apps/russoAPI?') !== -1 || p.indexOf('RequestType=') !== -1) return toUniqueList([p, v1]);
+      if (p) return toUniqueList([p, v1, legacy]);
+      return toUniqueList([v1, legacy]);
+    }
+
+    function fetchJsonWithFallback(urls, requestInit) {
+      var queue = toUniqueList(urls);
+      var failures = [];
+      var init = requestInit || { headers: { Accept: 'application/json' } };
+
+      function attempt(index) {
+        if (index >= queue.length) {
+          throw new Error('Stock request failed: ' + failures.join(' | '));
+        }
+
+        var url = queue[index];
+        return fetch(url, init)
+          .then(function (res) {
+            return res.text().then(function (raw) {
+              if (!res.ok) {
+                throw new Error(url + ' -> HTTP ' + res.status);
+              }
+              try {
+                return { data: raw ? JSON.parse(raw) : null, url: url };
+              } catch (e) {
+                throw new Error(url + ' -> invalid JSON');
+              }
+            });
+          })
+          .catch(function (err) {
+            failures.push(err && err.message ? err.message : (url + ' -> request failed'));
+            return attempt(index + 1);
+          });
+      }
+
+      return attempt(0);
+    }
+
+    function extractStockItems(data) {
+      if (!data) return [];
+      if (Array.isArray(data)) return data;
+      if (
+        data.data &&
+        data.data.productVariant &&
+        data.data.productVariant.inventoryItem &&
+        data.data.productVariant.inventoryItem.inventoryLevels &&
+        Array.isArray(data.data.productVariant.inventoryItem.inventoryLevels.nodes)
+      ) {
+        return data.data.productVariant.inventoryItem.inventoryLevels.nodes;
+      }
+      if (Array.isArray(data.data)) return data.data;
+      if (data.data && Array.isArray(data.data.stockLevels)) return data.data.stockLevels;
+      if (data.data && Array.isArray(data.data.getStockLevels)) return data.data.getStockLevels;
+      if (Array.isArray(data.stockLevels)) return data.stockLevels;
+      if (Array.isArray(data.getStockLevels)) return data.getStockLevels;
+      if (Array.isArray(data.locations)) return data.locations;
+      return [];
+    }
+
+    function toLocationNameFromStockItem(item) {
+      if (!item || typeof item !== 'object') return null;
+      if (item.location && typeof item.location === 'object' && item.location.name) {
+        return item.location.name;
+      }
+      return item.locationName || item.location_name || item.location || item.name || item.storeName || item.store_name || null;
+    }
+
+    function toAvailableQtyFromStockItem(item) {
+      if (!item || typeof item !== 'object') return null;
+
+      if (Array.isArray(item.quantities)) {
+        var availableNode = item.quantities.find(function (q) {
+          return q && String(q.name || '').toLowerCase() === 'available';
+        });
+        if (availableNode && isFinite(Number(availableNode.quantity))) {
+          return Number(availableNode.quantity);
+        }
+      }
+
+      var value =
+        item.inventoryAvailable ??
+        item.inventory_available ??
+        item.available ??
+        item.quantityAvailable ??
+        item.quantity_available ??
+        item.quantity ??
+        item.stock;
+      var n = Number(value);
+      return isFinite(n) ? n : null;
+    }
+
+    function addLocationIdCandidates(target, locationId) {
+      var rawId = String(locationId || '').trim();
+      if (!rawId) return;
+      if (target.indexOf(rawId) === -1) target.push(rawId);
+
+      if (/^\d+$/.test(rawId)) {
+        var gid = 'gid://shopify/Location/' + rawId;
+        if (target.indexOf(gid) === -1) target.push(gid);
+        return;
+      }
+
+      var gidMatch = rawId.match(/gid:\/\/shopify\/Location\/(\d+)/i);
+      if (gidMatch && gidMatch[1] && target.indexOf(gidMatch[1]) === -1) {
+        target.push(gidMatch[1]);
+      }
+    }
+
+    function getStockLookupCandidates(selectedName, selectedId) {
+      var candidates = [];
+      var normalizedName = normalizeKey(selectedName);
+      if (normalizedName) candidates.push(normalizedName);
+      addLocationIdCandidates(candidates, selectedId);
+      return candidates;
+    }
+
+    function buildStockMaps(items) {
+      var stockMap = {};
+      var qtyMap = {};
+
+      (items || []).forEach(function (item) {
+        var locationName = toLocationNameFromStockItem(item);
+        if (!locationName) return;
+
+        var qty = toAvailableQtyFromStockItem(item);
+        if (qty === null) return;
+
+        var normalizedName = normalizeKey(locationName);
+        stockMap[normalizedName] = qty > 0;
+        qtyMap[normalizedName] = qty;
+
+        if (item.location && item.location.id) {
+          var locationId = String(item.location.id);
+          stockMap[locationId] = qty > 0;
+          qtyMap[locationId] = qty;
+        }
+      });
+
+      return { stockMap: stockMap, qtyMap: qtyMap };
+    }
+
+    function getLiveStockMapsForVariant(variantId) {
+      var id = String(variantId || '').trim();
+      if (!id) return Promise.resolve(null);
+
+      var cache = window.__PreferredStoreVariantStockCache || {};
+      if (cache[id]) return Promise.resolve(cache[id]);
+
+      var cfg = window.__PreferredStoreConfig || {};
+      var endpoints = buildStockEndpointCandidates(cfg.stockLevelsEndpoint || '/apps/russoAPI/v1/getStockLevels');
+      var requestInit = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          variantId: id,
+          variant_id: id
+        })
+      };
+
+      return fetchJsonWithFallback(endpoints, requestInit)
+        .then(function (result) {
+          var items = extractStockItems(result.data);
+          var mapped = buildStockMaps(items);
+          cache[id] = mapped;
+          window.__PreferredStoreVariantStockCache = cache;
+          return mapped;
+        })
+        .catch(function () {
+          return null;
+        });
+    }
+
+    function getLiveStockForSelectedStore(mapped, selectedName, selectedId) {
+      if (!mapped || !mapped.stockMap || !mapped.qtyMap) return null;
+      var candidates = getStockLookupCandidates(selectedName, selectedId);
+
+      for (var i = 0; i < candidates.length; i += 1) {
+        var candidate = candidates[i];
+        if (Object.prototype.hasOwnProperty.call(mapped.stockMap, candidate)) {
+          return {
+            inStock: !!mapped.stockMap[candidate],
+            qty: mapped.qtyMap[candidate]
+          };
+        }
+      }
+
+      return null;
+    }
+
+    function getLegacyStockForSelectedStore(selectedName) {
+      if (!locations.length) return null;
+      var inStockSet = {};
+      locations.forEach(function (loc) {
+        var key = normalizeKey(loc);
+        if (key) inStockSet[key] = true;
+      });
+
+      return {
+        inStock: !!inStockSet[normalizeKey(selectedName)],
+        qty: null
+      };
+    }
+
+    // Display-only status label for the PDP button.
+    // Uses selected store cookie + live proxy stock first, then legacy metafield fallback.
+    function updateButtonLabel() {
+      var fallbackLabel = {{ preferred_store_default_label | json }};
+      var showStatusLabel = {{ preferred_store_show_status_label | json }};
+
+      if (!showStatusLabel) {
+        setButtonLabel(fallbackLabel);
+        setStatusIcon(null);
+        return;
+      }
+
+      var selectedName = getCookie('preferred_store_location_name');
+      if (!selectedName) {
+        setButtonLabel(fallbackLabel);
+        setStatusIcon(null);
+        return;
+      }
+
+      var selectedId = getCookie('preferred_store_location_id');
+      var variantId =
+        (window.__PreferredStoreProductContext && window.__PreferredStoreProductContext.variantId) ||
+        (openBtn && openBtn.dataset ? openBtn.dataset.preferredStoreVariantId : null) ||
+        {{ preferred_store_variant.id | json }};
+
+      getLiveStockMapsForVariant(variantId)
+        .then(function (mapped) {
+          var live = getLiveStockForSelectedStore(mapped, selectedName, selectedId);
+          if (live) {
+            setStatusIcon(live.inStock);
+            setButtonLabel(live.inStock
+              ? ('Available at ' + selectedName.replace('Russo ', ''))
+              : ('Unavailable at ' + selectedName.replace('Russo ', '')));
+            return;
+          }
+
+          var legacy = getLegacyStockForSelectedStore(selectedName);
+          if (legacy) {
+            setStatusIcon(legacy.inStock);
+            setButtonLabel(legacy.inStock
+              ? ('Available at ' + selectedName)
+              : ('Unavailable at ' + selectedName));
+            return;
+          }
+
+          setStatusIcon(null);
+          setButtonLabel('Pickup Availability unknown at ' + selectedName);
+        })
+        .catch(function () {
+          setStatusIcon(null);
+          setButtonLabel('Pickup Availability unknown at ' + selectedName);
+        });
+    }
+
+    updateButtonLabel();
+
+    var openBtn = root.querySelector('[data-preferred-store-open]');
+    if (openBtn && !openBtn.__preferredStoreBound) {
+      openBtn.__preferredStoreBound = true;
+      // Click path: set current variant context, then open the global preferred-store drawer.
+      // Drawer code in russo-preferred-store-main.js performs the main getStockLevels request.
+      openBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var variantId = openBtn.dataset ? openBtn.dataset.preferredStoreVariantId : null;
+
+        window.__PreferredStoreProductContext = {
+          variantId: variantId || {{ preferred_store_variant.id | json }},
+          locations: locations
+        };
+
+        console.info('Preferred store: PDP direct button clicked', {
+          variantId: window.__PreferredStoreProductContext.variantId,
+          hasGlobalOpener: typeof window.__PreferredStoreOpen === 'function',
+          hasDirectApi: !!(window.__PreferredStoreAPI && typeof window.__PreferredStoreAPI.open === 'function')
+        });
+
+        // Deterministic probe: this exact button click attempts stock fetch directly.
+        // It removes ambiguity about whether main drawer scripts were reached.
+        (function () {
+          var cfg = window.__PreferredStoreConfig || {};
+          var endpoint = cfg.stockLevelsEndpoint || '/apps/russoAPI/v1/getStockLevels';
+          var variant = String(window.__PreferredStoreProductContext.variantId || '');
+          if (!variant) {
+            console.warn('Preferred store probe: missing variant id, skipping direct fetch');
+            return;
+          }
+
+          var joiner = endpoint.indexOf('?') === -1 ? '?' : '&';
+          var url = endpoint + joiner + 'source=pdp-trigger';
+          console.info('Preferred store probe: requesting (POST)', {
+            url: url,
+            body: { variantId: variant }
+          });
+
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              variantId: variant,
+              variant_id: variant
+            })
+          })
+            .then(function (res) {
+              return res.text().then(function (raw) {
+                console.info('Preferred store probe: response', {
+                  ok: res.ok,
+                  status: res.status,
+                  sample: String(raw || '').slice(0, 180)
+                });
+              });
+            })
+            .catch(function (err) {
+              console.error('Preferred store probe: request failed', err);
+            });
+        })();
+
+        if (typeof window.__PreferredStoreOpen === 'function') {
+          window.__PreferredStoreOpen({
+            variantId: window.__PreferredStoreProductContext.variantId,
+            locations: locations
+          });
+          return;
+        }
+
+        if (window.__PreferredStoreAPI && typeof window.__PreferredStoreAPI.open === 'function') {
+          window.__PreferredStoreAPI.open();
+          return;
+        }
+
+        console.warn('Preferred store: no opener available on PDP button click');
+      });
+    }
+
+    document.addEventListener('preferred-store-drawer:close', updateButtonLabel);
+    document.addEventListener('shopify:section:load', updateButtonLabel);
+  })();
+</script>

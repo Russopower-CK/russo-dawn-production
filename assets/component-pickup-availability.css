@@ -4,8 +4,7 @@ pickup-availability {
 
 
 .pickup-availability-preview {
-  align-items: flex-start;
-  display: flex;
+
   gap: 0.2rem;
 }
 

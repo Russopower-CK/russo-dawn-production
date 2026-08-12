@@ -188,16 +188,24 @@
 
       window.__PreferredStoreMainLoading = true;
 
+      var cfg = window.__PreferredStoreConfig || {};
+      var configuredMainUrl = cfg.mainScriptUrl ? String(cfg.mainScriptUrl).trim() : '';
       var base = getBaseUrl();
-      if (!base) {
-        reject(new Error('Preferred store: cannot determine assets base URL'));
-        return;
+      var mainSrc = configuredMainUrl;
+
+      if (!mainSrc) {
+        if (!base) {
+          reject(new Error('Preferred store: cannot determine assets base URL'));
+          return;
+        }
+        mainSrc = base + 'russo-preferred-store-main.js?v=' + Date.now();
       }
 
       var script = document.createElement('script');
-      script.src = base + 'russo-preferred-store-main.js';
+      script.src = mainSrc;
       script.async = true;
       script.defer = true;
+      console.info('Preferred store: loading main script', { src: script.src });
       script.onload = function () { resolve(); };
       script.onerror = function () { reject(new Error('Preferred store: failed to load main')); };
       document.head.appendChild(script);
@@ -219,6 +227,23 @@
         console.error(e);
       });
   }
+
+  // Public opener so specific PDP buttons can call directly with context.
+  window.__PreferredStoreOpen = function (options) {
+    if (options && options.variantId) {
+      var ctx = window.__PreferredStoreProductContext || {};
+      ctx.variantId = String(options.variantId);
+      if (Array.isArray(options.locations)) ctx.locations = options.locations;
+      window.__PreferredStoreProductContext = ctx;
+    }
+
+    console.info('Preferred store: open requested', {
+      variantId: options && options.variantId ? String(options.variantId) : null,
+      hasEntry: !!window.__PreferredStoreEntryLoaded
+    });
+
+    ensureMainThenOpen();
+  };
 
   // -----------------------------
   // Run hydration now + later
@@ -254,13 +279,20 @@
     retryPickupHydration();
   });
 
-  // Import-on-interaction: open drawer + lazy load main
+  // Import-on-interaction: open drawer + lazy load main.
+  // Use capture phase so section-level click handlers cannot swallow the event
+  // before this delegated listener sees it.
   document.addEventListener('click', function (e) {
     var trigger = e.target && e.target.closest && e.target.closest('[data-preferred-store-open]');
     if (!trigger) return;
 
+    // PDP direct triggers call window.__PreferredStoreOpen themselves.
+    if (trigger.dataset && trigger.dataset.preferredStoreDirect === 'true') return;
+
+    console.info('Preferred store: delegated click trigger detected');
+
     e.preventDefault();
     e.stopPropagation();
     ensureMainThenOpen();
-  });
+  }, true);
 })();

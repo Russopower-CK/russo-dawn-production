@@ -16,7 +16,9 @@
 
 <script>
   window.__PreferredStoreConfig = {
+    mainScriptUrl: {{ 'russo-preferred-store-main.js' | asset_url | json }},
     locationsEndpoint: {{ block.settings.locations_endpoint | json }},
+    stockLevelsEndpoint: '/apps/russoAPI/v1/getStockLevels',
     geoipEndpoint: {{ block.settings.geoip_endpoint | json }},
     enableGeoipSort: {{ block.settings.enable_geoip_sort | json }},
     headerTargetSelector: {{ block.settings.header_target_selector | json }},

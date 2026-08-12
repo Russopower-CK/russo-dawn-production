@@ -416,6 +416,30 @@
   cursor: pointer;
   font-size: 0.9rem;
 }
+
+.preferred-store-pickup__status-button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  color: rgb(var(--color-foreground));
+  font: inherit;
+  cursor: pointer;
+}
+
+.preferred-store-pickup__status-button [data-preferred-store-product-label] {
+  display: inline;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.preferred-store-pickup__status-button:focus-visible {
+  outline: 2px solid #111827;
+  outline-offset: 2px;
+}
 .pickup-status {
   font-size: 0.9rem;
   font-weight: 600;
@@ -516,10 +540,45 @@
   background: rgba(17, 24, 39, 0.06);
 }
 
-/* Keep text-node hiding only for non-header trigger variants. */
-.preferred-store-trigger:not(.preferred-store-trigger--header-inline) {
+/* Keep text-node hiding only for side-tab style variants. */
+.preferred-store-trigger:not(.preferred-store-trigger--header-inline):not(.preferred-store-trigger--product-block) {
   font-size: 0 !important;
   line-height: 0;
+}
+
+/* Product-page trigger should render as a full, visible button. */
+.preferred-store-trigger.preferred-store-trigger--product-block {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 4.2rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(17, 24, 39, 0.25);
+  border-radius: 0.4rem;
+  background: #ffffff;
+  color: rgb(var(--color-foreground));
+  font-size: 0.95rem !important;
+  line-height: 1.2 !important;
+  white-space: normal;
+  text-align: center;
+}
+
+.preferred-store-trigger.preferred-store-trigger--product-block::before {
+  display: inline-block !important;
+  margin-right: 0;
+  flex: 0 0 18px;
+  /* Dark pin icon for light PDP backgrounds */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111827' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'%3E%3C/path%3E%3Ccircle cx='12' cy='10' r='3'%3E%3C/circle%3E%3C/svg%3E");
+}
+
+.preferred-store-trigger.preferred-store-trigger--product-block [data-preferred-store-current-label] {
+  display: inline !important;
+  line-height: 1.2 !important;
+  color: currentColor;
+  font-weight: 600;
 }
 
 /* Force header trigger to render icon + label inline, left-to-right. */

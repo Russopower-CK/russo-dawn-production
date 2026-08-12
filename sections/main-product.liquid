@@ -38,7 +38,8 @@
       }
     }
     .product-vendor a {
-      color: #d9121f !important;
+      color: var(--russo-red-dark);
+       text-decoration: none;
     }
     /* Optional hover state */
     .product-vendor a:hover {
@@ -178,7 +179,9 @@
                   block: block,
                   product: product,
                   include_pickup: true,
-                  pickup_availability_components: 'all'
+                  pickup_availability_components: 'all',
+                  use_russo_pickup: block.settings.use_russo_pickup,
+                  show_launcher_button: true
                 %}
               {%- when 'inventory' -%}
                 <p
@@ -267,6 +270,12 @@
                     </div>
                   </details>
                 </div>
+
+              {%- when 'pickup-availability' %}
+                {% render 'russo-preferred-store-variant-trigger',
+                  variant: product.selected_or_first_available_variant,
+                  button_label: 'Select a Store'
+                %}
 
               {%- when 'popup' -%}
                 <modal-opener
@@ -971,6 +980,13 @@
           "id": "show_inventory_quantity",
           "label": "t:sections.main-product.blocks.inventory.settings.show_inventory_quantity.label",
           "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "use_russo_pickup",
+          "label": "Use Russo Pickup Logic",
+          "default": false,
+          "info": "Use Russo Proxy for inventory and store selector drawer."
         }
       ]
     },

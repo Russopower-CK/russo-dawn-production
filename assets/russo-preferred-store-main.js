@@ -14,6 +14,7 @@
     return {
       // Geo
       locationsEndpoint: cfg.locationsEndpoint || `${API_BASE}/pickuplocations`,
+      stockLevelsEndpoint: cfg.stockLevelsEndpoint || `${API_BASE}/getStockLevels`,
       geoipEndpoint: cfg.geoipEndpoint || `${API_BASE}/geoip`,
       geocodeZipEndpoint: cfg.geocodeZipEndpoint || `${API_BASE}/geocode-zip`,
 
@@ -51,9 +52,10 @@
     return toUniqueList([v1, legacy]);
   }
 
-  function fetchJsonWithFallback(urls) {
+  function fetchJsonWithFallback(urls, requestInit) {
     var queue = toUniqueList(urls);
     var failures = [];
+    var init = requestInit || { headers: { Accept: 'application/json' } };
 
     function attempt(index) {
       if (index >= queue.length) {
@@ -61,7 +63,7 @@
       }
 
       var url = queue[index];
-      return fetch(url, { headers: { Accept: 'application/json' } })
+      return fetch(url, init)
         .then(function (res) {
           var contentType = (res.headers && res.headers.get && res.headers.get('content-type')) || '';
           return res.text().then(function (raw) {
@@ -169,7 +171,56 @@
     return buildInStockSetFromLocations(ctx.locations || []);
   })();
 
-  function getStockStateForStore(storeName) {
+  function addLocationIdCandidates(target, locationId) {
+    var raw = String(locationId || '').trim();
+    if (!raw) return;
+
+    if (target.indexOf(raw) === -1) target.push(raw);
+
+    if (/^\d+$/.test(raw)) {
+      var gid = 'gid://shopify/Location/' + raw;
+      if (target.indexOf(gid) === -1) target.push(gid);
+      return;
+    }
+
+    var gidMatch = raw.match(/gid:\/\/shopify\/Location\/(\d+)/i);
+    if (gidMatch && gidMatch[1] && target.indexOf(gidMatch[1]) === -1) {
+      target.push(gidMatch[1]);
+    }
+  }
+
+  function getStoreLookupCandidates(storeName, explicitLocationId) {
+    var candidates = [];
+    var key = normalizeKey(storeName);
+    if (key) candidates.push(key);
+
+    addLocationIdCandidates(candidates, explicitLocationId);
+
+    var store = allLocations.find(function (loc) {
+      return loc && normalizeKey(loc.name) === key;
+    });
+    addLocationIdCandidates(candidates, store && store.id);
+
+    return { key: key, candidates: candidates };
+  }
+
+  function getStockStateForStore(storeName, locationId) {
+    var lookup = getStoreLookupCandidates(storeName, locationId);
+    var key = lookup.key;
+    var candidates = lookup.candidates;
+
+    for (var i = 0; i < candidates.length; i += 1) {
+      var candidate = candidates[i];
+      if (proxyStockByLocation && Object.prototype.hasOwnProperty.call(proxyStockByLocation, candidate)) {
+        return !!proxyStockByLocation[candidate];
+      }
+    }
+
+    // Once proxy lookup is attempted, use proxy-only stock truth.
+    if (hasAttemptedProxyStock) {
+      return null;
+    }
+
     // If no product context (non-product page), return null (don’t show stock text)
     if (!productInStockSet) return null;
 
@@ -178,7 +229,30 @@
     var keys = Object.keys(productInStockSet);
     if (!keys.length) return null;
 
-    return !!productInStockSet[normalizeKey(storeName)];
+    return !!productInStockSet[key];
+  }
+
+  function getStockQuantityForStore(storeName, locationId) {
+    var lookup = getStoreLookupCandidates(storeName, locationId);
+    var candidates = lookup.candidates;
+
+    for (var i = 0; i < candidates.length; i += 1) {
+      var candidate = candidates[i];
+      if (Object.prototype.hasOwnProperty.call(proxyQtyByLocation, candidate)) {
+        return proxyQtyByLocation[candidate];
+      }
+    }
+
+    if (hasAttemptedProxyStock) {
+      console.info('Preferred store: quantity not matched for location', {
+        storeName: storeName,
+        locationId: locationId || null,
+        lookupCandidates: candidates,
+        availableQtyKeys: Object.keys(proxyQtyByLocation || {})
+      });
+    }
+
+    return null;
   }
 
   function updatePickupStatusLine() {
@@ -392,6 +466,166 @@
   var allLocations = [];
   var hasFetchedLocations = false;
   var currentOrigin = null;
+  var stockByVariantCache = {};
+  var proxyStockByLocation = {};
+  var proxyQtyByLocation = {};
+  var hasAttemptedProxyStock = false;
+
+  function getActiveVariantId() {
+    var ctx = window.__PreferredStoreProductContext || {};
+    var variantId = ctx.variantId;
+
+    if (!variantId) {
+      var pickupEl = document.querySelector('pickup-availability[data-variant-id]');
+      variantId = pickupEl && pickupEl.dataset ? pickupEl.dataset.variantId : null;
+    }
+
+    if (!variantId) {
+      var idInput = document.querySelector('input[name="id"][form^="product-form-"], form[action*="/cart/add"] input[name="id"]');
+      variantId = idInput && idInput.value ? idInput.value : null;
+    }
+
+    if (!variantId && window.ShopifyAnalytics && window.ShopifyAnalytics.meta) {
+      variantId = window.ShopifyAnalytics.meta.selectedVariantId || null;
+    }
+
+    if (!variantId) {
+      var params = new URLSearchParams(window.location.search);
+      variantId = params.get('variant');
+    }
+
+    return variantId ? String(variantId) : null;
+  }
+
+  function extractStockItems(data) {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (
+      data.data &&
+      data.data.productVariant &&
+      data.data.productVariant.inventoryItem &&
+      data.data.productVariant.inventoryItem.inventoryLevels &&
+      Array.isArray(data.data.productVariant.inventoryItem.inventoryLevels.nodes)
+    ) {
+      return data.data.productVariant.inventoryItem.inventoryLevels.nodes;
+    }
+    if (Array.isArray(data.data)) return data.data;
+    if (data.data && Array.isArray(data.data.stockLevels)) return data.data.stockLevels;
+    if (data.data && Array.isArray(data.data.getStockLevels)) return data.data.getStockLevels;
+    if (Array.isArray(data.stockLevels)) return data.stockLevels;
+    if (Array.isArray(data.getStockLevels)) return data.getStockLevels;
+    if (Array.isArray(data.locations)) return data.locations;
+    return [];
+  }
+
+  function toLocationNameFromStockItem(item) {
+    if (!item || typeof item !== 'object') return null;
+    if (item.location && typeof item.location === 'object' && item.location.name) {
+      return item.location.name;
+    }
+    return item.locationName || item.location_name || item.location || item.name || item.storeName || item.store_name || null;
+  }
+
+  function toInventoryFromStockItem(item) {
+    if (!item || typeof item !== 'object') return null;
+
+    if (Array.isArray(item.quantities)) {
+      var availableNode = item.quantities.find(function (q) {
+        return q && String(q.name || '').toLowerCase() === 'available';
+      });
+      if (availableNode && isFinite(Number(availableNode.quantity))) {
+        return Number(availableNode.quantity);
+      }
+    }
+
+    var value =
+      item.inventoryAvailable ??
+      item.inventory_available ??
+      item.available ??
+      item.quantityAvailable ??
+      item.quantity_available ??
+      item.quantity ??
+      item.stock;
+    var n = Number(value);
+    return isFinite(n) ? n : null;
+  }
+
+  function mapStockArrayToMaps(items) {
+    var stockMap = {};
+    var qtyMap = {};
+    if (!Array.isArray(items)) return { stockMap: stockMap, qtyMap: qtyMap };
+
+    items.forEach(function (item) {
+      var locationName = toLocationNameFromStockItem(item);
+      if (!locationName) return;
+
+      var inventory = toInventoryFromStockItem(item);
+      if (inventory === null) return;
+
+      var normalizedName = normalizeKey(locationName);
+      stockMap[normalizedName] = inventory > 0;
+      qtyMap[normalizedName] = inventory;
+
+      if (item.location && item.location.id) {
+        var locationId = String(item.location.id);
+        stockMap[locationId] = inventory > 0;
+        qtyMap[locationId] = inventory;
+      }
+    });
+
+    return { stockMap: stockMap, qtyMap: qtyMap };
+  }
+
+  function loadProxyStockForVariant(variantId) {
+    hasAttemptedProxyStock = true;
+
+    if (!variantId) {
+      console.warn('Preferred store: no variantId found for stock lookup');
+      proxyStockByLocation = {};
+      proxyQtyByLocation = {};
+      return Promise.resolve();
+    }
+
+    if (stockByVariantCache[variantId]) {
+      proxyStockByLocation = stockByVariantCache[variantId].stockMap || {};
+      proxyQtyByLocation = stockByVariantCache[variantId].qtyMap || {};
+      return Promise.resolve();
+    }
+
+    var cfg = getConfig();
+    var endpoints = buildProxyCandidates(cfg.stockLevelsEndpoint, 'getStockLevels');
+    var requestInit = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        variantId: variantId,
+        variant_id: variantId
+      })
+    };
+
+    console.info('Preferred store: requesting stock levels (POST)', {
+      variantId: variantId,
+      endpoints: endpoints,
+      body: { variantId: variantId }
+    });
+
+    return fetchJsonWithFallback(endpoints, requestInit)
+      .then(function (result) {
+        var stockItems = extractStockItems(result.data);
+        var mapped = mapStockArrayToMaps(stockItems);
+        stockByVariantCache[variantId] = mapped;
+        proxyStockByLocation = mapped.stockMap;
+        proxyQtyByLocation = mapped.qtyMap;
+      })
+      .catch(function (err) {
+        console.error('Preferred store: stock levels fetch failed', err);
+        proxyStockByLocation = {};
+        proxyQtyByLocation = {};
+      });
+  }
 
   // -----------------------------
   // Rendering
@@ -487,16 +721,21 @@
     }
 
     //Stock line
-    var stock = getStockStateForStore(loc.name);
+    var stock = getStockStateForStore(loc.name, loc.id);
+    var qty = getStockQuantityForStore(loc.name, loc.id);
     if (stock === true) {
       var stockYes = document.createElement('div');
       stockYes.className = 'preferred-store-card__stock preferred-store-card__stock--yes';
-      stockYes.textContent = 'In stock at this store';
+      stockYes.textContent = qty === null
+        ? 'In stock at this store'
+        : ('In stock at this store (' + qty + ' available)');
       card.appendChild(stockYes);
     } else if (stock === false) {
       var stockNo = document.createElement('div');
       stockNo.className = 'preferred-store-card__stock preferred-store-card__stock--no';
-      stockNo.textContent = 'Pickup unavailable';
+      stockNo.textContent = qty === null
+        ? 'Pickup unavailable'
+        : ('Pickup unavailable (' + qty + ' available)');
       card.appendChild(stockNo);
     }
 
@@ -703,7 +942,13 @@
     var els = getDrawerEls();
     if (!els) return;
 
-    fetchLocationsIfNeeded();
+    var variantId = getActiveVariantId();
+
+    Promise.resolve(loadProxyStockForVariant(variantId)).then(function () {
+      fetchLocationsIfNeeded();
+      renderFilteredLocations(els.searchInput ? els.searchInput.value : '');
+      updatePickupStatusLine();
+    });
 
     if (typeof els.dialog.showModal === 'function') els.dialog.showModal();
     else els.dialog.setAttribute('open', 'open');
