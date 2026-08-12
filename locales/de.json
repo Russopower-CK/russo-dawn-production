@@ -391,7 +391,6 @@
       "view_addresses": "Adressen anzeigen",
       "return": "Zurück zu Kontodetails"
     },
-    "account_fallback": "Konto",
     "activate_account": {
       "title": "Konto aktivieren",
       "subtext": "Erstelle ein Passwort, um dein Konto zu aktiveren.",

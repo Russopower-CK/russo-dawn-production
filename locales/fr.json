@@ -403,7 +403,6 @@
       "view_addresses": "Voir les adresses",
       "return": "Retour aux détails du compte"
     },
-    "account_fallback": "Compte",
     "activate_account": {
       "title": "Activer le compte",
       "subtext": "Créez votre mot de passe pour activer le compte.",
