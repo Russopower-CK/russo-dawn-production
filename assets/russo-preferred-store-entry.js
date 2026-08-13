@@ -212,7 +212,7 @@
     });
   }
 
-  function ensureMainThenOpen() {
+  function ensureMainThenOpen(options) {
     // UX: show the drawer immediately on first click
     openDialogImmediately();
 
@@ -220,7 +220,7 @@
     loadMain()
       .then(function () {
         if (window.__PreferredStoreAPI && typeof window.__PreferredStoreAPI.open === 'function') {
-          window.__PreferredStoreAPI.open();
+          window.__PreferredStoreAPI.open(options || {});
         }
       })
       .catch(function (e) {
@@ -242,7 +242,7 @@
       hasEntry: !!window.__PreferredStoreEntryLoaded
     });
 
-    ensureMainThenOpen();
+    ensureMainThenOpen(options || {});
   };
 
   // -----------------------------
@@ -293,6 +293,9 @@
 
     e.preventDefault();
     e.stopPropagation();
-    ensureMainThenOpen();
+    ensureMainThenOpen({
+      source: 'delegated-trigger',
+      skipStockLookup: true
+    });
   }, true);
 })();

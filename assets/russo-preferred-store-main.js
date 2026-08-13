@@ -938,13 +938,25 @@
   // -----------------------------
   // Drawer open/close
   // -----------------------------
-  function openDrawer() {
+  function openDrawer(options) {
     var els = getDrawerEls();
     if (!els) return;
 
-    var variantId = getActiveVariantId();
+    var opts = options || {};
+    var shouldLookupStock = opts.skipStockLookup !== true;
+    var variantId = opts.variantId ? String(opts.variantId) : getActiveVariantId();
+    var stockPromise;
 
-    Promise.resolve(loadProxyStockForVariant(variantId)).then(function () {
+    if (shouldLookupStock) {
+      stockPromise = loadProxyStockForVariant(variantId);
+    } else {
+      hasAttemptedProxyStock = false;
+      proxyStockByLocation = {};
+      proxyQtyByLocation = {};
+      stockPromise = Promise.resolve();
+    }
+
+    Promise.resolve(stockPromise).then(function () {
       fetchLocationsIfNeeded();
       renderFilteredLocations(els.searchInput ? els.searchInput.value : '');
       updatePickupStatusLine();

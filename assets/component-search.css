@@ -55,7 +55,7 @@
 .search__button:not(:focus-visible):not(.focused) {
   box-shadow: inherit;
   background-color: #be1e2d;
-  height: 96%;
+
 }
 .reset__button:not(:focus-visible):not(.focused){
   color:black;

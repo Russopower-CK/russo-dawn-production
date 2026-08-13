@@ -5,7 +5,7 @@
     <search-form class="search-modal__form">
   {%- endif -%}
   <form action="{{ routes.search_url }}" method="get" role="search" class="search">
-    <div class="field_input">
+    <div class="field">
       <input
         class="search__input field__input"
         id="Search-In-Header"
@@ -58,7 +58,6 @@
       width: 100%;
       max-width: 1200px;
       justify-self: stretch;
-      border: none;
     }
 
     .header__search .field {
@@ -72,7 +71,6 @@
       background: rgb(var(--color-foreground));
       font-size: 14px;
       width: 100%;
-      border: none;
       color: rgb(var(--color-background));
     }
 
@@ -91,10 +89,8 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: none;
-      border: none;
+
       cursor: pointer;
-      padding: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
