@@ -20,7 +20,6 @@
 {% assign showpickup = include_pickup %}
 {% assign pickup_auto_status_fetch = auto_status_fetch | default: false %}
 
-<script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
 <style>
       .shipping-stock {
         margin: 0;
@@ -184,6 +183,7 @@
         auto_status_fetch: pickup_auto_status_fetch
       %}
     {% else %}
+      <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
       {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
         | where: 'pick_up_enabled', true
       -%}
