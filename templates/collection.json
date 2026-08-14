@@ -31,6 +31,7 @@
         "show_sku": true,
         "show_rating": true,
         "quick_add": "standard",
+        "use_russo_pickup": true,
         "enable_filtering": true,
         "filter_type": "vertical",
         "enable_sorting": true,
