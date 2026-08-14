@@ -8,6 +8,7 @@
   - hide_view_other_stores: {Boolean} legacy option to hide the pickup availability button (optional).
   - pickup_availability_components: {String} comma-separated list of pickup availability components to show.
   - use_russo_pickup: {Boolean} specifies if the base pickup-preview or the russo preffered store is rendered.
+  -auto_status_fetch: {Boolean} specifies if the russo-preffered-store-variant-trigger will auto fetch stock levels. Set false if rendered from card-product.
     Supported values: headline, time, button. Aliases: caption-large/title/location, caption/eta, stores/view-other-stores.
     Examples: 'headline' (caption only), 'headline,time', 'all'.
   Usage:
@@ -17,6 +18,7 @@
   %}
 {% endcomment %}
 {% assign showpickup = include_pickup %}
+{% assign pickup_auto_status_fetch = auto_status_fetch | default: false %}
 
 <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
 <style>
@@ -178,7 +180,8 @@
       {% render 'russo-preferred-store-variant-trigger',
         variant: product.selected_or_first_available_variant,
         button_label: 'Select a Store',
-        show_launcher_button: show_launcher_button
+        show_launcher_button: show_launcher_button,
+        auto_status_fetch: pickup_auto_status_fetch
       %}
     {% else %}
       {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities

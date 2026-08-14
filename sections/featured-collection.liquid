@@ -199,7 +199,9 @@
                     quick_add: section.settings.quick_add,
                     show_stock: true,
                     pickup_availability_components: 'headline',
-                    enable_hover_actions: true
+                    enable_hover_actions: true,
+                    use_russo_pickup: section.settings.use_russo_pickup,
+                    auto_status_fetch: false
                   %}
                 </li>
                 {%- assign skip_card_product_styles = true -%}
@@ -427,6 +429,13 @@
       "type": "checkbox",
       "id": "hide_no_products",
       "label": "Russo Hide When No Products"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_russo_pickup",
+      "label": "Use Russo Pickup Logic",
+      "default": false,
+      "info": "Use Russo Proxy for inventory and store selector drawer."
     },
     {
       "type": "checkbox",

@@ -212,6 +212,367 @@
     });
   }
 
+  function toUniqueList(items) {
+    var out = [];
+    (items || []).forEach(function (item) {
+      var value = String(item || '').trim();
+      if (!value) return;
+      if (out.indexOf(value) === -1) out.push(value);
+    });
+    return out;
+  }
+
+  function buildStockEndpointCandidates(primary) {
+    var p = String(primary || '').trim();
+    var v1 = '/apps/russoAPI/v1/getStockLevels';
+    var legacy = '/apps/russoAPI?RequestType=getStockLevels';
+
+    if (p.indexOf('/apps/russoAPI/v1/') !== -1) return toUniqueList([p, legacy]);
+    if (p.indexOf('/apps/russoAPI?') !== -1 || p.indexOf('RequestType=') !== -1) return toUniqueList([p, v1]);
+    if (p) return toUniqueList([p, v1, legacy]);
+    return toUniqueList([v1, legacy]);
+  }
+
+  function fetchJsonWithFallback(urls, requestInit) {
+    var queue = toUniqueList(urls);
+    var failures = [];
+
+    function attempt(index) {
+      if (index >= queue.length) {
+        throw new Error('Batch stock request failed: ' + failures.join(' | '));
+      }
+
+      var url = queue[index];
+      return fetch(url, requestInit)
+        .then(function (res) {
+          return res.text().then(function (raw) {
+            if (!res.ok) throw new Error(url + ' -> HTTP ' + res.status);
+            try {
+              return { data: raw ? JSON.parse(raw) : null, url: url };
+            } catch (e) {
+              throw new Error(url + ' -> invalid JSON');
+            }
+          });
+        })
+        .catch(function (err) {
+          failures.push(err && err.message ? err.message : (url + ' -> request failed'));
+          return attempt(index + 1);
+        });
+    }
+
+    return attempt(0);
+  }
+
+  function collectBatchVariantIds() {
+    var triggers = document.querySelectorAll('[data-preferred-store-variant-trigger][data-auto-status-fetch="false"]');
+    var ids = [];
+
+    triggers.forEach(function (node) {
+      var id = node && node.dataset ? node.dataset.preferredStoreVariantId : null;
+      if (!id) return;
+      var normalized = String(id).trim();
+      if (!/^\d+$/.test(normalized)) return;
+      ids.push(normalized);
+    });
+
+    return toUniqueList(ids);
+  }
+
+  function clearPickupIcon(root) {
+    var iconRoot = root.querySelector('.preffered-store-pickup__status-icon');
+    if (!iconRoot) return;
+    iconRoot.innerHTML = '';
+  }
+
+  function setPickupIcon(root, inStock) {
+    var iconRoot = root.querySelector('.preffered-store-pickup__status-icon');
+    if (!iconRoot) return;
+
+    if (inStock === true) {
+      iconRoot.innerHTML =
+        '<svg class="surface-pick-up-embed__in-stock-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">' +
+        '<path d="M4.33346 10.5625L3.80311 11.0928L4.33344 11.6232L4.86379 11.0928L4.33346 10.5625ZM0.191824 7.48134L3.80311 11.0928L4.8638 10.0322L1.25251 6.4207L0.191824 7.48134ZM4.86379 11.0928L12.9888 2.96783L11.9281 1.90717L3.80313 10.0322L4.86379 11.0928Z"></path>' +
+        '</svg>';
+      return;
+    }
+
+    if (inStock === false) {
+      iconRoot.innerHTML =
+        '<svg class="surface-pick-up-embed__out-of-stock-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">' +
+        '<path d="M1.46967 2.53033L5.96967 7.03033L7.03033 5.96967L2.53033 1.46967L1.46967 2.53033ZM5.96967 7.03033L10.4697 11.5303L11.5303 10.4697L7.03033 5.96967L5.96967 7.03033ZM7.03033 7.03033L11.5303 2.53033L10.4697 1.46967L5.96967 5.96967L7.03033 7.03033ZM10.4697 1.46967L1.46967 10.4697L2.53033 11.5303L11.5303 2.53033L10.4697 1.46967Z"></path>' +
+        '</svg>';
+      return;
+    }
+
+    iconRoot.innerHTML = '';
+  }
+
+  function setPickupLabel(root, text) {
+    var label = root.querySelector('[data-preferred-store-product-label]');
+    if (!label) return;
+    label.textContent = text;
+  }
+
+  function parseVariantIdFromGid(gid) {
+    var raw = String(gid || '');
+    var match = raw.match(/ProductVariant\/(\d+)/i);
+    return match && match[1] ? String(match[1]) : null;
+  }
+
+  function inventoryLevelNodes(levels) {
+    if (!levels || typeof levels !== 'object') return [];
+    if (Array.isArray(levels.nodes)) return levels.nodes;
+    if (Array.isArray(levels.edges)) {
+      return levels.edges
+        .map(function (edge) { return edge && edge.node ? edge.node : null; })
+        .filter(Boolean);
+    }
+    return [];
+  }
+
+  function extractVariantNodes(data) {
+    if (!data || typeof data !== 'object') return [];
+    if (data.data && Array.isArray(data.data.nodes)) return data.data.nodes;
+    if (Array.isArray(data.nodes)) return data.nodes;
+    if (data.data && data.data.productVariant) return [data.data.productVariant];
+    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.nodes)) {
+      return data.data.productVariants.nodes;
+    }
+    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.edges)) {
+      return data.data.productVariants.edges
+        .map(function (edge) { return edge && edge.node ? edge.node : null; })
+        .filter(Boolean);
+    }
+    return [];
+  }
+
+  function toLocationNameFromStockItem(item) {
+    if (!item || typeof item !== 'object') return null;
+    if (item.location && typeof item.location === 'object' && item.location.name) {
+      return item.location.name;
+    }
+    return item.locationName || item.location_name || item.location || item.name || item.storeName || item.store_name || null;
+  }
+
+  function toAvailableQtyFromStockItem(item) {
+    if (!item || typeof item !== 'object') return null;
+
+    if (Array.isArray(item.quantities)) {
+      var availableNode = item.quantities.find(function (q) {
+        return q && String(q.name || '').toLowerCase() === 'available';
+      });
+      if (availableNode && isFinite(Number(availableNode.quantity))) {
+        return Number(availableNode.quantity);
+      }
+    }
+
+    var value =
+      item.inventoryAvailable ??
+      item.inventory_available ??
+      item.available ??
+      item.quantityAvailable ??
+      item.quantity_available ??
+      item.quantity ??
+      item.stock;
+    var n = Number(value);
+    return isFinite(n) ? n : null;
+  }
+
+  function buildStockMaps(items) {
+    var stockMap = {};
+    var qtyMap = {};
+
+    (items || []).forEach(function (item) {
+      var locationName = toLocationNameFromStockItem(item);
+      if (!locationName) return;
+
+      var qty = toAvailableQtyFromStockItem(item);
+      if (qty === null) return;
+
+      var normalizedName = normalizeKey(locationName);
+      stockMap[normalizedName] = qty > 0;
+      qtyMap[normalizedName] = qty;
+
+      var noRussoPrefixName = normalizeKey(String(locationName || '').replace(/^russo\s+/i, ''));
+      if (noRussoPrefixName) {
+        stockMap[noRussoPrefixName] = qty > 0;
+        qtyMap[noRussoPrefixName] = qty;
+      }
+
+      if (item.location && item.location.id) {
+        var locationId = String(item.location.id);
+        stockMap[locationId] = qty > 0;
+        qtyMap[locationId] = qty;
+
+        var idMatch = locationId.match(/gid:\/\/shopify\/Location\/(\d+)/i);
+        if (idMatch && idMatch[1]) {
+          stockMap[idMatch[1]] = qty > 0;
+          qtyMap[idMatch[1]] = qty;
+        }
+      }
+    });
+
+    return { stockMap: stockMap, qtyMap: qtyMap };
+  }
+
+  function addLocationIdCandidates(target, locationId) {
+    var rawId = String(locationId || '').trim();
+    if (!rawId) return;
+    if (target.indexOf(rawId) === -1) target.push(rawId);
+
+    if (/^\d+$/.test(rawId)) {
+      var gid = 'gid://shopify/Location/' + rawId;
+      if (target.indexOf(gid) === -1) target.push(gid);
+      return;
+    }
+
+    var gidMatch = rawId.match(/gid:\/\/shopify\/Location\/(\d+)/i);
+    if (gidMatch && gidMatch[1] && target.indexOf(gidMatch[1]) === -1) {
+      target.push(gidMatch[1]);
+    }
+  }
+
+  function getStockLookupCandidates(selectedName, selectedId) {
+    var candidates = [];
+    var normalizedName = normalizeKey(selectedName);
+    if (normalizedName) candidates.push(normalizedName);
+
+    var noRussoPrefix = normalizeKey(String(selectedName || '').replace(/^russo\s+/i, ''));
+    if (noRussoPrefix && candidates.indexOf(noRussoPrefix) === -1) {
+      candidates.push(noRussoPrefix);
+    }
+
+    addLocationIdCandidates(candidates, selectedId);
+    return candidates;
+  }
+
+  function getLiveStockForSelectedStore(mapped, selectedName, selectedId) {
+    if (!mapped || !mapped.stockMap || !mapped.qtyMap) return null;
+    var candidates = getStockLookupCandidates(selectedName, selectedId);
+
+    for (var i = 0; i < candidates.length; i += 1) {
+      var candidate = candidates[i];
+      if (Object.prototype.hasOwnProperty.call(mapped.stockMap, candidate)) {
+        return {
+          inStock: !!mapped.stockMap[candidate],
+          qty: mapped.qtyMap[candidate]
+        };
+      }
+    }
+
+    return null;
+  }
+
+  function hydrateBatchPickupStatuses() {
+    var triggers = document.querySelectorAll('[data-preferred-store-variant-trigger][data-auto-status-fetch="false"]');
+    if (!triggers.length) return;
+
+    var selectedName = getCookie('preferred_store_location_name');
+    var selectedId = getCookie('preferred_store_location_id');
+    var cache = window.__PreferredStoreVariantStockCache || {};
+
+    triggers.forEach(function (root) {
+      var defaultLabel = (root.dataset && root.dataset.preferredStoreDefaultLabel)
+        ? String(root.dataset.preferredStoreDefaultLabel)
+        : 'Choose a Store';
+      var variantId = root.dataset ? String(root.dataset.preferredStoreVariantId || '').trim() : '';
+
+      if (!selectedName) {
+        setPickupLabel(root, defaultLabel);
+        clearPickupIcon(root);
+        return;
+      }
+
+      if (!variantId || !cache[variantId]) {
+        setPickupLabel(root, 'Pickup Availability unknown at ' + selectedName);
+        clearPickupIcon(root);
+        return;
+      }
+
+      var live = getLiveStockForSelectedStore(cache[variantId], selectedName, selectedId);
+      if (!live) {
+        setPickupLabel(root, 'Pickup Availability unknown at ' + selectedName);
+        clearPickupIcon(root);
+        return;
+      }
+
+      setPickupIcon(root, live.inStock);
+      setPickupLabel(root, live.inStock
+        ? ('Available at ' + selectedName.replace('Russo ', ''))
+        : ('Unavailable at ' + selectedName.replace('Russo ', '')));
+    });
+  }
+
+  function mergeBatchResponseIntoVariantCache(data) {
+    var variantNodes = extractVariantNodes(data);
+    if (!variantNodes.length) return;
+
+    var cache = window.__PreferredStoreVariantStockCache || {};
+
+    variantNodes.forEach(function (variantNode) {
+      if (!variantNode || typeof variantNode !== 'object') return;
+
+      var variantId = parseVariantIdFromGid(variantNode.id) || String(variantNode.id || '').trim();
+      if (!variantId) return;
+
+      var levels = inventoryLevelNodes(
+        variantNode.inventoryItem && variantNode.inventoryItem.inventoryLevels
+      );
+
+      cache[String(variantId)] = buildStockMaps(levels);
+    });
+
+    window.__PreferredStoreVariantStockCache = cache;
+  }
+
+  function batchProbeVariantStock() {
+    var variantIds = collectBatchVariantIds();
+    if (!variantIds.length) return;
+
+    var state = window.__PreferredStoreBatchProbeState || {};
+    var signature = variantIds.join(',');
+
+    if (state.inFlight && state.signature === signature) return;
+    if (state.lastSuccessSignature === signature) return;
+
+    state.inFlight = true;
+    state.signature = signature;
+    window.__PreferredStoreBatchProbeState = state;
+
+    var cfg = window.__PreferredStoreConfig || {};
+    var endpoints = buildStockEndpointCandidates(cfg.stockLevelsEndpoint || '/apps/russoAPI/v1/getStockLevels');
+    var requestInit = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        variantIds: variantIds,
+        variant_ids: variantIds
+      })
+    };
+
+    fetchJsonWithFallback(endpoints, requestInit)
+      .then(function (result) {
+        state.inFlight = false;
+        state.lastSuccessSignature = signature;
+        window.__PreferredStoreBatchProbeState = state;
+        window.__PreferredStoreBatchStockResponse = result.data;
+        mergeBatchResponseIntoVariantCache(result.data);
+        hydrateBatchPickupStatuses();
+        console.info('Preferred store batch probe: success', {
+          variantCount: variantIds.length,
+          endpoint: result.url
+        });
+      })
+      .catch(function (err) {
+        state.inFlight = false;
+        window.__PreferredStoreBatchProbeState = state;
+        console.error('Preferred store batch probe: failed', err);
+      });
+  }
+
   function ensureMainThenOpen(options) {
     // UX: show the drawer immediately on first click
     openDialogImmediately();
@@ -254,13 +615,14 @@
   retryHeaderMount();
   updatePickupStatusLine();
   retryPickupHydration();
+  batchProbeVariantStock();
+  hydrateBatchPickupStatuses();
 
 
   document.addEventListener('preferred-store-drawer:close', function () {
-  updatePickupStatusLine();
-  // ...any other hydration you need
-      updatePickupStatusLine();
-});
+    updatePickupStatusLine();
+    hydrateBatchPickupStatuses();
+  });
   document.addEventListener('DOMContentLoaded', function () {
     updateLabelsFromCookies();
     retryLabelHydration();
@@ -268,6 +630,8 @@
     retryHeaderMount();
     updatePickupStatusLine();
     retryPickupHydration();
+    batchProbeVariantStock();
+    hydrateBatchPickupStatuses();
   });
 
   document.addEventListener('shopify:section:load', function () {
@@ -277,6 +641,8 @@
     retryHeaderMount();
     updatePickupStatusLine();
     retryPickupHydration();
+    batchProbeVariantStock();
+    hydrateBatchPickupStatuses();
   });
 
   // Import-on-interaction: open drawer + lazy load main.

@@ -194,6 +194,11 @@
     var key = normalizeKey(storeName);
     if (key) candidates.push(key);
 
+    var keyNoRussoPrefix = normalizeKey(String(storeName || '').replace(/^russo\s+/i, ''));
+    if (keyNoRussoPrefix && candidates.indexOf(keyNoRussoPrefix) === -1) {
+      candidates.push(keyNoRussoPrefix);
+    }
+
     addLocationIdCandidates(candidates, explicitLocationId);
 
     var store = allLocations.find(function (loc) {
@@ -498,16 +503,52 @@
   }
 
   function extractStockItems(data) {
+    function inventoryLevelNodes(levels) {
+      if (!levels || typeof levels !== 'object') return [];
+      if (Array.isArray(levels.nodes)) return levels.nodes;
+      if (Array.isArray(levels.edges)) {
+        return levels.edges
+          .map(function (edge) { return edge && edge.node ? edge.node : null; })
+          .filter(Boolean);
+      }
+      return [];
+    }
+
+    function nodesFromVariant(variantNode) {
+      if (!variantNode || typeof variantNode !== 'object') return [];
+      if (!variantNode.inventoryItem || !variantNode.inventoryItem.inventoryLevels) return [];
+      return inventoryLevelNodes(variantNode.inventoryItem.inventoryLevels);
+    }
+
     if (!data) return [];
     if (Array.isArray(data)) return data;
+    if (data.data && Array.isArray(data.data.nodes)) {
+      return data.data.nodes.reduce(function (all, variantNode) {
+        return all.concat(nodesFromVariant(variantNode));
+      }, []);
+    }
+    if (Array.isArray(data.nodes)) {
+      return data.nodes.reduce(function (all, variantNode) {
+        return all.concat(nodesFromVariant(variantNode));
+      }, []);
+    }
     if (
       data.data &&
       data.data.productVariant &&
       data.data.productVariant.inventoryItem &&
-      data.data.productVariant.inventoryItem.inventoryLevels &&
-      Array.isArray(data.data.productVariant.inventoryItem.inventoryLevels.nodes)
+      data.data.productVariant.inventoryItem.inventoryLevels
     ) {
-      return data.data.productVariant.inventoryItem.inventoryLevels.nodes;
+      return nodesFromVariant(data.data.productVariant);
+    }
+    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.nodes)) {
+      return data.data.productVariants.nodes.reduce(function (all, variantNode) {
+        return all.concat(nodesFromVariant(variantNode));
+      }, []);
+    }
+    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.edges)) {
+      return data.data.productVariants.edges.reduce(function (all, edge) {
+        return all.concat(nodesFromVariant(edge && edge.node ? edge.node : null));
+      }, []);
     }
     if (Array.isArray(data.data)) return data.data;
     if (data.data && Array.isArray(data.data.stockLevels)) return data.data.stockLevels;
@@ -565,6 +606,12 @@
       var normalizedName = normalizeKey(locationName);
       stockMap[normalizedName] = inventory > 0;
       qtyMap[normalizedName] = inventory;
+
+      var noRussoPrefixName = normalizeKey(String(locationName || '').replace(/^russo\s+/i, ''));
+      if (noRussoPrefixName) {
+        stockMap[noRussoPrefixName] = inventory > 0;
+        qtyMap[noRussoPrefixName] = inventory;
+      }
 
       if (item.location && item.location.id) {
         var locationId = String(item.location.id);

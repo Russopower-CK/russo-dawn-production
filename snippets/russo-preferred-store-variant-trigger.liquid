@@ -7,11 +7,12 @@
     show_status_display: render the status line (default true)
     show_launcher_button: render the open-selector button/link (default true)
     launcher_button_label: launcher button text (default "Check availability at other stores")
+    auto_status_fetch: when false, skip status fetch/update logic in this snippet (default false)
 
     Responsibility split for this snippet:
   1) Status-only button label:
       - updateButtonLabel() updates the button text from cookie + live getStockLevels data.
-      - Uses variant metafield locations only as legacy fallback when live data is unavailable.
+      - Does not use legacy metafield/store_availability fallback.
   2) Click/open + stock fetch:
      - Click handler sets window.__PreferredStoreProductContext and opens drawer via
        window.__PreferredStoreOpen(...) or window.__PreferredStoreAPI.open().
@@ -36,11 +37,11 @@
 </style>
 {%- liquid
   assign preferred_store_variant = variant | default: product.selected_or_first_available_variant
-  assign preferred_store_locations_raw = preferred_store_variant.metafields.custom.location_availability.value
   assign preferred_store_default_label = button_label | default: 'Choose a Store'
   assign preferred_store_show_status_label = show_status_label | default: true
   assign preferred_store_show_status_display = show_status_display | default: true
   assign preferred_store_show_launcher_button = show_launcher_button | default: false
+  assign preferred_store_auto_status_fetch = auto_status_fetch | default: false
   assign preferred_store_launcher_button_label = launcher_button_label | default: 'Check availability at other stores'
   assign preferred_store_instance_id = 'preferred-store-variant-' | append: section.id | append: '-' | append: preferred_store_variant.id
 -%}
@@ -49,6 +50,9 @@
   class="pickup-availability-preview"
   data-preferred-store-variant-trigger
   data-instance-id="{{ preferred_store_instance_id }}"
+  data-preferred-store-variant-id="{{ preferred_store_variant.id }}"
+  data-auto-status-fetch="{{ preferred_store_auto_status_fetch }}"
+  data-preferred-store-default-label="{{ preferred_store_default_label | escape }}"
 >
   {%- if preferred_store_show_status_display -%}
     <div class="preffered-store-pickup__display">
@@ -81,20 +85,9 @@
   (function () {
     var root = document.querySelector('[data-instance-id="{{ preferred_store_instance_id }}"]');
     if (!root) return;
+    var autoStatusFetch = {{ preferred_store_auto_status_fetch | json }};
 
-    var raw = {{ preferred_store_locations_raw | json }};
     var locations = [];
-
-    if (Array.isArray(raw)) {
-      locations = raw
-        .map(function (item) { return String(item || '').trim(); })
-        .filter(Boolean);
-    } else if (typeof raw === 'string') {
-      locations = raw
-        .split(',')
-        .map(function (item) { return String(item || '').trim(); })
-        .filter(Boolean);
-    }
 
     window.__PreferredStoreProductContext = {
       variantId: {{ preferred_store_variant.id | json }},
@@ -200,16 +193,52 @@
     }
 
     function extractStockItems(data) {
+      function inventoryLevelNodes(levels) {
+        if (!levels || typeof levels !== 'object') return [];
+        if (Array.isArray(levels.nodes)) return levels.nodes;
+        if (Array.isArray(levels.edges)) {
+          return levels.edges
+            .map(function (edge) { return edge && edge.node ? edge.node : null; })
+            .filter(Boolean);
+        }
+        return [];
+      }
+
+      function nodesFromVariant(variantNode) {
+        if (!variantNode || typeof variantNode !== 'object') return [];
+        if (!variantNode.inventoryItem || !variantNode.inventoryItem.inventoryLevels) return [];
+        return inventoryLevelNodes(variantNode.inventoryItem.inventoryLevels);
+      }
+
       if (!data) return [];
       if (Array.isArray(data)) return data;
+      if (data.data && Array.isArray(data.data.nodes)) {
+        return data.data.nodes.reduce(function (all, variantNode) {
+          return all.concat(nodesFromVariant(variantNode));
+        }, []);
+      }
+      if (Array.isArray(data.nodes)) {
+        return data.nodes.reduce(function (all, variantNode) {
+          return all.concat(nodesFromVariant(variantNode));
+        }, []);
+      }
       if (
         data.data &&
         data.data.productVariant &&
         data.data.productVariant.inventoryItem &&
-        data.data.productVariant.inventoryItem.inventoryLevels &&
-        Array.isArray(data.data.productVariant.inventoryItem.inventoryLevels.nodes)
+        data.data.productVariant.inventoryItem.inventoryLevels
       ) {
-        return data.data.productVariant.inventoryItem.inventoryLevels.nodes;
+        return nodesFromVariant(data.data.productVariant);
+      }
+      if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.nodes)) {
+        return data.data.productVariants.nodes.reduce(function (all, variantNode) {
+          return all.concat(nodesFromVariant(variantNode));
+        }, []);
+      }
+      if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.edges)) {
+        return data.data.productVariants.edges.reduce(function (all, edge) {
+          return all.concat(nodesFromVariant(edge && edge.node ? edge.node : null));
+        }, []);
       }
       if (Array.isArray(data.data)) return data.data;
       if (data.data && Array.isArray(data.data.stockLevels)) return data.data.stockLevels;
@@ -273,6 +302,12 @@
       var candidates = [];
       var normalizedName = normalizeKey(selectedName);
       if (normalizedName) candidates.push(normalizedName);
+
+      var noRussoPrefix = normalizeKey(String(selectedName || '').replace(/^russo\s+/i, ''));
+      if (noRussoPrefix && candidates.indexOf(noRussoPrefix) === -1) {
+        candidates.push(noRussoPrefix);
+      }
+
       addLocationIdCandidates(candidates, selectedId);
       return candidates;
     }
@@ -291,6 +326,12 @@
         var normalizedName = normalizeKey(locationName);
         stockMap[normalizedName] = qty > 0;
         qtyMap[normalizedName] = qty;
+
+        var noRussoPrefixName = normalizeKey(String(locationName || '').replace(/^russo\s+/i, ''));
+        if (noRussoPrefixName) {
+          stockMap[noRussoPrefixName] = qty > 0;
+          qtyMap[noRussoPrefixName] = qty;
+        }
 
         if (item.location && item.location.id) {
           var locationId = String(item.location.id);
@@ -353,22 +394,8 @@
       return null;
     }
 
-    function getLegacyStockForSelectedStore(selectedName) {
-      if (!locations.length) return null;
-      var inStockSet = {};
-      locations.forEach(function (loc) {
-        var key = normalizeKey(loc);
-        if (key) inStockSet[key] = true;
-      });
-
-      return {
-        inStock: !!inStockSet[normalizeKey(selectedName)],
-        qty: null
-      };
-    }
-
     // Display-only status label for the PDP button.
-    // Uses selected store cookie + live proxy stock first, then legacy metafield fallback.
+    // Uses selected store cookie + live proxy stock only.
     function updateButtonLabel() {
       var fallbackLabel = {{ preferred_store_default_label | json }};
       var showStatusLabel = {{ preferred_store_show_status_label | json }};
@@ -403,15 +430,6 @@
             return;
           }
 
-          var legacy = getLegacyStockForSelectedStore(selectedName);
-          if (legacy) {
-            setStatusIcon(legacy.inStock);
-            setButtonLabel(legacy.inStock
-              ? ('Available at ' + selectedName)
-              : ('Unavailable at ' + selectedName));
-            return;
-          }
-
           setStatusIcon(null);
           setButtonLabel('Pickup Availability unknown at ' + selectedName);
         })
@@ -421,7 +439,9 @@
         });
     }
 
-    updateButtonLabel();
+    if (autoStatusFetch) {
+      updateButtonLabel();
+    }
 
     var openBtn = root.querySelector('[data-preferred-store-open]');
     if (openBtn && !openBtn.__preferredStoreBound) {
@@ -505,7 +525,9 @@
       });
     }
 
-    document.addEventListener('preferred-store-drawer:close', updateButtonLabel);
-    document.addEventListener('shopify:section:load', updateButtonLabel);
+    if (autoStatusFetch) {
+      document.addEventListener('preferred-store-drawer:close', updateButtonLabel);
+      document.addEventListener('shopify:section:load', updateButtonLabel);
+    }
   })();
 </script>
