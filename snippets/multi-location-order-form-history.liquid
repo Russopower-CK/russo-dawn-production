@@ -1,0 +1,128 @@
+{% comment %}
+  Snippet: multi-location-order-form-history.liquid
+  Usage: {% render 'multi-location-order-form-history', form_id: section.settings.form_id %}
+  Requires: form_id (string) — the metaobject GID or handle of the linked form
+{% endcomment %}
+<style>
+  .mlo-form__history-table th {
+    background-color: rgba(var(--color-foreground), 0.02);
+  }
+  .mlo-form__history-table th,
+  .mlo-form__history-table td {
+    text-align: left;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    padding: 1rem;
+    vertical-align: middle;
+  }
+  .mlo-form__history-table tbody tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.15s ease;
+  }
+  .mlo-form-history {
+    padding-top: 2rem;
+  }
+</style>
+<div class="mlo-form-header h2">Order Form History</div>
+<div
+  class="mlo-form-history"
+  id="mlo-history-container"
+  data-form-id="{{ form_id | escape }}"
+>
+  <p class="mlo-form__history-loading">Loading order history…</p>
+</div>
+
+<script>
+  (function () {
+    const formId = {{ form_id | json }};
+
+    {% comment %} B2B: grab the company ID from the logged-in customer {% endcomment %}
+    {% if customer and customer.b2b? %}
+      const companyId = {{ customer.current_company.id | json }};
+    {% else %}
+      const companyId = null;
+    {% endif %}
+
+    const container = document.getElementById('mlo-history-container');
+
+    if (!formId) {
+      console.warn('[MLO] No form_id provided — skipping history fetch.');
+      if (container) container.innerHTML = '<p>No form specified.</p>';
+      return;
+    }
+
+    fetch('/apps/russoAPI/v1/order-form-history', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({
+        form_id:    formId,
+        company_id: companyId
+      })
+    })
+    .then(function (res) {
+      if (!res.ok) throw new Error('API responded with status ' + res.status);
+      return res.json();
+    })
+    .then(function (data) {
+      renderHistory(data.entries, container);
+    })
+    .catch(function (err) {
+      console.error('[MLO] Order form history fetch failed:', err);
+      if (container) {
+        container.innerHTML = '<p class="mlo-form__history-error">Unable to load order history. Please try again.</p>';
+      }
+    });
+
+    function renderHistory(entries, container) {
+      if (!entries || entries.length === 0) {
+        container.innerHTML = '<p class="mlo-form__history-empty">No submissions found for this form.</p>';
+        return;
+      }
+
+      let html = `
+        <table class="mlo-form__history-table">
+          <thead>
+            <tr>
+              <th>Confirmation #</th>
+              <th>Company Location</th>
+              <th>Submitted Date</th>
+              <th>Line Items</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+entries.forEach(function (row) {
+  const lineItems = Array.isArray(row.line_items)
+    ? row.line_items.map(function (li) {
+        return escapeHtml(li.line_title ?? JSON.stringify(li)) + ' x' + (li.quantity ?? '?');
+      }).join('<br>')
+    : escapeHtml(JSON.stringify(row.line_items ?? ''));
+
+
+        html += `
+          <tr>
+            <td>${escapeHtml(row.confirmation_number ?? '')}</td>
+            <td>${escapeHtml(row.company_location_name ?? '')}</td>
+            <td>${escapeHtml(row.submitted_date ?? '')}</td>
+            <td>${lineItems}</td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  })();
+</script>

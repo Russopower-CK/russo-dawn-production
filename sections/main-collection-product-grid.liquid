@@ -179,7 +179,8 @@
                     section_id: section.id,
                     show_stock: true,
                     pickup_availability_components: 'headline',
-                    enable_hover_actions: true
+                    enable_hover_actions: true,
+                    use_russo_pickup: section.settings.use_russo_pickup
                   %}
                 </li>
                 {%- assign skip_card_product_styles = true -%}
@@ -353,6 +354,13 @@
           "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
         }
       ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_russo_pickup",
+      "label": "Use Russo Pickup Logic",
+      "default": false,
+      "info": "Use Russo Proxy for inventory and store selector drawer."
     },
     {
       "type": "header",

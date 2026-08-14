@@ -83,6 +83,13 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
 - Payload root includes `requested_delivery_date` from the date input field.
 - Payload root includes `customer_email` from the logged-in customer context.
 - Payload root includes `company_id` when a current company context exists.
+- Payload root includes `form_id` from the selected `form_configuration_entry.form_id` value.
+- Payload root includes `form_metaobject_id` from the selected `form_configuration_entry.id` (Metaobject GID).
+- Payload root includes `form_metaobject_handle` from the selected `form_configuration_entry.handle` as a fallback reference when GID is unavailable in storefront runtime.
+- Submission payload shape is controlled by `section.settings.payload_submission_format`:
+  - `legacy`: original single payload object with root `lines` array.
+  - `orders_by_location`: payload root is `{ OrdersToMake: [...] }`, with one object per location and nested `Lines` array.
+  - in `orders_by_location`, `customer_id`, `form_id`, and form metaobject reference fields are at payload root (not per-order).
 
 ### Quantity input controls
 - Quantity inputs are rendered through reusable snippet `snippets/russo-order-qty-input.liquid` across all input modes.

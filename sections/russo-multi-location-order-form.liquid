@@ -44,9 +44,9 @@
   endif
 
   if form_configuration_entry != blank
-    assign target_form_entry_id = form_configuration_entry.id | default: form_configuration_entry.value.id
-    assign target_form_entry_handle = form_configuration_entry.handle | default: form_configuration_entry.value.handle
-    assign target_form_business_id = form_configuration_entry.form_id.value | default: form_configuration_entry.form_id
+    assign target_form_entry_id = form_configuration_entry.id | default: form_configuration_entry.value.id | default: form_configuration_entry.system.id | default: form_configuration_entry.value.system.id | default: form_configuration_entry.admin_graphql_api_id | default: form_configuration_entry.value.admin_graphql_api_id
+    assign target_form_entry_handle = form_configuration_entry.handle | default: form_configuration_entry.value.handle | default: form_configuration_entry.system.handle | default: form_configuration_entry.value.system.handle
+    assign target_form_business_id = form_configuration_entry.form_id.value | default: form_configuration_entry.form_id | default: form_configuration_entry.value.form_id.value | default: form_configuration_entry.value.form_id
   endif
 
   if customer and customer.b2b?
@@ -131,6 +131,10 @@
         data-storage-key="russo-order-form::{{ shop.permanent_domain }}::{{ customer.id }}::{{ section.id }}"
         data-customer-email="{{ customer.email | escape }}"
         data-company-id="{{ resolved_company_id | escape }}"
+        data-form-id="{{ target_form_business_id | escape }}"
+        data-form-metaobject-id="{{ target_form_entry_id | escape }}"
+        data-form-metaobject-handle="{{ target_form_entry_handle | escape }}"
+        data-payload-submission-format="{{ section.settings.payload_submission_format | default: 'legacy' }}"
         data-submit-endpoint="{{ section.settings.fake_submit_endpoint | escape }}"
         data-submit-confirm-modal-id="OrderSubmitConfirmModal-{{ section.id }}"
         data-submit-start-text="{{ section.settings.submit_in_progress_message | escape }}"
@@ -530,6 +534,8 @@
         {%- endif -%}
       </form>
     {%- endif -%}
+
+    {% render 'multi-location-order-form-history', form_id: target_form_business_id %}
   </div>
 </section>
 
@@ -1130,6 +1136,7 @@
       const rows = Array.from(root.querySelectorAll('[data-order-form-row]'));
       const locationRows = Array.from(root.querySelectorAll('[data-location-row]'));
       const qtyInputs = Array.from(root.querySelectorAll('.b2b-russo-order-form__qty'));
+      const payloadSubmissionFormat = root.dataset.payloadSubmissionFormat || 'legacy';
       const allocations = {};
       const locationNamesById = {};
       const locationFreightCentsById = {};
@@ -1242,6 +1249,31 @@
         }
       };
 
+      const getPayloadMetaFields = (payload) => {
+        if (!payload || typeof payload !== 'object') {
+          return {
+            purchaseOrderNumber: '',
+            requestedDeliveryDate: '',
+            note: '',
+          };
+        }
+
+        if (Array.isArray(payload.OrdersToMake) && payload.OrdersToMake.length) {
+          const firstOrder = payload.OrdersToMake[0] || {};
+          return {
+            purchaseOrderNumber: firstOrder.purchase_order_number || '',
+            requestedDeliveryDate: firstOrder.requested_delivery_date || '',
+            note: firstOrder.note || '',
+          };
+        }
+
+        return {
+          purchaseOrderNumber: payload.purchase_order_number || '',
+          requestedDeliveryDate: payload.requested_delivery_date || '',
+          note: payload.note || '',
+        };
+      };
+
       const restoreDraft = () => {
         if (!storageKey) return;
         const draftRaw = localStorage.getItem(storageKey);
@@ -1281,14 +1313,15 @@
         }
 
         if (draft.payload && typeof draft.payload === 'object') {
-          purchaseOrderInput.value = draft.payload.purchase_order_number || '';
+          const payloadMeta = getPayloadMetaFields(draft.payload);
+          purchaseOrderInput.value = payloadMeta.purchaseOrderNumber;
           if (requestedDeliveryDateInput) {
-            const draftRequestedDate = String(draft.payload.requested_delivery_date || '');
+            const draftRequestedDate = String(payloadMeta.requestedDeliveryDate || '');
             requestedDeliveryDateInput.value =
               draftRequestedDate && draftRequestedDate >= todayIsoDate ? draftRequestedDate : '';
           }
           if (noteInput) {
-            noteInput.value = draft.payload.note || '';
+            noteInput.value = payloadMeta.note;
           }
         }
       };
@@ -1623,7 +1656,7 @@
           });
         }
 
-        return {
+        const basePayload = {
           created_at: new Date().toISOString(),
           customer_id:
             window.ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page
@@ -1631,11 +1664,59 @@
               : null,
           customer_email: root.dataset.customerEmail || null,
           company_id: root.dataset.companyId || null,
+          form_id: root.dataset.formId || null,
+          form_metaobject_id: root.dataset.formMetaobjectId || null,
+          form_metaobject_handle: root.dataset.formMetaobjectHandle || null,
           purchase_order_number: purchaseOrderInput.value.trim(),
           requested_delivery_date: requestedDeliveryDateInput ? requestedDeliveryDateInput.value : '',
           note: noteInput ? noteInput.value.trim() : '',
           includes_location_freight_charge: useFreightCharge,
           lines,
+        };
+
+        if (payloadSubmissionFormat !== 'orders_by_location') {
+          return basePayload;
+        }
+
+        const groupedByLocation = {};
+        basePayload.lines.forEach((line) => {
+          const locationKey = String(line.location_id);
+          if (!groupedByLocation[locationKey]) {
+            groupedByLocation[locationKey] = {
+              locationId: line.location_id,
+              locationName: line.location_name,
+              Lines: [],
+            };
+          }
+          groupedByLocation[locationKey].Lines.push(line);
+        });
+
+        const ordersToMake = Object.values(groupedByLocation).map((locationGroup) => {
+          const order = {
+            companyLocation: String(locationGroup.locationId),
+            location_name: locationGroup.locationName,
+            customer_email: basePayload.customer_email,
+            company_id: basePayload.company_id,
+            purchase_order_number: basePayload.purchase_order_number,
+            requested_delivery_date: basePayload.requested_delivery_date,
+            note: basePayload.note,
+            includes_location_freight_charge: basePayload.includes_location_freight_charge,
+            Lines: locationGroup.Lines,
+          };
+          delete order.form_id;
+          delete order.form_metaobject_id;
+          delete order.form_metaobject_handle;
+          return order;
+        });
+
+        return {
+          created_at: basePayload.created_at,
+          payload_submission_format: 'orders_by_location',
+          customer_id: basePayload.customer_id,
+          form_id: basePayload.form_id,
+          form_metaobject_id: basePayload.form_metaobject_id,
+          form_metaobject_handle: basePayload.form_metaobject_handle,
+          OrdersToMake: ordersToMake,
         };
       };
 
@@ -2003,6 +2084,23 @@
       "id": "show_developer_tools",
       "label": "Show developer tools (JSON payload)",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "payload_submission_format",
+      "label": "Submission payload format",
+      "default": "legacy",
+      "options": [
+        {
+          "value": "legacy",
+          "label": "Legacy (single payload with lines array)"
+        },
+        {
+          "value": "orders_by_location",
+          "label": "Orders by location (OrdersToMake + Lines)"
+        }
+      ],
+      "info": "Controls payload shape used for preview and submit. Orders by location groups line items into one order object per company location."
     },
     {
       "type": "text",

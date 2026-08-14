@@ -287,7 +287,8 @@
                           skip_styles: skip_card_product_styles,
                           quick_add: 'standard',
                           show_stock: true,
-                          pickup_availability_components: 'headline'
+                          pickup_availability_components: 'headline',
+                          use_russo_pickup: section.settings.use_russo_pickup
                         %}
                         {%- assign skip_card_product_styles = true -%}
                       {%- when 'article' -%}
@@ -434,6 +435,13 @@
       ],
       "default": "default",
       "label": "t:sections.all.image_shape.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_russo_pickup",
+      "label": "Use Russo Pickup Logic",
+      "default": false,
+      "info": "Use Russo Proxy for inventory and store selector drawer."
     },
     {
       "type": "checkbox",

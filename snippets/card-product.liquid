@@ -19,6 +19,7 @@
   - show_sku: {Boolean} Show the vendor SKU. Default false
   - show_stock: {Boolean} show the russo shipping stock snippet
   - pickup_availability_components:
+  - use_russo_pickup: {Boolean} use the russo pickup logic on the shipping-stock
 
   Usage:
   {% render 'card-product', show_vendor: section.settings.show_vendor %}
@@ -291,7 +292,8 @@
                 product: card_product,
                 include_pickup: true,
                 pickup_availability_components: pickup_availability_components,
-                show_pickup_availability: true
+                show_pickup_availability: true,
+                use_russo_pickup: use_russo_pickup
               -%}
             {%- endif -%}
             {%- comment -%}
