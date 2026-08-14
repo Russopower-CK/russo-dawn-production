@@ -30,7 +30,7 @@
         "show_vendor": true,
         "show_sku": true,
         "show_rating": true,
-        "quick_add": "none",
+        "quick_add": "standard",
         "use_russo_pickup": false,
         "enable_filtering": true,
         "filter_type": "vertical",
