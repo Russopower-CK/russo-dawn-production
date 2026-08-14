@@ -172,7 +172,7 @@
       "inventory_in_stock_show_count": "{{ quantity }} in stock",
       "inventory_low_stock": "Low stock",
       "inventory_low_stock_show_count": "Low stock: {{ quantity }} left",
-      "inventory_out_of_stock": "Out of stock",
+      "inventory_out_of_stock": "Typically available in 5-10 business days. Manufacturer lead times may vary.",
       "inventory_out_of_stock_continue_selling": "Typically available in 5-10 business days. Manufacturer lead times may vary.",
       "by_vendor": "by {{ vendor }}",
       "by_vendor_html": "by {{ vendor_link }}",
