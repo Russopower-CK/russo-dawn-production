@@ -9,6 +9,10 @@
   - pickup_availability_components: {String} comma-separated list of pickup availability components to show.
   - use_russo_pickup: {Boolean} specifies if the base pickup-preview or the russo preffered store is rendered.
   -auto_status_fetch: {Boolean} specifies if the russo-preffered-store-variant-trigger will auto fetch stock levels. Set false if rendered from card-product.
+  - continue_selling_display_mode: {String} optional. "base" (default) keeps theme translation, "custom_tooltip" shows custom hover tooltip.
+  - continue_selling_label: {String} optional custom label shown when continue selling.
+  - continue_selling_tooltip_title: {String} optional tooltip title for custom continue selling display.
+  - continue_selling_tooltip_body: {String} optional tooltip body for custom continue selling display.
     Supported values: headline, time, button. Aliases: caption-large/title/location, caption/eta, stores/view-other-stores.
     Examples: 'headline' (caption only), 'headline,time', 'all'.
   Usage:
@@ -19,6 +23,21 @@
 {% endcomment %}
 {% assign showpickup = include_pickup %}
 {% assign pickup_auto_status_fetch = auto_status_fetch | default: false %}
+{% assign continue_selling_display_mode = continue_selling_display_mode
+  | default: 'custom_tooltip'
+  | downcase
+  | strip
+%}
+{% assign use_continue_selling_tooltip = false %}
+{% if continue_selling_display_mode == 'custom_tooltip' or continue_selling_display_mode == 'custom' %}
+  {% assign use_continue_selling_tooltip = true %}
+{% endif %}
+{% assign continue_selling_label = continue_selling_label | default: 'Special Order' %}
+{% assign continue_selling_tooltip_title = continue_selling_tooltip_title | default: continue_selling_label %}
+{% assign continue_selling_tooltip_body = continue_selling_tooltip_body | default: blank %}
+{% if continue_selling_tooltip_body == blank %}
+  {% assign continue_selling_tooltip_body = 'products.product.inventory_out_of_stock_continue_selling' | t %}
+{% endif %}
 
 <style>
       .shipping-stock {
@@ -68,6 +87,88 @@
       width: 10px;
     height: 10px;
   padding: 1px;}
+
+      .continue-selling-note {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-weight: 600;
+        cursor: help;
+        z-index: 500000;
+        padding: 5px;
+      }
+
+      .continue-selling-tooltip {
+        position: absolute;
+        left: 0;
+        bottom: calc(100% + 0.8rem);
+        width: min(28rem, 80vw);
+        background: rgb(74, 74, 74);
+        color: rgb(255, 255, 255);
+        border-radius: 0.8rem;
+        box-shadow: 0 10px 24px rgb(0 0 0 / 24%);
+        opacity: 0;
+        padding: 5px;
+        visibility: hidden;
+        transform: translateY(6px);
+        transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+        pointer-events: auto;
+        z-index: 5000001;
+      }
+
+      .continue-selling-note:hover .continue-selling-tooltip,
+      .continue-selling-note:focus-visible .continue-selling-tooltip,
+      .continue-selling-note:focus-within .continue-selling-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .continue-selling-tooltip__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 1.2rem;
+        border-bottom: 1px solid rgb(255 255 255 / 16%);
+        font-size: 1.5rem;
+      }
+
+      .continue-selling-tooltip__close {
+        line-height: 1;
+        font-size: 2.1rem;
+      }
+
+      .continue-selling-tooltip__body {
+        margin: 0;
+        padding: 1.2rem;
+        font-size: 1.2rem;
+        line-height: 1.45;
+      }
+
+      .continue-selling-tooltip::after {
+        content: '';
+        position: absolute;
+        left: 2rem;
+        top: 100%;
+        width: 0;
+        height: 0;
+        border-left: 0.7rem solid transparent;
+        border-right: 0.7rem solid transparent;
+        border-top: 0.7rem solid rgb(74, 74, 74);
+      }
+
+      .grid__item:has(.continue-selling-note:hover),
+      .grid__item:has(.continue-selling-note:focus-within) {
+        position: relative;
+        z-index: 600;
+      }
+
+      .card-wrapper:has(.continue-selling-note:hover),
+      .card-wrapper:has(.continue-selling-note:focus-within) {
+        z-index: 600;
+      }
 </style>
 <div class="product__inventory_status">
   <div class="shipping-stock">
@@ -111,10 +212,25 @@
               {%- endif -%}
             {%- else -%}
               {%- if product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
-                <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
-                  {{- 'icon-inventory-status.svg' | inline_asset_content -}}
-                </span>
-                {{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}
+                {%- if use_continue_selling_tooltip -%}
+                  <span class="continue-selling-note" tabindex="0">
+                    {{- continue_selling_label | escape -}}
+                    <span class="continue-selling-tooltip" role="tooltip">
+                      <span class="continue-selling-tooltip__header">
+                        <span>{{- continue_selling_tooltip_title | escape -}}</span>
+                        <span class="continue-selling-tooltip__close" aria-hidden="true">X</span>
+                      </span>
+                      <span class="continue-selling-tooltip__body">
+                        {{- continue_selling_tooltip_body | escape -}}
+                      </span>
+                    </span>
+                  </span>
+                {%- else -%}
+                  <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
+                    {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+                  </span>
+                  {{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}
+                {%- endif -%}
               {%- else -%}
                 <span class="svg-wrapper" style="color: rgb(200, 200, 200)">
                   {{- 'icon-inventory-status.svg' | inline_asset_content -}}
