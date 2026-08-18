@@ -14,9 +14,7 @@
   "parent": "header-group.json",
   "sections": {
     "header": {
-      "custom_css": [
-        ".secondary_menu{gap: 5px;}"
-      ],
+      "custom_css": [],
       "settings": {},
       "blocks": {
         "menu_3ggdH": {
