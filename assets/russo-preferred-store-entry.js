@@ -573,6 +573,52 @@
       });
   }
 
+  var batchRefreshTimer = null;
+  function scheduleBatchRefresh() {
+    if (batchRefreshTimer) return;
+    batchRefreshTimer = setTimeout(function () {
+      batchRefreshTimer = null;
+      batchProbeVariantStock();
+      hydrateBatchPickupStatuses();
+    }, 120);
+  }
+
+  function observeTriggerInsertions() {
+    if (typeof MutationObserver !== 'function' || !document.body) return;
+
+    var observer = new MutationObserver(function (mutations) {
+      var shouldRefresh = false;
+
+      for (var i = 0; i < mutations.length; i += 1) {
+        var mutation = mutations[i];
+        if (!mutation.addedNodes || !mutation.addedNodes.length) continue;
+
+        for (var j = 0; j < mutation.addedNodes.length; j += 1) {
+          var node = mutation.addedNodes[j];
+          if (!node || node.nodeType !== 1) continue;
+
+          if (node.matches && node.matches('[data-preferred-store-variant-trigger]')) {
+            shouldRefresh = true;
+            break;
+          }
+
+          if (node.querySelector && node.querySelector('[data-preferred-store-variant-trigger]')) {
+            shouldRefresh = true;
+            break;
+          }
+        }
+
+        if (shouldRefresh) break;
+      }
+
+      if (shouldRefresh) {
+        scheduleBatchRefresh();
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
   function ensureMainThenOpen(options) {
     // UX: show the drawer immediately on first click
     openDialogImmediately();
@@ -617,6 +663,7 @@
   retryPickupHydration();
   batchProbeVariantStock();
   hydrateBatchPickupStatuses();
+  observeTriggerInsertions();
 
 
   document.addEventListener('preferred-store-drawer:close', function () {
