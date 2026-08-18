@@ -13,6 +13,8 @@
 {%- endif -%}
 
 <script src="{{ 'main-search.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-hover-panel.js'  | asset_url }}" defer="defer"></script>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 
 <style>
   .template-search__header {
@@ -289,7 +291,8 @@
                           show_stock: true,
                           pickup_availability_components: 'headline',
                           use_russo_pickup: section.settings.use_russo_pickup,
-                          auto_status_fetch: false
+                          auto_status_fetch: false,
+                          enable_hover_actions: true
                         %}
                         {%- assign skip_card_product_styles = true -%}
                       {%- when 'article' -%}

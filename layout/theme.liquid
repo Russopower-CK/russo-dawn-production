@@ -298,7 +298,7 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
-    <script src="{{ 'product-hover-panel.js' | asset_url }}" defer="defer"></script>
+    {% comment %}<script src="{{ 'product-hover-panel.js' | asset_url }}" defer="defer"></script> {% endcomment %}
     <script>
       window.predictiveSearchFields = '{{ settings.predictive_search_fields | escape }}';
     </script>
@@ -389,6 +389,6 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-    <script src="{{ 'russo-sidebar-mega-menu.js' | asset_url }}" defer="defer"></script>
+    {% comment %} <script src="{{ 'russo-sidebar-mega-menu.js' | asset_url }}" defer="defer"></script>{% endcomment %}
   </body>
 </html>
