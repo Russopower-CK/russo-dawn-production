@@ -189,7 +189,7 @@
       "custom_css": [],
       "name": "t:sections.slideshow.presets.name",
       "settings": {
-        "layout": "full_bleed",
+        "layout": "grid",
         "slide_height": "small",
         "slider_visual": "dots",
         "auto_rotate": true,
