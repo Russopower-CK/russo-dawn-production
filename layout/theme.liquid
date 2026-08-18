@@ -318,8 +318,12 @@
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
       <div id="product-hover-panel"></div>
-      {% if settings.show_kenect_widget %}
-        <script async src="{{ 'kenect-script.js' | asset_url }}" type="text/javascript"></script>
+      {% if settings.show_kenect_widget and settings.kenect_url != blank %}
+        <script
+          async
+          src="{{ settings.kenect_url }}"
+          type="text/javascript"
+        ></script>
       {% endif %}
     </main>
 

@@ -87,8 +87,6 @@
   {% else %}
     {% assign volumediscounts = product.selected_or_first_available_variant.metafields.custom.volume_discounts.value %}
 
-    {{ volumediscounts.size }}
-
     {% if volumediscounts and volumediscounts.size > 0 %}
       <table class="discount-table">
         <thead>

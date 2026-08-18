@@ -836,7 +836,7 @@
           } )
         .catch(function (err) { console.error('Preferred store: cart update error', err); });
 
-      //closeDrawer();
+      closeDrawer();
     });
 
     return card;

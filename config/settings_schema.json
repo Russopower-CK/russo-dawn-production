@@ -53,6 +53,11 @@
         "default": false
       },
       {
+      "type": "url",
+      "id": "kenect_url",
+      "label": "URL for Kenect widget script."
+      },
+      {
         "type": "text",
         "id": "predictive_search_fields",
         "label": "Predictive Search Fields",
