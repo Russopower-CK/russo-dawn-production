@@ -95,7 +95,7 @@
         gap: 0.35rem;
         font-weight: 600;
         cursor: help;
-        z-index: 500000;
+        z-index: 2;
         padding: 5px;
       }
 
@@ -114,7 +114,7 @@
         transform: translateY(6px);
         transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
         pointer-events: auto;
-        z-index: 5000001;
+        z-index: 2;
       }
 
       .continue-selling-note:hover .continue-selling-tooltip,
@@ -162,12 +162,12 @@
       .grid__item:has(.continue-selling-note:hover),
       .grid__item:has(.continue-selling-note:focus-within) {
         position: relative;
-        z-index: 600;
+        z-index: 2;
       }
 
       .card-wrapper:has(.continue-selling-note:hover),
       .card-wrapper:has(.continue-selling-note:focus-within) {
-        z-index: 600;
+        z-index: 3;
       }
 </style>
 <div class="product__inventory_status">
