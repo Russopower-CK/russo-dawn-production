@@ -7,11 +7,14 @@
   .mlo-form__history-table th {
     background-color: rgba(var(--color-foreground), 0.02);
   }
+  .mlo-form__history-table td {
+    font-size: 1.2rem;
+  }
   .mlo-form__history-table th,
   .mlo-form__history-table td {
     text-align: left;
     border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
-    padding: 1rem;
+    padding: 0.5rem;
     vertical-align: middle;
   }
   .mlo-form__history-table tbody tr:hover {
@@ -21,14 +24,33 @@
   .mlo-form-history {
     padding-top: 2rem;
   }
+  .mlo-form-wrapper {
+    padding-top: 2rem;
+    display: block;
+  }
+  .mlo-form-header {
+    text-align: center;
+  }
+  .mlo-form__history-table {
+    width: 100%;
+  }
 </style>
-<div class="mlo-form-header h2">Order Form History</div>
-<div
-  class="mlo-form-history"
-  id="mlo-history-container"
-  data-form-id="{{ form_id | escape }}"
->
-  <p class="mlo-form__history-loading">Loading order history…</p>
+<div class="mlo-form-wrapper">
+  <details class="accordion">
+    <summary class="summary__title">
+      <div class="mlo-form-header h2">Order Form History</div>
+      {{- 'icon-caret.svg' | inline_asset_content -}}
+    </summary>
+    <div class="accordian__content">
+      <div
+        class="mlo-form-history"
+        id="mlo-history-container"
+        data-form-id="{{ form_id | escape }}"
+      >
+        <p class="mlo-form__history-loading">Loading order history…</p>
+      </div>
+    </div>
+  </details>
 </div>
 
 <script>
@@ -75,13 +97,19 @@
       }
     });
 
-    function renderHistory(entries, container) {
-      if (!entries || entries.length === 0) {
-        container.innerHTML = '<p class="mlo-form__history-empty">No submissions found for this form.</p>';
-        return;
-      }
+function renderHistory(entries, container) {
+  if (!entries || entries.length === 0) {
+    container.innerHTML = '<p class="mlo-form__history-empty">No submissions found for this form.</p>';
+    return;
+  }
 
-      let html = `
+  entries.sort(function(a, b) {
+    const aNum = parseInt(String(a.confirmation_number || '').replace(/\D/g, ''), 10) || 0;
+    const bNum = parseInt(String(b.confirmation_number || '').replace(/\D/g, ''), 10) || 0;
+    return bNum - aNum;
+  });
+
+  let html = `
         <table class="mlo-form__history-table">
           <thead>
             <tr>

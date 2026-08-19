@@ -102,6 +102,8 @@
 
 <section class="b2b-russo-order-form section-{{ section.id }}">
   <div class="page-width">
+    {% render 'multi-location-order-form-history', form_id: target_form_business_id %}
+
     <header class="b2b-russo-order-form__header">
       <h2>{{ resolved_heading }}</h2>
       {%- if resolved_description != blank -%}
@@ -494,6 +496,7 @@
               id="requested-delivery-date-{{ section.id }}"
               type="date"
               data-requested-delivery-date
+              value="{{ 'now' | date: '%Y-%m-%d' }}"
             >
           </div>
         </div>
@@ -534,8 +537,6 @@
         {%- endif -%}
       </form>
     {%- endif -%}
-
-    {% render 'multi-location-order-form-history', form_id: target_form_business_id %}
   </div>
 </section>
 
