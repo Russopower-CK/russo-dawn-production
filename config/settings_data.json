@@ -14,7 +14,7 @@
     "favicon": "shopify://shop_images/Russo-R-Favicon.png",
     "default_product_image": "shopify://shop_images/Russo-photo-not-available.jpg",
     "show_back_to_top": true,
-    "show_kenect_widget": false,
+    "show_kenect_widget": true,
     "kenect_url": "https://resource.kenect.com/api/v1/widget/client-data/iIYr15CB66nTKB9sHmL5kJ",
     "type_header_font": "roboto_n6",
     "heading_scale": 100,
@@ -169,9 +169,9 @@
       },
       "8812806695923387213": {
         "type": "shopify://apps/russo-ai-chat/blocks/chat-interface/019f863b-0240-7a49-9c0c-fe6acee10339",
-        "disabled": false,
+        "disabled": true,
         "settings": {
-          "chat_bubble_color": "#B71414",
+          "chat_bubble_color": "#b71414",
           "custom_icon_svg": "",
           "welcome_message": "👋 Hi there! How can I help you today?",
           "placeholder": "Type your message here...",
