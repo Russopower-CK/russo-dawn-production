@@ -12,16 +12,16 @@
     "slideshow_9myT39": {
       "type": "slideshow",
       "blocks": {
-        "slide_8AYhjw": {
+        "slide_K76BnM": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/EchoHC-2020-hedge-trimmer_IMGL3285.jpg",
+            "image": "shopify://shop_images/JBP_ECHO_RHC2_HIGH-1750_8ac8c236-608f-4820-8ec3-ee7016c44ee2.jpg",
             "image_overlay_opacity": 40,
-            "heading": "<strong>Sculpt. Trim. Perfect.</strong>",
+            "heading": "Built to Cut. Built to Last.",
             "heading_size": "h1",
-            "subheading": "<strong>Upgrade Your Crew’s Cutting Power.</strong>",
-            "button_label": "SHOP ECHO HEDGE TRIMMERS",
-            "link": "https://russopower.com/collections/hedge-trimmers?filter.p.vendor=ECHO",
+            "subheading": "ECHO chainsaws deliver professional-grade power and durability for tree removal, land clearing, and property maintenance.",
+            "button_label": "Shop Echo Chainsaws",
+            "link": "https://russopower.com/collections/chainsaws?filter.p.vendor=Echo",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -33,13 +33,67 @@
         "slide_N3884K": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Toro-Grandstand.png",
+            "image": "shopify://shop_images/lc20_4758s-zm-4000-myride-PH_DSC2920_proof.jpg",
             "image_overlay_opacity": 30,
-            "heading": "Fast. Maneuverable. Productive.",
+            "heading": "0% Financing on Select Z Master 4000 Models",
             "heading_size": "h2",
-            "subheading": "Tough bumps and challenging terrain are all in a day’s work. Feeling them shouldn’t have to be. The Toro GrandStand combines the speed and comfort of a zero-turn rider with the on-and-off ease of a wide area walk-behind.",
+            "subheading": "Special 0% for 42 month financing or $650 off select Z Master 4000 models. Now through 10/31/2026",
             "button_label": "SHOP NOW",
             "link": "https://russopower.com/products/toro-72513-grandstand-60-in-stand-on-mower?_pos=3&_psq=72513&_ss=e&_v=1.0",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_8AYhjw": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/TrailerFleet10_1.png",
+            "image_overlay_opacity": 40,
+            "heading": "Power Your Business with a Smarter Fleet",
+            "heading_size": "h1",
+            "subheading": "Unlock commercial discounts and additional benefits with the Russo Power Fleet Program and keep your crew moving throughout the season!",
+            "button_label": "LEARN MORE",
+            "link": "shopify://pages/power-fleet-program",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_ECbQFf": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/OnlineUsedAuction.jpg",
+            "image_overlay_opacity": 40,
+            "heading": "CASH IN on Your Used Equipment!",
+            "heading_size": "h1",
+            "subheading": "Skip the hassle and let Russo handle the sale for you. We take care of everything—from advertising to managing the transaction.",
+            "button_label": "Consign Today",
+            "link": "shopify://pages/consign-now",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_z8LHbe": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/DrainageSeminar-HomePage.jpg",
+            "image_overlay_opacity": 40,
+            "heading": "FREE NDS Drainage Certification Seminar",
+            "heading_size": "h2",
+            "subheading": "Join us at our Schiller Park location on August 21, 2026! Earn CEUs, network and enjoy a FREE lunch on us! Limited Space Available!",
+            "button_label": "LEARN MORE",
+            "link": "shopify://pages/power-fleet-program",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -76,24 +130,6 @@
             "subheading": "<strong>We bring the power to you! Schedule an on-site demo today!</strong>",
             "button_label": "REQUEST A DEMO",
             "link": "shopify://pages/request-demo",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
-        "slide_z8LHbe": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/TrailerFleet20-6.png",
-            "image_overlay_opacity": 40,
-            "heading": "<strong>Powering the Progress: Power Fleet Program</strong>",
-            "heading_size": "h2",
-            "subheading": "<strong>Protect your crew and your profit! Russo offers custom fleet programs to help improve your efficiency, productivity, and quality of your business!</strong>",
-            "button_label": "LEARN MORE",
-            "link": "shopify://pages/power-fleet-program",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -155,36 +191,19 @@
             "text_alignment_mobile": "center",
             "color_scheme": "scheme-3"
           }
-        },
-        "slide_ECbQFf": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/ToolsSuppliesRusso-7.jpg",
-            "image_overlay_opacity": 40,
-            "heading": "Let's Talk Dirty",
-            "heading_size": "h1",
-            "subheading": "",
-            "button_label": "SHOP SHOVELS",
-            "link": "shopify://collections/shovels",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
         }
       },
       "block_order": [
-        "slide_8AYhjw",
+        "slide_K76BnM",
         "slide_N3884K",
+        "slide_8AYhjw",
+        "slide_ECbQFf",
+        "slide_z8LHbe",
         "slide_hJGYwx",
         "slide_xTxXVX",
-        "slide_z8LHbe",
         "slide_Mephzj",
         "slide_GwVcWP",
-        "slide_hfmrxN",
-        "slide_ECbQFf"
+        "slide_hfmrxN"
       ],
       "custom_css": [],
       "name": "t:sections.slideshow.presets.name",
