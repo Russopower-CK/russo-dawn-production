@@ -852,7 +852,7 @@
       ],
       "name": "Russo Review Slider",
       "settings": {
-        "use_metaobject_entries": false,
+        "use_metaobject_entries": true,
         "metaobject_type": "russo_testimonials"
       }
     },
