@@ -15,7 +15,7 @@
         {% endif %}
 
         {% if metaobject_entries != blank %}
-          {% assign sorted_testimonials = metaobject_entries | sort: 'testimonial_date' | reverse %}
+          {% assign sorted_testimonials = metaobject_entries | sort: 'testimonial_date.value' | reverse %}
           {% for testimonial in sorted_testimonials %}
             {% assign rating = testimonial.rating.value | default: 0 | plus: 0 %}
             {% assign review = testimonial.testimonial.value %}
@@ -24,7 +24,7 @@
             {% assign location_label = testimonial.location_link.value.text %}
             {% assign location_url = testimonial.location_link.value.url %}
 
-            <div class="testimonial-card">
+            <div class="testimonial-card" data-date="{{ testimonial.testimonial_date.value }}">
               <div class="testimonial-stars">
                 {% for i in (1..5) %}
                   {% if i <= rating %}
@@ -264,6 +264,15 @@
       }
     }
 </style>
+<script>
+  (function () {
+    const track = document.querySelector('#testimonial-slider-{{ section.id }} .testimonial-track-inner');
+    if (!track) return;
+    const cards = Array.from(track.querySelectorAll('.testimonial-card'));
+    cards.sort((a, b) => new Date(b.dataset.date) - new Date(a.dataset.date));
+    cards.forEach((card) => track.appendChild(card));
+  })();
+</script>
 
 <script>
   (function () {
