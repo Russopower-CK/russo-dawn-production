@@ -15,7 +15,7 @@
         {% endif %}
 
         {% if metaobject_entries != blank %}
-          {% assign sorted_testimonials = metaobject_entries | sort: 'testimonial_date.value' | reverse %}
+          {% assign sorted_testimonials = metaobject_entries | sort: 'testimonial_date' | reverse %}
           {% for testimonial in sorted_testimonials %}
             {% assign rating = testimonial.rating.value | default: 0 | plus: 0 %}
             {% assign review = testimonial.testimonial.value %}
