@@ -1,0 +1,48 @@
+{% comment %}
+  Usage:
+  {% assign mf_owner_type = "product" %}
+  {% assign mf_namespace = "tire" %}
+  {% assign mf_key = "size" %}
+  {% render 'metafield-definition-select', owner_type: mf_owner_type, namespace: mf_namespace, field_key: mf_key %}
+{% endcomment %}
+<div class="metafield-select-wrapper">
+  <select
+    id="metafield-select-{{ namespace }}-{{ field_key }}"
+    name="properties[{{ field_key }}]"
+    data-owner-type="{{ owner_type }}"
+    data-namespace="{{ namespace }}"
+    data-key="{{ field_key }}"
+  >
+    <option value="">Select {{ field_key | replace: '_', ' ' | capitalize }}...</option>
+  </select>
+</div>
+<script>
+  (function () {
+    const select = document.getElementById('metafield-select-{{ namespace }}-{{ field_key }}');
+
+    fetch('/apps/russoAPI/v1/getMetafieldDefinition', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ownerType: '{{ owner_type }}',
+        namespace: '{{ namespace }}',
+        key: '{{ field_key }}',
+      }),
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        const validations = res?.data?.metafieldDefinition?.validations ?? [];
+        const choicesValidation = validations.find((v) => v.name === 'choices');
+        if (!choicesValidation) return;
+
+        const choices = JSON.parse(choicesValidation.value);
+        choices.forEach((choice) => {
+          const opt = document.createElement('option');
+          opt.value = choice;
+          opt.textContent = choice;
+          select.appendChild(opt);
+        });
+      })
+      .catch((err) => console.error('Failed to load metafield choices:', err));
+  })();
+</script>

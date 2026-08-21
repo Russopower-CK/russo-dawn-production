@@ -484,14 +484,14 @@
       }
 
       if (!variantId || !cache[variantId]) {
-        setPickupLabel(root, 'Pickup Availability unknown at ' + selectedName);
+        setPickupLabel(root, '');
         clearPickupIcon(root);
         return;
       }
 
       var live = getLiveStockForSelectedStore(cache[variantId], selectedName, selectedId);
       if (!live) {
-        setPickupLabel(root, 'Pickup Availability unknown at ' + selectedName);
+        setPickupLabel(root, 'Entry2 Pickup Availability unknown at ' + selectedName);
         clearPickupIcon(root);
         return;
       }

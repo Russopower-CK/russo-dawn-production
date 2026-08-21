@@ -274,7 +274,7 @@
     var stock = getStockStateForStore(selectedName);
     if (stock === null) {
       // Unknown / no tags
-      statusEl.textContent = 'Pickup availability unknown at ' + selectedName;
+      statusEl.textContent = 'Pickup availability unknown at Main' + selectedName;
       return;
     }
 

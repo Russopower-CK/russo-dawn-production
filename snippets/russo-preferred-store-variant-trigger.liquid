@@ -37,7 +37,7 @@
 </style>
 {%- liquid
   assign preferred_store_variant = variant | default: product.selected_or_first_available_variant
-  assign preferred_store_default_label = button_label | default: 'Choose a Store'
+  assign preferred_store_default_label = button_label | default: ' '
   assign preferred_store_show_status_label = show_status_label | default: true
   assign preferred_store_show_status_display = show_status_display | default: true
   assign preferred_store_show_launcher_button = show_launcher_button | default: false
