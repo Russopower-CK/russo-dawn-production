@@ -46,15 +46,12 @@
     max-width: 250px;
     height: auto;
   }
-
-  .list-menu.list-menu--inline {
-    margin-left: 1rem;
-  }
-
   .header__menu-item:hover {
     color: var(--russo-red-dark);
   }
-
+  .header__menu-item{
+    padding-left: 0;
+  }
   {%- if section.settings.menu_type_desktop != "drawer" -%}
     @media screen and (min-width: 990px) {
       header-drawer,
