@@ -5,6 +5,12 @@
   if (window.__preferredStoreMainLoaded) return;
   window.__preferredStoreMainLoaded = true;
 
+  var shared = window.__PreferredStoreShared;
+  if (!shared) {
+    console.error('Preferred store: shared helpers are not available; main script aborted.');
+    return;
+  }
+
   // -----------------------------
   // Config & API Endpoints
   // -----------------------------
@@ -31,65 +37,18 @@
   }
 
   function toUniqueList(items) {
-    var out = [];
-    (items || []).forEach(function (item) {
-      var value = String(item || '').trim();
-      if (!value) return;
-      if (out.indexOf(value) === -1) out.push(value);
-    });
-    return out;
+    return shared.toUniqueList(items);
   }
 
   function buildProxyCandidates(primary, requestType) {
-    var p = String(primary || '').trim();
-    var legacy = '/apps/russoAPI?RequestType=' + encodeURIComponent(requestType);
-    var v1 = '/apps/russoAPI/v1/' + encodeURIComponent(requestType);
-
-    // Try the configured endpoint first, then fallback to the alternate proxy shape.
-    if (p.indexOf('/apps/russoAPI/v1/') !== -1) return toUniqueList([p, legacy]);
-    if (p.indexOf('/apps/russoAPI?') !== -1 || p.indexOf('RequestType=') !== -1) return toUniqueList([p, v1]);
-    if (p) return toUniqueList([p, v1, legacy]);
-    return toUniqueList([v1, legacy]);
+    return shared.buildProxyCandidates(primary, requestType);
   }
 
   function fetchJsonWithFallback(urls, requestInit) {
-    var queue = toUniqueList(urls);
-    var failures = [];
-    var init = requestInit || { headers: { Accept: 'application/json' } };
-
-    function attempt(index) {
-      if (index >= queue.length) {
-        throw new Error('Proxy request failed: ' + failures.join(' | '));
-      }
-
-      var url = queue[index];
-      return fetch(url, init)
-        .then(function (res) {
-          var contentType = (res.headers && res.headers.get && res.headers.get('content-type')) || '';
-          return res.text().then(function (raw) {
-            var bodySnippet = String(raw || '').slice(0, 220).replace(/\s+/g, ' ').trim();
-
-            if (!res.ok) {
-              throw new Error(url + ' -> HTTP ' + res.status + ' [' + contentType + '] ' + bodySnippet);
-            }
-
-            var data;
-            try {
-              data = raw ? JSON.parse(raw) : null;
-            } catch (parseErr) {
-              throw new Error(url + ' -> invalid JSON [' + contentType + '] ' + bodySnippet);
-            }
-
-            return { data: data, url: url };
-          });
-        })
-        .catch(function (err) {
-          failures.push(err && err.message ? err.message : (url + ' -> request failed'));
-          return attempt(index + 1);
-        });
-    }
-
-    return attempt(0);
+    return shared.fetchJsonWithFallback(urls, requestInit, {
+      errorPrefix: 'Proxy request failed',
+      includeBodySnippet: true
+    });
   }
 
   // -----------------------------
@@ -144,25 +103,11 @@
   // Reads location names from variant metafield
   // -----------------------------
   function normalizeKey(s) {
-    return String(s || '')
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, ' ')
-      .replace(/[^\w\s]/g, '');
+    return shared.normalizeKey(s);
   }
 
   function buildInStockSetFromLocations(locations) {
-    var set = {};
-    if (!Array.isArray(locations)) return set;
-
-    locations.forEach(function (loc) {
-      var trimmed = String(loc || '').trim();
-      if (trimmed) {
-        set[normalizeKey(trimmed)] = true;
-      }
-    });
-
-    return set;
+    return shared.buildInStockSetFromLocations(locations);
   }
 
   // Build once per page load (product page block sets this)
@@ -172,21 +117,7 @@
   })();
 
   function addLocationIdCandidates(target, locationId) {
-    var raw = String(locationId || '').trim();
-    if (!raw) return;
-
-    if (target.indexOf(raw) === -1) target.push(raw);
-
-    if (/^\d+$/.test(raw)) {
-      var gid = 'gid://shopify/Location/' + raw;
-      if (target.indexOf(gid) === -1) target.push(gid);
-      return;
-    }
-
-    var gidMatch = raw.match(/gid:\/\/shopify\/Location\/(\d+)/i);
-    if (gidMatch && gidMatch[1] && target.indexOf(gidMatch[1]) === -1) {
-      target.push(gidMatch[1]);
-    }
+    return shared.addLocationIdCandidates(target, locationId);
   }
 
   function getStoreLookupCandidates(storeName, explicitLocationId) {
@@ -504,14 +435,7 @@
 
   function extractStockItems(data) {
     function inventoryLevelNodes(levels) {
-      if (!levels || typeof levels !== 'object') return [];
-      if (Array.isArray(levels.nodes)) return levels.nodes;
-      if (Array.isArray(levels.edges)) {
-        return levels.edges
-          .map(function (edge) { return edge && edge.node ? edge.node : null; })
-          .filter(Boolean);
-      }
-      return [];
+      return shared.inventoryLevelNodes(levels);
     }
 
     function nodesFromVariant(variantNode) {
@@ -560,67 +484,15 @@
   }
 
   function toLocationNameFromStockItem(item) {
-    if (!item || typeof item !== 'object') return null;
-    if (item.location && typeof item.location === 'object' && item.location.name) {
-      return item.location.name;
-    }
-    return item.locationName || item.location_name || item.location || item.name || item.storeName || item.store_name || null;
+    return shared.toLocationNameFromStockItem(item);
   }
 
   function toInventoryFromStockItem(item) {
-    if (!item || typeof item !== 'object') return null;
-
-    if (Array.isArray(item.quantities)) {
-      var availableNode = item.quantities.find(function (q) {
-        return q && String(q.name || '').toLowerCase() === 'available';
-      });
-      if (availableNode && isFinite(Number(availableNode.quantity))) {
-        return Number(availableNode.quantity);
-      }
-    }
-
-    var value =
-      item.inventoryAvailable ??
-      item.inventory_available ??
-      item.available ??
-      item.quantityAvailable ??
-      item.quantity_available ??
-      item.quantity ??
-      item.stock;
-    var n = Number(value);
-    return isFinite(n) ? n : null;
+    return shared.toAvailableQtyFromStockItem(item);
   }
 
   function mapStockArrayToMaps(items) {
-    var stockMap = {};
-    var qtyMap = {};
-    if (!Array.isArray(items)) return { stockMap: stockMap, qtyMap: qtyMap };
-
-    items.forEach(function (item) {
-      var locationName = toLocationNameFromStockItem(item);
-      if (!locationName) return;
-
-      var inventory = toInventoryFromStockItem(item);
-      if (inventory === null) return;
-
-      var normalizedName = normalizeKey(locationName);
-      stockMap[normalizedName] = inventory > 0;
-      qtyMap[normalizedName] = inventory;
-
-      var noRussoPrefixName = normalizeKey(String(locationName || '').replace(/^russo\s+/i, ''));
-      if (noRussoPrefixName) {
-        stockMap[noRussoPrefixName] = inventory > 0;
-        qtyMap[noRussoPrefixName] = inventory;
-      }
-
-      if (item.location && item.location.id) {
-        var locationId = String(item.location.id);
-        stockMap[locationId] = inventory > 0;
-        qtyMap[locationId] = inventory;
-      }
-    });
-
-    return { stockMap: stockMap, qtyMap: qtyMap };
+    return shared.buildStockMaps(items);
   }
 
   function loadProxyStockForVariant(variantId) {

@@ -2,6 +2,7 @@
   App Embed: renders the global drawer markup and loads the small entry JS + CSS.
 {% endcomment %}
 {{ 'russo-preferred-store.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'russo-preferred-store-shared.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'russo-preferred-store-entry.js' | asset_url }}" defer="defer"></script>
 <button
   type="button"

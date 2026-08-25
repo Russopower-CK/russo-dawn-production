@@ -3880,3 +3880,10 @@ details-disclosure > details {
 .product-block--collapsible-tab + .product-block--collapsible-tab {
   border-top: none;
 }
+/*make one column mobile */
+@media screen and (max-width: 749px) {
+    .header--has-account.header--has-menu:not(.header--mobile-left):not(.header--has-app) {
+        grid-template-areas: 'none';
+        grid-template-columns: auto;
+    }
+}

@@ -13,6 +13,12 @@
     return null;
   }
 
+  var shared = window.__PreferredStoreShared;
+  if (!shared) {
+    console.error('Preferred store: shared helpers are not available; entry script aborted.');
+    return;
+  }
+
   // -----------------------------
   // Label hydration (header triggers)
   // -----------------------------
@@ -76,24 +82,11 @@
   // Requires window.__PreferredStoreProductContext = { locations: [...] }
   // -----------------------------
   function normalizeKey(s) {
-    return String(s || '')
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, ' ')
-      .replace(/[^\w\s]/g, '');
+    return shared.normalizeKey(s);
   }
 
   function buildInStockSetFromLocations(locations) {
-    var set = {};
-    if (!Array.isArray(locations)) return set;
-
-    locations.forEach(function (loc) {
-      var trimmed = String(loc || '').trim();
-      if (trimmed) {
-        set[normalizeKey(trimmed)] = true;
-      }
-    });
-    return set;
+    return shared.buildInStockSetFromLocations(locations);
   }
 
   function updatePickupStatusLine() {
@@ -213,54 +206,15 @@
   }
 
   function toUniqueList(items) {
-    var out = [];
-    (items || []).forEach(function (item) {
-      var value = String(item || '').trim();
-      if (!value) return;
-      if (out.indexOf(value) === -1) out.push(value);
-    });
-    return out;
+    return shared.toUniqueList(items);
   }
 
   function buildStockEndpointCandidates(primary) {
-    var p = String(primary || '').trim();
-    var v1 = '/apps/russoAPI/v1/getStockLevels';
-    var legacy = '/apps/russoAPI?RequestType=getStockLevels';
-
-    if (p.indexOf('/apps/russoAPI/v1/') !== -1) return toUniqueList([p, legacy]);
-    if (p.indexOf('/apps/russoAPI?') !== -1 || p.indexOf('RequestType=') !== -1) return toUniqueList([p, v1]);
-    if (p) return toUniqueList([p, v1, legacy]);
-    return toUniqueList([v1, legacy]);
+    return shared.buildProxyCandidates(primary, 'getStockLevels');
   }
 
   function fetchJsonWithFallback(urls, requestInit) {
-    var queue = toUniqueList(urls);
-    var failures = [];
-
-    function attempt(index) {
-      if (index >= queue.length) {
-        throw new Error('Batch stock request failed: ' + failures.join(' | '));
-      }
-
-      var url = queue[index];
-      return fetch(url, requestInit)
-        .then(function (res) {
-          return res.text().then(function (raw) {
-            if (!res.ok) throw new Error(url + ' -> HTTP ' + res.status);
-            try {
-              return { data: raw ? JSON.parse(raw) : null, url: url };
-            } catch (e) {
-              throw new Error(url + ' -> invalid JSON');
-            }
-          });
-        })
-        .catch(function (err) {
-          failures.push(err && err.message ? err.message : (url + ' -> request failed'));
-          return attempt(index + 1);
-        });
-    }
-
-    return attempt(0);
+    return shared.fetchJsonWithFallback(urls, requestInit, { errorPrefix: 'Batch stock request failed' });
   }
 
   function collectBatchVariantIds() {
@@ -314,153 +268,39 @@
   }
 
   function parseVariantIdFromGid(gid) {
-    var raw = String(gid || '');
-    var match = raw.match(/ProductVariant\/(\d+)/i);
-    return match && match[1] ? String(match[1]) : null;
+    return shared.parseVariantIdFromGid(gid);
   }
 
   function inventoryLevelNodes(levels) {
-    if (!levels || typeof levels !== 'object') return [];
-    if (Array.isArray(levels.nodes)) return levels.nodes;
-    if (Array.isArray(levels.edges)) {
-      return levels.edges
-        .map(function (edge) { return edge && edge.node ? edge.node : null; })
-        .filter(Boolean);
-    }
-    return [];
+    return shared.inventoryLevelNodes(levels);
   }
 
   function extractVariantNodes(data) {
-    if (!data || typeof data !== 'object') return [];
-    if (data.data && Array.isArray(data.data.nodes)) return data.data.nodes;
-    if (Array.isArray(data.nodes)) return data.nodes;
-    if (data.data && data.data.productVariant) return [data.data.productVariant];
-    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.nodes)) {
-      return data.data.productVariants.nodes;
-    }
-    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.edges)) {
-      return data.data.productVariants.edges
-        .map(function (edge) { return edge && edge.node ? edge.node : null; })
-        .filter(Boolean);
-    }
-    return [];
+    return shared.extractVariantNodes(data);
   }
 
   function toLocationNameFromStockItem(item) {
-    if (!item || typeof item !== 'object') return null;
-    if (item.location && typeof item.location === 'object' && item.location.name) {
-      return item.location.name;
-    }
-    return item.locationName || item.location_name || item.location || item.name || item.storeName || item.store_name || null;
+    return shared.toLocationNameFromStockItem(item);
   }
 
   function toAvailableQtyFromStockItem(item) {
-    if (!item || typeof item !== 'object') return null;
-
-    if (Array.isArray(item.quantities)) {
-      var availableNode = item.quantities.find(function (q) {
-        return q && String(q.name || '').toLowerCase() === 'available';
-      });
-      if (availableNode && isFinite(Number(availableNode.quantity))) {
-        return Number(availableNode.quantity);
-      }
-    }
-
-    var value =
-      item.inventoryAvailable ??
-      item.inventory_available ??
-      item.available ??
-      item.quantityAvailable ??
-      item.quantity_available ??
-      item.quantity ??
-      item.stock;
-    var n = Number(value);
-    return isFinite(n) ? n : null;
+    return shared.toAvailableQtyFromStockItem(item);
   }
 
   function buildStockMaps(items) {
-    var stockMap = {};
-    var qtyMap = {};
-
-    (items || []).forEach(function (item) {
-      var locationName = toLocationNameFromStockItem(item);
-      if (!locationName) return;
-
-      var qty = toAvailableQtyFromStockItem(item);
-      if (qty === null) return;
-
-      var normalizedName = normalizeKey(locationName);
-      stockMap[normalizedName] = qty > 0;
-      qtyMap[normalizedName] = qty;
-
-      var noRussoPrefixName = normalizeKey(String(locationName || '').replace(/^russo\s+/i, ''));
-      if (noRussoPrefixName) {
-        stockMap[noRussoPrefixName] = qty > 0;
-        qtyMap[noRussoPrefixName] = qty;
-      }
-
-      if (item.location && item.location.id) {
-        var locationId = String(item.location.id);
-        stockMap[locationId] = qty > 0;
-        qtyMap[locationId] = qty;
-
-        var idMatch = locationId.match(/gid:\/\/shopify\/Location\/(\d+)/i);
-        if (idMatch && idMatch[1]) {
-          stockMap[idMatch[1]] = qty > 0;
-          qtyMap[idMatch[1]] = qty;
-        }
-      }
-    });
-
-    return { stockMap: stockMap, qtyMap: qtyMap };
+    return shared.buildStockMaps(items);
   }
 
   function addLocationIdCandidates(target, locationId) {
-    var rawId = String(locationId || '').trim();
-    if (!rawId) return;
-    if (target.indexOf(rawId) === -1) target.push(rawId);
-
-    if (/^\d+$/.test(rawId)) {
-      var gid = 'gid://shopify/Location/' + rawId;
-      if (target.indexOf(gid) === -1) target.push(gid);
-      return;
-    }
-
-    var gidMatch = rawId.match(/gid:\/\/shopify\/Location\/(\d+)/i);
-    if (gidMatch && gidMatch[1] && target.indexOf(gidMatch[1]) === -1) {
-      target.push(gidMatch[1]);
-    }
+    return shared.addLocationIdCandidates(target, locationId);
   }
 
   function getStockLookupCandidates(selectedName, selectedId) {
-    var candidates = [];
-    var normalizedName = normalizeKey(selectedName);
-    if (normalizedName) candidates.push(normalizedName);
-
-    var noRussoPrefix = normalizeKey(String(selectedName || '').replace(/^russo\s+/i, ''));
-    if (noRussoPrefix && candidates.indexOf(noRussoPrefix) === -1) {
-      candidates.push(noRussoPrefix);
-    }
-
-    addLocationIdCandidates(candidates, selectedId);
-    return candidates;
+    return shared.getStockLookupCandidates(selectedName, selectedId);
   }
 
   function getLiveStockForSelectedStore(mapped, selectedName, selectedId) {
-    if (!mapped || !mapped.stockMap || !mapped.qtyMap) return null;
-    var candidates = getStockLookupCandidates(selectedName, selectedId);
-
-    for (var i = 0; i < candidates.length; i += 1) {
-      var candidate = candidates[i];
-      if (Object.prototype.hasOwnProperty.call(mapped.stockMap, candidate)) {
-        return {
-          inStock: !!mapped.stockMap[candidate],
-          qty: mapped.qtyMap[candidate]
-        };
-      }
-    }
-
-    return null;
+    return shared.getLiveStockForSelectedStore(mapped, selectedName, selectedId);
   }
 
   function hydrateBatchPickupStatuses() {

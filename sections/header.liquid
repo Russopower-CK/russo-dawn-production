@@ -8,6 +8,7 @@
   onload="this.media='all'"
 >
 {{ 'russo-preferred-store.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'russo-preferred-store-shared.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'russo-preferred-store-entry.js' | asset_url }}" defer="defer"></script>
 
 {%- if settings.predictive_search_enabled -%}
