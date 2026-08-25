@@ -102,8 +102,6 @@
 
 <section class="b2b-russo-order-form section-{{ section.id }}">
   <div class="page-width">
-    {% render 'multi-location-order-form-history', form_id: target_form_business_id %}
-
     <header class="b2b-russo-order-form__header">
       <h2>{{ resolved_heading }}</h2>
       {%- if resolved_description != blank -%}
@@ -185,7 +183,7 @@
             >
               {% paginate source_collection.products by section.settings.products_per_page %}
                 <table class="b2b-russo-order-form__table">
-                  <thead>
+                  <thead class="b2b-russo-order-form__table-header">
                     <tr>
                       {%- if use_location_rows_input -%}
                         <th scope="col">Location</th>
@@ -197,7 +195,7 @@
                                 assign variant_label = variant_label | append: ' - ' | append: order_variant.title
                               endif
                             -%}
-                            <th scope="col" class="b2b-russo-order-form__product-heading">
+                            <th scope="col" class="b2b-russo-order-form__product-heading location-rows">
                               <span class="b2b-russo-order-form__location-title">{{ variant_label }}</span>
                             </th>
                           {%- endfor -%}
@@ -537,10 +535,14 @@
         {%- endif -%}
       </form>
     {%- endif -%}
+    {% render 'multi-location-order-form-history', form_id: target_form_business_id %}
   </div>
 </section>
 
 {% stylesheet %}
+  .b2b-russo-order-form__table-header {
+    display: table-header-group;
+  }
   .b2b-russo-order-form__header {
     margin-bottom: 1.5rem;
   }
@@ -1817,14 +1819,36 @@
         submitConfirmModal.removeAttribute('open');
       };
 
+      const payloadHasLineItems = (payload) => {
+        if (!payload || typeof payload !== 'object') {
+          return false;
+        }
+
+        if (Array.isArray(payload.lines)) {
+          return payload.lines.length > 0;
+        }
+
+        if (Array.isArray(payload.OrdersToMake)) {
+          return payload.OrdersToMake.some((order) => Array.isArray(order.Lines) && order.Lines.length > 0);
+        }
+
+        return false;
+      };
+
       const runSubmit = async () => {
         if (submitButton.disabled) return;
+
+        const payload = writePayload(false);
+        if (!payloadHasLineItems(payload)) {
+          closeSubmitConfirmModal();
+          submitStatus.textContent = 'Add at least one product quantity before submitting.';
+          return;
+        }
 
         submitButton.disabled = true;
         submitStatus.textContent = root.dataset.submitStartText || 'Submitting...';
 
         try {
-          const payload = writePayload(false);
           const response = await fetch(submitEndpoint, {
             method: 'POST',
             headers: {

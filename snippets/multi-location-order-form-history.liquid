@@ -1,156 +1,485 @@
 {% comment %}
   Snippet: multi-location-order-form-history.liquid
   Usage: {% render 'multi-location-order-form-history', form_id: section.settings.form_id %}
-  Requires: form_id (string) — the metaobject GID or handle of the linked form
 {% endcomment %}
+
 <style>
+  @media screen and (max-width: 749px) {
+    .mlo-form__history-table {
+      table-layout: fixed;
+    }
+
+    .mlo-form__history-table th,
+    .mlo-form__history-table td {
+      padding: 0.5rem;
+      font-size: 1.1rem;
+      word-break: break-word;
+    }
+
+    .mlo-form__history-table th:nth-child(4),
+    .mlo-form__history-table td:nth-child(4) {
+      display: none;
+    }
+
+    .mlo-history-modal__content {
+      width: 100vw;
+      height: 100vh;
+      max-height: none;
+      border-radius: 0;
+      padding: 1rem;
+    }
+  }
+  .mlo-history-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 8px;
+    background: rgb(var(--color-background));
+  }
+
+  .mlo-history-preview__summary h3 {
+    margin: 0 0 0.5rem;
+  }
+
+  .mlo-sortable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .mlo-sortable:hover {
+    background-color: rgba(var(--color-foreground), 0.05);
+  }
+
+  .mlo-sort-indicator {
+    margin-left: 0.25rem;
+    opacity: 0.5;
+  }
+
+  .mlo-form__history-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
   .mlo-form__history-table th {
     background-color: rgba(var(--color-foreground), 0.02);
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
+
   .mlo-form__history-table td {
     font-size: 1.2rem;
   }
+
   .mlo-form__history-table th,
   .mlo-form__history-table td {
     text-align: left;
     border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
-    padding: 0.5rem;
-    vertical-align: middle;
+    padding: 0.75rem;
+    vertical-align: top;
   }
+
   .mlo-form__history-table tbody tr:hover {
     background-color: #f5f5f5;
-    transition: background-color 0.15s ease;
   }
-  .mlo-form-history {
-    padding-top: 2rem;
+
+  .mlo-history-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
   }
-  .mlo-form-wrapper {
-    padding-top: 2rem;
+
+  .mlo-history-modal.active {
     display: block;
   }
-  .mlo-form-header {
-    text-align: center;
+
+  .mlo-history-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
   }
-  .mlo-form__history-table {
-    width: 100%;
+
+  .mlo-history-modal__content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(1400px, 95vw);
+    max-height: 85vh;
+    overflow: auto;
+    transform: translate(-50%, -50%);
+    background: rgb(var(--color-background));
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .mlo-history-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .mlo-history-modal__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 3rem;
+    line-height: 1;
+    padding: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .mlo-history-preview {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .mlo-history-modal__content {
+      width: 100vw;
+      height: 100vh;
+      max-height: none;
+      border-radius: 0;
+    }
   }
 </style>
-<div class="mlo-form-wrapper">
-  <details class="accordion">
-    <summary class="summary__title">
-      <div class="mlo-form-header h2">Order Form History</div>
-      {{- 'icon-caret.svg' | inline_asset_content -}}
-    </summary>
-    <div class="accordian__content">
-      <div
-        class="mlo-form-history"
-        id="mlo-history-container"
-        data-form-id="{{ form_id | escape }}"
-      >
-        <p class="mlo-form__history-loading">Loading order history…</p>
-      </div>
+
+<div class="mlo-history-preview">
+  <div class="mlo-history-preview__summary">
+    <h3>Order History</h3>
+
+    <div id="mlo-history-summary">
+      <p>Loading order history...</p>
     </div>
-  </details>
+  </div>
+
+  <button
+    type="button"
+    id="mlo-history-open"
+    class="button button--primary"
+  >
+    View Full History
+  </button>
+</div>
+
+<div
+  class="mlo-history-modal"
+  id="mlo-history-modal"
+  aria-hidden="true"
+>
+  <div
+    class="mlo-history-modal__backdrop"
+    id="mlo-history-backdrop"
+  ></div>
+
+  <div class="mlo-history-modal__content">
+    <div class="mlo-history-modal__header">
+      <h2>Order History</h2>
+
+      <button
+        type="button"
+        id="mlo-history-close"
+        class="mlo-history-modal__close"
+        aria-label="Close"
+      >
+        ×
+      </button>
+    </div>
+
+    <div
+      class="mlo-form-history"
+      id="mlo-history-container"
+      data-form-id="{{ form_id | escape }}"
+    >
+      <p>Loading order history...</p>
+    </div>
+  </div>
 </div>
 
 <script>
-  (function () {
-    const formId = {{ form_id | json }};
+(function () {
 
-    {% comment %} B2B: grab the company ID from the logged-in customer {% endcomment %}
-    {% if customer and customer.b2b? %}
-      const companyId = {{ customer.current_company.id | json }};
-    {% else %}
-      const companyId = null;
-    {% endif %}
+  const formId = {{ form_id | json }};
 
-    const container = document.getElementById('mlo-history-container');
+  {% if customer and customer.b2b? %}
+    const companyId = {{ customer.current_company.id | json }};
+  {% else %}
+    const companyId = null;
+  {% endif %}
 
-    if (!formId) {
-      console.warn('[MLO] No form_id provided — skipping history fetch.');
-      if (container) container.innerHTML = '<p>No form specified.</p>';
-      return;
+  const container = document.getElementById('mlo-history-container');
+  const summaryContainer = document.getElementById('mlo-history-summary');
+
+  const modal = document.getElementById('mlo-history-modal');
+  const openBtn = document.getElementById('mlo-history-open');
+  const closeBtn = document.getElementById('mlo-history-close');
+  const backdrop = document.getElementById('mlo-history-backdrop');
+
+  let historyEntries = [];
+
+  let currentSort = 'confirmation_number';
+  let currentDirection = 'desc';
+
+  function openModal() {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closeModal();
     }
+  });
 
-    fetch('/apps/russoAPI/v1/order-form-history', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: JSON.stringify({
-        form_id:    formId,
-        company_id: companyId
-      })
-    })
-    .then(function (res) {
-      if (!res.ok) throw new Error('API responded with status ' + res.status);
-      return res.json();
-    })
-    .then(function (data) {
-      renderHistory(data.entries, container);
-    })
-    .catch(function (err) {
-      console.error('[MLO] Order form history fetch failed:', err);
-      if (container) {
-        container.innerHTML = '<p class="mlo-form__history-error">Unable to load order history. Please try again.</p>';
-      }
-    });
-
-function renderHistory(entries, container) {
-  if (!entries || entries.length === 0) {
-    container.innerHTML = '<p class="mlo-form__history-empty">No submissions found for this form.</p>';
+  if (!formId) {
+    container.innerHTML = '<p>No form specified.</p>';
     return;
   }
 
-  entries.sort(function(a, b) {
-    const aNum = parseInt(String(a.confirmation_number || '').replace(/\D/g, ''), 10) || 0;
-    const bNum = parseInt(String(b.confirmation_number || '').replace(/\D/g, ''), 10) || 0;
-    return bNum - aNum;
+  fetch('/apps/russoAPI/v1/order-form-history', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify({
+      form_id: formId,
+      company_id: companyId
+    })
+  })
+  .then(function(res) {
+    if (!res.ok) {
+      throw new Error('API responded with status ' + res.status);
+    }
+    return res.json();
+  })
+  .then(function(data) {
+
+    historyEntries = data.entries || [];
+
+    renderHistory();
+
+  })
+  .catch(function(err) {
+
+    console.error('[MLO] History fetch failed:', err);
+
+    container.innerHTML =
+      '<p>Unable to load order history.</p>';
+
+    summaryContainer.innerHTML =
+      '<p>Unable to load order history.</p>';
+
   });
 
-  let html = `
-        <table class="mlo-form__history-table">
-          <thead>
-            <tr>
-              <th>Confirmation #</th>
-              <th>Company Location</th>
-              <th>Submitted Date</th>
-              <th>Line Items</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
+  function renderHistory() {
 
-entries.forEach(function (row) {
-  const lineItems = Array.isArray(row.line_items)
-    ? row.line_items.map(function (li) {
-        return escapeHtml(li.line_title ?? JSON.stringify(li)) + ' x' + (li.quantity ?? '?');
-      }).join('<br>')
-    : escapeHtml(JSON.stringify(row.line_items ?? ''));
+    if (!historyEntries.length) {
 
+      summaryContainer.innerHTML =
+        '<p>No previous submissions found.</p>';
 
-        html += `
+      container.innerHTML =
+        '<p>No submissions found for this form.</p>';
+
+      return;
+    }
+
+    sortEntries();
+
+    const latest = historyEntries[0];
+
+    summaryContainer.innerHTML = `
+      <p>
+        <strong>${historyEntries.length}</strong> previous orders<br>
+        Last Order: ${escapeHtml(latest.confirmation_number || '')}<br>
+        ${escapeHtml(latest.company_location_name || '')}<br>
+        ${escapeHtml(latest.submitted_date || '')}
+      </p>
+    `;
+
+    let html = `
+      <table class="mlo-form__history-table">
+        <thead>
           <tr>
-            <td>${escapeHtml(row.confirmation_number ?? '')}</td>
-            <td>${escapeHtml(row.company_location_name ?? '')}</td>
-            <td>${escapeHtml(row.submitted_date ?? '')}</td>
-            <td>${lineItems}</td>
+            <th
+              class="mlo-sortable"
+              data-sort="confirmation_number"
+            >
+              Confirmation #
+              <span class="mlo-sort-indicator">
+                ${getSortIndicator('confirmation_number')}
+              </span>
+            </th>
+
+            <th
+              class="mlo-sortable"
+              data-sort="company_location_name"
+            >
+              Company Location
+              <span class="mlo-sort-indicator">
+                ${getSortIndicator('company_location_name')}
+              </span>
+            </th>
+
+            <th
+              class="mlo-sortable"
+              data-sort="submitted_date"
+            >
+              Submitted Date
+              <span class="mlo-sort-indicator">
+                ${getSortIndicator('submitted_date')}
+              </span>
+            </th>
+
+            <th>
+              Line Items
+            </th>
           </tr>
-        `;
+        </thead>
+        <tbody>
+    `;
+
+    historyEntries.forEach(function(row) {
+
+      const lineItems = Array.isArray(row.line_items)
+        ? row.line_items.map(function(li) {
+            return (
+              escapeHtml(li.line_title || '') +
+              ' x' +
+              (li.quantity || 0)
+            );
+          }).join('<br>')
+        : '';
+
+      html += `
+        <tr>
+          <td>${escapeHtml(row.confirmation_number || '')}</td>
+          <td>${escapeHtml(row.company_location_name || '')}</td>
+          <td>${escapeHtml(row.submitted_date || '')}</td>
+          <td>${lineItems}</td>
+        </tr>
+      `;
+    });
+
+    html += `
+        </tbody>
+      </table>
+    `;
+
+    container.innerHTML = html;
+
+    attachSortEvents();
+  }
+
+  function attachSortEvents() {
+
+    container
+      .querySelectorAll('[data-sort]')
+      .forEach(function(header) {
+
+        header.addEventListener('click', function() {
+
+          const field = this.dataset.sort;
+
+          if (currentSort === field) {
+            currentDirection =
+              currentDirection === 'asc'
+                ? 'desc'
+                : 'asc';
+          } else {
+            currentSort = field;
+            currentDirection = 'asc';
+          }
+
+          renderHistory();
+
+        });
+
       });
 
-      html += '</tbody></table>';
-      container.innerHTML = html;
+  }
+
+  function sortEntries() {
+
+    historyEntries.sort(function(a, b) {
+
+      let aVal = a[currentSort] || '';
+      let bVal = b[currentSort] || '';
+
+      if (currentSort === 'confirmation_number') {
+
+        aVal =
+          parseInt(
+            String(aVal).replace(/\D/g, ''),
+            10
+          ) || 0;
+
+        bVal =
+          parseInt(
+            String(bVal).replace(/\D/g, ''),
+            10
+          ) || 0;
+      }
+      else {
+        aVal = String(aVal).toLowerCase();
+        bVal = String(bVal).toLowerCase();
+      }
+
+      if (currentDirection === 'asc') {
+
+        if (aVal > bVal) return 1;
+        if (aVal < bVal) return -1;
+        return 0;
+
+      }
+
+      if (aVal < bVal) return 1;
+      if (aVal > bVal) return -1;
+      return 0;
+
+    });
+
+  }
+
+  function getSortIndicator(field) {
+
+    if (field !== currentSort) {
+      return '⇅';
     }
 
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-  })();
+    return currentDirection === 'asc'
+      ? '▲'
+      : '▼';
+
+  }
+
+  function escapeHtml(str) {
+
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+  }
+
+})();
 </script>
