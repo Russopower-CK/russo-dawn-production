@@ -1,0 +1,87 @@
+/* include in thead class for header row */
+.russo-table-header{
+    background-color: #f9fafb;
+    border-bottom:2px solid var(--border-color);
+    font-weight: 600;
+}
+.russo-table-header th{
+    font-weight: 600;
+    text-align: left;
+    padding: 15px;
+}
+
+.russo-table-row{
+    background-color: var(--color-foreground);
+
+}
+.russo-table-row td{
+    padding: 15px;
+}
+
+.russo-table-row:hover{
+     background-color: #eaeaea;
+}
+.russo-table-wrapper{
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+.russo-table{
+    border-collapse: collapse;
+    overflow-x: auto;
+    width: 100%;
+    table-layout: fixed;
+    padding: 5px;
+}
+.russo-table-row td{
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+.russo-search-input{
+    padding: 10px 40px 10px 12px;
+}
+
+/*mobile adjustments tip - add data-label for the table row tr so that a caption appears */
+@media screen and (max-width: 749px) {
+
+    .russo-table thead {
+        display: none;
+    }
+
+    .russo-table,
+    .russo-table tbody,
+    .russo-table tr,
+    .russo-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .russo-table-row {
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin-bottom: 12px;
+        padding: 8px;
+        background: white;
+    }
+
+    .russo-table-row td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        text-align: right;
+        padding: 8px 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .russo-table-row td:last-child {
+        border-bottom: none;
+    }
+
+    .russo-table-row td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+        color: #666;
+        flex-shrink: 0;
+    }
+}

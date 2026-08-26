@@ -1,52 +1,77 @@
+{{ 'component-table.css' | asset_url | stylesheet_tag }}
+
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js" async></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('myInput').addEventListener('keyup', function () {
-        var value = this.value.toLowerCase();
-        document.querySelectorAll('#myTable tr').forEach(function (row) {
-          row.style.display = row.textContent.toLowerCase().includes(value) ? '' : 'none';
+      // SEARCH
+      const searchInput = document.getElementById('searchInput');
+
+      if (searchInput) {
+        searchInput.addEventListener('keyup', function () {
+          const value = this.value.toLowerCase();
+
+          document.querySelectorAll('#myTable tr').forEach(function (row) {
+            row.style.display = row.textContent.toLowerCase().includes(value) ? '' : 'none';
+          });
+        });
+      }
+
+      // SORTING
+      const headers = document.querySelectorAll('.asset-list-table thead th');
+
+      headers.forEach((header, columnIndex) => {
+        header.style.cursor = 'pointer';
+
+        header.addEventListener('click', function () {
+          const tbody = document.getElementById('myTable');
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+
+          const ascending = !header.classList.contains('sort-asc');
+
+          headers.forEach((h) => {
+            h.classList.remove('sort-asc', 'sort-desc');
+          });
+
+          header.classList.add(ascending ? 'sort-asc' : 'sort-desc');
+
+          rows.sort((a, b) => {
+            let aValue = a.cells[columnIndex]?.textContent.trim() || '';
+            let bValue = b.cells[columnIndex]?.textContent.trim() || '';
+
+            const aDate = Date.parse(aValue);
+            const bDate = Date.parse(bValue);
+
+            // Date sort
+            if (!isNaN(aDate) && !isNaN(bDate)) {
+              return ascending ? aDate - bDate : bDate - aDate;
+            }
+
+            // Numeric sort
+            if (!isNaN(aValue) && !isNaN(bValue)) {
+              return ascending ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
+            }
+
+            // Text sort
+            return ascending
+              ? aValue.localeCompare(bValue, undefined, {
+                  numeric: true,
+                  sensitivity: 'base',
+                })
+              : bValue.localeCompare(aValue, undefined, {
+                  numeric: true,
+                  sensitivity: 'base',
+                });
+          });
+
+          rows.forEach((row) => tbody.appendChild(row));
         });
       });
     });
   </script>
 
-  <style>
-    .section-1 {
-      margin-left: 20px;
-    }
-    .asset-list-wrapper {
-      max-width: var(--page-width);
-      padding: 5rem;
-    }
-    .responsive-table {
-      width: 95%;
-      font-family: roboto;
-      border-collapse: collapse;
-      border-spacing: 0;
-      margin: 20px;
-    }
-    .responsive-table td,
-    th {
-      border: 1px solid #eaeaea;
-      text-align: left;
-      padding: 8px;
-    }
-    .responsive-table tr:hover {
-      background-color: #eaeaea;
-    }
-    @media screen and (max-width: 719px) {
-      .responsive-table {
-        width: 80%;
-        margin: 8px;
-        font-size: var(--font-size-body-tiny);
-      }
-      .section-1 {
-        margin-left: 8px;
-      }
-    }
-  </style>
+  <style></style>
 </head>
 <body>
   <div class="asset-list-wrapper page-width">
@@ -57,22 +82,22 @@
       </p>
       <p>
         Search your Serialized Units by item number, serial number, asset number, description, or manufacturer: <br>
-        <input id="myInput" type="text" placeholder="Search...">
+        <input class="russo-search-input" id="searchInput" type="text" placeholder="Search...">
       </p>
       <br>
     </div>
-    <div style="overflow-x:auto;">
-      <table class="responsive-table">
-        <thead>
+    <div class="russo-table-wrapper">
+      <table class="asset-list-table russo-table">
+        <thead class="asset-list russo-table-header">
           <tr>
-            <th>Item Number</th>
-            <th>MFR Item Number</th>
-            <th>Serial Number</th>
-            <th>Asset ID</th>
-            <th>Description</th>
-            <th>Manufacturer</th>
-            <th>Purchase Date</th>
-            <th>Service Status</th>
+            <th class="sortable" data-column="0">Item Number</th>
+            <th class="sortable" data-column="1">MFR Item Number</th>
+            <th class="sortable" data-column="2">Serial Number</th>
+            <th class="sortable" data-column="3">Asset ID</th>
+            <th class="sortable" data-column="4">Description</th>
+            <th class="sortable" data-column="5">Manufacturer</th>
+            <th class="sortable" data-column="6">Purchase Date</th>
+            <th class="sortable" data-column="7">Service Status</th>
           </tr>
         </thead>
         <tbody id="myTable">
@@ -82,18 +107,17 @@
           {% else %}
             {% assign equipmentlist = customer.metafields.custom.equipment_list %}
           {% endif %}
-
-          {% for equipment in equipmentlist.value %}
-            <h4 class="product-detail-heading">{{ equipment.name }}</h4>
-            <tr>
-              <td>{{ equipment.item_number }}</td>
-              <td>{{ equipment.item_vendor_item_no }}</td>
-              <td>{{ equipment.serial_number }}</td>
-              <td>{{ equipment.asset_tag }}</td>
-              <td>{{ equipment.unit_description }}</td>
-              <td>{{ equipment.manufacturer }}</td>
-              <td>{{ equipment.saleDate }}</td>
-              <td>{{ equipment.serviceStatus }}</td>
+          {% assign equipments = equipmentlist.value | sort: 'saleDate' | reverse %}
+          {% for equipment in equipments %}
+            <tr class="russo-table-row">
+              <td data-label="SKU">{{ equipment.item_number }}</td>
+              <td data-label="Vendor SKU">{{ equipment.item_vendor_item_no }}</td>
+              <td data-label="Serial">{{ equipment.serial_number }}</td>
+              <td data-label="Asset Tag">{{ equipment.asset_tag }}</td>
+              <td data-label="Description">{{ equipment.unit_description }}</td>
+              <td data-label="Manufacturer">{{ equipment.manufacturer }}</td>
+              <td data-label="Purchase Date">{{ equipment.saleDate }}</td>
+              <td data-label="Service Status">{{ equipment.serviceStatus }}</td>
             </tr>
           {% endfor %}
         </tbody>

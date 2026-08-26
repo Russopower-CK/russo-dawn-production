@@ -13,6 +13,7 @@
     --russo-black: #231f20;
     --russo-grey: rgba(230,230,230);
     --russo-white: #FFFFFF;
+      --border-color: #e1e3e5;
 }
 
 .product-card-wrapper .card,
@@ -3887,3 +3888,4 @@ details-disclosure > details {
         grid-template-columns: auto;
     }
 }
+
