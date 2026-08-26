@@ -302,6 +302,24 @@
     <script>
       window.predictiveSearchFields = '{{ settings.predictive_search_fields | escape }}';
     </script>
+
+    {%- if settings.show_kenect_widget -%}
+      <style>
+        /* Hide Kenect widget while cart drawer is active */
+        body:has(cart-drawer.active) [id*="kenect"],
+        body:has(cart-drawer.active) iframe[src*="kenect"],
+        body:has(cart-drawer.active) [class*="kenect"],
+        body.overflow-hidden [id*="kenect"],
+        body.overflow-hidden iframe[src*="kenect"],
+        body.overflow-hidden [class*="kenect"] {
+          display: none !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+          z-index: -1 !important;
+        }
+      </style>
+    {%- endif -%}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
