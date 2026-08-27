@@ -1,0 +1,64 @@
+{% comment %}
+  Reusable tooltip note markup.
+  Accepts:
+  - label: {String} visible trigger text.
+  - tooltip_title: {String} tooltip header text.
+  - tooltip_body: {String} tooltip body text.
+  - note_class: {String} optional classes for note wrapper.
+  - label_class: {String} optional classes for trigger label text.
+  - tooltip_class: {String} optional classes for tooltip wrapper.
+  - is_hidden: {Boolean} when true, renders hidden attribute on wrapper.
+  - note_data_attribute: {String} optional raw data attribute for wrapper span.
+  - label_data_attribute: {String} optional raw data attribute for label span.
+  - title_data_attribute: {String} optional raw data attribute for title span.
+  - body_data_attribute: {String} optional raw data attribute for body span.
+{% endcomment %}
+{%- liquid
+  assign tooltip_label = label | default: 'Special Order'
+  assign tooltip_heading = tooltip_title | default: tooltip_label
+  assign tooltip_copy = tooltip_body | default: ''
+  assign tooltip_note_class = note_class | default: 'continue-selling-note'
+  assign tooltip_label_class = label_class | default: ''
+  assign tooltip_popup_class = tooltip_class | default: 'continue-selling-tooltip'
+-%}
+<span
+  class="{{ tooltip_note_class }}"
+  tabindex="0"
+  {% if is_hidden %}
+    hidden
+  {% endif -%}
+  {% if note_data_attribute != blank %}
+    {{ note_data_attribute -}}
+  {% endif %}
+>
+  <span
+    {% if tooltip_label_class != blank %}
+      class="{{ tooltip_label_class }}"
+    {% endif %}
+    {% if label_data_attribute != blank %}
+      {{ label_data_attribute -}}
+    {% endif %}
+  >
+    {{- tooltip_label | escape -}}
+  </span>
+  <span class="{{ tooltip_popup_class }}" role="tooltip">
+    <span class="continue-selling-tooltip__header">
+      <span
+        {% if title_data_attribute != blank %}
+          {{ title_data_attribute -}}
+        {% endif %}
+      >
+        {{- tooltip_heading | escape -}}
+      </span>
+      <span class="continue-selling-tooltip__close" aria-hidden="true">X</span>
+    </span>
+    <span
+      class="continue-selling-tooltip__body"
+      {% if body_data_attribute != blank %}
+        {{ body_data_attribute -}}
+      {% endif %}
+    >
+      {{- tooltip_copy | escape -}}
+    </span>
+  </span>
+</span>

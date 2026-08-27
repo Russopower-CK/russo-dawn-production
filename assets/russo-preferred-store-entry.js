@@ -267,6 +267,41 @@
     label.textContent = text;
   }
 
+  function setPickupLabelContent(root, payload) {
+    var label = root.querySelector('[data-preferred-store-product-label]');
+    if (!label) return;
+    var specialOrder = root.querySelector('[data-preferred-store-special-order-note]');
+    var specialOrderLabel = root.querySelector('[data-preferred-store-special-order-label]');
+    var specialOrderTitle = root.querySelector('[data-preferred-store-special-order-tooltip-title]');
+    var specialOrderBody = root.querySelector('[data-preferred-store-special-order-tooltip-body]');
+
+    var data = payload || {};
+
+    if (data.showSpecialOrder && specialOrder) {
+      label.hidden = true;
+      specialOrder.hidden = false;
+      specialOrder.classList.remove('preferred-store-special-order-note--hidden');
+
+      if (specialOrderLabel) {
+        specialOrderLabel.textContent = data.specialOrderLabel || data.text || 'Special Order';
+      }
+      if (specialOrderTitle) {
+        specialOrderTitle.textContent = data.specialOrderTitle || data.specialOrderLabel || data.text || 'Special Order';
+      }
+      if (specialOrderBody) {
+        specialOrderBody.textContent = data.specialOrderBody || '';
+      }
+      return;
+    }
+
+    label.hidden = false;
+    if (specialOrder) {
+      specialOrder.hidden = true;
+      specialOrder.classList.add('preferred-store-special-order-note--hidden');
+    }
+    label.textContent = data.text || '';
+  }
+
   function parseVariantIdFromGid(gid) {
     return shared.parseVariantIdFromGid(gid);
   }
@@ -303,6 +338,21 @@
     return shared.getLiveStockForSelectedStore(mapped, selectedName, selectedId);
   }
 
+  function buildPreferredStoreStatusLabel(options) {
+    if (shared && typeof shared.buildPreferredStoreStatusLabel === 'function') {
+      return shared.buildPreferredStoreStatusLabel(options);
+    }
+
+    var opts = options || {};
+    return {
+      text: String(opts.defaultLabel || 'Choose a Store'),
+      showSpecialOrder: false,
+      specialOrderLabel: '',
+      specialOrderTitle: '',
+      specialOrderBody: ''
+    };
+  }
+
   function hydrateBatchPickupStatuses() {
     var triggers = document.querySelectorAll('[data-preferred-store-variant-trigger][data-auto-status-fetch="false"]');
     if (!triggers.length) return;
@@ -315,31 +365,59 @@
       var defaultLabel = (root.dataset && root.dataset.preferredStoreDefaultLabel)
         ? String(root.dataset.preferredStoreDefaultLabel)
         : 'Choose a Store';
+      var unavailableDisplayMode = (root.dataset && root.dataset.preferredStoreUnavailableDisplayMode)
+        ? String(root.dataset.preferredStoreUnavailableDisplayMode)
+        : 'custom_tooltip';
+      var unavailableLabel = (root.dataset && root.dataset.preferredStoreUnavailableLabel)
+        ? String(root.dataset.preferredStoreUnavailableLabel)
+        : 'Special Order';
+      var unavailableTooltipTitle = (root.dataset && root.dataset.preferredStoreUnavailableTooltipTitle)
+        ? String(root.dataset.preferredStoreUnavailableTooltipTitle)
+        : unavailableLabel;
+      var unavailableTooltipBody = (root.dataset && root.dataset.preferredStoreUnavailableTooltipBody)
+        ? String(root.dataset.preferredStoreUnavailableTooltipBody)
+        : 'Unavailable at {store}. Contact us to place a special order.';
       var variantId = root.dataset ? String(root.dataset.preferredStoreVariantId || '').trim() : '';
 
       if (!selectedName) {
-        setPickupLabel(root, defaultLabel);
+        setPickupLabelContent(root, buildPreferredStoreStatusLabel({
+          status: 'default',
+          defaultLabel: defaultLabel
+        }));
         clearPickupIcon(root);
         return;
       }
 
       if (!variantId || !cache[variantId]) {
-        setPickupLabel(root, '');
+        setPickupLabelContent(root, buildPreferredStoreStatusLabel({
+          status: 'default',
+          defaultLabel: ''
+        }));
         clearPickupIcon(root);
         return;
       }
 
       var live = getLiveStockForSelectedStore(cache[variantId], selectedName, selectedId);
       if (!live) {
-        setPickupLabel(root, 'Entry2 Pickup Availability unknown at ' + selectedName);
+        setPickupLabelContent(root, buildPreferredStoreStatusLabel({
+          status: 'unknown',
+          selectedName: selectedName,
+          defaultLabel: defaultLabel
+        }));
         clearPickupIcon(root);
         return;
       }
 
       setPickupIcon(root, live.inStock);
-      setPickupLabel(root, live.inStock
-        ? ('Available at ' + selectedName.replace('Russo ', ''))
-        : ('Unavailable at ' + selectedName.replace('Russo ', '')));
+      setPickupLabelContent(root, buildPreferredStoreStatusLabel({
+        status: live.inStock ? 'available' : 'unavailable',
+        selectedName: selectedName,
+        defaultLabel: defaultLabel,
+        unavailableDisplayMode: unavailableDisplayMode,
+        unavailableLabel: unavailableLabel,
+        unavailableTooltipTitle: unavailableTooltipTitle,
+        unavailableTooltipBody: unavailableTooltipBody
+      }));
     });
   }
 

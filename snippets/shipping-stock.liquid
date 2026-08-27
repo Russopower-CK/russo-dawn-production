@@ -213,18 +213,11 @@
             {%- else -%}
               {%- if product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
                 {%- if use_continue_selling_tooltip -%}
-                  <span class="continue-selling-note" tabindex="0">
-                    {{- continue_selling_label | escape -}}
-                    <span class="continue-selling-tooltip" role="tooltip">
-                      <span class="continue-selling-tooltip__header">
-                        <span>{{- continue_selling_tooltip_title | escape -}}</span>
-                        <span class="continue-selling-tooltip__close" aria-hidden="true">X</span>
-                      </span>
-                      <span class="continue-selling-tooltip__body">
-                        {{- continue_selling_tooltip_body | escape -}}
-                      </span>
-                    </span>
-                  </span>
+                  {% render 'russo-tooltip-note',
+                    label: continue_selling_label,
+                    tooltip_title: continue_selling_tooltip_title,
+                    tooltip_body: continue_selling_tooltip_body
+                  %}
                 {%- else -%}
                   <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
                     {{- 'icon-inventory-status.svg' | inline_asset_content -}}

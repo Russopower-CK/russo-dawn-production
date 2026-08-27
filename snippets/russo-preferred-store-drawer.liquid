@@ -2,6 +2,7 @@
 <script>
   window.__PreferredStoreGeoipEnabled = {{ shop.metafields['app--257135706113']['russo_app_setup'].value.storeSelectorSetup.geoipEnabled | json }};
 </script>
+
 <style>
   .preferred-store-item {
     display: flex;
@@ -28,7 +29,10 @@
     border-radius: 50%;
     margin-right: 10px;
   }
-
+  .preferred-store-dawer-subheader {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
   .store-right a {
     text-decoration: underline;
     color: inherit;
@@ -51,8 +55,7 @@
         ✕
       </button>
     </header>
-
-    <div class="preferred-store-drawer__body">
+    <div class="preferred-store-dawer-subheader">
       <p class="preferred-store-current-message" data-preferred-store-message>
         {{ setup.storeSelectorSetup.message | default: 'Choose your store to see local pickup options.' }}
       </p>
@@ -96,7 +99,8 @@
           data-preferred-store-search
         >
       </div>
-
+    </div>
+    <div class="preferred-store-drawer__body">
       <div class="preferred-store-list" data-preferred-store-list>
         <p class="preferred-store-list__loading" data-preferred-store-loading>Loading stores…</p>
       </div>

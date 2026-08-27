@@ -118,6 +118,8 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
   - latest payload snapshot
 - Top-right submit button uses reusable snippet `snippets/russo-confirm-modal.liquid` (Dawn `modal-opener` + `modal-dialog`) for confirmation, then posts payload to `fake_submit_endpoint` (default `/apps/russoAPI/v1/submit-order-form`) and, on success, clears local draft state and resets form values.
 - Submit flow validates payload content before POST; when no line items are present, submission is blocked and status text prompts the user to add quantity before submitting.
+- Submit confirmation modal is dismissed after any submit attempt result (success or failure), and also when blocked due to empty line items.
+- Submit status messaging is stateful (`pending`, `success`, `error`) so error responses render with stronger visual emphasis.
 - Submit confirmation action labels are static (`Confirm submit`, `Cancel`).
 - Submit status messages are section settings and rendered via `[data-submit-status]`.
 

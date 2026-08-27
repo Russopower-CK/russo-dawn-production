@@ -562,6 +562,30 @@
   .b2b-russo-order-form__submit-status {
     margin: 0;
     font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.35;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.6rem;
+    border: 1px solid transparent;
+    background: transparent;
+  }
+
+  .b2b-russo-order-form__submit-status[data-status-state='pending'] {
+    color: rgba(var(--color-foreground), 0.9);
+    background: rgba(var(--color-foreground), 0.06);
+    border-color: rgba(var(--color-foreground), 0.16);
+  }
+
+  .b2b-russo-order-form__submit-status[data-status-state='success'] {
+    color: rgb(10, 94, 46);
+    background: rgba(10, 94, 46, 0.12);
+    border-color: rgba(10, 94, 46, 0.32);
+  }
+
+  .b2b-russo-order-form__submit-status[data-status-state='error'] {
+    color: rgb(152, 21, 24);
+    background: rgba(218, 54, 51, 0.14);
+    border-color: rgba(218, 54, 51, 0.44);
   }
 
   .b2b-russo-order-form__entry-layout--with-summary {
@@ -1819,6 +1843,16 @@
         submitConfirmModal.removeAttribute('open');
       };
 
+      const setSubmitStatus = (message, state) => {
+        if (!submitStatus) return;
+        submitStatus.textContent = message;
+        if (state) {
+          submitStatus.dataset.statusState = state;
+        } else {
+          delete submitStatus.dataset.statusState;
+        }
+      };
+
       const payloadHasLineItems = (payload) => {
         if (!payload || typeof payload !== 'object') {
           return false;
@@ -1841,12 +1875,12 @@
         const payload = writePayload(false);
         if (!payloadHasLineItems(payload)) {
           closeSubmitConfirmModal();
-          submitStatus.textContent = 'Add at least one product quantity before submitting.';
+          setSubmitStatus('Add at least one product quantity before submitting.', 'error');
           return;
         }
 
         submitButton.disabled = true;
-        submitStatus.textContent = root.dataset.submitStartText || 'Submitting...';
+        setSubmitStatus(root.dataset.submitStartText || 'Submitting...', 'pending');
 
         try {
           const response = await fetch(submitEndpoint, {
@@ -1870,9 +1904,10 @@
           clearFormValues();
           updateTotals();
           writePayload(false);
-          submitStatus.textContent = root.dataset.submitSuccessText || 'Submitted.';
+          setSubmitStatus(root.dataset.submitSuccessText || 'Submitted.', 'success');
         } catch (error) {
-          submitStatus.textContent = root.dataset.submitErrorText || 'Submission failed.';
+          closeSubmitConfirmModal();
+          setSubmitStatus(root.dataset.submitErrorText || 'Submission failed.', 'error');
           console.error('Order form submit error', error);
         } finally {
           submitButton.disabled = false;

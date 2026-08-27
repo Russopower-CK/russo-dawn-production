@@ -239,6 +239,74 @@
     return set;
   }
 
+  function stripRussoPrefix(name) {
+    return String(name || '').replace(/^russo\s+/i, '').trim();
+  }
+
+  function buildPreferredStoreStatusLabel(options) {
+    var opts = options || {};
+    var status = String(opts.status || 'default').toLowerCase();
+    var selectedName = String(opts.selectedName || '').trim();
+    var compactStoreName = stripRussoPrefix(selectedName);
+    var fallbackLabel = String(opts.defaultLabel || 'Choose a Store');
+
+    if (status === 'default' || !selectedName) {
+      return {
+        text: fallbackLabel,
+        showSpecialOrder: false,
+        specialOrderLabel: '',
+        specialOrderTitle: '',
+        specialOrderBody: ''
+      };
+    }
+
+    if (status === 'available') {
+      return {
+        text: 'Available at ' + (compactStoreName || selectedName),
+        showSpecialOrder: false,
+        specialOrderLabel: '',
+        specialOrderTitle: '',
+        specialOrderBody: ''
+      };
+    }
+
+    if (status === 'unknown') {
+      return {
+        text: 'Pickup Availability unknown at ' + selectedName,
+        showSpecialOrder: false,
+        specialOrderLabel: '',
+        specialOrderTitle: '',
+        specialOrderBody: ''
+      };
+    }
+
+    var unavailableDisplayMode = String(opts.unavailableDisplayMode || 'custom_tooltip').toLowerCase();
+    var isTooltipMode = unavailableDisplayMode === 'custom_tooltip' || unavailableDisplayMode === 'custom';
+
+    if (!isTooltipMode) {
+      return {
+        text: 'Unavailable at ' + (compactStoreName || selectedName),
+        showSpecialOrder: false,
+        specialOrderLabel: '',
+        specialOrderTitle: '',
+        specialOrderBody: ''
+      };
+    }
+
+    var unavailableLabel = String(opts.unavailableLabel || 'Special Order');
+    var tooltipTitle = String(opts.unavailableTooltipTitle || unavailableLabel);
+    var tooltipTemplate = String(opts.unavailableTooltipBody || 'Unavailable at {store}. Contact us to place a special order.');
+    var tooltipBody = tooltipTemplate.replace(/\{store\}/gi, compactStoreName || selectedName);
+
+    return {
+      text: unavailableLabel,
+      showSpecialOrder: true,
+      specialOrderLabel: unavailableLabel,
+      specialOrderTitle: tooltipTitle,
+      specialOrderBody: tooltipBody
+    };
+  }
+
   window.__PreferredStoreShared = {
     normalizeKey: normalizeKey,
     toUniqueList: toUniqueList,
@@ -253,6 +321,7 @@
     addLocationIdCandidates: addLocationIdCandidates,
     getStockLookupCandidates: getStockLookupCandidates,
     getLiveStockForSelectedStore: getLiveStockForSelectedStore,
-    buildInStockSetFromLocations: buildInStockSetFromLocations
+    buildInStockSetFromLocations: buildInStockSetFromLocations,
+    buildPreferredStoreStatusLabel: buildPreferredStoreStatusLabel
   };
 })();

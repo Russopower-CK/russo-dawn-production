@@ -22,11 +22,14 @@
 {%- endcomment -%}
 <style>
   .preferred-store-pickup__status-default-label {
-    width: 100%;
+    width: auto;
+    white-space: nowrap;
   }
   .preffered-store-pickup__display {
     display: flex;
     align-items: center;
+    gap: 0.35rem;
+    flex-wrap: nowrap;
   }
   .preferred-store-pickup__status-label {
     text-decoration: underline;
@@ -43,6 +46,10 @@
   assign preferred_store_show_launcher_button = show_launcher_button | default: false
   assign preferred_store_auto_status_fetch = auto_status_fetch | default: false
   assign preferred_store_launcher_button_label = launcher_button_label | default: 'Check availability at other stores'
+  assign preferred_store_unavailable_display_mode = unavailable_display_mode | default: 'custom_tooltip'
+  assign preferred_store_unavailable_label = unavailable_label | default: 'Special Order'
+  assign preferred_store_unavailable_tooltip_title = unavailable_tooltip_title | default: preferred_store_unavailable_label
+  assign preferred_store_unavailable_tooltip_body = unavailable_tooltip_body | default: 'Unavailable at {store}. Contact us to place a special order.'
   assign preferred_store_instance_id = 'preferred-store-variant-' | append: section.id | append: '-' | append: preferred_store_variant.id
 -%}
 
@@ -53,6 +60,10 @@
   data-preferred-store-variant-id="{{ preferred_store_variant.id }}"
   data-auto-status-fetch="{{ preferred_store_auto_status_fetch }}"
   data-preferred-store-default-label="{{ preferred_store_default_label | escape }}"
+  data-preferred-store-unavailable-display-mode="{{ preferred_store_unavailable_display_mode | escape }}"
+  data-preferred-store-unavailable-label="{{ preferred_store_unavailable_label | escape }}"
+  data-preferred-store-unavailable-tooltip-title="{{ preferred_store_unavailable_tooltip_title | escape }}"
+  data-preferred-store-unavailable-tooltip-body="{{ preferred_store_unavailable_tooltip_body | escape }}"
 >
   {%- if preferred_store_show_status_display -%}
     <div class="preffered-store-pickup__display">
@@ -61,6 +72,18 @@
       <span class="preferred-store-pickup__status-default-label caption" data-preferred-store-product-label>
         {{- preferred_store_default_label -}}
       </span>
+      {% render 'russo-tooltip-note',
+        label: preferred_store_unavailable_label,
+        label_class: 'preferred-store-pickup__status-default-label caption',
+        tooltip_title: preferred_store_unavailable_tooltip_title,
+        tooltip_body: preferred_store_unavailable_tooltip_body,
+        note_class: 'continue-selling-note preferred-store-special-order-note preferred-store-special-order-note--hidden',
+        note_data_attribute: 'data-preferred-store-special-order-note',
+        label_data_attribute: 'data-preferred-store-special-order-label',
+        title_data_attribute: 'data-preferred-store-special-order-tooltip-title',
+        body_data_attribute: 'data-preferred-store-special-order-tooltip-body',
+        is_hidden: true
+      %}
     </div>
   {%- endif -%}
 
@@ -113,6 +136,41 @@
       var label = root.querySelector('[data-preferred-store-product-label]');
       if (!label) return;
       label.textContent = text;
+    }
+
+    function setButtonLabelContent(payload) {
+      var label = root.querySelector('[data-preferred-store-product-label]');
+      if (!label) return;
+      var specialOrder = root.querySelector('[data-preferred-store-special-order-note]');
+      var specialOrderLabel = root.querySelector('[data-preferred-store-special-order-label]');
+      var specialOrderTitle = root.querySelector('[data-preferred-store-special-order-tooltip-title]');
+      var specialOrderBody = root.querySelector('[data-preferred-store-special-order-tooltip-body]');
+
+      var data = payload || {};
+
+      if (data.showSpecialOrder && specialOrder) {
+        label.hidden = true;
+        specialOrder.hidden = false;
+        specialOrder.classList.remove('preferred-store-special-order-note--hidden');
+
+        if (specialOrderLabel) {
+          specialOrderLabel.textContent = data.specialOrderLabel || data.text || 'Special Order';
+        }
+        if (specialOrderTitle) {
+          specialOrderTitle.textContent = data.specialOrderTitle || data.specialOrderLabel || data.text || 'Special Order';
+        }
+        if (specialOrderBody) {
+          specialOrderBody.textContent = data.specialOrderBody || '';
+        }
+        return;
+      }
+
+      label.hidden = false;
+      if (specialOrder) {
+        specialOrder.hidden = true;
+        specialOrder.classList.add('preferred-store-special-order-note--hidden');
+      }
+      label.textContent = data.text || '';
     }
 
     function setStatusIcon(inStock) {
@@ -394,6 +452,22 @@
       return null;
     }
 
+    function buildPreferredStoreStatusLabel(options) {
+      var shared = window.__PreferredStoreShared;
+      if (shared && typeof shared.buildPreferredStoreStatusLabel === 'function') {
+        return shared.buildPreferredStoreStatusLabel(options);
+      }
+
+      var opts = options || {};
+      return {
+        text: String(opts.defaultLabel || 'Choose a Store'),
+        showSpecialOrder: false,
+        specialOrderLabel: '',
+        specialOrderTitle: '',
+        specialOrderBody: ''
+      };
+    }
+
     // Display-only status label for the PDP button.
     // Uses selected store cookie + live proxy stock only.
     function updateButtonLabel() {
@@ -401,17 +475,36 @@
       var showStatusLabel = {{ preferred_store_show_status_label | json }};
 
       if (!showStatusLabel) {
-        setButtonLabel(fallbackLabel);
+        setButtonLabelContent(buildPreferredStoreStatusLabel({
+          status: 'default',
+          defaultLabel: fallbackLabel
+        }));
         setStatusIcon(null);
         return;
       }
 
       var selectedName = getCookie('preferred_store_location_name');
       if (!selectedName) {
-        setButtonLabel(fallbackLabel);
+        setButtonLabelContent(buildPreferredStoreStatusLabel({
+          status: 'default',
+          defaultLabel: fallbackLabel
+        }));
         setStatusIcon(null);
         return;
       }
+
+      var unavailableDisplayMode = root.dataset && root.dataset.preferredStoreUnavailableDisplayMode
+        ? String(root.dataset.preferredStoreUnavailableDisplayMode)
+        : 'custom_tooltip';
+      var unavailableLabel = root.dataset && root.dataset.preferredStoreUnavailableLabel
+        ? String(root.dataset.preferredStoreUnavailableLabel)
+        : 'Special Order';
+      var unavailableTooltipTitle = root.dataset && root.dataset.preferredStoreUnavailableTooltipTitle
+        ? String(root.dataset.preferredStoreUnavailableTooltipTitle)
+        : unavailableLabel;
+      var unavailableTooltipBody = root.dataset && root.dataset.preferredStoreUnavailableTooltipBody
+        ? String(root.dataset.preferredStoreUnavailableTooltipBody)
+        : 'Unavailable at {store}. Contact us to place a special order.';
 
       var selectedId = getCookie('preferred_store_location_id');
       var variantId =
@@ -424,18 +517,32 @@
           var live = getLiveStockForSelectedStore(mapped, selectedName, selectedId);
           if (live) {
             setStatusIcon(live.inStock);
-            setButtonLabel(live.inStock
-              ? ('Available at ' + selectedName.replace('Russo ', ''))
-              : ('Unavailable at ' + selectedName.replace('Russo ', '')));
+            setButtonLabelContent(buildPreferredStoreStatusLabel({
+              status: live.inStock ? 'available' : 'unavailable',
+              selectedName: selectedName,
+              defaultLabel: fallbackLabel,
+              unavailableDisplayMode: unavailableDisplayMode,
+              unavailableLabel: unavailableLabel,
+              unavailableTooltipTitle: unavailableTooltipTitle,
+              unavailableTooltipBody: unavailableTooltipBody
+            }));
             return;
           }
 
           setStatusIcon(null);
-          setButtonLabel('Pickup Availability unknown at ' + selectedName);
+          setButtonLabelContent(buildPreferredStoreStatusLabel({
+            status: 'unknown',
+            selectedName: selectedName,
+            defaultLabel: fallbackLabel
+          }));
         })
         .catch(function () {
           setStatusIcon(null);
-          setButtonLabel('Pickup Availability unknown at ' + selectedName);
+          setButtonLabelContent(buildPreferredStoreStatusLabel({
+            status: 'unknown',
+            selectedName: selectedName,
+            defaultLabel: fallbackLabel
+          }));
         });
     }
 
