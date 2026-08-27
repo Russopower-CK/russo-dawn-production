@@ -14,6 +14,7 @@
     "favicon": "shopify://shop_images/Russo-R-Favicon.png",
     "default_product_image": "shopify://shop_images/Russo-photo-not-available.jpg",
     "show_back_to_top": true,
+    "use_russo_favorites": true,
     "show_kenect_widget": true,
     "kenect_url": "https://resource.kenect.com/api/v1/widget/client-data/iIYr15CB66nTKB9sHmL5kJ",
     "type_header_font": "roboto_n6",
