@@ -12,7 +12,13 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   ProductActionsFlyout.prototype.init = function () {
-    if (!this.panel || !this.cards.length) return;
+    if (!this.cards.length) return;
+
+    if (!this.panel) {
+      this.panel = document.createElement('div');
+      this.panel.id = 'product-hover-panel';
+      document.body.appendChild(this.panel);
+    }
 
     if (this.panel.parentNode !== document.body) {
       document.body.appendChild(this.panel);
@@ -120,6 +126,11 @@ document.addEventListener('DOMContentLoaded', function () {
     this.panel.style.display = 'block';
 
     this.position();
+
+    this.panel.classList.remove('is-revealing');
+    // Force reflow so animation restarts on each card hover.
+    void this.panel.offsetWidth;
+    this.panel.classList.add('is-revealing');
   };
 
   ProductActionsFlyout.prototype.close = function () {
@@ -142,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
       );
     }
 
+    this.panel.classList.remove('is-revealing');
     this.panel.style.display = 'none';
 
     this.activeCard = null;
