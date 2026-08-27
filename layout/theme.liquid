@@ -298,7 +298,6 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
-    {% comment %}<script src="{{ 'product-hover-panel.js' | asset_url }}" defer="defer"></script> {% endcomment %}
     <script>
       window.predictiveSearchFields = '{{ settings.predictive_search_fields | escape }}';
     </script>
@@ -335,14 +334,6 @@
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
-      <div id="product-hover-panel"></div>
-      {% if settings.show_kenect_widget and settings.kenect_url != blank %}
-        <script
-          async
-          src="{{ settings.kenect_url }}"
-          type="text/javascript"
-        ></script>
-      {% endif %}
     </main>
 
     {%- if settings.show_back_to_top -%}
@@ -408,5 +399,13 @@
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
     <script src="{{ 'russo-sidebar-mega-menu.js' | asset_url }}" defer="defer"></script>
+
+    {% if settings.show_kenect_widget and settings.kenect_url != blank %}
+      <script
+        async
+        src="{{ settings.kenect_url }}"
+        type="text/javascript"
+      ></script>
+    {% endif %}
   </body>
 </html>
