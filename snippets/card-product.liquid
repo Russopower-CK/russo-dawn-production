@@ -152,6 +152,9 @@
       {% if enable_hover_actions %}hover-actions-enabled{% endif %}
     "
   >
+    {% if settings.use_russo_favorites %}
+      {% render 'russo-order-form-icon-toggle', product: card_product, absolute: true %}
+    {% endif %}
     <div
       class="
         card card--{{ settings.card_style }}

@@ -1,0 +1,55 @@
+{%- assign product_in_order_form = false -%}
+{%- assign is_b2b = customer.b2b? -%}
+
+{%- if is_b2b -%}
+  {%- assign order_form_collection = customer.metafields.custom.order_form_collection.value -%}
+  {%- assign order_form_favorites = customer.metafields.custom.order_form_favorites.value -%}
+
+  {%- for c in product.collections -%}
+    {%- if order_form_collection and c.handle == order_form_collection.handle -%}
+      {%- assign product_in_order_form = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if product_in_order_form == false and order_form_favorites -%}
+    {%- for id in order_form_favorites -%}
+      {%- if id.id == product.id -%}
+        {%- assign product_in_order_form = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign add_label_value = add_label | default: 'Add to Favorites' -%}
+{%- assign remove_label_value = remove_label | default: 'Remove from Favorites' -%}
+{%- assign icon_aria_label = add_label_value -%}
+{%- if product_in_order_form -%}
+  {%- assign icon_aria_label = remove_label_value -%}
+{%- endif -%}
+<div
+  class="orderform-icon-wrap{% if absolute %} orderform-icon-wrap--absolute{% endif %}"
+  data-orderform-buttons
+  data-orderform-mode="icon"
+  data-product-id="{{ product.id }}"
+  data-in-order-form="{{ product_in_order_form | json }}"
+  data-add-label="{{ add_label_value | escape }}"
+  data-remove-label="{{ remove_label_value | escape }}"
+  data-processing-label="{{ processing_label | default: 'Processing...' | escape }}"
+  data-success-add="{{ success_add_message | default: 'Added to order form.' | escape }}"
+  data-success-remove="{{ success_remove_message | default: 'Removed from order form.' | escape }}"
+  data-error-message="{{ error_message | default: 'Update failed. Please try again.' | escape }}"
+  data-network-error-message="{{ network_error_message | default: 'Network error.' | escape }}"
+>
+  <button
+    type="button"
+    class="orderform-icon-btn{% if product_in_order_form %} is-active{% endif %}"
+    data-action="toggle"
+    aria-pressed="{% if product_in_order_form %}true{% else %}false{% endif %}"
+    aria-label="{{ icon_aria_label | escape }}"
+  >
+    <span class="visually-hidden">{{ icon_aria_label }}</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+    </svg>
+  </button>
+</div>

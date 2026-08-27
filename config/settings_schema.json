@@ -48,6 +48,11 @@
       },
       {
         "type": "checkbox",
+        "id": "use_russo_favorites",
+        "label": "Use Russo Favorites"
+      },
+      {
+        "type": "checkbox",
         "id": "show_kenect_widget",
         "label": "Show Kenect Widget",
         "default": false

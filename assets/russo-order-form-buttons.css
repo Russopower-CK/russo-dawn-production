@@ -1,0 +1,126 @@
+/* Russo order-form button styling loaded once for all snippet instances */
+.orderform-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 15px 0;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.orderform-btn.of-add {
+  background-color: var(--russo-green, #0a7d36);
+  border: 0;
+  width: 100%;
+}
+
+.orderform-btn.of-add:hover:not(:disabled) {
+  background-color: var(--russo-green-dark, #08612a);
+}
+
+.orderform-btn.of-remove {
+  background-color: var(--russo-red, #e31e24);
+  width: 100%;
+}
+
+.orderform-btn.of-remove:hover:not(:disabled) {
+  background-color: var(--russo-red-dark, #b21217);
+}
+
+.orderform-btn:disabled {
+  background-color: #e5e5e5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.orderform-msg {
+  grid-column: 1 / -1;
+  width: 100%;
+  font-size: 13px;
+  margin-top: 10px;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.orderform-msg.success {
+  background: #f0fff4;
+  color: #1a7a33;
+  border: 1px solid #c6f6d5;
+}
+
+.orderform-msg.error {
+  background: #fff5f5;
+  color: var(--russo-red, #e31e24);
+  border: 1px solid #feb2b2;
+}
+
+.orderform-icon-wrap {
+  display: inline-flex;
+}
+
+.orderform-icon-wrap--absolute {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 25;
+  pointer-events: auto;
+}
+
+.orderform-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.92);
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.orderform-icon-btn svg {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.orderform-icon-btn path {
+  fill: currentColor;
+  stroke: var(--russo-red, #e31e24);
+  stroke-width: 1.6;
+}
+
+.orderform-icon-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.orderform-icon-btn.is-active {
+  color: var(--russo-red, #e31e24);
+  background: #ffffff;
+}
+
+.orderform-icon-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.orderform-icon-btn.is-busy {
+  opacity: 0.75;
+}
+
+@media (max-width: 768px) {
+  .orderform-buttons {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .orderform-btn {
+    width: 100%;
+  }
+}
