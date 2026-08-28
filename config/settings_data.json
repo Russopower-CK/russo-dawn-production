@@ -201,6 +201,13 @@
           "quick_action_4_action": "template",
           "quick_action_4_icon": "☎"
         }
+      },
+      "15351435345818755577": {
+        "type": "shopify://apps/pandectes-gdpr/blocks/banner/58c0baa2-6cc1-480c-9ea6-38d6d559556a",
+        "disabled": false,
+        "settings": {
+          "fast_load": false
+        }
       }
     },
     "color_schemes": {
