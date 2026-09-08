@@ -21,21 +21,42 @@
      - This file also includes a direct "probe" fetch for debugging visibility on click.
 {%- endcomment -%}
 <style>
-  .preferred-store-pickup__status-default-label {
-    width: auto;
-    white-space: nowrap;
+  .russo-card__shipping-stock .preffered-store-pickup__display {
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    container-type: inline-size;
   }
+
+  .russo-card__shipping-stock .preferred-store-pickup__status-default-label {
+    white-space: normal;
+    width: auto;
+  }
+
   .preffered-store-pickup__display {
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    flex-wrap: nowrap;
   }
   .preferred-store-pickup__status-label {
     text-decoration: underline;
   }
   .preferred-store-pickup__status-label:hover {
     text-decoration-thickness: 0.2rem;
+  }
+
+  .russo-card__shipping-stock .preffered-store-pickup__display,
+  .russo-card__shipping-stock .pickup-availability-preview {
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .russo-card__shipping-stock .preferred-store-pickup__status-default-label,
+  .russo-card__shipping-stock .preferred-store-pickup__status-line,
+  .russo-card__shipping-stock .caption {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: clamp(0.5rem, 1rem, 1.25rem);
   }
 </style>
 {%- liquid

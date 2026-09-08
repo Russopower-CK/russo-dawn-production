@@ -125,6 +125,18 @@
         transform: translateY(0);
       }
 
+      /* Elevates the grid item's own stacking context (created by the scroll-trigger slide-in animation) above sibling cards while the tooltip is open. */
+      .grid__item:has(.continue-selling-note:hover),
+      .grid__item:has(.continue-selling-note:focus-within) {
+        position: relative;
+        z-index: 2;
+      }
+
+      .card-wrapper:has(.continue-selling-note:hover),
+      .card-wrapper:has(.continue-selling-note:focus-within) {
+        z-index: 3;
+      }
+
       .continue-selling-tooltip__header {
         display: flex;
         justify-content: space-between;
