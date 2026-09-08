@@ -317,7 +317,6 @@
 .preferred-store-card__distance {
   font-size: small !important;      /* Slightly larger than address text */
   font-weight: 700;                /* Bold to emphasize proximity */
-  color: #111827;
   margin-top: 4px;
   text-align: right;
 }
@@ -690,5 +689,267 @@
     right: -64px;
     min-width: 80px;
     font-size: 0.82rem;
+  }
+}
+
+/* ==========================================
+   STORE SELECTOR V2
+   Paste AFTER existing preferred store css
+   ========================================== */
+
+/* Drawer */
+.preferred-store-drawer__panel {
+  border-left: 1px solid #e5e7eb;
+}
+
+.preferred-store-drawer__title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.preferred-store-current-message {
+  font-size: 1.4rem;
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+}
+
+/* Store list spacing */
+.preferred-store-list {
+  gap: 1rem;
+}
+
+/* ==========================================
+   CARD
+   ========================================== */
+
+.preferred-store-card {
+  position: relative;
+
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  grid-template-areas:
+    "name distance"
+    "stock stock"
+    "address address"
+    "footer footer" !important;
+
+  gap: 0.75rem;
+
+  padding: 1.2rem !important;
+
+  border: 1px solid #d6d6d6;
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.preferred-store-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--russo-red-dark);
+  box-shadow: 0 8px 18px rgb(0 0 0 / 10%);
+}
+
+/* ==========================================
+   SELECTED STORE
+   ========================================== */
+
+.preferred-store-card--selected {
+  border: 2px solid var(--russo-red-dark) !important;
+  background: #fff8f8;
+  box-shadow: 0 0 0 4px rgb(180 20 20 / 10%);
+}
+
+.preferred-store-card--selected::before {
+  content: "Selected";
+  position: absolute;
+  top: -10px;
+  right: 12px;
+
+  padding: 3px 8px;
+
+  background: var(--russo-red-dark);
+  color: white;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  border-radius: 999px;
+}
+
+/* ==========================================
+   NAME + DISTANCE
+   ========================================== */
+
+.preferred-store-card__name {
+  grid-area: name;
+  margin: 0 !important;
+
+  font-size: 1.8rem !important;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.preferred-store-card__distance {
+  grid-area: distance;
+
+  align-self: start;
+  justify-self: end;
+
+  margin: 0;
+
+  padding: 4px 10px;
+  color: #374151;
+  background: #f3f4f6;
+
+  border-radius: 999px;
+
+  font-size: 1.2rem !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   STOCK BADGE
+   ========================================== */
+
+.preferred-store-card__stock {
+  grid-area: stock;
+
+  display: inline-flex;
+  width: fit-content;
+
+  padding: 0.35rem 0.8rem;
+
+  border-radius: 999px;
+
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.preferred-store-card__stock--yes {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+}
+
+.preferred-store-card__stock--yes::before {
+  content: "✓";
+  margin-right: 0.4rem;
+}
+
+.preferred-store-card__stock--no {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+.preferred-store-card__stock--no::before {
+  content: "✕";
+  margin-right: 0.4rem;
+}
+
+/* ==========================================
+   ADDRESS
+   ========================================== */
+
+.preferred-store-card__address {
+  grid-area: address;
+
+  font-size: 1.35rem !important;
+  line-height: 1.5;
+
+  color: #444;
+
+  margin: 0;
+}
+
+/* Remove visual clutter */
+.preferred-store-card__address br:last-child {
+  display: none;
+}
+
+/* ==========================================
+   FOOTER LINKS
+   ========================================== */
+
+.preferred-store-card__phone,
+.preferred-store-card__details-link {
+  margin: 0;
+}
+
+.preferred-store-card__phone {
+  grid-area: footer;
+}
+
+.preferred-store-card__details-link {
+  grid-area: footer;
+  justify-self: end;
+}
+
+.preferred-store-card__phone a,
+.preferred-store-card__details-link a {
+  font-size: 1.25rem !important;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.preferred-store-card__phone a:hover,
+.preferred-store-card__details-link a:hover {
+  color: var(--russo-red-dark);
+}
+
+/* ==========================================
+   INPUTS
+   ========================================== */
+
+.preferred-store-zip__row .field__input {
+  border-radius: 8px;
+}
+
+.preferred-store-zip__row .button {
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* ==========================================
+   GEO BUTTON
+   ========================================== */
+
+.geo-button {
+  margin-top: .6rem;
+}
+
+[data-preferred-store-use-geo] {
+  text-decoration: none;
+  font-weight: 700;
+}
+
+[data-preferred-store-use-geo]:hover {
+  color: var(--russo-red-dark);
+}
+
+/* ==========================================
+   MOBILE
+   ========================================== */
+
+@media (max-width: 480px) {
+
+  .preferred-store-card {
+    padding: 1rem !important;
+  }
+
+  .preferred-store-card__name {
+    font-size: 1.6rem !important;
+  }
+
+  .preferred-store-card__address {
+    font-size: 1.2rem !important;
+  }
+
+  .preferred-store-card__distance {
+    font-size: 1.1rem !important;
   }
 }

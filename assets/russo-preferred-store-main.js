@@ -1,5 +1,4 @@
-
-  var storeLocationChanged = false; // Starts as false when the page loads
+var storeLocationChanged = false; // Starts as false when the page loads
 
 (function () {
   if (window.__preferredStoreMainLoaded) return;
@@ -32,7 +31,7 @@
       calculateDistanceEndpoint: cfg.calculateDistanceEndpoint || `${API_BASE}/calculate-distance`,
       calculateDistanceMatrixEndpoint: cfg.calculateDistanceMatrixEndpoint || `${API_BASE}/calculate-distance-matrix`,
 
-      enableGeoipSort: cfg.enableGeoipSort !== false
+      enableGeoipSort: cfg.enableGeoipSort !== false,
     };
   }
 
@@ -47,7 +46,7 @@
   function fetchJsonWithFallback(urls, requestInit) {
     return shared.fetchJsonWithFallback(urls, requestInit, {
       errorPrefix: 'Proxy request failed',
-      includeBodySnippet: true
+      includeBodySnippet: true,
     });
   }
 
@@ -57,9 +56,7 @@
   var COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
   function setCookie(name, value) {
-    document.cookie =
-      name + '=' + encodeURIComponent(value) +
-      '; path=/; max-age=' + COOKIE_MAX_AGE;
+    document.cookie = name + '=' + encodeURIComponent(value) + '; path=/; max-age=' + COOKIE_MAX_AGE;
   }
 
   function getCookie(name) {
@@ -184,7 +181,7 @@
         storeName: storeName,
         locationId: locationId || null,
         lookupCandidates: candidates,
-        availableQtyKeys: Object.keys(proxyQtyByLocation || {})
+        availableQtyKeys: Object.keys(proxyQtyByLocation || {}),
       });
     }
 
@@ -209,9 +206,7 @@
       return;
     }
 
-    statusEl.textContent = stock
-      ? ('Pickup: available at ' + selectedName)
-      : ('Pickup: unavailable at ' + selectedName);
+    statusEl.textContent = stock ? 'Pickup: available at ' + selectedName : 'Pickup: unavailable at ' + selectedName;
   }
 
   // -----------------------------
@@ -257,7 +252,9 @@
   // -----------------------------
   // Distance (miles)
   // -----------------------------
-  function toRad(deg) { return (deg * Math.PI) / 180; }
+  function toRad(deg) {
+    return (deg * Math.PI) / 180;
+  }
 
   function haversineDistanceMi(lat1, lon1, lat2, lon2) {
     var R = 3958.7613;
@@ -265,8 +262,7 @@
     var dLon = toRad(lon2 - lon1);
     var a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
@@ -315,9 +311,11 @@
     return new Promise(function (resolve, reject) {
       if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
       navigator.geolocation.getCurrentPosition(
-        function (pos) { resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }); },
+        function (pos) {
+          resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        },
         reject,
-        { enableHighAccuracy: false, timeout: 15000, maximumAge: 30 * 60 * 1000 }
+        { enableHighAccuracy: false, timeout: 15000, maximumAge: 30 * 60 * 1000 },
       );
     });
   }
@@ -337,21 +335,22 @@
     } catch (e) {}
 
     var endpoints = buildProxyCandidates(geoipEndpoint, 'geoip');
-    return fetchJsonWithFallback(endpoints)
-      .then(function (result) {
-        var data = result.data;
-        var lat = Number(data && data.lat);
-        var lng = Number(data && data.lng);
-        if (!isFinite(lat) || !isFinite(lng)) throw new Error('geoip missing lat/lng');
-        var origin = {
-          lat: lat,
-          lng: lng,
-          source: (data && data.source) || 'ip',
-          accuracy: (data && data.accuracy) || 'approx'
-        };
-        try { sessionStorage.setItem(SESSION_ORIGIN_KEY, JSON.stringify(origin)); } catch (e) {}
-        return origin;
-      });
+    return fetchJsonWithFallback(endpoints).then(function (result) {
+      var data = result.data;
+      var lat = Number(data && data.lat);
+      var lng = Number(data && data.lng);
+      if (!isFinite(lat) || !isFinite(lng)) throw new Error('geoip missing lat/lng');
+      var origin = {
+        lat: lat,
+        lng: lng,
+        source: (data && data.source) || 'ip',
+        accuracy: (data && data.accuracy) || 'approx',
+      };
+      try {
+        sessionStorage.setItem(SESSION_ORIGIN_KEY, JSON.stringify(origin));
+      } catch (e) {}
+      return origin;
+    });
   }
 
   // -----------------------------
@@ -371,7 +370,7 @@
       zipBtn: dialog.querySelector('[data-preferred-store-zip-btn]'),
       useGeoBtn: dialog.querySelector('[data-preferred-store-use-geo]'),
       zipStatusEl: dialog.querySelector('[data-preferred-store-zip-status]'),
-      closeEls: dialog.querySelectorAll('[data-preferred-store-close]')
+      closeEls: dialog.querySelectorAll('[data-preferred-store-close]'),
     };
   }
 
@@ -385,9 +384,7 @@
   function updateMessage(name) {
     var els = getDrawerEls();
     if (!els || !els.messageEl) return;
-    els.messageEl.textContent = name
-      ? "You're shopping at: " + name
-      : 'Choose your store to see local pickup options.';
+    els.messageEl.textContent = name ? "You're shopping at: " + name : 'Choose your store to see local pickup options.';
   }
 
   function removeLoading() {
@@ -417,7 +414,9 @@
     }
 
     if (!variantId) {
-      var idInput = document.querySelector('input[name="id"][form^="product-form-"], form[action*="/cart/add"] input[name="id"]');
+      var idInput = document.querySelector(
+        'input[name="id"][form^="product-form-"], form[action*="/cart/add"] input[name="id"]',
+      );
       variantId = idInput && idInput.value ? idInput.value : null;
     }
 
@@ -517,18 +516,18 @@
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         variantId: variantId,
-        variant_id: variantId
-      })
+        variant_id: variantId,
+      }),
     };
 
     console.info('Preferred store: requesting stock levels (POST)', {
       variantId: variantId,
       endpoints: endpoints,
-      body: { variantId: variantId }
+      body: { variantId: variantId },
     });
 
     return fetchJsonWithFallback(endpoints, requestInit)
@@ -552,17 +551,17 @@
   function formatPhoneDisplay(phone) {
     // Format phone for display: +1(847)-678-9525
     var cleaned = String(phone || '').replace(/\D/g, '');
-    
+
     // US format: +1(XXX)-XXX-XXXX
     if (cleaned.length === 11 && cleaned.charAt(0) === '1') {
       return '+1(' + cleaned.substr(1, 3) + ')-' + cleaned.substr(4, 3) + '-' + cleaned.substr(7, 4);
     }
-    
+
     // 10-digit format: (XXX)-XXX-XXXX
     if (cleaned.length === 10) {
       return '(' + cleaned.substr(0, 3) + ')-' + cleaned.substr(3, 3) + '-' + cleaned.substr(6, 4);
     }
-    
+
     // Return as-is if it doesn't match expected formats
     return phone;
   }
@@ -589,48 +588,54 @@
     if (Array.isArray(formattedAddress) && formattedAddress.length) {
       var addrNode = document.createElement('div');
       addrNode.className = 'preferred-store-card__address';
-      addrNode.innerHTML = formattedAddress.filter(Boolean).join('<br>');
+addrNode.innerHTML = formattedAddress
+  .filter(Boolean)
+  .map(line => line.replace('United States', '').trim())
+  .join('<br>');
       card.appendChild(addrNode);
     }
 
-      var phone = (loc && loc.address && loc.address.phone) || loc.phone || null;
+    var phone = (loc && loc.address && loc.address.phone) || loc.phone || null;
 
-      if (phone) {
-        var phoneNode = document.createElement('div');
-        phoneNode.className = 'preferred-store-card__phone';
+    if (phone) {
+      var phoneNode = document.createElement('div');
+      phoneNode.className = 'preferred-store-card__phone';
 
-        var phoneLink = document.createElement('a');
-        phoneLink.href = 'tel:' + phone;
+      var phoneLink = document.createElement('a');
+      phoneLink.href = 'tel:' + phone;
 
-        // Create SVG element
-        var svgNS = "http://www.w3.org/2000/svg";
-        var svg = document.createElementNS(svgNS, "svg");
-        svg.setAttribute("width", "16");
-        svg.setAttribute("height", "16");
-        svg.setAttribute("viewBox", "0 0 24 24");
-        svg.style.marginRight = "6px";
-        svg.style.verticalAlign = "middle";
+      // Create SVG element
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('width', '16');
+      svg.setAttribute('height', '16');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.style.marginRight = '6px';
+      svg.style.verticalAlign = 'middle';
 
-        var path = document.createElementNS(svgNS, "path");
-        path.setAttribute("fill", "currentColor");
-        path.setAttribute("d", "M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.11.37 2.3.57 3.58.57a1 1 0 011 1v3.5a1 1 0 01-1 1C10.07 22 2 13.93 2 3.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.28.2 2.47.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z");
+      var path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('fill', 'currentColor');
+      path.setAttribute(
+        'd',
+        'M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.11.37 2.3.57 3.58.57a1 1 0 011 1v3.5a1 1 0 01-1 1C10.07 22 2 13.93 2 3.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.28.2 2.47.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z',
+      );
 
-        svg.appendChild(path);
+      svg.appendChild(path);
 
-        // Create text node
-        var textNode = document.createTextNode(formatPhoneDisplay(phone));
+      // Create text node
+      var textNode = document.createTextNode(formatPhoneDisplay(phone));
 
-        // Append SVG + text to link
-        phoneLink.appendChild(svg);
-        phoneLink.appendChild(textNode);
+      // Append SVG + text to link
+      phoneLink.appendChild(svg);
+      phoneLink.appendChild(textNode);
 
-        phoneLink.addEventListener('click', function (e) {
-          e.stopPropagation(); // Prevent card click from firing
-        });
+      phoneLink.addEventListener('click', function (e) {
+        e.stopPropagation(); // Prevent card click from firing
+      });
 
-        phoneNode.appendChild(phoneLink);
-        card.appendChild(phoneNode);
-      }
+      phoneNode.appendChild(phoneLink);
+      card.appendChild(phoneNode);
+    }
 
     if (typeof loc.distanceMi === 'number') {
       var distanceNode = document.createElement('div');
@@ -645,16 +650,12 @@
     if (stock === true) {
       var stockYes = document.createElement('div');
       stockYes.className = 'preferred-store-card__stock preferred-store-card__stock--yes';
-      stockYes.textContent = qty === null
-        ? 'In stock at this store'
-        : ('In stock at this store (' + qty + ' available)');
+      stockYes.textContent = qty === null ? 'In stock at this store' : 'In stock at this store (' + qty + ' available)';
       card.appendChild(stockYes);
     } else if (stock === false) {
       var stockNo = document.createElement('div');
       stockNo.className = 'preferred-store-card__stock preferred-store-card__stock--no';
-      stockNo.textContent = qty === null
-        ? 'Pickup unavailable'
-        : ('Pickup unavailable (' + qty + ' available)');
+      stockNo.textContent = qty === null ? 'Pickup unavailable' : 'Pickup unavailable (' + qty + ' available)';
       card.appendChild(stockNo);
     }
 
@@ -692,21 +693,23 @@
         body: JSON.stringify({
           attributes: {
             preferred_store_location_id: id,
-            preferred_store_location_name: name
-          }
-        })
+            preferred_store_location_name: name,
+          },
+        }),
       })
         .then(function (res) {
           if (!res.ok) throw new Error('Cart update failed: ' + res.status);
           return res.json();
         })
-        .then(function () {     
-            storeLocationChanged = true; 
-            
-            renderFilteredLocations('');
-          // setTimeout(function () { window.location.reload(); }, 150); 
-          } )
-        .catch(function (err) { console.error('Preferred store: cart update error', err); });
+        .then(function () {
+          storeLocationChanged = true;
+
+          renderFilteredLocations('');
+          // setTimeout(function () { window.location.reload(); }, 150);
+        })
+        .catch(function (err) {
+          console.error('Preferred store: cart update error', err);
+        });
 
       closeDrawer();
     });
@@ -718,7 +721,9 @@
     var els = getDrawerEls();
     if (!els || !els.listEl) return;
     var locs = Array.isArray(locations) ? locations : allLocations;
-    var term = String(searchTerm || '').toLowerCase().trim();
+    var term = String(searchTerm || '')
+      .toLowerCase()
+      .trim();
     els.listEl.innerHTML = '';
 
     if (!locs.length) {
@@ -749,7 +754,9 @@
     var selectedId = getCookie('preferred_store_location_id');
     var pinned = null;
     if (selectedId) {
-      var idx = filtered.findIndex(function (loc) { return String(loc.id) === String(selectedId); });
+      var idx = filtered.findIndex(function (loc) {
+        return String(loc.id) === String(selectedId);
+      });
       if (idx !== -1) {
         pinned = filtered.splice(idx, 1)[0];
       }
@@ -771,13 +778,12 @@
 
     var locs = Array.isArray(locations) ? locations : allLocations;
 
-
     var updated = locs.map(function (loc) {
       var lat = loc && loc.address && typeof loc.address.latitude === 'number' ? loc.address.latitude : null;
       var lng = loc && loc.address && typeof loc.address.longitude === 'number' ? loc.address.longitude : null;
 
       var copy = Object.assign({}, loc);
-      copy.distanceMi = (lat != null && lng != null) ? haversineDistanceMi(oLat, oLng, lat, lng) : null;
+      copy.distanceMi = lat != null && lng != null ? haversineDistanceMi(oLat, oLng, lat, lng) : null;
       return copy;
     });
 
@@ -836,7 +842,10 @@
         if (window.__PreferredStoreGeoipEnabled) {
           return getFastSessionOrigin(cfg.geoipEndpoint)
             .then(function (origin) {
-              applyOriginAndRender(origin, 'Showing stores near you (approx). Click “Use my location” for precise distance.');
+              applyOriginAndRender(
+                origin,
+                'Showing stores near you (approx). Click “Use my location” for precise distance.',
+              );
             })
             .catch(function () {
               setStatus('Tip: Enter a ZIP or click “Use my location” to sort by distance.', false);
@@ -884,7 +893,10 @@
     if (typeof els.dialog.showModal === 'function') els.dialog.showModal();
     else els.dialog.setAttribute('open', 'open');
 
-    if (els.searchInput) setTimeout(function () { els.searchInput.focus(); }, 150);
+    if (els.searchInput)
+      setTimeout(function () {
+        els.searchInput.focus();
+      }, 150);
   }
 
   function closeDrawer() {
@@ -912,12 +924,18 @@
     els.closeEls.forEach(function (el) {
       if (el.__psBound) return;
       el.__psBound = true;
-      el.addEventListener('click', function (e) { e.preventDefault(); closeDrawer(); });
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        closeDrawer();
+      });
     });
 
     if (els.overlay && !els.overlay.__psBound) {
       els.overlay.__psBound = true;
-      els.overlay.addEventListener('click', function (e) { e.preventDefault(); closeDrawer(); });
+      els.overlay.addEventListener('click', function (e) {
+        e.preventDefault();
+        closeDrawer();
+      });
     }
 
     // Search
@@ -928,21 +946,21 @@
       });
     }
 
-          // 1. Find your main dialog element near the top of bindDrawerInputs()
-      var dialogEl = document.querySelector('.preferred-store-drawer');
-      var panelEl = document.querySelector('.preferred-store-drawer__panel');
+    // 1. Find your main dialog element near the top of bindDrawerInputs()
+    var dialogEl = document.querySelector('.preferred-store-drawer');
+    var panelEl = document.querySelector('.preferred-store-drawer__panel');
 
-      // 2. Add this click listener to detect clicks outside the panel box
-      if (dialogEl && panelEl && !dialogEl.__psBackdropBound) {
-        dialogEl.__psBackdropBound = true;
-        
-        dialogEl.addEventListener('click', function (e) {
-          // If the click happened on the dialog layout background, but NOT inside the panel content box
-          if (!panelEl.contains(e.target)) {
-            closeDrawer();
-          }
-        });
-      }
+    // 2. Add this click listener to detect clicks outside the panel box
+    if (dialogEl && panelEl && !dialogEl.__psBackdropBound) {
+      dialogEl.__psBackdropBound = true;
+
+      dialogEl.addEventListener('click', function (e) {
+        // If the click happened on the dialog layout background, but NOT inside the panel content box
+        if (!panelEl.contains(e.target)) {
+          closeDrawer();
+        }
+      });
+    }
 
     // ZIP
     function useZipOrigin(rawZip) {
@@ -954,7 +972,7 @@
         .then(function (pos) {
           applyOriginAndRender(
             { lat: pos.lat, lng: pos.lng, source: 'zip', label: zip5, accuracy: 'zip-centroid' },
-            'Showing stores near ZIP ' + zip5 + '.'
+            'Showing stores near ZIP ' + zip5 + '.',
           );
         })
         .catch(function () {
@@ -988,7 +1006,7 @@
           .then(function (pos) {
             applyOriginAndRender(
               { lat: pos.lat, lng: pos.lng, source: 'geo', accuracy: 'precise' },
-              'Showing stores near your location.'
+              'Showing stores near your location.',
             );
           })
           .catch(function (err) {
@@ -1026,7 +1044,6 @@
       }
     }
   })();
-
 
   window.__PreferredStoreAPI = window.__PreferredStoreAPI || {};
   window.__PreferredStoreAPI.open = openDrawer;
