@@ -7,9 +7,22 @@ document.addEventListener('DOMContentLoaded', function () {
     this.activeActions = null;
     this.placeholder = null;
     this.hideTimeout = null;
+    this.rafId = null;
 
     this.boundPosition = this.position.bind(this);
   }
+
+  // Batches position() to once per frame so it stays in lockstep with scroll instead of thrashing layout on every scroll event.
+  ProductActionsFlyout.prototype.schedulePosition = function () {
+    if (this.rafId) return;
+
+    const self = this;
+
+    this.rafId = requestAnimationFrame(function () {
+      self.rafId = null;
+      if (self.activeCard) self.position();
+    });
+  };
 
   ProductActionsFlyout.prototype.init = function () {
     if (!this.cards.length) return;
@@ -57,22 +70,19 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    window.addEventListener(
+    // capture:true needed because scroll events (e.g. from a horizontal card carousel) don't bubble to window
+    document.addEventListener(
       'scroll',
       function () {
-        if (self.activeCard) {
-          self.position();
-        }
+        self.schedulePosition();
       },
-      { passive: true }
+      { passive: true, capture: true }
     );
 
     window.addEventListener(
       'resize',
       function () {
-        if (self.activeCard) {
-          self.position();
-        }
+        self.schedulePosition();
       },
       { passive: true }
     );
@@ -91,14 +101,20 @@ document.addEventListener('DOMContentLoaded', function () {
       rect.left + window.scrollX + 'px';
 
     this.panel.style.top =
-      rect.bottom + window.scrollY - 1 + 'px';
+      rect.bottom + window.scrollY + 'px';
 
     this.panel.style.width =
       rect.width + 'px';
   };
 
   ProductActionsFlyout.prototype.open = function (card) {
-    if (!card || this.activeCard === card) return;
+    if (!card) return;
+
+    // Already showing this card's actions, just keep it positioned instead of tearing down and rebuilding.
+    if (this.activeCard === card) {
+      this.position();
+      return;
+    }
 
     this.close();
 
@@ -155,6 +171,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     this.panel.classList.remove('is-revealing');
     this.panel.style.display = 'none';
+
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
 
     this.activeCard = null;
     this.activeActions = null;
