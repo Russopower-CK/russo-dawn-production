@@ -15,7 +15,6 @@
         "slide_K76BnM": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/JBP_ECHO_RHC2_HIGH-1750_8ac8c236-608f-4820-8ec3-ee7016c44ee2.jpg",
             "image_overlay_opacity": 40,
             "heading": "Built to Cut. Built to Last.",
             "heading_size": "h1",
@@ -33,7 +32,6 @@
         "slide_N3884K": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/lc20_4758s-zm-4000-myride-PH_DSC2920_proof.jpg",
             "image_overlay_opacity": 30,
             "heading": "0% Financing on Select Z Master 4000 Models",
             "heading_size": "h2",
@@ -51,7 +49,6 @@
         "slide_8AYhjw": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/TrailerFleet10_1.png",
             "image_overlay_opacity": 40,
             "heading": "Power Your Business with a Smarter Fleet",
             "heading_size": "h1",
@@ -69,7 +66,6 @@
         "slide_ECbQFf": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/OnlineUsedAuction.jpg",
             "image_overlay_opacity": 40,
             "heading": "CASH IN on Your Used Equipment!",
             "heading_size": "h1",
@@ -87,7 +83,6 @@
         "slide_z8LHbe": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/DrainageSeminar-HomePage.jpg",
             "image_overlay_opacity": 40,
             "heading": "FREE NDS Drainage Certification Seminar",
             "heading_size": "h2",
@@ -105,7 +100,6 @@
         "slide_hJGYwx": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/BeltsValpo_1.jpg",
             "image_overlay_opacity": 50,
             "heading": "<strong>Don't Let a Snapped Belt Stall Your Crew!</strong>",
             "heading_size": "h1",
@@ -123,7 +117,6 @@
         "slide_xTxXVX": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/IMG_5301.heic",
             "image_overlay_opacity": 20,
             "heading": "<strong>Ready For A Test Drive?</strong>",
             "heading_size": "h1",
@@ -141,7 +134,6 @@
         "slide_Mephzj": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Russo-GrubPreventative.png",
             "image_overlay_opacity": 30,
             "heading": "<strong>Step 3: Summer Fertilizer & Grub Prevention</strong>",
             "heading_size": "h1",
@@ -159,7 +151,6 @@
         "slide_GwVcWP": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/sw21_4738s_22370_tx1300_boxrake_0578_proof-_1.jpg",
             "image_overlay_opacity": 30,
             "heading": "<strong>0% for up to 60mo -OR- 1.99% for 72mo</strong>",
             "heading_size": "h1",
@@ -177,7 +168,6 @@
         "slide_hfmrxN": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Trailer_Elgin_1.jpg",
             "image_overlay_opacity": 30,
             "heading": "<strong>Haul More. Mow More. Earn More.</strong>",
             "heading_size": "h1",
@@ -488,7 +478,6 @@
         "row_G8fznD": {
           "type": "row",
           "settings": {
-            "image": "shopify://shop_images/Russo-Staff-BW.png",
             "caption": "",
             "heading": "<strong>YOUR PREMIER POWER EQUIPMENT DEALER</strong>",
             "text": "<p>From humble beginnings, Russo has worked hard to build a vast network and true destination for nature's professionals. We are dedicated to forward thinking and being a beacon of leadership for landscapers, arborists, plant health care specialists, snow and ice removal warriors, municipalities, and landowners. We will always be known for our commitment to customer service through expert sales, service, and parts representatives as well as competitively priced inventory.</p>",
@@ -499,7 +488,6 @@
         "row_GJwTdg": {
           "type": "row",
           "settings": {
-            "image": "shopify://shop_images/4H5A4042-BW-resized.jpg",
             "caption": "",
             "heading": "<strong>BIG SAVINGS ON TOP BRANDS</strong>",
             "text": "<p>Take advantage of exclusive discounts and promotions on equipment, parts, and supplies!</p>",
@@ -563,7 +551,6 @@
       "disabled": true,
       "name": "t:sections.image-with-text.presets.name",
       "settings": {
-        "image": "shopify://shop_images/Russo-Service-TwCycle.jpg",
         "height": "adapt",
         "desktop_image_width": "medium",
         "layout": "text_first",
@@ -660,7 +647,6 @@
       ],
       "name": "t:sections.image-with-text.presets.name",
       "settings": {
-        "image": "shopify://shop_images/Russo-GrubPreventative.png",
         "height": "adapt",
         "desktop_image_width": "medium",
         "layout": "text_first",
@@ -903,7 +889,6 @@
     },
     "custom_liquid_Whmaxx": {
       "type": "custom-liquid",
-      "disabled": true,
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
         "custom_liquid": "{% render 'russo-5-step-calculator', collection_handle: 'lawn-care-program-products' %}",
