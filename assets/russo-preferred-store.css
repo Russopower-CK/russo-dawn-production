@@ -290,7 +290,8 @@
   grid-template-areas:
     "name link"
     "address link2"
-    "address link3";
+    "address link3"
+    "hours hours";
   gap: 0.4rem 1rem;
   align-items: start;
 
@@ -731,6 +732,7 @@
     "name distance"
     "stock stock"
     "address address"
+    "hours hours"
     "footer footer" !important;
 
   gap: 0.75rem;
@@ -869,6 +871,14 @@
 /* Remove visual clutter */
 .preferred-store-card__address br:last-child {
   display: none;
+}
+
+.preferred-store-card__hours {
+  grid-area: hours;
+
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: #374151;
 }
 
 /* ==========================================

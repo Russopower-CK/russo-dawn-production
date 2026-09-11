@@ -566,6 +566,38 @@ var storeLocationChanged = false; // Starts as false when the page loads
     return phone;
   }
 
+  function getGoogleHoursValue(loc) {
+    var hours = loc && loc.google_hours;
+    if (!hours) return null;
+
+    if (hours.jsonValue) return hours.jsonValue;
+
+    if (typeof hours.value === 'string') {
+      try {
+        return JSON.parse(hours.value);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    return hours;
+  }
+
+  function getTodayStoreHoursText(loc) {
+    var googleHours = getGoogleHoursValue(loc);
+    var place = googleHours && googleHours.place;
+    var openingHours = (place && (place.currentOpeningHours || place.regularOpeningHours)) || null;
+    var weekdayDescriptions = openingHours && openingHours.weekdayDescriptions;
+    if (!Array.isArray(weekdayDescriptions) || !weekdayDescriptions.length) return null;
+
+    var todayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+    var todayHours = weekdayDescriptions.find(function (description) {
+      return typeof description === 'string' && description.indexOf(todayName + ':') === 0;
+    });
+
+    return todayHours || null;
+  }
+
   function createCard(loc) {
     var card = document.createElement('button');
     card.type = 'button';
@@ -588,12 +620,14 @@ var storeLocationChanged = false; // Starts as false when the page loads
     if (Array.isArray(formattedAddress) && formattedAddress.length) {
       var addrNode = document.createElement('div');
       addrNode.className = 'preferred-store-card__address';
-addrNode.innerHTML = formattedAddress
-  .filter(Boolean)
-  .map(line => line.replace('United States', '').trim())
-  .join('<br>');
+      addrNode.innerHTML = formattedAddress
+        .filter(Boolean)
+        .map((line) => line.replace('United States', '').trim())
+        .join('<br>');
       card.appendChild(addrNode);
     }
+
+  
 
     var phone = (loc && loc.address && loc.address.phone) || loc.phone || null;
 
@@ -644,6 +678,16 @@ addrNode.innerHTML = formattedAddress
       card.appendChild(distanceNode);
     }
 
+    // Store hours
+    var todayHours = getTodayStoreHoursText(loc);
+    if (todayHours) {
+      var hoursNode = document.createElement('div');
+      hoursNode.className = 'preferred-store-card__hours';
+      hoursNode.textContent = todayHours;
+      card.appendChild(hoursNode);
+    }
+    
+
     //Stock line
     var stock = getStockStateForStore(loc.name, loc.id);
     var qty = getStockQuantityForStore(loc.name, loc.id);
@@ -660,7 +704,7 @@ addrNode.innerHTML = formattedAddress
     }
 
     // Store Details link
-    var landingPageUrl = loc && loc.metafield && loc.metafield.jsonValue;
+    var landingPageUrl = loc?.landing_page?.value;
     if (landingPageUrl) {
       var storeDetailsLink = document.createElement('div');
       storeDetailsLink.className = 'preferred-store-card__details-link';
