@@ -15,6 +15,7 @@
         "slide_K76BnM": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/JBP_ECHO_RHC2_HIGH-1750_8ac8c236-608f-4820-8ec3-ee7016c44ee2.jpg",
             "image_overlay_opacity": 40,
             "heading": "Built to Cut. Built to Last.",
             "heading_size": "h1",
@@ -844,6 +845,7 @@
     },
     "russo_multi_location_order_form_VFwgDq": {
       "type": "russo-multi-location-order-form",
+      "disabled": true,
       "settings": {
         "form_configuration_entry": "",
         "heading": "Featured Product Order Form",
@@ -888,6 +890,7 @@
     },
     "custom_liquid_Whmaxx": {
       "type": "custom-liquid",
+      "disabled": true,
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
         "custom_liquid": "{% render 'russo-5-step-calculator', collection_handle: 'lawn-care-program-products' %}",
