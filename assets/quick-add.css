@@ -360,6 +360,7 @@ quick-add-modal .product-form__buttons {
   padding: 0.8rem;
   min-width: 25%;
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
 quick-add-modal .product-media-container.constrain-height {

@@ -43,7 +43,17 @@
         disabled aria-disabled="true"
       {% endif %}
     >
-      {{ add_label | default: 'Add to Favorites' }}
+      <svg
+        class="orderform-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        style="width:16px; height:16px; margin-right:8px; display:inline-block; vertical-align:middle;"
+      >
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+      <span style="vertical-align:middle;">{{ add_label | default: 'Add to Favorites' }}</span>
     </button>
 
     <button
@@ -54,9 +64,71 @@
         disabled aria-disabled="true"
       {% endunless %}
     >
-      {{ remove_label | default: 'Remove from Favorites' }}
+      <svg
+        class="orderform-icon"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        stroke="currentColor"
+        stroke-width="2"
+        style="width:16px; height:16px; margin-right:8px; display:inline-block; vertical-align:middle;"
+      >
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+      <span style="vertical-align:middle;">{{ remove_label | default: 'Remove from Favorites' }}</span>
     </button>
 
     <div class="orderform-msg" aria-live="polite" style="display:none;"></div>
   </div>
 {% endif %}
+<style>
+  /* Container styling to put them side-by-side or stack neatly */
+  .orderform-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    max-width: 450px;
+  }
+
+  /* Base style resets specifically for these two buttons */
+  .orderform-buttons .orderform-btn.button {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: auto;
+    width: auto;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Style for the "Add to Favorites" button when active */
+  .orderform-buttons .of-add.button:not([disabled]) {
+    background-color: transparent;
+    border: 1px solid #121212;
+    color: #121212;
+  }
+
+  .orderform-buttons .of-add.button:not([disabled]):hover {
+    background-color: #f7f7f7;
+  }
+
+  /* Style for the "Remove" button when it is active/clickable */
+  .orderform-buttons .of-remove.button:not([disabled]) {
+    background-color: #fff5f5;
+    border: 1px solid #d93838;
+    color: #d93838;
+  }
+
+  .orderform-buttons .of-remove.button:not([disabled]):hover {
+    background-color: #ffebeb;
+  }
+
+  /* Completely clean up the look of the currently disabled/inactive button */
+  .orderform-buttons .orderform-btn.button[disabled] {
+    display: none !important; /* Hides the unused button completely instead of letting it sit greyed out */
+  }
+</style>
