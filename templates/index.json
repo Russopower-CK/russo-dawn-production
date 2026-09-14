@@ -84,23 +84,6 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_z8LHbe": {
-          "type": "slide",
-          "settings": {
-            "image_overlay_opacity": 40,
-            "heading": "FREE NDS Drainage Certification Seminar",
-            "heading_size": "h2",
-            "subheading": "Join us at our Schiller Park location on August 21, 2026! Earn CEUs, network and enjoy a FREE lunch on us! Limited Space Available!",
-            "button_label": "LEARN MORE",
-            "link": "shopify://pages/power-fleet-program",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_hJGYwx": {
           "type": "slide",
           "settings": {
@@ -122,6 +105,7 @@
         "slide_xTxXVX": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/IMG_5301.heic",
             "image_overlay_opacity": 20,
             "heading": "<strong>Ready For A Test Drive?</strong>",
             "heading_size": "h1",
@@ -139,12 +123,13 @@
         "slide_Mephzj": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Russo-KentuckyBluegrass.jpg",
             "image_overlay_opacity": 30,
-            "heading": "<strong>Step 3: Summer Fertilizer & Grub Prevention</strong>",
+            "heading": "Step 4: Late Summer / Early Fall",
             "heading_size": "h1",
-            "subheading": "<strong>Grub Control: How to Evict Lawn Pests Before They Move In</strong>",
+            "subheading": "Late Summer feeding or Weed & Feed",
             "button_label": "LEARN MORE",
-            "link": "shopify://blogs/powering-productivity/grub-control-how-to-evict-lawn-pests-before-they-move-in",
+            "link": "shopify://pages/5-step-lawn-program",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "middle-right",
@@ -156,6 +141,7 @@
         "slide_GwVcWP": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/toro-dingo-tx1000-trencher-slider.jpg",
             "image_overlay_opacity": 30,
             "heading": "<strong>0% for up to 60mo -OR- 1.99% for 72mo</strong>",
             "heading_size": "h1",
@@ -173,6 +159,7 @@
         "slide_hfmrxN": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Trailer_Elgin_1.jpg",
             "image_overlay_opacity": 30,
             "heading": "<strong>Haul More. Mow More. Earn More.</strong>",
             "heading_size": "h1",
@@ -193,7 +180,6 @@
         "slide_N3884K",
         "slide_8AYhjw",
         "slide_ECbQFf",
-        "slide_z8LHbe",
         "slide_hJGYwx",
         "slide_xTxXVX",
         "slide_Mephzj",
