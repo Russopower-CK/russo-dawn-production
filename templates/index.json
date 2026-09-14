@@ -469,6 +469,7 @@
         "row_G8fznD": {
           "type": "row",
           "settings": {
+            "image": "shopify://shop_images/Russo-Staff-BW.png",
             "caption": "",
             "heading": "<strong>YOUR PREMIER POWER EQUIPMENT DEALER</strong>",
             "text": "<p>From humble beginnings, Russo has worked hard to build a vast network and true destination for nature's professionals. We are dedicated to forward thinking and being a beacon of leadership for landscapers, arborists, plant health care specialists, snow and ice removal warriors, municipalities, and landowners. We will always be known for our commitment to customer service through expert sales, service, and parts representatives as well as competitively priced inventory.</p>",
@@ -479,6 +480,7 @@
         "row_GJwTdg": {
           "type": "row",
           "settings": {
+            "image": "shopify://shop_images/4H5A4042-BW-resized.jpg",
             "caption": "",
             "heading": "<strong>BIG SAVINGS ON TOP BRANDS</strong>",
             "text": "<p>Take advantage of exclusive discounts and promotions on equipment, parts, and supplies!</p>",
@@ -638,6 +640,7 @@
       ],
       "name": "t:sections.image-with-text.presets.name",
       "settings": {
+        "image": "shopify://shop_images/Russo-GrubPreventative.png",
         "height": "adapt",
         "desktop_image_width": "medium",
         "layout": "text_first",
