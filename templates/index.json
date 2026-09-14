@@ -33,6 +33,7 @@
         "slide_N3884K": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/lc20_4758s-zm-4000-myride-PH_DSC2920_proof.jpg",
             "image_overlay_opacity": 30,
             "heading": "0% Financing on Select Z Master 4000 Models",
             "heading_size": "h2",
@@ -50,6 +51,7 @@
         "slide_8AYhjw": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/TrailerFleet10_1.png",
             "image_overlay_opacity": 40,
             "heading": "Power Your Business with a Smarter Fleet",
             "heading_size": "h1",
@@ -67,12 +69,13 @@
         "slide_ECbQFf": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/OnlineUsedAuction.jpg",
             "image_overlay_opacity": 40,
-            "heading": "CASH IN on Your Used Equipment!",
+            "heading": "September 16, 2026 | Click. Bid. Win!",
             "heading_size": "h1",
-            "subheading": "Skip the hassle and let Russo handle the sale for you. We take care of everything—from advertising to managing the transaction.",
-            "button_label": "Consign Today",
-            "link": "shopify://pages/consign-now",
+            "subheading": "Don’t miss our upcoming used equipment auction—quality equipment, great deals, and plenty of opportunities to add value to your operation.",
+            "button_label": "Learn More!",
+            "link": "shopify://pages/online-used-equipment-auctions",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "middle-right",
@@ -101,6 +104,7 @@
         "slide_hJGYwx": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/BeltsValpo_1.jpg",
             "image_overlay_opacity": 50,
             "heading": "<strong>Don't Let a Snapped Belt Stall Your Crew!</strong>",
             "heading_size": "h1",
