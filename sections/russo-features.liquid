@@ -1,0 +1,443 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --russo-features-padding-top: {{ section.settings.padding_top }}px;
+    --russo-features-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<russo-features class="russo-features color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width russo-features__inner">
+    {%- if section.settings.heading != blank or section.settings.introduction != blank -%}
+      <header class="russo-features__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="inline-richtext {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.introduction != blank -%}
+          <div class="rte">{{ section.settings.introduction }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="russo-features__list">
+      {%- for feature in metaobjects.russo_feature.values -%}
+        {%- liquid
+          assign feature_title = feature.title.value
+          assign feature_media = feature.media.value
+          assign gallery = feature.media_gallery.value
+        -%}
+        <details
+          class="russo-feature"
+          {% if section.settings.open_first and forloop.first %}
+            open
+          {% endif %}
+        >
+          <summary class="russo-feature__summary">
+            <h3>{{ feature_title | escape }}</h3>
+            <span class="russo-feature__toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="russo-feature__content">
+            {%- if feature.description.value != blank -%}
+              <div class="russo-feature__description rte">{{ feature.description.value | newline_to_br }}</div>
+            {%- endif -%}
+
+            {%- if feature_media != blank or gallery != blank -%}
+              <div class="russo-feature__gallery">
+            {%- endif -%}
+
+            {%- if feature_media != blank -%}
+              {%- liquid
+                assign feature_media_caption = feature_media.alt
+                if feature_media_caption == blank and feature_media.preview_image != blank
+                  assign feature_media_caption = feature_media.preview_image.alt
+                endif
+              -%}
+              <div class="russo-feature__media-item">
+                {%- case feature_media.media_type -%}
+                  {%- when 'image' -%}
+                    <button
+                      class="russo-feature__image-button"
+                      type="button"
+                      data-lightbox-trigger
+                      data-image-src="{{ feature_media | image_url: width: 2000 }}"
+                      aria-label="{{ feature_title | escape }}"
+                    >
+                      {{
+                        feature_media
+                        | image_url: width: 1400
+                        | image_tag:
+                          widths: '550, 750, 1100, 1400',
+                          sizes: '(min-width: 750px) 240px, 45vw',
+                          loading: 'lazy',
+                          class: 'russo-feature__image',
+                          alt: feature_media.alt
+                      }}
+                    </button>
+                  {%- when 'video', 'external_video' -%}
+                    {{ feature_media | media_tag: controls: true, class: 'russo-feature__video' }}
+                  {%- else -%}
+                    {%- if feature_media.preview_image != blank -%}
+                      {{
+                        feature_media.preview_image
+                        | image_url: width: 1400
+                        | image_tag:
+                          widths: '550, 750, 1100, 1400',
+                          loading: 'lazy',
+                          class: 'russo-feature__image',
+                          alt: feature_title
+                      }}
+                    {%- endif -%}
+                {%- endcase -%}
+                {%- if feature_media_caption != blank -%}
+                  <p class="russo-feature__media-caption">{{ feature_media_caption | escape }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if gallery != blank -%}
+              {%- for gallery_media in gallery -%}
+                {%- liquid
+                  assign gallery_media_caption = gallery_media.alt
+                  if gallery_media_caption == blank and gallery_media.preview_image != blank
+                    assign gallery_media_caption = gallery_media.preview_image.alt
+                  endif
+                -%}
+                <div class="russo-feature__media-item">
+                  {%- case gallery_media.media_type -%}
+                    {%- when 'image' -%}
+                      <button
+                        class="russo-feature__image-button"
+                        type="button"
+                        data-lightbox-trigger
+                        data-image-src="{{ gallery_media | image_url: width: 2000 }}"
+                        aria-label="{{ feature_title | escape }}"
+                      >
+                        {{
+                          gallery_media
+                          | image_url: width: 800
+                          | image_tag:
+                            widths: '300, 500, 800',
+                            sizes: '(min-width: 750px) 240px, 45vw',
+                            loading: 'lazy',
+                            class: 'russo-feature__image',
+                            alt: gallery_media.alt
+                        }}
+                      </button>
+                    {%- when 'video', 'external_video' -%}
+                      {{ gallery_media | media_tag: controls: true, class: 'russo-feature__video' }}
+                    {%- else -%}
+                      {%- if gallery_media.preview_image != blank -%}
+                        {{
+                          gallery_media.preview_image
+                          | image_url: width: 800
+                          | image_tag:
+                            widths: '300, 500, 800',
+                            loading: 'lazy',
+                            class: 'russo-feature__image',
+                            alt: feature_title
+                        }}
+                      {%- endif -%}
+                  {%- endcase -%}
+                  {%- if gallery_media_caption != blank -%}
+                    <p class="russo-feature__media-caption">{{ gallery_media_caption | escape }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- if feature_media != blank or gallery != blank -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </details>
+      {%- else -%}
+        {%- if request.design_mode -%}
+          <p class="russo-features__empty">
+            Add and publish Russo Feature metaobject entries to populate this section.
+          </p>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <dialog class="russo-features__lightbox" data-lightbox>
+    <button
+      class="russo-features__lightbox-close"
+      type="button"
+      data-lightbox-close
+      aria-label="{{ 'accessibility.close' | t }}"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <img class="russo-features__lightbox-image" data-lightbox-image alt="" width="2000" height="1500">
+  </dialog>
+</russo-features>
+
+{% stylesheet %}
+  .russo-features {
+    display: block;
+  }
+  .russo-features__inner {
+    padding-top: var(--russo-features-padding-top);
+    padding-bottom: var(--russo-features-padding-bottom);
+  }
+  .russo-features__header {
+    max-width: 72rem;
+    margin-bottom: 3rem;
+  }
+  .russo-features__header h2 {
+    margin: 0 0 1rem;
+  }
+  .russo-features__list {
+    display: grid;
+    gap: 1.6rem;
+  }
+  .russo-feature {
+    padding: 0 1.8rem 1.8rem;
+    border: 0.1rem solid rgba(var(--color-foreground), 0.12);
+    border-radius: 1.6rem;
+    background: rgba(var(--color-background), 0.92);
+    box-shadow: 0 1.2rem 2.8rem rgba(0, 0, 0, 0.06);
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      border-color 180ms ease;
+  }
+  .russo-feature:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 1.6rem 3.2rem rgba(0, 0, 0, 0.08);
+  }
+  .russo-feature[open] {
+    border-color: rgba(var(--color-foreground), 0.2);
+    box-shadow: 0 1.8rem 3.6rem rgba(0, 0, 0, 0.08);
+  }
+  .russo-feature__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.8rem 0 1.4rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .russo-feature__summary::-webkit-details-marker {
+    display: none;
+  }
+  .russo-feature__summary h3 {
+    margin: 0;
+    font-size: calc(var(--font-heading-scale) * 2rem);
+  }
+  .russo-feature__toggle {
+    position: relative;
+    width: 1.8rem;
+    height: 1.8rem;
+    flex: 0 0 1.8rem;
+  }
+  .russo-feature__toggle::before,
+  .russo-feature__toggle::after {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0.2rem;
+    background: rgb(var(--color-foreground));
+    content: '';
+    transition: transform 180ms ease;
+  }
+  .russo-feature__toggle::after {
+    transform: rotate(90deg);
+  }
+  .russo-feature[open] .russo-feature__toggle::after {
+    transform: rotate(0);
+  }
+  .russo-feature__content {
+    padding: 0 0 0.2rem;
+  }
+  .russo-feature__description {
+    max-width: 72rem;
+    margin-bottom: 2rem;
+  }
+  .russo-feature__gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 24rem));
+    gap: 1.2rem;
+    justify-content: start;
+  }
+  .russo-feature__media-item {
+    min-width: 0;
+    padding: 0.8rem;
+    border-radius: 1.2rem;
+    background: rgba(var(--color-foreground), 0.03);
+  }
+  .russo-feature__image-button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0.6rem;
+    background: transparent;
+    cursor: zoom-in;
+  }
+  .russo-feature__image,
+  .russo-feature__video {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.6rem;
+  }
+  .russo-feature__media-item .russo-feature__image-button,
+  .russo-feature__media-item .russo-feature__image,
+  .russo-feature__media-item .russo-feature__video {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .russo-feature__media-caption {
+    margin: 0.9rem 0 0;
+    color: rgba(var(--color-foreground), 0.72);
+    font-size: 1.4rem;
+    line-height: 1.4;
+  }
+  .russo-feature__image-button .russo-feature__image {
+    transition: transform 220ms ease;
+  }
+  .russo-feature__image-button:hover .russo-feature__image {
+    transform: scale(1.02);
+  }
+  .russo-feature__image-button:focus-visible,
+  .russo-feature__summary:focus-visible,
+  .russo-features__lightbox-close:focus-visible {
+    outline: 0.2rem solid rgb(var(--color-foreground));
+    outline-offset: 0.3rem;
+  }
+  .russo-features__lightbox {
+    width: min(120rem, calc(100vw - 4rem));
+    max-width: none;
+    height: min(90vh, 90rem);
+    max-height: none;
+    padding: 4rem;
+    border: 0;
+    background: transparent;
+  }
+  .russo-features__lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.88);
+  }
+  .russo-features__lightbox-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .russo-features__lightbox-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4rem;
+    height: 4rem;
+    padding: 0;
+    border: 0;
+    color: #fff;
+    background: transparent;
+    font-size: 3.2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .russo-features__empty {
+    padding: 2rem 0;
+  }
+  @media screen and (max-width: 749px) {
+    .russo-feature {
+      padding: 0 1.4rem 1.4rem;
+      border-radius: 1.3rem;
+    }
+
+    .russo-feature__summary {
+      padding: 1.5rem 0 1.2rem;
+    }
+
+    .russo-features__lightbox {
+      width: calc(100vw - 2rem);
+      padding: 4rem 0 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .russo-feature__toggle::before,
+    .russo-feature__toggle::after,
+    .russo-feature__image-button .russo-feature__image {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('russo-features')) {
+    customElements.define(
+      'russo-features',
+      class RussoFeatures extends HTMLElement {
+        connectedCallback() {
+          this.dialog = this.querySelector('[data-lightbox]');
+          this.dialogImage = this.querySelector('[data-lightbox-image]');
+          this.querySelectorAll('[data-lightbox-trigger]').forEach((trigger) => {
+            trigger.addEventListener('click', () => this.openLightbox(trigger));
+          });
+          this.querySelector('[data-lightbox-close]')?.addEventListener('click', () => this.dialog.close());
+          this.dialog?.addEventListener('click', (event) => {
+            if (event.target === this.dialog) this.dialog.close();
+          });
+        }
+
+        openLightbox(trigger) {
+          if (!this.dialog || !this.dialogImage) return;
+          this.dialogImage.src = trigger.dataset.imageSrc;
+          this.dialogImage.alt = trigger.getAttribute('aria-label') || '';
+          this.dialog.showModal();
+        }
+      }
+    );
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Russo features",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Features" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    { "type": "richtext", "id": "introduction", "label": "Introduction" },
+    { "type": "checkbox", "id": "open_first", "label": "Open first feature", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "header", "content": "Spacing" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [{ "name": "Russo features" }]
+}
+{% endschema %}
