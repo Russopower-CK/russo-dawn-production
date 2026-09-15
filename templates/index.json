@@ -891,6 +891,19 @@
         "padding_top": 40,
         "padding_bottom": 52
       }
+    },
+    "russo_features_TfBEeV": {
+      "type": "russo-features",
+      "name": "Russo features",
+      "settings": {
+        "heading": "Features",
+        "heading_size": "h1",
+        "introduction": "",
+        "open_first": true,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -904,6 +917,7 @@
     "image_with_text_zGqWLt",
     "russo_testimonial_4GEURr",
     "russo_multi_location_order_form_VFwgDq",
-    "custom_liquid_Whmaxx"
+    "custom_liquid_Whmaxx",
+    "russo_features_TfBEeV"
   ]
 }
