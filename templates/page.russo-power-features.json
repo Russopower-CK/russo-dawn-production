@@ -24,7 +24,7 @@
         "heading": "Features",
         "heading_size": "h1",
         "introduction": "",
-        "open_first": true,
+        "open_first": false,
         "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
