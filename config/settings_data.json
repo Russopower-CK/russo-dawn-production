@@ -131,6 +131,7 @@
     "show_vendor": false,
     "show_cart_note": false,
     "cart_drawer_collection": "",
+    "customer_account_menu_2": "customer-account-menu-payment-portal-access",
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
