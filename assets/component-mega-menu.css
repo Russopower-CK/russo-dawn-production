@@ -485,6 +485,7 @@
     flex-wrap: nowrap !important;
     align-items: center;
     white-space: nowrap;
+    gap: 1rem;
   }
 
   .header__menu_wrapper .list-menu--inline > li {
@@ -500,7 +501,7 @@
 
 @media screen and (min-width: 990px) and (max-width: 1300px) {
   .header__menu_wrapper .list-menu--inline {
-    gap: 0;
+    gap: 1rem;
     margin-left: 0.5rem;
   }
 

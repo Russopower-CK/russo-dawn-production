@@ -295,7 +295,7 @@
 
     var unavailableLabel = String(opts.unavailableLabel || 'Special Order');
     var tooltipTitle = String(opts.unavailableTooltipTitle || unavailableLabel);
-    var tooltipTemplate = String(opts.unavailableTooltipBody || 'Unavailable at {store}. Contact us to place a special order.');
+    var tooltipTemplate = String(opts.unavailableTooltipBody || 'Unavailable at {store}. Typical Lead Time is 2-5 Business days.');
     var tooltipBody = tooltipTemplate.replace(/\{store\}/gi, compactStoreName || selectedName);
 
     return {

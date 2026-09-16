@@ -70,7 +70,7 @@
   assign preferred_store_unavailable_display_mode = unavailable_display_mode | default: 'custom_tooltip'
   assign preferred_store_unavailable_label = unavailable_label | default: 'Special Order'
   assign preferred_store_unavailable_tooltip_title = unavailable_tooltip_title | default: preferred_store_unavailable_label
-  assign preferred_store_unavailable_tooltip_body = unavailable_tooltip_body | default: 'Unavailable at {store}. Contact us to place a special order.'
+  assign preferred_store_unavailable_tooltip_body = unavailable_tooltip_body | default: 'Unavailable at {store}. Typical Lead Time is 2-5 Business days.'
   assign preferred_store_instance_id = 'preferred-store-variant-' | append: section.id | append: '-' | append: preferred_store_variant.id
 -%}
 
@@ -525,7 +525,7 @@
         : unavailableLabel;
       var unavailableTooltipBody = root.dataset && root.dataset.preferredStoreUnavailableTooltipBody
         ? String(root.dataset.preferredStoreUnavailableTooltipBody)
-        : 'Unavailable at {store}. Contact us to place a special order.';
+        : 'Unavailable at {store}. Typical Lead Time is 2-5 Business days.';
 
       var selectedId = getCookie('preferred_store_location_id');
       var variantId =

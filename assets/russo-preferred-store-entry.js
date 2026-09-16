@@ -376,7 +376,7 @@
         : unavailableLabel;
       var unavailableTooltipBody = (root.dataset && root.dataset.preferredStoreUnavailableTooltipBody)
         ? String(root.dataset.preferredStoreUnavailableTooltipBody)
-        : 'Unavailable at {store}. Contact us to place a special order.';
+        : 'Unavailable at {store}. Typical Lead Time is 2-5 Business days.';
       var variantId = root.dataset ? String(root.dataset.preferredStoreVariantId || '').trim() : '';
 
       if (!selectedName) {
