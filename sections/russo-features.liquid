@@ -381,23 +381,55 @@
     customElements.define(
       'russo-features',
       class RussoFeatures extends HTMLElement {
+        constructor() {
+          super();
+          // Bind handlers to maintain correct 'this' context during removal
+          this._handleTriggerClick = this.handleTriggerClick.bind(this);
+          this._handleOutsideClick = this.handleOutsideClick.bind(this);
+          this._handleCloseClick = () => this.dialog?.close();
+        }
+
         connectedCallback() {
           this.dialog = this.querySelector('[data-lightbox]');
           this.dialogImage = this.querySelector('[data-lightbox-image]');
-          this.querySelectorAll('[data-lightbox-trigger]').forEach((trigger) => {
-            trigger.addEventListener('click', () => this.openLightbox(trigger));
+          this.triggers = this.querySelectorAll('[data-lightbox-trigger]');
+          this.closeBtn = this.querySelector('[data-lightbox-close]');
+
+          // Attach listeners
+          this.triggers.forEach((trigger) => {
+            trigger.addEventListener('click', this._handleTriggerClick);
           });
-          this.querySelector('[data-lightbox-close]')?.addEventListener('click', () => this.dialog.close());
-          this.dialog?.addEventListener('click', (event) => {
-            if (event.target === this.dialog) this.dialog.close();
-          });
+          this.closeBtn?.addEventListener('click', this._handleCloseClick);
+          this.dialog?.addEventListener('click', this._handleOutsideClick);
         }
 
-        openLightbox(trigger) {
+        disconnectedCallback() {
+          // Cleanup listeners to prevent memory leaks
+          this.triggers?.forEach((trigger) => {
+            trigger.removeEventListener('click', this._handleTriggerClick);
+          });
+          this.closeBtn?.removeEventListener('click', this._handleCloseClick);
+          this.dialog?.removeEventListener('click', this._handleOutsideClick);
+
+          // Ensure the open dialog doesn't leave the background inert if component unmounts
+          if (this.dialog?.open) {
+            this.dialog.close();
+          }
+        }
+
+        handleTriggerClick(event) {
+          const trigger = event.currentTarget;
           if (!this.dialog || !this.dialogImage) return;
+
           this.dialogImage.src = trigger.dataset.imageSrc;
           this.dialogImage.alt = trigger.getAttribute('aria-label') || '';
           this.dialog.showModal();
+        }
+
+        handleOutsideClick(event) {
+          if (event.target === this.dialog) {
+            this.dialog.close();
+          }
         }
       }
     );

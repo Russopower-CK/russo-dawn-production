@@ -1514,6 +1514,12 @@
         "id": "customer_account_menu",
         "default": "customer-account-main-menu",
         "label": "t:settings_schema.customer_accounts.settings.customer_account_menu.label"
+      },
+      {
+        "type":"link_list",
+        "id": "customer_account_menu_2",
+        "default": "customer-account-main-menu",
+        "label": "Russo Second Customer Account Menu (For has portal account)"
       }
     ]
   }

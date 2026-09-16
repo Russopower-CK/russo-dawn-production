@@ -480,8 +480,18 @@
       {%- endif -%}
 
       {%- if shop.customer_accounts_enabled -%}
+        {% liquid
+          assign account_menu_handle = settings.customer_account_menu
+          if customer
+            assign has_ipay_account = customer.metafields.custom.has_ipay_account.value
+
+            if has_ipay_account == true
+              assign account_menu_handle = settings.customer_account_menu_2
+            endif
+          endif
+        %}
         <shopify-account
-          menu="{{ settings.customer_account_menu | default: 'customer-account-main-menu' }}"
+          menu="{{ account_menu_handle | default: 'customer-account-main-menu' }}"
           class="header__icon header__icon--account link focus-inset"
         >
           <span slot="signed-out-avatar" class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
