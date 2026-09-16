@@ -253,7 +253,12 @@
   }
   @media screen and (min-width: 750px) {
     .russo-features__list {
-      grid-template-columns: repeat(auto-fit, minmax(32rem, 1fr));
+      grid-template-columns: 1fr;
+    }
+  }
+  @media screen and (min-width: 990px) {
+    .russo-features__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   .russo-feature__description {
