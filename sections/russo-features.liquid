@@ -17,13 +17,13 @@
         {%- endif -%}
       </header>
     {%- endif -%}
-
     <div class="russo-features__list">
       {%- for feature in metaobjects.russo_feature.values -%}
         {%- liquid
           assign feature_title = feature.title.value
           assign feature_media = feature.media.value
           assign gallery = feature.media_gallery.value
+          assign tiers = feature.required_tiers.value
         -%}
         <details
           class="russo-feature"
@@ -33,6 +33,14 @@
         >
           <summary class="russo-feature__summary">
             <h3>{{ feature_title | escape }}</h3>
+            {% if feature.required_tiers.value != blank and section.settings.show_required_tiers %}
+              <div class="russo-required__tiers rte">
+                {% for tier in feature.required_tiers.value %}
+                  {{ tier.name.value -}}
+                  {%- unless forloop.last %}, {% endunless %}
+                {% endfor %}
+              </div>
+            {% endif %}
             <span class="russo-feature__toggle" aria-hidden="true"></span>
           </summary>
           <div class="russo-feature__content">
@@ -175,13 +183,14 @@
 {% stylesheet %}
   .russo-features {
     display: block;
+    padding-top: var(--russo-features-padding-top);
   }
   .russo-features__inner {
     padding-top: var(--russo-features-padding-top);
     padding-bottom: var(--russo-features-padding-bottom);
   }
   .russo-features__header {
-    max-width: 72rem;
+    max-width: var(--page-width);
     margin-bottom: 3rem;
   }
   .russo-features__header h2 {
@@ -456,6 +465,7 @@
     },
     { "type": "richtext", "id": "introduction", "label": "Introduction" },
     { "type": "checkbox", "id": "open_first", "label": "Open first feature", "default": true },
+    { "type": "checkbox", "id": "show_required_tiers", "label": "Show Tier Requirement", "default": true },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
     { "type": "header", "content": "Spacing" },
     {

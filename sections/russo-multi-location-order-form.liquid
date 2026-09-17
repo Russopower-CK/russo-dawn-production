@@ -134,7 +134,7 @@
         data-form-id="{{ target_form_business_id | escape }}"
         data-form-metaobject-id="{{ target_form_entry_id | escape }}"
         data-form-metaobject-handle="{{ target_form_entry_handle | escape }}"
-        data-payload-submission-format="{{ section.settings.payload_submission_format | default: 'legacy' }}"
+        data-payload-submission-format="{{ section.settings.payload_submission_format | default: 'orders_by_location' }}"
         data-submit-endpoint="{{ section.settings.fake_submit_endpoint | escape }}"
         data-submit-confirm-modal-id="OrderSubmitConfirmModal-{{ section.id }}"
         data-submit-start-text="{{ section.settings.submit_in_progress_message | escape }}"
@@ -196,7 +196,16 @@
                               endif
                             -%}
                             <th scope="col" class="b2b-russo-order-form__product-heading location-rows">
-                              <span class="b2b-russo-order-form__location-title">{{ variant_label }}</span>
+                              <div class="location-rows-product-heading">
+                                {%- if section.settings.show_product_image and product.featured_image != blank -%}
+                                  {{
+                                    product.featured_image
+                                    | image_url: width: 80, height: 80
+                                    | image_tag: loading: 'lazy', class: 'b2b-russo-order-form__product-image'
+                                  }}
+                                {%- endif -%}
+                                <span class="b2b-russo-order-form__location-title">{{ variant_label }}</span>
+                              </div>
                             </th>
                           {%- endfor -%}
                         {%- endfor -%}
@@ -540,6 +549,10 @@
 </section>
 
 {% stylesheet %}
+  .location-rows-product-heading {
+    display: flex;
+    align-items: center;
+  }
   .b2b-russo-order-form__table-header {
     display: table-header-group;
   }
@@ -733,6 +746,7 @@
   }
   .b2b-russo-order-form__product-heading {
     text-align: left;
+    align-content: center;
   }
 
   .b2b-russo-order-form__numeric-heading {
@@ -2149,7 +2163,7 @@
       "type": "select",
       "id": "payload_submission_format",
       "label": "Submission payload format",
-      "default": "legacy",
+      "default": "orders_by_location",
       "options": [
         {
           "value": "legacy",
