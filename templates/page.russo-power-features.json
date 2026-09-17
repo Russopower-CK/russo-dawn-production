@@ -21,10 +21,11 @@
       "type": "russo-features",
       "name": "Russo features",
       "settings": {
-        "heading": "Features",
+        "heading": "Russo Power Features",
         "heading_size": "h1",
-        "introduction": "",
-        "open_first": false,
+        "introduction": "<p>Discover what sets Russo Power Equipment apart. Our features are designed to make your shopping experience easier, faster, and more reliable. From streamlined ordering, location & staff management, asset list, online payment portal , to dedicated support, learn how we help your business succeed.</p>",
+        "open_first": true,
+        "show_required_tiers": false,
         "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
