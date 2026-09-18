@@ -24,7 +24,7 @@
         "allow_note": false,
         "restricted_order_form": true,
         "location_selector_label": "Destination location",
-        "quantity_column_label": "Quantity",
+        "quantity_column_label": "Loads",
         "summary_title": "Location Order Summary",
         "summary_empty_message": "No quantities selected yet.",
         "products_per_page": 20,
