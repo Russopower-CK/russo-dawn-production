@@ -247,46 +247,39 @@
     }
   });
 
-  if (!formId) {
-    container.innerHTML = '<p>No form specified.</p>';
-    return;
-  }
 
-  fetch('/apps/russoAPI/v1/order-form-history', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
-    },
-    body: JSON.stringify({
-      form_id: formId,
-      company_id: companyId
-    })
-  })
-  .then(function(res) {
-    if (!res.ok) {
-      throw new Error('API responded with status ' + res.status);
+    function fetchHistory() {
+    if (!formId) {
+      container.innerHTML = '<p>No form specified.</p>';
+      return;
     }
-    return res.json();
-  })
-  .then(function(data) {
 
-    historyEntries = data.entries || [];
-
-    renderHistory();
-
-  })
-  .catch(function(err) {
-
-    console.error('[MLO] History fetch failed:', err);
-
-    container.innerHTML =
-      '<p>Unable to load order history.</p>';
-
-    summaryContainer.innerHTML =
-      '<p>Unable to load order history.</p>';
-
-  });
+    fetch('/apps/russoAPI/v1/order-form-history', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({ form_id: formId, company_id: companyId })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('API responded with status ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      historyEntries =
+        (data && Array.isArray(data.entries) && data.entries) ||
+        (data && data.data && Array.isArray(data.data.entries) && data.data.entries) ||
+        [];
+      renderHistory();
+       window.__mloHistoryCount = historyEntries.length;
+    })
+    .catch(err => {
+      console.error('[MLO] History fetch failed:', err);
+      container.innerHTML = '<p>Unable to load order history.</p>';
+      summaryContainer.innerHTML = '<p>Unable to load order history.</p>';
+    });
+  }
 
   function renderHistory() {
 
@@ -480,6 +473,10 @@
       .replace(/'/g, '&#039;');
 
   }
+ // Listen for external refresh trigger from section polling
+  document.addEventListener('mlo-history:refresh', fetchHistory);
 
+  // Initial load
+  fetchHistory();
 })();
 </script>
