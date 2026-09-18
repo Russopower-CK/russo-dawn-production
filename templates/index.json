@@ -894,12 +894,14 @@
     },
     "russo_features_TfBEeV": {
       "type": "russo-features",
+      "disabled": true,
       "name": "Russo features",
       "settings": {
         "heading": "Features",
         "heading_size": "h1",
         "introduction": "",
         "open_first": true,
+        "show_required_tiers": true,
         "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
