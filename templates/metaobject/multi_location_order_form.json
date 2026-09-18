@@ -39,7 +39,7 @@
         "submit_confirm_message": "Are you sure you want to submit this order?",
         "fake_submit_endpoint": "/apps/russoAPI/v1/submit-order-form",
         "submit_in_progress_message": "Submitting order...",
-        "submit_success_message": "Order submitted. Draft cleared.",
+        "submit_success_message": "Order submitted. Draft cleared. Please wait for the order history to refresh before submitting again.",
         "submit_error_message": "Could not submit order. Please try again.",
         "show_developer_tools": false,
         "payload_submission_format": "orders_by_location",
