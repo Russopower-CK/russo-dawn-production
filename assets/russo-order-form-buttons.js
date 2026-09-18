@@ -80,6 +80,13 @@
     if (!wrap || wrap.getAttribute('data-orderform-busy') === 'true') return;
     if (btn.disabled) return;
 
+    var isLoggedIn = asBool(wrap.getAttribute('data-customer-logged-in'));
+    if (!isLoggedIn) {
+      var loginUrl = wrap.getAttribute('data-login-url') || '/account/login';
+      window.location.href = loginUrl;
+      return;
+    }
+
     var productId = wrap.getAttribute('data-product-id');
     var actionType = btn.getAttribute('data-action');
     if (!productId || !actionType) return;

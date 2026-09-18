@@ -33,6 +33,8 @@
   data-product-id="{{ product.id }}"
   data-in-order-form="{{ product_in_order_form | json }}"
   data-add-label="{{ add_label_value | escape }}"
+  data-customer-logged-in="{% if customer %}true{% else %}false{% endif %}"
+  data-login-url="{{ routes.account_login_url }}"
   data-remove-label="{{ remove_label_value | escape }}"
   data-processing-label="{{ processing_label | default: 'Processing...' | escape }}"
   data-success-add="{{ success_add_message | default: 'Added to order form.' | escape }}"
