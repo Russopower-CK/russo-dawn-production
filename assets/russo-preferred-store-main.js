@@ -6,7 +6,6 @@ var storeLocationChanged = false; // Starts as false when the page loads
 
   var shared = window.__PreferredStoreShared;
   if (!shared) {
-    console.error('Preferred store: shared helpers are not available; main script aborted.');
     return;
   }
 
@@ -174,15 +173,6 @@ var storeLocationChanged = false; // Starts as false when the page loads
       if (Object.prototype.hasOwnProperty.call(proxyQtyByLocation, candidate)) {
         return proxyQtyByLocation[candidate];
       }
-    }
-
-    if (hasAttemptedProxyStock) {
-      console.info('Preferred store: quantity not matched for location', {
-        storeName: storeName,
-        locationId: locationId || null,
-        lookupCandidates: candidates,
-        availableQtyKeys: Object.keys(proxyQtyByLocation || {}),
-      });
     }
 
     return null;
@@ -444,6 +434,7 @@ var storeLocationChanged = false; // Starts as false when the page loads
     }
 
     if (!data) return [];
+    if (data.data && data.data.data) return extractStockItems(data.data.data);
     if (Array.isArray(data)) return data;
     if (data.data && Array.isArray(data.data.nodes)) {
       return data.data.nodes.reduce(function (all, variantNode) {
@@ -498,7 +489,6 @@ var storeLocationChanged = false; // Starts as false when the page loads
     hasAttemptedProxyStock = true;
 
     if (!variantId) {
-      console.warn('Preferred store: no variantId found for stock lookup');
       proxyStockByLocation = {};
       proxyQtyByLocation = {};
       return Promise.resolve();
@@ -524,12 +514,6 @@ var storeLocationChanged = false; // Starts as false when the page loads
       }),
     };
 
-    console.info('Preferred store: requesting stock levels (POST)', {
-      variantId: variantId,
-      endpoints: endpoints,
-      body: { variantId: variantId },
-    });
-
     return fetchJsonWithFallback(endpoints, requestInit)
       .then(function (result) {
         var stockItems = extractStockItems(result.data);
@@ -539,7 +523,6 @@ var storeLocationChanged = false; // Starts as false when the page loads
         proxyQtyByLocation = mapped.qtyMap;
       })
       .catch(function (err) {
-        console.error('Preferred store: stock levels fetch failed', err);
         proxyStockByLocation = {};
         proxyQtyByLocation = {};
       });
@@ -751,9 +734,7 @@ var storeLocationChanged = false; // Starts as false when the page loads
           renderFilteredLocations('');
           // setTimeout(function () { window.location.reload(); }, 150);
         })
-        .catch(function (err) {
-          console.error('Preferred store: cart update error', err);
-        });
+        .catch(function (err) {});
 
       closeDrawer();
     });
@@ -768,6 +749,7 @@ var storeLocationChanged = false; // Starts as false when the page loads
     var term = String(searchTerm || '')
       .toLowerCase()
       .trim();
+
     els.listEl.innerHTML = '';
 
     if (!locs.length) {
@@ -900,7 +882,6 @@ var storeLocationChanged = false; // Starts as false when the page loads
         }
       })
       .catch(function (err) {
-        console.error('Preferred store: failed to load locations from app proxy', err);
         var els2 = getDrawerEls();
         if (els2 && els2.loadingEl) els2.loadingEl.textContent = 'Failed to load stores.';
         setStatus('Could not load stores from app proxy. Check app proxy endpoint and network.', true);

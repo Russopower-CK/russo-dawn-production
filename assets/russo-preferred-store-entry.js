@@ -15,7 +15,6 @@
 
   var shared = window.__PreferredStoreShared;
   if (!shared) {
-    console.error('Preferred store: shared helpers are not available; entry script aborted.');
     return;
   }
 
@@ -198,7 +197,6 @@
       script.src = mainSrc;
       script.async = true;
       script.defer = true;
-      console.info('Preferred store: loading main script', { src: script.src });
       script.onload = function () { resolve(); };
       script.onerror = function () { reject(new Error('Preferred store: failed to load main')); };
       document.head.appendChild(script);
@@ -479,15 +477,10 @@
         window.__PreferredStoreBatchStockResponse = result.data;
         mergeBatchResponseIntoVariantCache(result.data);
         hydrateBatchPickupStatuses();
-        console.info('Preferred store batch probe: success', {
-          variantCount: variantIds.length,
-          endpoint: result.url
-        });
       })
       .catch(function (err) {
         state.inFlight = false;
         window.__PreferredStoreBatchProbeState = state;
-        console.error('Preferred store batch probe: failed', err);
       });
   }
 
@@ -548,9 +541,7 @@
           window.__PreferredStoreAPI.open(options || {});
         }
       })
-      .catch(function (e) {
-        console.error(e);
-      });
+      .catch(function (e) {});
   }
 
   // Public opener so specific PDP buttons can call directly with context.
@@ -561,11 +552,6 @@
       if (Array.isArray(options.locations)) ctx.locations = options.locations;
       window.__PreferredStoreProductContext = ctx;
     }
-
-    console.info('Preferred store: open requested', {
-      variantId: options && options.variantId ? String(options.variantId) : null,
-      hasEntry: !!window.__PreferredStoreEntryLoaded
-    });
 
     ensureMainThenOpen(options || {});
   };
@@ -619,8 +605,6 @@
 
     // PDP direct triggers call window.__PreferredStoreOpen themselves.
     if (trigger.dataset && trigger.dataset.preferredStoreDirect === 'true') return;
-
-    console.info('Preferred store: delegated click trigger detected');
 
     e.preventDefault();
     e.stopPropagation();

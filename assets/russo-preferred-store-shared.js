@@ -95,6 +95,7 @@
 
   function extractVariantNodes(data) {
     if (!data || typeof data !== 'object') return [];
+    if (data.data && data.data.data) return extractVariantNodes(data.data.data);
     if (data.data && Array.isArray(data.data.nodes)) return data.data.nodes;
     if (Array.isArray(data.nodes)) return data.nodes;
     if (data.data && data.data.productVariant) return [data.data.productVariant];

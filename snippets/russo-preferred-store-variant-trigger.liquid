@@ -290,6 +290,7 @@
       }
 
       if (!data) return [];
+      if (data.data && data.data.data) return extractStockItems(data.data.data);
       if (Array.isArray(data)) return data;
       if (data.data && Array.isArray(data.data.nodes)) {
         return data.data.nodes.reduce(function (all, variantNode) {
@@ -587,12 +588,6 @@
           locations: locations
         };
 
-        console.info('Preferred store: PDP direct button clicked', {
-          variantId: window.__PreferredStoreProductContext.variantId,
-          hasGlobalOpener: typeof window.__PreferredStoreOpen === 'function',
-          hasDirectApi: !!(window.__PreferredStoreAPI && typeof window.__PreferredStoreAPI.open === 'function')
-        });
-
         // Deterministic probe: this exact button click attempts stock fetch directly.
         // It removes ambiguity about whether main drawer scripts were reached.
         (function () {
@@ -600,17 +595,11 @@
           var endpoint = cfg.stockLevelsEndpoint || '/apps/russoAPI/v1/getStockLevels';
           var variant = String(window.__PreferredStoreProductContext.variantId || '');
           if (!variant) {
-            console.warn('Preferred store probe: missing variant id, skipping direct fetch');
             return;
           }
 
           var joiner = endpoint.indexOf('?') === -1 ? '?' : '&';
           var url = endpoint + joiner + 'source=pdp-trigger';
-          console.info('Preferred store probe: requesting (POST)', {
-            url: url,
-            body: { variantId: variant }
-          });
-
           fetch(url, {
             method: 'POST',
             headers: {
@@ -623,17 +612,9 @@
             })
           })
             .then(function (res) {
-              return res.text().then(function (raw) {
-                console.info('Preferred store probe: response', {
-                  ok: res.ok,
-                  status: res.status,
-                  sample: String(raw || '').slice(0, 180)
-                });
-              });
+              return res.text();
             })
-            .catch(function (err) {
-              console.error('Preferred store probe: request failed', err);
-            });
+            .catch(function (err) {});
         })();
 
         if (typeof window.__PreferredStoreOpen === 'function') {
@@ -649,7 +630,6 @@
           return;
         }
 
-        console.warn('Preferred store: no opener available on PDP button click');
       });
     }
 
