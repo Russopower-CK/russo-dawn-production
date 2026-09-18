@@ -4,7 +4,7 @@
     --russo-features-padding-bottom: {{ section.settings.padding_bottom }}px;
   }
 {%- endstyle -%}
-
+{%- assign features = metaobjects.russo_feature.values | sort: 'sort_order' -%}
 <russo-features class="russo-features color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width russo-features__inner">
     {%- if section.settings.heading != blank or section.settings.introduction != blank -%}
@@ -18,7 +18,7 @@
       </header>
     {%- endif -%}
     <div class="russo-features__list">
-      {%- for feature in metaobjects.russo_feature.values -%}
+      {%- for feature in features -%}
         {%- liquid
           assign feature_title = feature.title.value
           assign feature_media = feature.media.value

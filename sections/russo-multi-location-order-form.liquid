@@ -544,8 +544,9 @@
             readonly>{}</textarea>
         {%- endif -%}
       </form>
+
+      {% render 'multi-location-order-form-history', form_id: target_form_business_id %}
     {%- endif -%}
-    {% render 'multi-location-order-form-history', form_id: target_form_business_id %}
   </div>
 </section>
 
