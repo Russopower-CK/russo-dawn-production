@@ -12,24 +12,6 @@
     "slideshow_9myT39": {
       "type": "slideshow",
       "blocks": {
-        "slide_VJ3ktV": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/redmax-15off-fleet-of-one_slide_a.jpg",
-            "image_overlay_opacity": 0,
-            "heading": "RedMax Fall Into Savings Event",
-            "heading_size": "h1",
-            "subheading": "Save 15% OFF MSRP on select RedMax Leaf Blowers! | Now thru Sept. 30, 2026",
-            "button_label": "SHOP REDMAX",
-            "link": "shopify://collections/redmax-fall-into-savings",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_K76BnM": {
           "type": "slide",
           "settings": {
@@ -43,6 +25,24 @@
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_VJ3ktV": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/redmax-15off-fleet-of-one_slide_a.jpg",
+            "image_overlay_opacity": 0,
+            "heading": "RedMax Fall Into Savings Event",
+            "heading_size": "h1",
+            "subheading": "Save 15% OFF MSRP on select RedMax Leaf Blowers! | Now thru Sept. 30, 2026",
+            "button_label": "SHOP REDMAX",
+            "link": "shopify://collections/redmax-fall-into-savings",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-right",
             "text_alignment": "right",
             "text_alignment_mobile": "center",
             "color_scheme": "scheme-3"
@@ -194,8 +194,8 @@
         }
       },
       "block_order": [
-        "slide_VJ3ktV",
         "slide_K76BnM",
+        "slide_VJ3ktV",
         "slide_N3884K",
         "slide_8AYhjw",
         "slide_ECbQFf",
