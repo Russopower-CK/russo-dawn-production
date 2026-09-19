@@ -20,7 +20,7 @@ var storeLocationChanged = false; // Starts as false when the page loads
       locationsEndpoint: cfg.locationsEndpoint || `${API_BASE}/pickuplocations`,
       stockLevelsEndpoint: cfg.stockLevelsEndpoint || `${API_BASE}/getStockLevels`,
       geoipEndpoint: cfg.geoipEndpoint || `https://russo-worker.ckim-3d5.workers.dev/v1/geoip`,
-      geocodeZipEndpoint: cfg.geocodeZipEndpoint || `${API_BASE}/geocode-zip`,
+      geocodeZipEndpoint: cfg.geocodeZipEndpoint || `https://russo-worker.ckim-3d5.workers.dev/v1/geocode-zip`,
 
       // Order Form
       orderFormEndpoint: cfg.orderFormEndpoint || `${API_BASE}/orderform`,
