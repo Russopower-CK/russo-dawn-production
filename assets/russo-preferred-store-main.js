@@ -677,12 +677,12 @@ var storeLocationChanged = false; // Starts as false when the page loads
     if (stock === true) {
       var stockYes = document.createElement('div');
       stockYes.className = 'preferred-store-card__stock preferred-store-card__stock--yes';
-      stockYes.textContent = qty === null ? 'In stock at this store' : 'In stock at this store (' + qty + ' available)';
+      stockYes.textContent = qty === null ? 'In stock at this store' : 'In stock at this store';
       card.appendChild(stockYes);
     } else if (stock === false) {
       var stockNo = document.createElement('div');
       stockNo.className = 'preferred-store-card__stock preferred-store-card__stock--no';
-      stockNo.textContent = qty === null ? 'Pickup unavailable' : 'Pickup unavailable (' + qty + ' available)';
+      stockNo.textContent = qty === null ? 'Pickup unavailable' : 'Pickup unavailable';
       card.appendChild(stockNo);
     }
 
