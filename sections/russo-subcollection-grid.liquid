@@ -1,402 +1,124 @@
-{% comment %}
-  Russo Subcollection Grid
-  Custom section for the Russo Power Equipment Dawn theme.
-
-  The selected menu should contain parent collections as top-level
-  links, with child collections nested underneath them.
-{% endcomment %}
-
-{%- liquid
-  assign current_collection_link = blank
-
-  if section.settings.menu != blank
-    for parent_link in section.settings.menu.links
-      if parent_link.type == 'collection_link'
-        if parent_link.object.handle == collection.handle
-          assign current_collection_link = parent_link
-          break
-        endif
-      endif
-    endfor
-  endif
--%}
-
-{%- if current_collection_link != blank and current_collection_link.links.size > 0 -%}
-  <div
-    class="russo-subcollection-section color-{{ section.settings.color_scheme }} gradient"
-    style="
-      --russo-subcollection-columns-desktop: {{ section.settings.columns_desktop }};
-      --russo-subcollection-columns-mobile: {{ section.settings.columns_mobile }};
-      --russo-subcollection-image-ratio: {{ section.settings.image_ratio }}%;
-    "
-  >
-    <div
-      class="page-width section-{{ section.id }}-padding"
-    >
-      {%- if section.settings.heading != blank -%}
-        <div class="title-wrapper-with-link title-wrapper--self-padded-mobile">
-          <h2 class="title {{ section.settings.heading_size }}">
-            {{ section.settings.heading }}
-          </h2>
-        </div>
-      {%- endif -%}
-
-      <ul class="russo-subcollection-grid" role="list">
-        {%- for child_link in current_collection_link.links -%}
-          {%- if child_link.type == 'collection_link' -%}
-            {%- assign child_collection = child_link.object -%}
-
-            {%- liquid
-              assign card_image = child_collection.image
-
-              if card_image == blank and child_collection.products.first != blank
-                assign card_image = child_collection.products.first.featured_media.preview_image
-              endif
-            -%}
-
-            <li class="russo-subcollection-grid__item">
-              {{ child_collection.url }}
-                <div class="russo-subcollection-card__media">
-                  {%- if card_image != blank -%}
-                    {{
-                      card_image
-                      | image_url: width: 1200
-                      | image_tag:
-                        loading: 'lazy',
-                        widths: '165, 360, 533, 720, 940, 1200',
-                        sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
-                        class: 'russo-subcollection-card__image',
-                        alt: child_collection.title
-                    }}
-                  {%- else -%}
-                    {{
-                      'collection-1'
-                      | placeholder_svg_tag: 'placeholder-svg russo-subcollection-card__placeholder'
-                    }}
-                  {%- endif -%}
+<div class="subcollection-tiles" id="subcollection-tiles-{{ section.id }}" style="--subcollection-tiles-gap: {{ section.settings.gap | default: 24 }}px">
+  {% if section.settings.menu != blank %}
+    {% assign nav = linklists[section.settings.menu] | default: nil %}
+    {% if nav and nav.links_count > 0 %}
+      <div class="subcollection-tiles__grid" aria-label="{{ 'collections.subcollections.aria_label' | t }}">
+        {% for link in nav.links %}
+          {% if link.type == 'collection_link' and link.object != blank %}
+            {% assign sub_collection = link.object %}
+            <article class="subcollection-tile">
+              <a href="{{ sub_collection.url }}" class="subcollection-tile__link">
+                <div class="subcollection-tile__image-wrapper">
+                  {% if sub_collection.featured_image %}
+                    {{ sub_collection.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 50vw', class: 'subcollection-tile__image' }}
+                  {% else %}
+                    {{ 'collection-1' | placeholder_svg_tag: 'subcollection-tile__placeholder' }}
+                  {% endif %}
                 </div>
-
-                <div class="russo-subcollection-card__content">
-                  <h3 class="russo-subcollection-card__title">
-                    <span>{{ child_collection.title | escape }}</span>
-
-                    <span
-                      class="russo-subcollection-card__arrow"
-                      aria-hidden="true"
-                    >
-                      &rarr;
-                    </span>
-                  </h3>
-
-                  {%- if section.settings.show_product_count -%}
-                    <p class="russo-subcollection-card__count">
-                      {{ child_collection.products_count }}
-
-                      {%- if child_collection.products_count == 1 -%}
-                        &nbsp;product
-                      {%- else -%}
-                        &nbsp;products
-                      {%- endif -%}
+                <div class="subcollection-tile__content">
+                  <h3 class="subcollection-tile__title">{{ sub_collection.title }}</h3>
+                  {% if section.settings.show_product_count %}
+                    <p class="subcollection-tile__count">
+                      {{ 'collections.subcollections.product_count' | t: count: sub_collection.products_count }}
                     </p>
-                  {%- endif -%}
-
-                  {%- if section.settings.show_description and child_collection.description != blank -%}
-                    <div class="russo-subcollection-card__description rte">
-                      {{ child_collection.description | strip_html | truncatewords: 18 }}
-                    </div>
-                  {%- endif -%}
+                  {% endif %}
                 </div>
               </a>
-            </li>
-          {%- endif -%}
-        {%- endfor -%}
-      </ul>
-    </div>
-  </div>
-{%- elsif request.design_mode -%}
-  <div class="page-width section-{{ section.id }}-padding">
-    <div class="russo-subcollection-grid__empty">
-      <h2>{{ section.settings.heading | default: 'Shop by category' }}</h2>
-
-      <p>
-        Select the Russo Subcollections menu. The current collection must
-        be a top-level menu item with child collections nested underneath it.
-      </p>
-    </div>
-  </div>
-{%- endif -%}
-
-{% style %}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{% endstyle %}
+            </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="subcollection-tiles__empty">{{ 'collections.subcollections.empty_menu' | t }}</p>
+    {% endif %}
+  {% else %}
+    <p class="subcollection-tiles__empty">{{ 'collections.subcollections.no_menu' | t }}</p>
+  {% endif %}
+</div>
 
 {% stylesheet %}
-  .russo-subcollection-grid {
+  .subcollection-tiles__grid {
     display: grid;
-    grid-template-columns:
-      repeat(var(--russo-subcollection-columns-desktop), minmax(0, 1fr));
-    gap: 2rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--subcollection-tiles-gap);
   }
 
-  .russo-subcollection-grid__item {
-    min-width: 0;
-  }
-
-  .russo-subcollection-card {
-    display: block;
-    height: 100%;
+  .subcollection-tile {
+    border-radius: 0.75rem;
     overflow: hidden;
-    color: rgb(var(--color-foreground));
+    background: rgb(255 255 255 / 0.9);
+  }
+
+  .subcollection-tile__link {
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
-    background: rgb(var(--color-background));
-    border: 0.1rem solid rgba(var(--color-foreground), 0.12);
-    border-radius: var(--media-radius);
-    transition:
-      transform var(--duration-short) ease,
-      box-shadow var(--duration-short) ease;
+    color: inherit;
+    height: 100%;
   }
 
-  .russo-subcollection-card:hover {
-    transform: translateY(-0.4rem);
-    box-shadow: 0 0.8rem 2.4rem rgba(var(--color-foreground), 0.12);
-  }
-
-  .russo-subcollection-card:focus-visible {
-    outline: 0.2rem solid rgba(var(--color-foreground), 0.75);
-    outline-offset: 0.3rem;
-  }
-
-  .russo-subcollection-card__media {
+  .subcollection-tile__image-wrapper {
     position: relative;
+    padding-top: 70%;
     overflow: hidden;
-    width: 100%;
-    padding-bottom: var(--russo-subcollection-image-ratio);
-    background: rgba(var(--color-foreground), 0.04);
   }
 
-  .russo-subcollection-card__image,
-  .russo-subcollection-card__placeholder {
+  .subcollection-tile__image,
+  .subcollection-tile__placeholder svg {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-  }
-
-  .russo-subcollection-card__image {
-    object-fit: cover;
-    transition: transform var(--duration-long) ease;
-  }
-
-  .russo-subcollection-card:hover .russo-subcollection-card__image {
-    transform: scale(1.04);
-  }
-
-  .russo-subcollection-card__placeholder {
     object-fit: cover;
   }
 
-  .russo-subcollection-card__content {
-    padding: 1.6rem;
+  .subcollection-tile__content {
+    padding: 1rem 1.25rem 1.25rem;
   }
 
-  .russo-subcollection-card__title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+  .subcollection-tile__title {
+    font-size: 1rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .subcollection-tile__count {
     margin: 0;
-    color: rgb(var(--color-foreground));
-    font-size: calc(var(--font-heading-scale) * 1.8rem);
-  }
-
-  .russo-subcollection-card__arrow {
-    flex: 0 0 auto;
-    font-size: 2rem;
-    line-height: 1;
-    transition: transform var(--duration-short) ease;
-  }
-
-  .russo-subcollection-card:hover .russo-subcollection-card__arrow {
-    transform: translateX(0.3rem);
-  }
-
-  .russo-subcollection-card__count {
-    margin: 0.6rem 0 0;
-    color: rgba(var(--color-foreground), 0.7);
-    font-size: 1.3rem;
-  }
-
-  .russo-subcollection-card__description {
-    margin-top: 1rem;
-    color: rgba(var(--color-foreground), 0.75);
-    font-size: 1.4rem;
-    line-height: 1.5;
-  }
-
-  .russo-subcollection-grid__empty {
-    padding: 2rem;
-    border: 0.1rem dashed rgba(var(--color-foreground), 0.3);
-    text-align: center;
-  }
-
-  @media screen and (max-width: 749px) {
-    .russo-subcollection-grid {
-      grid-template-columns:
-        repeat(var(--russo-subcollection-columns-mobile), minmax(0, 1fr));
-      gap: 1.2rem;
-    }
-
-    .russo-subcollection-card__content {
-      padding: 1.2rem;
-    }
-
-    .russo-subcollection-card__title {
-      font-size: calc(var(--font-heading-scale) * 1.5rem);
-    }
+    font-size: 0.875rem;
+    opacity: 0.7;
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Russo subcollection grid",
-  "tag": "section",
-  "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
+  "name": "t:collections.subcollections.section_name",
   "settings": [
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "default": "Shop by category",
-      "label": "Heading"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "Small"
-        },
-        {
-          "value": "h1",
-          "label": "Medium"
-        },
-        {
-          "value": "h0",
-          "label": "Large"
-        }
-      ],
-      "default": "h1",
-      "label": "Heading size"
-    },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "Subcollection menu",
-      "info": "The current collection must be a top-level menu item. Nest its subcollections underneath it."
+      "label": "t:collections.subcollections.menu_label",
+      "info": "t:collections.subcollections.menu_info"
     },
     {
       "type": "range",
-      "id": "columns_desktop",
-      "min": 2,
-      "max": 6,
-      "step": 1,
-      "default": 4,
-      "label": "Desktop columns"
-    },
-    {
-      "type": "select",
-      "id": "columns_mobile",
-      "options": [
-        {
-          "value": "1",
-          "label": "1 column"
-        },
-        {
-          "value": "2",
-          "label": "2 columns"
-        }
-      ],
-      "default": "2",
-      "label": "Mobile columns"
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "options": [
-        {
-          "value": "100",
-          "label": "Square"
-        },
-        {
-          "value": "125",
-          "label": "Portrait"
-        },
-        {
-          "value": "66.6667",
-          "label": "Landscape"
-        }
-      ],
-      "default": "100",
-      "label": "Image ratio"
+      "id": "gap",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "t:collections.subcollections.gap_label",
+      "default": 24
     },
     {
       "type": "checkbox",
       "id": "show_product_count",
-      "default": true,
-      "label": "Show product count"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_description",
-      "default": false,
-      "label": "Show collection description"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "default": 36,
-      "label": "Top padding"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "default": 36,
-      "label": "Bottom padding"
+      "label": "t:collections.subcollections.show_product_count_label",
+      "default": true
     }
   ],
   "presets": [
     {
-      "name": "Russo subcollection grid"
+      "name": "t:collections.subcollections.preset_name",
+      "category": "t:sections.categories.collection"
     }
   ]
 }
