@@ -392,7 +392,7 @@
     }
   },
   "sections": {
-        "featured_collection": {
+    "featured_collection": {
       "name": "Featured collection",
       "title": {
         "label": "Heading"
@@ -874,6 +874,97 @@
         "custom-html": {
           "name": "Custom HTML",
           "category": "Advanced"
+        }
+      }
+    },
+        "logo_list": {
+      "name": "Logo list",
+      "title": {
+        "label": "Heading"
+      },
+      "blocks": {
+        "logo": {
+          "name": "Logo",
+          "image": {
+            "label": "Image",
+            "info": "320 x 320px .png recommended"
+          },
+          "link": {
+            "label": "Link"
+          }
+        }
+      },
+      "presets": {
+        "logo_list": {
+          "name": "Logo list",
+          "category": "Image"
+        }
+      }
+    },
+        "shoppable_image": {
+      "name": "Shoppable image",
+      "title": {
+        "label": "Section heading"
+      },
+      "image": {
+        "label": "Image"
+      },
+      "image_width": {
+        "label": "Image width",
+        "option_1": "Half",
+        "option_2": "Two thirds",
+        "option_3": "Full width"
+      },
+      "link_text": {
+        "label": "Product tooltip link text"
+      },
+      "header_1": {
+        "content": "Text"
+      },
+      "textbox_title": {
+        "label": "Heading"
+      },
+      "textbox_subheading": {
+        "label": "Subheading"
+      },
+      "textbox_button_label": {
+        "label": "Button label"
+      },
+      "textbox_button_link": {
+        "label": "Button link"
+      },
+      "textbox_button_style": {
+        "label": "Button style",
+        "option_1": "Primary",
+        "option_2": "Secondary"
+      },
+      "textbox_text_alignment": {
+        "label": "Text alignment"
+      },
+      "textbox_text_position": {
+        "label": "Text position",
+        "info": "Does not apply to full-width images",
+        "option_1": "Left of image",
+        "option_2": "Right of image"
+      },
+      "blocks": {
+        "product": {
+          "name": "Product",
+          "product": {
+            "label": "Product"
+          },
+          "x_axis": {
+            "label": "Horizontal axis"
+          },
+          "y_axis": {
+            "label": "Vertical axis"
+          }
+        }
+      },
+      "presets": {
+        "shoppable_image": {
+          "name": "Shoppable image",
+          "category": "Image"
         }
       }
     },
