@@ -41,6 +41,7 @@
     },
     "recently_viewed_dRWrXf": {
       "type": "recently-viewed",
+      "disabled": true,
       "name": "Russo Recently Viewed",
       "settings": {
         "heading": "Recently viewed",
