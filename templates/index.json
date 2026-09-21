@@ -34,7 +34,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/redmax-15off-fleet-of-one_slide_a.jpg",
-            "image_overlay_opacity": 0,
+            "image_overlay_opacity": 40,
             "heading": "RedMax Fall Into Savings Event",
             "heading_size": "h1",
             "subheading": "Save 15% OFF MSRP on select RedMax Leaf Blowers! | Now thru Sept. 30, 2026",
