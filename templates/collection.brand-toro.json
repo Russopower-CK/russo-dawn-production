@@ -17,8 +17,48 @@
         "color_scheme": "scheme-1"
       }
     },
+    "rich_text_TEHj4N": {
+      "type": "rich-text",
+      "blocks": {
+        "text_TDdHqP": {
+          "type": "text",
+          "settings": {
+            "text": "<h6>Toro Equipment: <a href=\"/collections/toro-aerators\" title=\"Aerators\">Aerators</a>  |  <a href=\"/collections/toro-compact-utility-loaders\" title=\"Compact Utility Loaders\">Compact Utility Loaders</a>  |  <a href=\"https://russopower.com/collections/compact-utility-loader-attachments?filter.p.vendor=Toro\" title=\"Toro Compact Utility Loader Attachments\">Compact Utility Loader Attachments</a>  |  <a href=\"/collections/toro-lawn-mowers\" title=\"Lawn Mowers\">Lawn Mowers</a>  |  <a href=\"https://russopower.com/collections/log-splitters?filter.p.vendor=Toro\" title=\"Toro Log Splitters\">Log Splitters</a>  |  <a href=\"https://russopower.com/collections/material-buggies?filter.p.vendor=Toro\" title=\"Toro Material Buggies\">Material Buggies</a>  |  <a href=\"https://russopower.com/collections/trenchers?filter.p.vendor=Toro\" title=\"Toro Trenchers\">Trenchers</a>  |  <a href=\"https://russopower.com/collections/stump-grinders?filter.p.vendor=Toro\" title=\"Toro Stump Grinders\">Stump Grinders</a>  |  <a href=\"/collections/toro-snow-blowers\" title=\"Snow Blowers\">Snow Blowers</a></h6><h6>Toro Parts: <a href=\"/collections/toro-mower-parts\" title=\"Toro Mower Parts\">Mower Parts</a>  |  <a href=\"/collections/toro-snow-blower-parts\" title=\"Snow Blower Parts\">Snow Blower Parts</a></h6>"
+          }
+        }
+      },
+      "block_order": [
+        "text_TDdHqP"
+      ],
+      "custom_css": [
+        ".rich-text--full-width {margin-top: 0;}",
+        ".rich-text--container {margin-top: 0; margin-bottom: 0;}",
+        ".rte h6 {}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "full_width": true,
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "dynamic_html_9WxfrB": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-bottom: 2em;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+      }
+    },
     "product-grid": {
       "type": "main-collection-product-grid",
+      "disabled": true,
       "settings": {
         "products_per_page": 24,
         "columns_desktop": 4,
@@ -41,6 +81,7 @@
     },
     "recently_viewed_dRWrXf": {
       "type": "recently-viewed",
+      "disabled": true,
       "name": "Russo Recently Viewed",
       "settings": {
         "heading": "Recently viewed",
@@ -49,11 +90,245 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "dynamic_shoppable_image_gUzJXk": {
+      "type": "dynamic-shoppable-image",
+      "blocks": {
+        "hotspot_WMdNLD": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-22588-dingo-tx-1000-turbo-wide-track",
+            "x_axis": 25,
+            "y_axis": 30
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_WMdNLD"
+      ],
+      "custom_css": [
+        ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
+        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}",
+        ".shoppable-image__text-box-wrapper {padding-top: 10px; padding-bottom: 30px;}",
+        ".shoppable-image__wrapper {padding-top: 20px;}",
+        ".shoppable-image__text-box-subheading h4 {color: #be1e2d; margin: 0; padding-top: 0; padding-bottom: 10px;}"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/toro-dingo-tx1000-trencher-slider.jpg",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "",
+        "textbox_subheading": "<h1>Toro Dingo</h1><h4>0% for 48 Months -OR- 1.99% for 72 Months*</h4><h3>Maximize ROI with a Multi-Functional Machine</h3><p>Supercharge daily tasks with the versatility of a compact utility loader & 30+ attachments from the company that invented the category! </p>",
+        "textbox_button_label": "BROWSE LINEUP",
+        "textbox_button_link": "shopify://collections/toro-compact-utility-loaders",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "right"
+      }
+    },
+    "dynamic_shoppable_image_h8M46V": {
+      "type": "dynamic-shoppable-image",
+      "blocks": {
+        "hotspot_LfaPt7": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-78596-multi-force-power-broom",
+            "x_axis": 60,
+            "y_axis": 31
+          }
+        },
+        "hotspot_4ch4PV": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-72530-grandstandr-multi-force-mower-52-in",
+            "x_axis": 10,
+            "y_axis": 24
+          }
+        },
+        "hotspot_gCgq7M": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-tine-rake-dethatcher-with-mount",
+            "x_axis": 36,
+            "y_axis": 82
+          }
+        },
+        "hotspot_QHPdTP": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-multi-force-leaf-plow",
+            "x_axis": 70,
+            "y_axis": 85
+          }
+        },
+        "hotspot_XwUd8j": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-pro-force-debris-blower",
+            "x_axis": 91,
+            "y_axis": 83
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_LfaPt7",
+        "hotspot_4ch4PV",
+        "hotspot_gCgq7M",
+        "hotspot_QHPdTP",
+        "hotspot_XwUd8j"
+      ],
+      "custom_css": [
+        ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
+        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}",
+        ".shoppable-image__text-box-wrapper {padding-top: 10px; padding-bottom: 30px;}",
+        ".shoppable-image__wrapper {padding-top: 20px;}"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/Toro-GrandStand-Multi-Force-collage.jpg",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "",
+        "textbox_subheading": "<h1>GrandStand MULTI FORCE Stand-On Mower</h1><h3>Works Year-Round</h3><p><strong>SWITCH ATTACHMENTS AND BOOST PROFITS</strong> no matter the season with the award-winning GrandStand® MULTI FORCE stand-on mower. Snow or shine, this maneuverable machine combines the productivity of the proven, low-maintenance GrandStand mower with the ability to add attachments for seasonal versatility. You’ll enjoy optimal performance whether you’re mowing a perfect stripe, clearing snow, blowing leaves or bagging debris.</p>",
+        "textbox_button_label": "SHOP ATTACHMENTS",
+        "textbox_button_link": "",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "left"
+      }
+    },
+    "dynamic_shoppable_image_FJDKm8": {
+      "type": "dynamic-shoppable-image",
+      "custom_css": [
+        ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
+        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}",
+        ".shoppable-image__text-box-wrapper {padding-top: 10px; padding-bottom: 30px;}",
+        ".shoppable-image__wrapper {padding-top: 20px;}"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/Grand_Stand_Multiforce-LC19_4353S-1604_Croppedjpg_ef360059-7e1d-45b8-b5c4-2150b20dcfcb.jpg",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "",
+        "textbox_subheading": "<h1>GrandStand MULTI FORCE EVO Stand-On Mower</h1><h3>34.5hp Kawasaki EVO Engine</h3><p>Take on the toughest cutting conditions now with an upgraded 34.5hp Kawasaki EVO 822cc engine.</p>",
+        "textbox_button_label": "SHOP ATTACHMENTS",
+        "textbox_button_link": "/collections/lawn-mower-attachments?filter.p.vendor=Toro",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "right"
+      }
+    },
+    "dynamic_shoppable_image_HmRKc6": {
+      "type": "dynamic-shoppable-image",
+      "blocks": {
+        "hotspot_KHaTh3": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-22-in-60v-max-battery-smartstow-walk-behind-mower-21466-with-battery-charger",
+            "x_axis": 64,
+            "y_axis": 76
+          }
+        },
+        "hotspot_w4AagX": {
+          "type": "hotspot",
+          "settings": {
+            "product": "",
+            "x_axis": 25,
+            "y_axis": 30
+          }
+        },
+        "hotspot_JqbKiK": {
+          "type": "hotspot",
+          "settings": {
+            "product": "",
+            "x_axis": 85,
+            "y_axis": 55
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_KHaTh3",
+        "hotspot_w4AagX",
+        "hotspot_JqbKiK"
+      ],
+      "custom_css": [
+        ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
+        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/Toro-60V-Battery-Lineup.webp",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "",
+        "textbox_subheading": "<h1>Toro 60V MAX Flex-Force Power System</h1><h3>Every Single Job, One Single Battery</h3><p>The same reliability, durability, and performance you know from Toro mowers is now available in a line of powerful handheld equipment. Energize a full lineup of battery-operated products with an interchangeable battery to allow seamless use of all Toro cordless equipment. Dominate any task at hand with their productive, lightweight, and easy to start handheld tools!</p>",
+        "textbox_button_label": "SHOP ALL 60V",
+        "textbox_button_link": "shopify://collections/toro-60v-battery-products",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "right"
+      }
+    },
+    "dynamic_shoppable_image_4t7Tj9": {
+      "type": "dynamic-shoppable-image",
+      "blocks": {
+        "hotspot_aNV3pq": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-18760-z-master-revolution-riding-mower-60",
+            "x_axis": 43,
+            "y_axis": 27
+          }
+        },
+        "hotspot_kbbXMm": {
+          "type": "hotspot",
+          "settings": {
+            "product": "toro-revolution-grandstand-18560-52-in-battery-zero-turn-mower",
+            "x_axis": 35,
+            "y_axis": 81
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_aNV3pq",
+        "hotspot_kbbXMm"
+      ],
+      "custom_css": [
+        ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
+        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/toro-revolution-series-riding-mowers-action.jpg",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "",
+        "textbox_subheading": "<h1>The Revolution Series</h1><h3>Truly Commercial-Grade Equipment</h3><p><strong>Battery Power + Trusted Toro Performance = Game Changer</strong><br/>Built on the same proven Grandstand® and Z Master® chassis and TURBO FORCE® deck that you’ve trusted for years, the new Revolution Series delivers lower overall cost over the machine’s lifetime. Built to tame the most savage lawns and have you out there from dawn ‘til dusk, the Toro line of battery-powered commercial equipment delivers where others can’t.</p>",
+        "textbox_button_label": "SHOP REVOLUTION",
+        "textbox_button_link": "shopify://collections/toro-battery-revolution-products",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "left"
+      }
     }
   },
   "order": [
     "banner",
+    "rich_text_TEHj4N",
+    "dynamic_html_9WxfrB",
     "product-grid",
-    "recently_viewed_dRWrXf"
+    "recently_viewed_dRWrXf",
+    "dynamic_shoppable_image_gUzJXk",
+    "dynamic_shoppable_image_h8M46V",
+    "dynamic_shoppable_image_FJDKm8",
+    "dynamic_shoppable_image_HmRKc6",
+    "dynamic_shoppable_image_4t7Tj9"
   ]
 }
