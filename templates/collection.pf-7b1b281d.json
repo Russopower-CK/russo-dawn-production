@@ -11,6 +11,7 @@
   "sections": {
     "banner": {
       "type": "main-collection-banner",
+      "disabled": true,
       "settings": {
         "show_collection_description": true,
         "show_collection_image": true,
@@ -19,6 +20,7 @@
     },
     "product-grid": {
       "type": "main-collection-product-grid",
+      "disabled": true,
       "settings": {
         "products_per_page": 24,
         "columns_desktop": 4,
@@ -41,6 +43,7 @@
     },
     "recently_viewed_dRWrXf": {
       "type": "recently-viewed",
+      "disabled": true,
       "name": "Russo Recently Viewed",
       "settings": {
         "heading": "Recently viewed",
