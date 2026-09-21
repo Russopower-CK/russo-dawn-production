@@ -39,8 +39,10 @@
           {% endif %}
           {% if section.settings.textbox_button_label != blank %}
             {% assign button_url = section.settings.textbox_button_link | default: '#' %}
-
-            {{ section.settings.textbox_button_label | escape | link_to: button_url, class: 'button' }}
+            {% assign button_class = 'button shoppable-image__text-box-button--'
+              | append: section.settings.textbox_button_style
+            %}
+            {{ section.settings.textbox_button_label | escape | link_to: button_url, class: button_class }}
           {% endif %}
         </div>
       </div>
@@ -191,6 +193,7 @@
       display: flex;
       align-items: center;
       gap: 40px;
+      margin-top: 1.75rem;
     }
 
     #ShoppableImage-{{ section.id }}.shoppable-image--text-right .shoppable-image__section-content {
@@ -296,7 +299,7 @@
 
     #ShoppableImage-{{ section.id }} .shoppable-image__text-box-button--primary {
       color: #fff;
-      background: #c8102e;
+      background: var(--russo-red-dark);
     }
 
     #ShoppableImage-{{ section.id }} .shoppable-image__text-box-button--secondary {

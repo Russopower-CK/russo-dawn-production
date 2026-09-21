@@ -1,0 +1,114 @@
+{% doc %}
+Render a product or content image, either as a normal <img> tag or as background-image attributes.
+
+@param {image} img - The image to render.
+@param {boolean} [lazy=false] - Enable native lazy loading for the image tag.
+@param {boolean} [background=false] - Output attributes for a background image container.
+@param {string} [size] - Image size in Shopify img_url format, for example 1350x1350.
+@param {string} [crop] - Optional crop mode for img_url.
+@param {string} [format] - Optional format for img_url.
+@param {string} [alt] - Alt text for the image.
+@param {string} [class] - CSS class names to apply.
+@param {string} [style] - Inline styles to append.
+@param {string} [attr] - Extra raw attributes to append.
+@param {boolean} [canvas=false] - Output a canvas helper element.
+@param {boolean} [disable_noscript=false] - Skip the noscript fallback for lazy images.
+@param {string} [focal_point] - Background focal point, for example center center.
+
+@example
+{% render 'rimg', img: block.settings.image, lazy: true, size: '1350x1350' %}
+{% enddoc %}
+
+{% liquid
+  assign lazy = lazy | default: false
+  assign background = background | default: false
+  assign size_default = img.width | append: 'x' | append: img.height
+  assign size = size | default: size_default
+  assign crop = crop | default: blank
+  assign format = format | default: blank
+  assign alt = alt | default: img.alt | default: '' | escape
+  assign class = class | default: blank
+  assign style = style | default: blank
+  assign attr = attr | default: blank
+  assign canvas = canvas | default: false
+  assign disable_noscript = disable_noscript | default: false
+  assign focal_point = focal_point | default: blank
+
+  assign image_src = img | img_url: size
+  if crop != blank and format != blank
+    assign image_src = img | img_url: size, crop: crop, format: format
+  elsif crop != blank
+    assign image_src = img | img_url: size, crop: crop
+  elsif format != blank
+    assign image_src = img | img_url: size, format: format
+  endif
+
+  assign background_style = ''
+  if background and image_src != blank
+    assign background_style = background_style | append: 'background-image:url(' | append: image_src | append: ');'
+    assign background_style = background_style | append: 'background-repeat:no-repeat;'
+    assign background_style = background_style | append: 'background-size:cover;'
+    if focal_point != blank
+      assign background_style = background_style | append: 'background-position:' | append: focal_point | append: ';'
+    endif
+  endif
+
+  if style != blank
+    if background_style != blank
+      assign style = style | append: background_style
+    endif
+  else
+    assign style = background_style
+  endif
+%}
+
+{% if img != blank %}
+  {% if background %}
+    {% if class != blank %}class="{{ class }}"{% endif %}
+    {% if style != blank %}style="{{ style }}"{% endif %}
+    {% if attr != blank %}{{ attr }}{% endif %}
+  {% else %}
+    {% if lazy and disable_noscript != true %}
+      <noscript>
+        <img
+          src="{{ image_src }}"
+          alt="{{ alt }}"
+          width="{{ img.width }}"
+          height="{{ img.height }}"
+          {% if class != blank %}
+            class="{{ class }}"
+          {% endif -%}
+          {% if style != blank %}
+            style="{{ style }}"
+          {% endif -%}
+          {% if attr != blank %}
+            {{ attr -}}
+          {% endif %}
+        >
+      </noscript>
+    {% endif %}
+
+    <img
+      src="{{ image_src }}"
+      alt="{{ alt }}"
+      width="{{ img.width }}"
+      height="{{ img.height }}"
+      {% if lazy %}
+        loading="lazy"
+      {% endif -%}
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif -%}
+      {% if style != blank %}
+        style="{{ style }}"
+      {% endif -%}
+      {% if attr != blank %}
+        {{ attr -}}
+      {% endif %}
+    >
+  {% endif %}
+
+  {% if canvas %}
+    <div data-rimg-canvas></div>
+  {% endif %}
+{% endif %}

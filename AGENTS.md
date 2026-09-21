@@ -136,3 +136,19 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
 - Preserve B2B gating checks (`customer`, `customer.b2b?`, location count checks).
 - Re-validate with Theme Check after edits.
 - If `sections/russo-multi-location-order-form.liquid` behavior, structure, selectors, settings, or payload logic changes, update this `AGENTS.md` section in the same change.
+
+## Multicolumn Section
+
+Primary file: `sections/multicolumn.liquid`
+
+### Purpose
+- Standard Dawn multicolumn section with image, heading, description, and optional CTA per block.
+- Each block now renders its CTA as a bottom-aligned button using `link_label` and `link`.
+- Block-level CTA style is configurable with `button_style`:
+  - `primary`
+  - `secondary`
+
+### Safe edit rules for this file
+- Keep the CTA anchored at the bottom of the block info area so image-only cards match the text/button cards.
+- Preserve `link_label` as the visibility gate for the CTA.
+- Re-validate with Theme Check after edits.

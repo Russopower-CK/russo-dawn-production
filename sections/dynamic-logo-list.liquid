@@ -5,6 +5,134 @@
   }
 </script>
 
+<style>
+  .logolist--section .pxu-lia-element {
+    --zoom-fade-scale: 0.8;
+    animation: zoom-fade 500ms cubic-bezier(0, 0, 0.2, 1) both paused;
+    animation-delay: calc(80ms * var(--pxu-lia-inner-sequence));
+  }
+
+  .logolist--inner {
+    margin-right: -0.625rem;
+    margin-left: -0.625rem;
+    font-size: 0;
+    text-align: center;
+  }
+  .logolist--inner > * {
+    margin-right: 0.625rem;
+    margin-left: 0.625rem;
+  }
+  @media screen and (min-width: 720px) {
+    .logolist--inner {
+      margin-right: -0.9375rem;
+      margin-left: -0.9375rem;
+    }
+    .logolist--inner > * {
+      margin-right: 0.9375rem;
+      margin-left: 0.9375rem;
+    }
+  }
+  @media screen and (min-width: 1280px) {
+    .logolist--inner {
+      margin-right: -1.25rem;
+      margin-left: -1.25rem;
+    }
+    .logolist--inner > * {
+      margin-right: 1.25rem;
+      margin-left: 1.25rem;
+    }
+  }
+
+  .logolist--item {
+    font-size: var(--font-size-body);
+    position: relative;
+    display: inline-block;
+    width: 90px;
+    margin-top: 1.25rem;
+    margin-right: 0.625rem;
+    margin-left: 0.625rem;
+    vertical-align: middle;
+    transition: width 100ms cubic-bezier(0.4, 0, 0.2, 1), margin 100ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @media screen and (max-width: 344px) {
+    .logolist--item:nth-child(-n + 2) {
+      margin-top: 0;
+    }
+  }
+  @media screen and (max-width: 454px) and (min-width: 345px) {
+    .logolist--item:nth-child(-n + 3) {
+      margin-top: 0;
+    }
+  }
+  @media screen and (min-width: 455px) and (max-width: 564px), screen and (min-width: 720px) and (max-width: 754px) {
+    .logolist--item:nth-child(-n + 4) {
+      margin-top: 0;
+    }
+  }
+  @media screen and (min-width: 565px) and (max-width: 674px),
+    screen and (min-width: 755px) and (max-width: 904px),
+    screen and (min-width: 1024px) and (max-width: 1174px) {
+    .logolist--item:nth-child(-n + 5) {
+      margin-top: 0;
+    }
+  }
+  @media screen and (min-width: 675px) and (max-width: 719px),
+    screen and (min-width: 905px) and (max-width: 1023px),
+    screen and (min-width: 1175px) {
+    .logolist--item:nth-child(-n + 6) {
+      margin-top: 0;
+    }
+  }
+  @media screen and (min-width: 720px) {
+    .logolist--item {
+      width: 120px;
+      margin-top: 1.875rem;
+      margin-right: 0.9375rem;
+      margin-left: 0.9375rem;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    .logolist--item {
+      width: 160px;
+    }
+  }
+  @media screen and (min-width: 1280px) {
+    .logolist--item {
+      margin-top: 2.5rem;
+      margin-right: 1.25rem;
+      margin-left: 1.25rem;
+    }
+    .logolist--item:nth-child(-n + 6) {
+      margin-top: 0;
+    }
+  }
+
+  .logolist--link {
+    display: block;
+  }
+
+  .logolist--image {
+    display: block;
+    max-width: 100%;
+    max-height: 90px;
+    margin: 0 auto;
+    transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  @media screen and (min-width: 720px) {
+    .logolist--image {
+      max-height: 120px;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    .logolist--image {
+      max-height: 160px;
+    }
+  }
+  .logolist--image:hover {
+    transform: scale(1.1);
+  }
+</style>
+
 <section class="logolist--container">
   {% if section.settings.title != blank %}
     <h2 class="home-section--title">
@@ -24,15 +152,14 @@
         {% endif %}
 
         {% if block.settings.image %}
-          {{
-            block.settings.image
-            | image_url: width: 640
-            | image_tag:
-              loading: 'lazy',
-              widths: '160, 240, 320, 480, 640',
-              sizes: '320px',
-              alt: block.settings.image.alt
-          }}
+          {% render 'rimg',
+            img: block.settings.image,
+            class: 'logolist--image',
+            size: '160x160',
+            lazy: true,
+            canvas: true,
+            focal_point: block.settings.image.presentation.focal_point
+          %}
         {% else %}
           {{ 'image' | placeholder_svg_tag: 'placeholder--image logolist--image' }}
         {% endif %}

@@ -23,7 +23,6 @@
       "block_order": [
         "logo_AgHT96"
       ],
-      "disabled": true,
       "custom_css": [],
       "name": "t:sections.logo_list.presets.logo_list.name",
       "settings": {
@@ -67,7 +66,7 @@
         "content_alignment": "center",
         "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
         "full_width": true,
-        "padding_top": 36,
+        "padding_top": 0,
         "padding_bottom": 0
       }
     },
@@ -101,18 +100,6 @@
         "enable_filtering": true,
         "filter_type": "vertical",
         "enable_sorting": true,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "recently_viewed_dRWrXf": {
-      "type": "recently-viewed",
-      "disabled": true,
-      "name": "Russo Recently Viewed",
-      "settings": {
-        "heading": "Recently viewed",
-        "heading_size": "h1",
-        "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -209,7 +196,8 @@
         ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
         ".shoppable-image__text-box-subheading h3 {margin-top: 0;}",
         ".shoppable-image__text-box-wrapper {padding-top: 10px; padding-bottom: 30px;}",
-        ".shoppable-image__wrapper {padding-top: 20px;}"
+        ".shoppable-image__wrapper {padding-top: 20px;}",
+        ".shoppable-image {margin-top: 10px;}"
       ],
       "name": "t:sections.shoppable_image.presets.shoppable_image.name",
       "settings": {
@@ -249,6 +237,88 @@
         "textbox_text_position": "right"
       }
     },
+    "dynamic_promo_mosiac_FihJGE": {
+      "type": "dynamic-promo-mosiac",
+      "blocks": {
+        "promotion_qbRhdJ": {
+          "type": "promotion",
+          "settings": {
+            "image": "shopify://shop_images/Toro-snow-blower-CO22_5167s_39926_60v_2stage_Loc_2174_proof.jpg",
+            "title": "Innovative Features",
+            "text": "✱ A patented Anti-Clogging System that directs heavy snow away from the chute to help you maintain a steady course. \n✱ Quick Stick chute control to easily change the direction of your deflector. \n✱ Hardened gears and a commercial grade gearbox so you can worry less about breaking pins.",
+            "color": "#000000",
+            "block_link": "shopify://collections/toro-snow-blowers",
+            "button_text": "SHOP SNOW BLOWERS",
+            "button_style": "primary",
+            "show_overlay": true,
+            "background": "#ffffff",
+            "opacity": 64
+          }
+        },
+        "promotion_mb3GfQ": {
+          "type": "promotion",
+          "settings": {
+            "image": "shopify://shop_images/Toro-Power-Clear-snow-blower-co23_5418s-39921-power-clear-60V-LOC-1032_proof.jpg",
+            "title": "POWER CLEAR® SINGLE-STAGE",
+            "text": "The perfect blend of power and efficiency to get the job done fast. Plus a compact design for easy storage leaves room in the garage for what matters most.",
+            "color": "#000000",
+            "block_link": "",
+            "button_text": "",
+            "button_style": "primary",
+            "show_overlay": true,
+            "background": "#FFFFFF",
+            "opacity": 64
+          }
+        },
+        "promotion_JmxVyt": {
+          "type": "promotion",
+          "settings": {
+            "image": "shopify://shop_images/Toro-Snowmaster-snow-blower-CO15_3216s_SN_36003_loc_04--9467_alt_proof.jpg",
+            "title": "SNOWMASTER®",
+            "text": "Easy enough for anyone in your household to handle, and still powers through tough, end-of-driveway snow.",
+            "color": "#000000",
+            "block_link": "",
+            "button_text": "",
+            "button_style": "primary",
+            "show_overlay": true,
+            "background": "#FFFFFF",
+            "opacity": 50
+          }
+        },
+        "promotion_yF78Vd": {
+          "type": "promotion",
+          "settings": {
+            "image": "shopify://shop_images/Toro-Power-Max-snow-blower-CO19_4243s_Snowblower_3235_proof.jpg",
+            "title": "POWER MAX® COMPACT or HEAVY-DUTY TWO-STAGE",
+            "text": "Take control of big snow jobs this winter with Power Max and Power Max HD. These two-stage snow blowers clear wide paths with speed and ease.",
+            "color": "#000000",
+            "block_link": "",
+            "button_text": "",
+            "button_style": "primary",
+            "show_overlay": true,
+            "background": "#FFFFFF",
+            "opacity": 50
+          }
+        }
+      },
+      "block_order": [
+        "promotion_qbRhdJ",
+        "promotion_mb3GfQ",
+        "promotion_JmxVyt",
+        "promotion_yF78Vd"
+      ],
+      "custom_css": [
+        ".home-section--title {text-align: center;}"
+      ],
+      "name": "t:sections.mosaic.presets.mosaic.name",
+      "settings": {
+        "title": "WHY CHOOSE A TORO SNOWBLOWER",
+        "section_height": "small",
+        "text_alignment": "top-left",
+        "maintain_aspect_ratio": false,
+        "compress_blocks": false
+      }
+    },
     "dynamic_shoppable_image_HmRKc6": {
       "type": "dynamic-shoppable-image",
       "blocks": {
@@ -284,7 +354,8 @@
       ],
       "custom_css": [
         ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
-        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}"
+        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}",
+        ".shoppable-image {margin-top: 5px; margin-bottom: 5px;}"
       ],
       "name": "t:sections.shoppable_image.presets.shoppable_image.name",
       "settings": {
@@ -327,7 +398,8 @@
       ],
       "custom_css": [
         ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
-        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}"
+        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}",
+        ".shoppable-image {margin-top: 10px;}"
       ],
       "name": "t:sections.shoppable_image.presets.shoppable_image.name",
       "settings": {
@@ -343,6 +415,66 @@
         "textbox_text_alignment": "left",
         "textbox_text_position": "left"
       }
+    },
+    "multicolumn_zkbXVF": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_aiWWTe": {
+          "type": "column",
+          "settings": {
+            "title": "Toro Battery Equipment SALE",
+            "text": "<p>Save big on battery tools for cleanup! A versatile lineup of options, all using the same 60V battery.</p>",
+            "link_label": "SHOP 60V SALE",
+            "button_style": "primary",
+            "link": "shopify://collections/toro-60v-battery-products"
+          }
+        },
+        "column_wWeVHQ": {
+          "type": "column",
+          "settings": {
+            "title": "Toro Dingo + 0% for 60 Months",
+            "text": "<p>Add a Dingo to your fleet & increase efficiency like never before. Now aggressively priced, plus special financing available, CONTACT US FOR EXCLUSIVE PRICING! *While supplies last.</p>",
+            "link_label": "SHOP DINGOS",
+            "button_style": "primary",
+            "link": "shopify://collections/toro-compact-utility-loaders"
+          }
+        },
+        "column_3QUqmG": {
+          "type": "column",
+          "settings": {
+            "title": "Save on Pre-Owned",
+            "text": "<p>Shop an assortment of high-quality used Toro equipment.</p>",
+            "link_label": "SHOP USED",
+            "button_style": "primary",
+            "link": "shopify://collections/toro-used-equipment"
+          }
+        }
+      },
+      "block_order": [
+        "column_aiWWTe",
+        "column_wWeVHQ",
+        "column_3QUqmG"
+      ],
+      "custom_css": [
+        ".content-container {align-content: center;}"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "button_label": "",
+        "button_link": "",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -351,11 +483,12 @@
     "rich_text_TEHj4N",
     "dynamic_html_9WxfrB",
     "product-grid",
-    "recently_viewed_dRWrXf",
     "dynamic_shoppable_image_gUzJXk",
     "dynamic_shoppable_image_h8M46V",
     "dynamic_shoppable_image_FJDKm8",
+    "dynamic_promo_mosiac_FihJGE",
     "dynamic_shoppable_image_HmRKc6",
-    "dynamic_shoppable_image_4t7Tj9"
+    "dynamic_shoppable_image_4t7Tj9",
+    "multicolumn_zkbXVF"
   ]
 }

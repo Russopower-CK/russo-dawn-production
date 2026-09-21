@@ -968,6 +968,85 @@
         }
       }
     },
+      "mosaic": {
+      "name": "Mosaic",
+      "title": {
+        "label": "Heading"
+      },
+      "section_height": {
+        "label": "Section height",
+        "option_1": "Small",
+        "option_2": "Medium",
+        "option_3": "Large"
+      },
+      "text_alignment": {
+        "label": "Text alignment",
+        "option_1": "Top left",
+        "option_2": "Top center",
+        "option_3": "Top right",
+        "option_4": "Center left",
+        "option_5": "Center center",
+        "option_6": "Center right",
+        "option_7": "Bottom left",
+        "option_8": "Bottom center",
+        "option_9": "Bottom right"
+      },
+      "maintain_aspect_ratio": {
+        "label": "Maintain aspect ratio"
+      },
+      "header_1": {
+        "content": "Mobile"
+      },
+      "compress_blocks": {
+        "label": "Compress blocks"
+      },
+      "blocks": {
+        "promotional_item": {
+          "name": "Promotional item",
+          "image": {
+            "label": "Image"
+          },
+          "title": {
+            "label": "Heading"
+          },
+          "text": {
+            "label": "Text"
+          },
+          "color": {
+            "label": "Text color"
+          },
+          "block_link": {
+            "label": "Link"
+          },
+          "button_text": {
+            "label": "Button text"
+          },
+          "button_style": {
+            "label": "Button style",
+            "option_1": "Primary",
+            "option_2": "Secondary"
+          },
+          "header_1": {
+            "content": "Overlay"
+          },
+          "show_overlay": {
+            "label": "Show overlay"
+          },
+          "background": {
+            "label": "Color"
+          },
+          "opacity": {
+            "label": "Opacity"
+          }
+        }
+      },
+      "presets": {
+        "mosaic": {
+          "name": "Mosaic",
+          "category": "Image"
+        }
+      }
+    },
     "featured-blog": {
       "name": "Blog posts",
       "settings": {
@@ -2861,6 +2940,15 @@
             "link_label": {
               "label": "Link label",
               "info": "Leave blank to hide"
+            },
+            "button_style": {
+              "label": "Button style",
+              "options__1": {
+                "label": "Primary"
+              },
+              "options__2": {
+                "label": "Secondary"
+              }
             },
             "link": {
               "label": "Link"
