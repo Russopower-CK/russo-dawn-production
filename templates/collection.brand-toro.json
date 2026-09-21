@@ -9,10 +9,36 @@
  */
 {
   "sections": {
+    "dynamic_logo_list_HQnp9g": {
+      "type": "dynamic-logo-list",
+      "blocks": {
+        "logo_AgHT96": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Toro-logo_63582a4a-1514-40d2-b33a-76b810dfe640.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_AgHT96"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "t:sections.logo_list.presets.logo_list.name",
+      "settings": {
+        "title": ""
+      }
+    },
     "banner": {
       "type": "main-collection-banner",
+      "disabled": true,
+      "custom_css": [
+        ".collection-hero__title {display: none;}",
+        ".collection-hero__image-container {display: flex !important;}"
+      ],
       "settings": {
-        "show_collection_description": true,
+        "show_collection_description": false,
         "show_collection_image": true,
         "color_scheme": "scheme-1"
       }
@@ -320,6 +346,7 @@
     }
   },
   "order": [
+    "dynamic_logo_list_HQnp9g",
     "banner",
     "rich_text_TEHj4N",
     "dynamic_html_9WxfrB",
