@@ -1,22 +1,22 @@
 {% doc %}
-  Render a product or content image, either as a normal <img> tag or as background-image attributes.
+Render a product or content image, either as a normal <img> tag or as background-image attributes.
 
-  @param {image} img - The image to render.
-  @param {boolean} [lazy=false] - Enable native lazy loading for the image tag.
-  @param {boolean} [background=false] - Output attributes for a background image container.
-  @param {string} [size] - Image size in Shopify img_url format, for example 1350x1350.
-  @param {string} [crop] - Optional crop mode for img_url.
-  @param {string} [format] - Optional format for img_url.
-  @param {string} [alt] - Alt text for the image.
-  @param {string} [class] - CSS class names to apply.
-  @param {string} [style] - Inline styles to append.
-  @param {string} [attr] - Extra raw attributes to append.
-  @param {boolean} [canvas=false] - Output a canvas helper element.
-  @param {boolean} [disable_noscript=false] - Skip the noscript fallback for lazy images.
-  @param {string} [focal_point] - Background focal point, for example center center.
+@param {image} img - The image to render.
+@param {boolean} [lazy=false] - Enable native lazy loading for the image tag.
+@param {boolean} [background=false] - Output attributes for a background image container.
+@param {string} [size] - Image size in Shopify img_url format, for example 1350x1350.
+@param {string} [crop] - Optional crop mode for img_url.
+@param {string} [format] - Optional format for img_url.
+@param {string} [alt] - Alt text for the image.
+@param {string} [class] - CSS class names to apply.
+@param {string} [style] - Inline styles to append.
+@param {string} [attr] - Extra raw attributes to append.
+@param {boolean} [canvas=false] - Output a canvas helper element.
+@param {boolean} [disable_noscript=false] - Skip the noscript fallback for lazy images.
+@param {string} [focal_point] - Background focal point, for example center center.
 
-  @example
-  {% render 'rimg', img: block.settings.image, lazy: true, size: '1350x1350' %}
+@example
+{% render 'rimg', img: block.settings.image, lazy: true, size: '1350x1350' %}
 {% enddoc %}
 
 {% liquid
