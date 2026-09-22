@@ -640,7 +640,7 @@
   "customer_accounts": {
     "sign_in": {
       "step_one": {
-        "subheading": "Sign in or create an account.<br><a href=\"https://russopower.com/pages/register-business-account\"><b>Register for a Business Account</b></a>"
+        "subheading_with_sign_in_options": "Sign in or create an account.<br><a href=\"https://russopower.com/pages/register-business-account\"><b>Register for a Business Account</b></a>"
       }
     }
   }
