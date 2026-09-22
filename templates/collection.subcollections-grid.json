@@ -72,7 +72,7 @@
         "mobile_grid_gap": 12,
         "row_gap": 30,
         "label_color": "#d71920",
-        "label_size": 14,
+        "label_size": 16,
         "label_weight": "700",
         "label_alignment": "center",
         "label_spacing": 18,
