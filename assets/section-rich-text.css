@@ -84,3 +84,11 @@
 .rich-text__blocks.right .rich-text__buttons {
   justify-content: flex-end;
 }
+
+
+.rte h6{
+  font-size: 1.25rem;
+}
+.rte a{
+  text-decoration: none;
+}

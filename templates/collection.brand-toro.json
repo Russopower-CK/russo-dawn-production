@@ -57,8 +57,7 @@
       ],
       "custom_css": [
         ".rich-text--full-width {margin-top: 0;}",
-        ".rich-text--container {margin-top: 0; margin-bottom: 0;}",
-        ".rte h6 {}"
+        ".rich-text--container {margin-top: 0; margin-bottom: 0;}"
       ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
@@ -266,7 +265,7 @@
             "button_text": "",
             "button_style": "primary",
             "show_overlay": true,
-            "background": "#FFFFFF",
+            "background": "#ffffff",
             "opacity": 64
           }
         },
@@ -281,7 +280,7 @@
             "button_text": "",
             "button_style": "primary",
             "show_overlay": true,
-            "background": "#FFFFFF",
+            "background": "#ffffff",
             "opacity": 50
           }
         },
@@ -296,7 +295,7 @@
             "button_text": "",
             "button_style": "primary",
             "show_overlay": true,
-            "background": "#FFFFFF",
+            "background": "#ffffff",
             "opacity": 50
           }
         }

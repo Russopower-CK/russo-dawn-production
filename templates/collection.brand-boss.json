@@ -1,0 +1,527 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "dynamic_logo_list_HQnp9g": {
+      "type": "dynamic-logo-list",
+      "blocks": {
+        "logo_AgHT96": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/BOSS-Logo.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_AgHT96"
+      ],
+      "custom_css": [],
+      "name": "t:sections.logo_list.presets.logo_list.name",
+      "settings": {
+        "title": ""
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "custom_css": [
+        ".collection-hero__title {display: none;}",
+        ".collection-hero__image-container {display: flex !important;}"
+      ],
+      "settings": {
+        "show_collection_description": false,
+        "show_collection_image": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "rich_text_TEHj4N": {
+      "type": "rich-text",
+      "blocks": {
+        "text_TDdHqP": {
+          "type": "text",
+          "settings": {
+            "text": "<h6>Boss Equipment: <a href=\"https://russopower.com/collections/salt-spreaders?filter.p.vendor=Boss\" title=\"Boss Ice Control Spreaders\">Ice Control Spreaders</a>  |  <a href=\"https://russopower.com/collections/snow-tractors?filter.p.vendor=Boss\" title=\"Boss Sidewalk Vehicles\">Sidewalk Vehicles & Implements</a>  |  <a href=\"https://russopower.com/collections/snow-plows?filter.p.vendor=Boss\" title=\"Boss Snow Removal Plows\">Snow Removal Plows & Pushers</a></h6><h6>Boss Parts: <a href=\"/collections/boss-parts-supplies\" title=\"Boss Parts & Supplies\">All Boss Parts & Supplies</a>  |  <a href=\"https://russopower.com/collections/hydraulic-oil?filter.p.vendor=Boss\" title=\"Boss Hydraulic Fluid\">Hydraulic Fluid</a>  |  <a href=\"https://russopower.com/collections/snow-plow-parts?filter.p.vendor=Boss\" title=\"Boss Snow Plow Parts\">Snow Plow Parts</a></h6>"
+          }
+        }
+      },
+      "block_order": [
+        "text_TDdHqP"
+      ],
+      "custom_css": [
+        ".rich-text--full-width {margin-top: 0;}",
+        ".rich-text--container {margin-top: 0; margin-bottom: 0;}",
+        ".rte h6 {}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "dynamic_html_9WxfrB": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-bottom: 2em;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "disabled": true,
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "use_russo_pickup": true,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_shoppable_image_gUzJXk": {
+      "type": "dynamic-shoppable-image",
+      "blocks": {
+        "hotspot_WMdNLD": {
+          "type": "hotspot",
+          "settings": {
+            "product": "boss-snowrator-snr24001",
+            "x_axis": 20,
+            "y_axis": 50
+          }
+        },
+        "hotspot_6jH99a": {
+          "type": "hotspot",
+          "settings": {
+            "product": "boss-sr-mag",
+            "x_axis": 50,
+            "y_axis": 50
+          }
+        },
+        "hotspot_3tiH9N": {
+          "type": "hotspot",
+          "settings": {
+            "product": "boss-snowrator-snr24200-snow-equipment-snowrator-scout",
+            "x_axis": 90,
+            "y_axis": 50
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_WMdNLD",
+        "hotspot_6jH99a",
+        "hotspot_3tiH9N"
+      ],
+      "custom_css": [
+        ".shoppable-image__text-box-subheading h1 {color: #be1e2d; margin: 0;}",
+        ".shoppable-image__text-box-subheading h3 {margin-top: 0;}",
+        ".shoppable-image__text-box-wrapper {padding-top: 10px; padding-bottom: 30px;}",
+        ".shoppable-image__wrapper {padding-top: 20px;}",
+        ".shoppable-image__text-box-subheading h4 {color: #be1e2d; margin: 0; padding-top: 0; padding-bottom: 10px;}"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/Boss-Snowrator-and-SR-MAG-and-SR-Scout-web.jpg",
+        "image_width": "two-thirds",
+        "link_text": "View product",
+        "textbox_title": "SIDEWALK SOLUTIONS",
+        "textbox_subheading": "<p>Adding a Snowrator®, SR MAG, or SR Scout to your fleet will help streamline your business–getting sidewalk jobs done faster and more efficiently while reducing your reliance on labor. Grow your business and increase your bottom line with an industry leading sidewalk snow tractor.</p>",
+        "textbox_button_label": "VIEW SNOW TRACTORS",
+        "textbox_button_link": "https://russopower.com/collections/snow-tractors?filter.p.vendor=Boss",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "right"
+      }
+    },
+    "blocks_LHwYR7": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_6496285_twHwdM": {
+          "type": "ai_gen_block_6496285",
+          "settings": {
+            "desktop_width_percent": 100,
+            "columns_mobile": "2",
+            "gap": 30,
+            "padding": 20,
+            "background_color": "#f3f3f3",
+            "icon_size": 60,
+            "icon_spacing": 15,
+            "icon_color": "#000000",
+            "icon_hover_color": "#000000",
+            "image_filter": "none",
+            "image_hover_filter": "none",
+            "title_size": 16,
+            "title_spacing": 10,
+            "title_color": "#121212",
+            "title_hover_color": "#000000",
+            "text_size": 14,
+            "text_color": "#121212",
+            "text_hover_color": "#000000",
+            "icon_1_content": "<img src=\"//cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_SidewalkEquipment_icon-money-maker_50x50.png?v=1702412086\" alt=\"\" data-rimg=\"\" srcset=\"//cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_SidewalkEquipment_icon-money-maker_50x50.png?v=1702412086 1x\" class=\"highlights-banner__custom-icon\" style=\"\n        object-fit:cover;object-position:50.0% 50.0%;\n      \n\">",
+            "icon_1_title": "Money Maker",
+            "icon_1_text": "Confidently expand your sidewalk snow removal business",
+            "icon_1_link": "",
+            "icon_2_content": "<img src=\"//cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_SidewalkEquipment_icon-labor-saver_50x50.png?v=1702412086\" alt=\"\" data-rimg=\"\" srcset=\"//cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_SidewalkEquipment_icon-labor-saver_50x50.png?v=1702412086 1x\" class=\"highlights-banner__custom-icon\" style=\"\n        object-fit:cover;object-position:50.0% 50.0%;\n      \n\">",
+            "icon_2_title": "Labor Saver",
+            "icon_2_text": "Reduce the need for shovelers",
+            "icon_2_link": "",
+            "icon_3_content": "<img src=\"//cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_SidewalkEquipment_icon-time-saver_50x50.png?v=1702412086\" alt=\"\" data-rimg=\"\" srcset=\"//cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_SidewalkEquipment_icon-time-saver_50x50.png?v=1702412086 1x\" class=\"highlights-banner__custom-icon\" style=\"\n        object-fit:cover;object-position:50.0% 50.0%;\n      \n\">",
+            "icon_3_title": "Time Saver",
+            "icon_3_text": "Brine, spread and plow at the same time",
+            "icon_3_link": "",
+            "icon_4_content": "<img src=\"//cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_SidewalkEquipment_icon-taskmaster_50x50.png?v=1702412086\" alt=\"\" data-rimg=\"\" srcset=\"//cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_SidewalkEquipment_icon-taskmaster_50x50.png?v=1702412086 1x\" class=\"highlights-banner__custom-icon\" style=\"\n        object-fit:cover;object-position:50.0% 50.0%;\n      \n\">",
+            "icon_4_title": "Taskmaster",
+            "icon_4_text": "Switch from one attachment to another quickly on the SR MAG",
+            "icon_4_link": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_6496285_twHwdM"
+      ],
+      "custom_css": [
+        ".ai-icon-row-container-amw44mwltuhhnmm5iuaigenblock6496285twhwdm {margin-top: 0.5rem;}"
+      ],
+      "name": "Icon row",
+      "settings": {}
+    },
+    "dynamic_shoppable_image_h8M46V": {
+      "type": "dynamic-shoppable-image",
+      "custom_css": [
+        ".button {background-color: black;}",
+        ".shoppable-image__section-content {align-items: start;}",
+        ".shoppable-image__text-box {justify-content: center; display: flex;}"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/Boss-Snowrator-and-SR-MAG-2-web.jpg",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "SIDEWALK VEHICLE IMPLEMENTS",
+        "textbox_subheading": "<p>Boss has developed the perfect tools to attack snow and ice.</p><p><strong>SR Scout Attachment Options</strong>: <br/>• 4' Straight-Blade<br/>• Bucket Mount</p><p><strong>Snowrator Attachment Options</strong>: <br/>• 4' Straight-Blade<br/>• 20-Gallon Brine Kit<br/>• TGS 85 Broadcast Spreader<br/>• EXACT PATH® 1.5 Cubic Foot Drop Spreader<br/>• Bucket Mount</p><p><strong>SR MAG Attachment Options</strong>: <br/>• 4' 2\" XT Plow<br/>• 4' and 5' Straight-Blades<br/>• STX48 Snow Thrower<br/>• BRX48 Broom<br/>• 20 or 40 Gallon Brine Kit<br/>• TGS 85 Broadcast Spreader<br/>• EXACT PATH® 1.5 Cubic Foot Drop Spreader<br/>• Bucket Mount</p>",
+        "textbox_button_label": "SNOWRATOR FAMILY COMPARISON CHART",
+        "textbox_button_link": "https://cdn.shopify.com/s/files/1/0691/3340/2417/files/Boss_Snowrator_SR_Family_Sheet.pdf?v=1769530654",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "left"
+      }
+    },
+    "dynamic_promo_mosiac_4LHf6G": {
+      "type": "dynamic-promo-mosiac",
+      "blocks": {
+        "promotion_aq3qiE": {
+          "type": "promotion",
+          "settings": {
+            "image": "shopify://shop_images/2023Brochure_HeavyEquipment_SK-R-plow-web.jpg",
+            "title": "HEAVY EQUIPMENT BOX SNOW PLOWS",
+            "text": "BOSS plows are designed to maximize efficiency with your Heavy Equipment. Easily maneuver the SK Box Plow with a skid steer, quickly attach the BH Box Plows to backhoes and wheel loaders, or simply attach the LDR Box Plows to a loader and efficiently clear snow away from pavement.",
+            "color": "#ffffff",
+            "block_link": "https://russopower.com/collections/snow-plows?filter.p.product_type=Skid+Steer+Snow+Plow&filter.p.product_type=Loader+Snow+Plow&filter.p.vendor=Boss",
+            "button_text": "SHOP BOX SNOW PLOWS",
+            "button_style": "primary",
+            "show_overlay": true,
+            "background": "#000000",
+            "opacity": 50
+          }
+        },
+        "promotion_ajqbwt": {
+          "type": "promotion",
+          "settings": {
+            "image": "shopify://shop_images/BOSS_2023Brochure_CompactEquipment_v-plow-web.jpg",
+            "title": "COMPACT VEHICLE SNOW PLOWS",
+            "text": "Designed specifically for compact vehicle applications, BOSS straight-blade and V-plow products are fully hydraulic to deliver maximum efficiency with no winches, cables or pulleys. See if your Full- or Mid-Size UTV, or ATV is recommended to carry a BOSS Snowplow.",
+            "color": "#ffffff",
+            "block_link": "https://info.bossplow.com/hubfs/Compact-Vehicle-Equipment-Chart_11-28-23.pdf",
+            "button_text": "COMPARE VEHICLE EQUIPMENT GUID",
+            "button_style": "primary",
+            "show_overlay": true,
+            "background": "#000000",
+            "opacity": 50
+          }
+        },
+        "promotion_xzTGhk": {
+          "type": "promotion",
+          "settings": {
+            "image": "shopify://shop_images/BOSS_2023Brochure_IceControlEquipment_QuickCube-web.jpg",
+            "title": "QUICKCUBE SALT SPREADER",
+            "text": "The BOSS QuickCube® holds up to 1,000 lbs of deicing material for storage and spreading! Save time, increase profit, and decrease operational costs.",
+            "color": "#ffffff",
+            "block_link": "shopify://products/boss-sks21190-quickcube",
+            "button_text": "boss quickcube",
+            "button_style": "primary",
+            "show_overlay": true,
+            "background": "#000000",
+            "opacity": 50
+          }
+        }
+      },
+      "block_order": [
+        "promotion_aq3qiE",
+        "promotion_ajqbwt",
+        "promotion_xzTGhk"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".promo-block--button {background-color: var(--russo-red-dark); border: none;}",
+        ".promo-block--header {color: white; font-size: 2.5rem;}"
+      ],
+      "name": "t:sections.mosaic.presets.mosaic.name",
+      "settings": {
+        "title": "",
+        "section_height": "small",
+        "text_alignment": "top-left",
+        "maintain_aspect_ratio": true,
+        "compress_blocks": true
+      }
+    },
+    "mosaic_grid_xwz8VQ": {
+      "type": "mosaic-grid",
+      "blocks": {
+        "tile_EB69ya": {
+          "type": "tile",
+          "settings": {
+            "size": "large",
+            "image": "shopify://shop_images/2023Brochure_HeavyEquipment_SK-R-plow-web.jpg",
+            "heading": "HEAVY EQUIPMENT BOX SNOW PLOWS",
+            "text": "<p>BOSS plows are designed to maximize efficiency with your Heavy Equipment. Easily maneuver the SK Box Plow with a skid steer, quickly attach the BH Box Plows to backhoes and wheel loaders, or simply attach the LDR Box Plows to a loader and efficiently clear snow away from pavement.</p>",
+            "button_label": "SHOP BOX SNOW PLOWS",
+            "button_link": "https://russopower.com/collections/snow-plows?filter.p.product_type=Skid+Steer+Snow+Plow&filter.p.product_type=Loader+Snow+Plow&filter.p.vendor=Boss",
+            "overlay_style": "solid",
+            "overlay_color": "#000000",
+            "overlay_opacity": 60,
+            "text_shadow": true,
+            "text_color": "",
+            "button_background": "",
+            "button_text_color": "",
+            "open_by_default": false
+          }
+        },
+        "tile_HTrh6B": {
+          "type": "tile",
+          "settings": {
+            "size": "small",
+            "image": "shopify://shop_images/BOSS_2023Brochure_CompactEquipment_v-plow-web.jpg",
+            "heading": "COMPACT VEHICLE SNOW PLOWS",
+            "text": "<p>Designed specifically for compact vehicle applications, BOSS straight-blade and V-plow products are fully hydraulic to deliver maximum efficiency with no winches, cables or pulleys. See if your Full- or Mid-Size UTV, or ATV is recommended to carry a BOSS Snowplow.</p>",
+            "button_label": "COMPACT VEHICLE EQUIPMENT GUIDE",
+            "button_link": "https://info.bossplow.com/hubfs/Compact-Vehicle-Equipment-Chart_11-28-23.pdf",
+            "overlay_style": "solid",
+            "overlay_color": "#000000",
+            "overlay_opacity": 45,
+            "text_shadow": true,
+            "text_color": "",
+            "button_background": "#000000",
+            "button_text_color": "",
+            "open_by_default": false
+          }
+        },
+        "tile_cnbDV9": {
+          "type": "tile",
+          "settings": {
+            "size": "small",
+            "image": "shopify://shop_images/BOSS_2023Brochure_IceControlEquipment_QuickCube-web.jpg",
+            "heading": "QUICKCUBE SALT SPREADER",
+            "text": "<p>The BOSS QuickCube® holds up to 1,000 lbs of deicing material for storage and spreading! Save time, increase profit, and decrease operational costs.</p>",
+            "button_label": "BOSS QUICKCUBE",
+            "button_link": "shopify://products/boss-sks21190-quickcube",
+            "overlay_style": "gradient_top",
+            "overlay_color": "#000000",
+            "overlay_opacity": 70,
+            "text_shadow": true,
+            "text_color": "",
+            "button_background": "",
+            "button_text_color": "",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "tile_EB69ya",
+        "tile_HTrh6B",
+        "tile_cnbDV9"
+      ],
+      "custom_css": [
+        ".mosaic{margin-top: 1.75rem;}"
+      ],
+      "name": "Russo Mosaic grid",
+      "settings": {
+        "title": "",
+        "columns": 3,
+        "row_height": 280,
+        "gap": 8,
+        "corner_radius": 0,
+        "content_position": "flex-start",
+        "content_padding": 28,
+        "heading_size": 39,
+        "body_size": 19,
+        "body_weight": "500",
+        "text_max_width": 46,
+        "text_color": "#ffffff",
+        "button_background": "#c8102e",
+        "button_text_color": "#ffffff",
+        "button_radius": 4,
+        "collapse_on_mobile": true,
+        "mobile_panel_color": "#1a1a1a",
+        "mobile_min_height": 240
+      }
+    },
+    "dynamic_promo_mosiac_V66wwB": {
+      "type": "dynamic-promo-mosiac",
+      "blocks": {
+        "promotion_LLDjzf": {
+          "type": "promotion",
+          "settings": {
+            "image": "shopify://shop_images/BOSS_2023Brochure_IceControlEquipment_VSI-Legacy-Sprayer-edit-web.jpg",
+            "title": "TAKE THE LEAD WITH LIQUIDS",
+            "text": "When using liquids there’s no need to wait for the endothermic reaction that occurs when using rock salt, as the liquid begins melting ice on contact. \n\nLooking for liquid solutions from BOSS’s recently acquired brand VSI?",
+            "color": "#ffffff",
+            "block_link": "shopify://collections/vsi-by-boss-snowplow",
+            "button_text": "LEARN MORE HERE",
+            "button_style": "primary",
+            "show_overlay": true,
+            "background": "#000000",
+            "opacity": 50
+          }
+        }
+      },
+      "block_order": [
+        "promotion_LLDjzf"
+      ],
+      "custom_css": [
+        ".promo-block--button {background-color: var(--russo-red-dark);}",
+        ".promo-block--header {color: white; font-size: large;}"
+      ],
+      "name": "t:sections.mosaic.presets.mosaic.name",
+      "settings": {
+        "title": "",
+        "section_height": "small",
+        "text_alignment": "top-left",
+        "maintain_aspect_ratio": false,
+        "compress_blocks": false
+      }
+    },
+    "featured_collection_meyhRe": {
+      "type": "featured-collection",
+      "custom_css": [
+        ".collection__title {text-align: center;}",
+        ".collection__view-all {padding-top: 0;}"
+      ],
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "boss-parts-supplies",
+        "products_to_show": 5,
+        "title": "Boss Parts & Supplies",
+        "heading_size": "h2",
+        "description": "",
+        "hide_no_products": false,
+        "use_russo_pickup": true,
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": true,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_sku": true,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 8
+      }
+    },
+    "dynamic_html_K34yaL": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-bottom: 2em;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+      }
+    },
+    "rich_text_JKT9ay": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_K74jUP": {
+          "type": "heading",
+          "settings": {
+            "heading": "About BOSS Snowplow",
+            "heading_size": "h1"
+          }
+        },
+        "text_rG4FWk": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Everything done at BOSS comes back to one goal: giving snow and ice removal professionals everything they need to restore order when winter weather brings chaos. That’s why they never stop pushing designs, engineering and innovations to help make your job easier and more productive. Because at BOSS, their promise is that they will always be there to back you up.</p><p>BOSS began manufacturing snow plows in Iron Mountain, MI in 1985. In the early years, the company was focused on taking a revolutionary and untested product design and improving it to meet the quality and durability expectations of the commercial snow removal professional.</p><p>Today, BOSS is a leader in the snow and ice management business with a growing line up of plows for trucks, UTVs, and ATVs, salt and sand spreaders and box plows built for the snow and ice management professional, as well as the homeowner. All products are designed for ease of use, quality and durability.  With a market competitive warranty, uncompromising quality and high level of craftsmanship, BOSS has grown to be a leader in the sale of truck plows.</p><p>BOSS products are designed and manufactured in Michigan's Upper Peninsula where winter and deep snow are a way of life. The products are designed, manufactured and put to the ultimate test at the company's facility.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_K74jUP",
+        "text_rG4FWk"
+      ],
+      "custom_css": [],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "left",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "dynamic_logo_list_HQnp9g",
+    "banner",
+    "rich_text_TEHj4N",
+    "dynamic_html_9WxfrB",
+    "product-grid",
+    "dynamic_shoppable_image_gUzJXk",
+    "blocks_LHwYR7",
+    "dynamic_shoppable_image_h8M46V",
+    "dynamic_promo_mosiac_4LHf6G",
+    "mosaic_grid_xwz8VQ",
+    "dynamic_promo_mosiac_V66wwB",
+    "featured_collection_meyhRe",
+    "dynamic_html_K34yaL",
+    "rich_text_JKT9ay"
+  ]
+}
