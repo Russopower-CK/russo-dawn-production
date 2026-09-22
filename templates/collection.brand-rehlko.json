@@ -1,0 +1,302 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "disabled": true,
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "use_russo_pickup": true,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "recently_viewed_dRWrXf": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "name": "Russo Recently Viewed",
+      "settings": {
+        "heading": "Recently viewed",
+        "heading_size": "h1",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_logo_list_Nyi84x": {
+      "type": "dynamic-logo-list",
+      "blocks": {
+        "logo_fPdYYN": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/rehlko_banner_square-web.png",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_fPdYYN"
+      ],
+      "name": "t:sections.logo_list.presets.logo_list.name",
+      "settings": {
+        "title": ""
+      }
+    },
+    "rich_text_8rUqgM": {
+      "type": "rich-text",
+      "blocks": {
+        "text_DNaW7j": {
+          "type": "text",
+          "settings": {
+            "text": "<h6>While the rebrand transition occurs please shop Rehlko products under the former brand name Kohler.</h6><h6>Engines, Parts & Supplies: <a href=\"https://russopower.com/collections/kohler?filter.p.product_type=Engine\" title=\"https://russopower.com/collections/kohler?filter.p.product_type=Engine\">Engines</a>  |  <a href=\"https://russopower.com/collections/kohler?filter.p.product_type=Tune+Up+Kit\" title=\"https://russopower.com/collections/kohler?filter.p.product_type=Tune+Up+Kit\">Tune Up Kits</a>  |  <a href=\"https://russopower.com/collections/kohler?filter.p.product_type=Oils&filter.p.product_type=4+Cycle+Oil&filter.p.product_type=Oil\" title=\"https://russopower.com/collections/kohler?filter.p.product_type=Oils&filter.p.product_type=4+Cycle+Oil&filter.p.product_type=Oil\">Oil</a>  |  <a href=\"/collections/kohler\" title=\"Kohler\">All Kohler Products</a></h6>"
+          }
+        }
+      },
+      "block_order": [
+        "text_DNaW7j"
+      ],
+      "custom_css": [
+        ".rich-text--full-width {margin-top: 0;}",
+        ".rich-text--container {margin-top: 0; margin-bottom: 0;}",
+        ".rte h6 {}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "full_width": true,
+        "padding_top": 8,
+        "padding_bottom": 0
+      }
+    },
+    "dynamic_html_wtb8Mm": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-bottom: 1.75rem;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+      }
+    },
+    "image_banner_Tmagwq": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_a4DC9K": {
+          "type": "heading",
+          "settings": {
+            "heading": "Tackle any job with powertrain technology",
+            "heading_size": "h1"
+          }
+        },
+        "text_YP8f8L": {
+          "type": "text",
+          "settings": {
+            "text": "Rehlko, formerly Kohler, keeps the world moving with best-in-class engine technology while lowering their impact on the planet by offering cleaner energy solutions through hybridization, electrification, and generators that can run on hydrotreated vegetable oil (HVO).",
+            "text_style": "body"
+          }
+        },
+        "buttons_khJWTV": {
+          "type": "buttons",
+          "disabled": true,
+          "settings": {
+            "button_label_1": "Button label",
+            "button_link_1": "",
+            "button_style_secondary_1": false,
+            "button_label_2": "Button label",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_a4DC9K",
+        "text_YP8f8L",
+        "buttons_khJWTV"
+      ],
+      "custom_css": [],
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Rehlko_launch_lighthouse.jpg",
+        "image_overlay_opacity": 20,
+        "image_height": "medium",
+        "image_behavior": "none",
+        "desktop_content_position": "top-right",
+        "desktop_content_alignment": "right",
+        "show_text_box": true,
+        "color_scheme": "scheme-3",
+        "stack_images_on_mobile": false,
+        "mobile_content_alignment": "center",
+        "show_text_below": false
+      }
+    },
+    "image_with_text_zjVYX3": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_cAJjx8": {
+          "type": "heading",
+          "settings": {
+            "heading": "ENGINES",
+            "heading_size": "h1"
+          }
+        },
+        "text_kgeVBL": {
+          "type": "text",
+          "settings": {
+            "text": "<p>REHLKO, formerly KOHLER, engines have been battle-tested at the South Pole, at Hoover Dam, during WWII, and at victory lane. And today, they power the toughest equipment on the planet.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_egb6KE": {
+          "type": "button",
+          "settings": {
+            "button_label": "EXPLORE ENGINES",
+            "button_link": "https://russopower.com/collections/kohler?filter.p.product_type=Engine",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_cAJjx8",
+        "text_kgeVBL",
+        "button_egb6KE"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/kohler-engine-with-technician.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_XtTcEG": {
+      "type": "featured-collection",
+      "custom_css": [],
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "kohler",
+        "products_to_show": 5,
+        "title": "Parts & Supplies",
+        "heading_size": "h1",
+        "description": "",
+        "hide_no_products": true,
+        "use_russo_pickup": true,
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": true,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_html_heUBMa": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-bottom: 1.75rem;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+      }
+    },
+    "rich_text_x74pPt": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_fxTkGQ": {
+          "type": "heading",
+          "settings": {
+            "heading": "About Rehlko",
+            "heading_size": "h1"
+          }
+        },
+        "text_nPzqyM": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Kohler Energy Rebrands as Rehlko</strong></p><p>— Ushering in a New Era of Sustainable Energy Innovation —</p><p>— Rehlko builds on a 100-plus-year legacy of powering an energy resilient world for a better future —</p><p></p><p>On September 17th, 2024,  Kohler Energy officially rebranded under its new corporate name Rehlko (pronounced REL-co), marking a major milestone in the company’s 100+ year history delivering innovative, resilient energy solutions that provide independence, agility, and security to mission-critical infrastructure, facilities and residences.</p><p>A global leader in energy resilience, Rehlko delivers innovative energy solutions critical to sustain and improve life across home energy, industrial energy systems, and powertrain technologies, by delivering control, resilience and innovation. Leveraging the strength of its portfolio of businesses – Power Systems, Home Energy, Kohler Uninterruptible Power, Clarke Energy, Heila Technologies, Curtis Instruments, and Engines, and more than a century of industry leadership, Rehlko builds resilience where and when the grid cannot, and goes beyond functional, individual recovery to create better lives and communities, and a more durable and reliable energy future. For more details, learn more at <a href=\"https://www.kohlerenergy.com/rehlko\" target=\"_blank\" title=\"https://www.kohlerenergy.com/rehlko\">Rehlko.com</a>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_fxTkGQ",
+        "text_nPzqyM"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid",
+    "recently_viewed_dRWrXf",
+    "dynamic_logo_list_Nyi84x",
+    "rich_text_8rUqgM",
+    "dynamic_html_wtb8Mm",
+    "image_banner_Tmagwq",
+    "image_with_text_zjVYX3",
+    "featured_collection_XtTcEG",
+    "dynamic_html_heUBMa",
+    "rich_text_x74pPt"
+  ]
+}

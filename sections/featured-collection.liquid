@@ -240,7 +240,7 @@
               </li>
             {%- endfor -%}
           {%- endif -%}
-          {% if section.settings.collection.image != blank %}
+          {% if section.settings.collection.image != blank and section.settings.view_all_style == 'russo_end' %}
             <li class="grid__item{% if show_mobile_slider or show_desktop_slider %} slider__slide{% endif %}">
               {%- assign featured_collection = section.settings.collection -%}
               <a
@@ -345,7 +345,10 @@
         {%- endif -%}
       </slider-component>
 
-      {%- if section.settings.show_view_all and more_in_collection -%}
+      {%- if section.settings.show_view_all
+        and more_in_collection
+        and section.settings.view_all_style != 'russo_end'
+      -%}
         <div class="center collection__view-all{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
           <a
             href="{{ section.settings.collection.url }}"
@@ -514,6 +517,10 @@
         {
           "value": "solid",
           "label": "t:sections.featured-collection.settings.view_all_style.options__3.label"
+        },
+        {
+          "value": "russo_end",
+          "label": "Russo End"
         }
       ],
       "default": "solid"
