@@ -25,8 +25,18 @@
   "
 >
   <div class="subcollections-grid__container page-width">
-    {% if section.settings.heading != blank or section.settings.text != blank %}
+    {% if section.settings.heading != blank or section.settings.text != blank or section.settings.show_breadcrumbs or section.settings.show_collection_description or section.settings.show_collection_image %}
       <div class="subcollections-grid__header">
+        {% if section.settings.show_breadcrumbs and collection %}
+          <nav class="subcollections-grid__breadcrumbs" aria-label="Breadcrumb">
+            <a href="{{ routes.root_url }}" class="subcollections-grid__breadcrumb-link">{{ 'general.breadcrumb.home' | t }}</a>
+            {% if collection.url != blank %}
+              <span class="subcollections-grid__breadcrumb-separator">/</span>
+              <span class="subcollections-grid__breadcrumb-current">{{ collection.title | escape }}</span>
+            {% endif %}
+          </nav>
+        {% endif %}
+
         {% if section.settings.heading != blank %}
           <h2 class="subcollections-grid__heading">
             {{ section.settings.heading | escape }}
@@ -37,6 +47,32 @@
           <div class="subcollections-grid__text rte">
             {{ section.settings.text }}
           </div>
+        {% endif %}
+
+        {% if collection != blank %}
+          {% if section.settings.show_collection_image and collection.image %}
+            <div class="subcollections-grid__collection-image">
+              <img
+                src="{{ collection.image | image_url: width: 1440 }}"
+                srcset="
+                  {{ collection.image | image_url: width: 720 }} 720w,
+                  {{ collection.image | image_url: width: 1080 }} 1080w,
+                  {{ collection.image | image_url: width: 1440 }} 1440w
+                "
+                sizes="(max-width: 749px) 100vw, 1440px"
+                width="{{ collection.image.width }}"
+                height="{{ collection.image.height }}"
+                alt="{{ collection.image.alt | default: collection.title | escape }}"
+                loading="lazy"
+              >
+            </div>
+          {% endif %}
+
+          {% if section.settings.show_collection_description and collection.description != blank %}
+            <div class="subcollections-grid__collection-description rte">
+              {{ collection.description }}
+            </div>
+          {% endif %}
         {% endif %}
       </div>
     {% endif %}
@@ -134,6 +170,50 @@
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__text {
     margin: 0;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__collection-image {
+    margin-top: 1.5rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__collection-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__collection-description {
+    margin-top: 1.5rem;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__breadcrumb-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__breadcrumb-separator {
+    opacity: 0.7;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__breadcrumb-current {
+    font-weight: 500;
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__items {
@@ -250,6 +330,24 @@
       "id": "heading",
       "label": "Heading",
       "default": "Shop by category"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
     },
     {
       "type": "richtext",
