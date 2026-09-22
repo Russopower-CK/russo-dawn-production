@@ -1,6 +1,206 @@
+{% doc %}
+  @prompt
+    Create a subcollection grid block that displays child collections in a row of evenly sized cards. Each card shows a square collection image with the collection title centered directly beneath it in small, bold, accent-colored uppercase-optional text. No divider line or border under the title, no border or background around the card, and no arrow or chevron icon next to the title. The whole card links to the collection. Include settings for the number of columns, image aspect ratio, title color, and title size, and make it responsive so cards stack nicely on mobile.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-subcollection-grid-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+  }
+
+  .ai-subcollection-grid__items-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns }}, minmax(0, 1fr));
+    gap: {{ block.settings.gap }}px;
+    width: 100%;
+  }
+
+  .ai-subcollection-grid__card-{{ ai_gen_id }} {
+    display: block;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ai-subcollection-grid__media-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: {{ block.settings.image_ratio }};
+    background: #f3f3f3;
+  }
+
+  .ai-subcollection-grid__media-{{ ai_gen_id }} img,
+  .ai-subcollection-grid__media-{{ ai_gen_id }} svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-subcollection-grid__title-{{ ai_gen_id }} {
+    margin: 10px 0 0;
+    color: {{ block.settings.title_color }};
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    text-transform: {% if block.settings.uppercase_titles %}uppercase{% else %}none{% endif %};
+  }
+
+  .ai-subcollection-grid__card-{{ ai_gen_id }}:focus-visible {
+    outline: 2px solid {{ block.settings.title_color }};
+    outline-offset: 4px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-subcollection-grid__items-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.mobile_columns }}, minmax(0, 1fr));
+      gap: {{ block.settings.mobile_gap }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-subcollection-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.collections != blank %}
+    <div class="ai-subcollection-grid__items-{{ ai_gen_id }}">
+      {% for collection in block.settings.collections %}
+        <a class="ai-subcollection-grid__card-{{ ai_gen_id }}" href="{{ collection.url }}" aria-label="View {{ collection.title | escape }} collection">
+          <div class="ai-subcollection-grid__media-{{ ai_gen_id }}">
+            {% if collection.featured_image %}
+              <img src="{{ collection.featured_image | image_url: width: 900 }}" alt="{{ collection.featured_image.alt | default: collection.title | escape }}" loading="lazy" width="{{ collection.featured_image.width }}" height="{{ collection.featured_image.height }}">
+            {% else %}
+              {{ 'collection-apparel-1' | placeholder_svg_tag }}
+            {% endif %}
+          </div>
+          <p class="ai-subcollection-grid__title-{{ ai_gen_id }}">{{ collection.title }}</p>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="ai-subcollection-grid__items-{{ ai_gen_id }}">
+      <div class="ai-subcollection-grid__media-{{ ai_gen_id }}">{{ 'collection-apparel-1' | placeholder_svg_tag }}</div>
+    </div>
+  {% endif %}
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Subcollection grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collections"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections",
+      "limit": 12
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Columns on mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        { "value": "1 / 1", "label": "Square" },
+        { "value": "4 / 5", "label": "Portrait" },
+        { "value": "4 / 3", "label": "Landscape" }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#BE1E2D"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_titles",
+      "label": "Use uppercase",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Desktop gap",
+      "min": 4,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "label": "Mobile gap",
+      "min": 4,
+      "max": 32,
+      "step": 4,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Subcollection grid"
+    }
+  ],
+  "tag": null,
+  "class": "subcollection-grid-block"
+}
 {% endschema %}
