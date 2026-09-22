@@ -303,6 +303,9 @@
         "collection_hmmeqE",
         "collection_hNt7HN"
       ],
+      "custom_css": [
+        ".logo-wrapper {margin-bottom: 1.25rem;}"
+      ],
       "name": "Russo Collection Img Grid",
       "settings": {
         "logo_height": 90,
@@ -432,7 +435,8 @@
     "featured_collection": {
       "type": "featured-collection",
       "custom_css": [
-        ".collection__title {text-align: center;}"
+        ".collection__title {text-align: center; margin-top: 1.75rem; margin-bottom: 0rem; padding-bottom: 0;}",
+        ".collection__title h2 {margin-bottom: 0; padding-bottom: 0;}"
       ],
       "settings": {
         "collection": "featured-products",
