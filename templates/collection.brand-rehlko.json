@@ -212,7 +212,9 @@
     },
     "featured_collection_XtTcEG": {
       "type": "featured-collection",
-      "custom_css": [],
+      "custom_css": [
+        ".collection__title{text-align: center;}"
+      ],
       "name": "t:sections.featured-collection.presets.name",
       "settings": {
         "collection": "kohler",

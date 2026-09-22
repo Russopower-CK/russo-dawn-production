@@ -1,0 +1,550 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "disabled": true,
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "use_russo_pickup": true,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "recently_viewed_dRWrXf": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "name": "Russo Recently Viewed",
+      "settings": {
+        "heading": "Recently viewed",
+        "heading_size": "h1",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_logo_list_FDkK6N": {
+      "type": "dynamic-logo-list",
+      "blocks": {
+        "logo_FCpW4d": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/IQ-Power-Tools-logo.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_FCpW4d"
+      ],
+      "name": "t:sections.logo_list.presets.logo_list.name",
+      "settings": {
+        "title": ""
+      }
+    },
+    "rich_text_DihV8B": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_ykN8qL": {
+          "type": "heading",
+          "disabled": true,
+          "settings": {
+            "heading": "Talk about your brand",
+            "heading_size": "h1"
+          }
+        },
+        "text_K3n7ey": {
+          "type": "text",
+          "settings": {
+            "text": "<h6>iQ Power Tools Equipment: <a href=\"/collections/concrete-saws?filter.p.vendor=IQ+Power+Tools\" title=\"/collections/concrete-saws?filter.p.vendor=IQ+Power+Tools\">Dry Cut Saws</a>  |  <a href=\"/products/iq426hepa-cyclonic-dust-extractor-with-hepa-filtration\" title=\"iQ426HEPA CYCLONIC DUST EXTRACTOR WITH HEPA FILTRATION\">Dust Extraction</a></h6><h6>iQ Power Tools Parts: <a href=\"/collections/iq-power-tools-parts-supplies\" title=\"iQ Power Tools Parts & Supplies\">All iQ Parts & Supplies</a>  |  <a href=\"/collections/construction-hardscape-tools?filter.p.vendor=IQ+Power+Tools\" title=\"/collections/construction-hardscape-tools?filter.p.vendor=IQ+Power+Tools\">Saw Blades</a></h6>"
+          }
+        },
+        "button_trMk8R": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_ykN8qL",
+        "text_K3n7ey",
+        "button_trMk8R"
+      ],
+      "custom_css": [],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "dynamic_html_digjr7": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-top: 2em; margin-bottom: 2em;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"page-width solid\">"
+      }
+    },
+    "image_with_text_7k993D": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_VwMbJA": {
+          "type": "heading",
+          "settings": {
+            "heading": "Integrated Dust Collection",
+            "heading_size": "h1"
+          }
+        },
+        "text_jyQyN6": {
+          "type": "text",
+          "settings": {
+            "text": "<p>For over 100+ Years Construction Crews have been cutting wet which creates a huge mess of toxic slurry and waste. iQ Power allows you to ditch the water and messy clean ups!</p><p>Every iQ Power Tools product features an integrated dust control system with a high powered vacuum and HEPA H-14 rated combination to keep exposure to dust at a minimum without the use of water.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_VwMbJA",
+        "text_jyQyN6"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/iQ-saw-in-action-2016.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_shoppable_image_DCkqjk": {
+      "type": "dynamic-shoppable-image",
+      "blocks": {
+        "hotspot_enqwEc": {
+          "type": "hotspot",
+          "settings": {
+            "product": "iq228cyclone-7-in-dry-cut-tile-saw",
+            "x_axis": 37,
+            "y_axis": 65
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_enqwEc"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/iq228cyclone_2.jpg",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "DRY CUT SAWS",
+        "textbox_subheading": "<p>Save time, money and water by choosing a dry saw over a wet saw. With integrated dust collecting systems, our saws remove dust and particles from your work environment, lowering your exposure to silica and helping to keep your lungs healthy on the job. All of our saws are dry saws that provide fast, precise cutting while requiring no water prep, saving you an average of 1-2 hours per workday.</p>",
+        "textbox_button_label": "SHOP SAWS",
+        "textbox_button_link": "shopify://collections/iq-power-tools",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "right"
+      }
+    },
+    "featured_product_qerMJQ": {
+      "type": "featured-product",
+      "blocks": {
+        "text_axpdXf": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_XkWbe4": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "rating_Law4yU": {
+          "type": "rating",
+          "settings": {}
+        },
+        "sku_88P6zL": {
+          "type": "sku",
+          "settings": {
+            "text_style": "body"
+          }
+        },
+        "price_KGQUer": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker_wVwN4Q": {
+          "type": "variant_picker",
+          "disabled": true,
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "text_MnBqEK": {
+          "type": "text",
+          "settings": {
+            "text": "The world's first 16.5\" masonry saw with integrated dust collection. Revolutionize the way you cut masonry materials with this innovative saw, designed to deliver unparalleled speed and precision in dry cutting.",
+            "text_style": "body"
+          }
+        },
+        "quantity_selector_MaWzxj": {
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {}
+        },
+        "buy_buttons_N9MX3m": {
+          "type": "buy_buttons",
+          "disabled": true,
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_BHNBYz": {
+          "type": "share",
+          "disabled": true,
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_axpdXf",
+        "title_XkWbe4",
+        "rating_Law4yU",
+        "sku_88P6zL",
+        "price_KGQUer",
+        "variant_picker_wVwN4Q",
+        "text_MnBqEK",
+        "quantity_selector_MaWzxj",
+        "buy_buttons_N9MX3m",
+        "share_BHNBYz"
+      ],
+      "custom_css": [
+        ".featured-product {border: solid 1px; border-color: rgba(128, 128, 128, 0.16); padding: 5px;}",
+        ".grid__item {align-content: center; text-align: center;}"
+      ],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "iqms362-dry-cut-dust-control-masonry-saw",
+        "color_scheme": "",
+        "secondary_background": false,
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "russo_highlights_banner_cqQJVU": {
+      "type": "russo-highlights-banner",
+      "blocks": {
+        "highlight_ULWd4U": {
+          "type": "highlight",
+          "settings": {
+            "icon": "none",
+            "title": "WATERLESS CUTTING",
+            "text": "",
+            "link": ""
+          }
+        },
+        "highlight_9Krqmb": {
+          "type": "highlight",
+          "settings": {
+            "icon": "none",
+            "title": "PRECISION",
+            "text": "",
+            "link": ""
+          }
+        },
+        "highlight_dXJdgc": {
+          "type": "highlight",
+          "settings": {
+            "icon": "none",
+            "title": "OSHA COMPLIANT",
+            "text": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "highlight_ULWd4U",
+        "highlight_9Krqmb",
+        "highlight_dXJdgc"
+      ],
+      "custom_css": [
+        ".highlights-banner__heading {font-weight: 600;}",
+        ".highlights-banner__text {font-weight: 600;}"
+      ],
+      "name": "t:sections.highlights_banner.presets.highlights_banner.name",
+      "settings": {
+        "section_spacing": true,
+        "section_width": "content-width",
+        "icon_layout": "center",
+        "color": "#4d4d4d",
+        "icon_color": "#4d4d4d",
+        "background_color": "#eaeaea",
+        "mobile_layout": "grid"
+      }
+    },
+    "featured_product_M8bFYT": {
+      "type": "featured-product",
+      "blocks": {
+        "text_MtWBxA": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_6ppPHb": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "rating_qJV6zp": {
+          "type": "rating",
+          "settings": {}
+        },
+        "sku_XbcXqP": {
+          "type": "sku",
+          "settings": {
+            "text_style": "body"
+          }
+        },
+        "price_QL84A4": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker_a8EGWX": {
+          "type": "variant_picker",
+          "disabled": true,
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "text_y6JnB6": {
+          "type": "text",
+          "settings": {
+            "text": "The world's first 16.5\" masonry saw with integrated dust collection. Revolutionize the way you cut masonry materials with this innovative saw, designed to deliver unparalleled speed and precision in dry cutting.",
+            "text_style": "body"
+          }
+        },
+        "quantity_selector_VJxn9R": {
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {}
+        },
+        "buy_buttons_gwhyfX": {
+          "type": "buy_buttons",
+          "disabled": true,
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_hG9aME": {
+          "type": "share",
+          "disabled": true,
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_MtWBxA",
+        "title_6ppPHb",
+        "rating_qJV6zp",
+        "sku_XbcXqP",
+        "price_QL84A4",
+        "variant_picker_a8EGWX",
+        "text_y6JnB6",
+        "quantity_selector_VJxn9R",
+        "buy_buttons_gwhyfX",
+        "share_hG9aME"
+      ],
+      "custom_css": [
+        ".featured-product {border: solid 1px; border-color: rgba(128, 128, 128, 0.16); padding: 5px;}",
+        ".grid__item {align-content: center; text-align: CENTER;}"
+      ],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "iq426hepa-cyclonic-dust-extractor-with-hepa-filtration",
+        "color_scheme": "",
+        "secondary_background": false,
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_html_WdFjp9": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-top: 2em; margin-bottom: 2em;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"page-width solid\">"
+      }
+    },
+    "rich_text_6RAt9p": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_VhxjbU": {
+          "type": "heading",
+          "settings": {
+            "heading": "About iQ Power Tools",
+            "heading_size": "h1"
+          }
+        },
+        "text_dpBwQi": {
+          "type": "text",
+          "settings": {
+            "text": "<p>At iQ Power Tools, we're not just about tools; we're about revolutionizing your workspace with unparalleled precision and efficiency. We design our iQ Tools with the professional in mind and blend cutting-edge technology with robust performance so that you can tackle any job with confidence. Every component, including our essential iQ Power Tool parts, features trusted durability and reliability to guarantee you have the power to perform at your best. Experience innovation that speaks volumes in the quality of work it enables. Choose iQ Power Tools, where excellence is our standard, and empower yourself to achieve more with tools that are as ambitious as you are.</p><p>-----</p><p>iQ Power Tools was founded by third-generation masons Joel and Paul Guth and decades of experience taught them about dust problems. It makes a huge mess, it costs a great deal of money, and it's a threat to the health and safety of our industry. They started building tools to solve their dust problems but soon realized these problems affected all contractors, so iQ Power Tools was established.</p><p>iQ was built upon the premise of developing solutions for problems affecting the masonry industry and, by extension, the construction industry as a whole.</p><p>Today, iQ Power Tools manufactures a full line of tools with integrated dust collection systems for masonry, hardscape, and tile. The innovation continues with a focus on the health and safety of construction workers in all trades. Educating the industry on the dangers of silica is an important part of iQ's focus. iQ Power Tools' mission is to build tools that save lives. With the new OSHA Silica Standard in effect, iQ is working harder than ever to educate and inform the construction industry and encourage everyone to take action.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_VhxjbU",
+        "text_dpBwQi"
+      ],
+      "custom_css": [],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "left",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 16
+      }
+    },
+    "video_DEYEKY": {
+      "type": "video",
+      "custom_css": [
+        ".video-section {max-width: 875px;}"
+      ],
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_video_looping": true,
+        "video_url": "https://www.youtube.com/watch?v=ngZd-VXbmAs",
+        "description": "",
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_ibxJkU": {
+      "type": "rich-text",
+      "blocks": {
+        "text_HBcFkc": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Masonry saws have had basically the same design for over 40 years until now. We experienced it first-hand and decided to make a change.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_HBcFkc"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "left",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid",
+    "recently_viewed_dRWrXf",
+    "dynamic_logo_list_FDkK6N",
+    "rich_text_DihV8B",
+    "dynamic_html_digjr7",
+    "image_with_text_7k993D",
+    "dynamic_shoppable_image_DCkqjk",
+    "featured_product_qerMJQ",
+    "russo_highlights_banner_cqQJVU",
+    "featured_product_M8bFYT",
+    "dynamic_html_WdFjp9",
+    "rich_text_6RAt9p",
+    "video_DEYEKY",
+    "rich_text_ibxJkU"
+  ]
+}

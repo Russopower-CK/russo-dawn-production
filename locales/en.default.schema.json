@@ -1047,6 +1047,99 @@
         }
       }
     },
+    "highlights_banner": {
+      "name": "Russo Highlights banner",
+      "section_spacing": {
+        "label": "Show section spacing"
+      },
+      "section_width": {
+        "label": "Section width",
+        "option_1": "Content width",
+        "option_2": "Full width"
+      },
+      "icon_layout": {
+        "label": "Icon layout",
+        "option_1": "Center",
+        "option_2": "Left"
+      },
+      "color": {
+        "label": "Text color"
+      },
+      "icon_color": {
+        "label": "Icon color"
+      },
+      "background_color": {
+        "label": "Background color"
+      },
+      "header_1": {
+        "content": "Mobile"
+      },
+      "mobile_layout": {
+        "label": "Layout",
+        "option_1": "Grid",
+        "option_2": "Slider"
+      },
+      "blocks": {
+        "highlight": {
+          "name": "Highlight",
+          "icon": {
+            "label": "Icon",
+            "option_1": "No icon",
+            "option_2": "Award trophy",
+            "option_3": "Car",
+            "option_4": "Cell phone",
+            "option_5": "Chat",
+            "option_6": "Chat alternate",
+            "option_7": "Credit card",
+            "option_8": "Delivery",
+            "option_9": "Delivery cart",
+            "option_10": "Delivery door",
+            "option_11": "Delivery hand off",
+            "option_12": "Delivery package",
+            "option_13": "Discount",
+            "option_14": "Email",
+            "option_15": "Envelope",
+            "option_16": "Gift card",
+            "option_17": "Heart",
+            "option_18": "Information",
+            "option_19": "Label tag",
+            "option_20": "Lock",
+            "option_21": "Number 14",
+            "option_22": "Number 24",
+            "option_23": "Number 30",
+            "option_24": "People",
+            "option_25": "Pin",
+            "option_26": "Question mark",
+            "option_27": "Rating 5 star",
+            "option_28": "Rating star",
+            "option_29": "Smile",
+            "option_30": "Store",
+            "option_31": "Tape measure",
+            "option_32": "Thumbs up",
+            "option_33": "Transfer"
+          },
+          "image": {
+            "label": "Image",
+            "info": "50 x 50px recommended. Uploading an image will override any icon selected above."
+          },
+          "title": {
+            "label": "Heading"
+          },
+          "text": {
+            "label": "Text"
+          },
+          "link": {
+            "label": "Link"
+          }
+        }
+      },
+      "presets": {
+        "highlights_banner": {
+          "name": "Russo Highlights banner",
+          "category": "Store information"
+        }
+      }
+    },
     "featured-blog": {
       "name": "Blog posts",
       "settings": {
