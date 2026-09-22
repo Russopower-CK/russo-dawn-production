@@ -1,0 +1,233 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "dynamic_logo_list_m7U7kV": {
+      "type": "dynamic-logo-list",
+      "blocks": {
+        "logo_BMaGA7": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Ferris-Logo.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_BMaGA7"
+      ],
+      "name": "t:sections.logo_list.presets.logo_list.name",
+      "settings": {
+        "title": ""
+      }
+    },
+    "rich_text_ziENUc": {
+      "type": "rich-text",
+      "blocks": {
+        "text_bVi8X8": {
+          "type": "text",
+          "settings": {
+            "text": "<h6>Ferris Equipment: <a href=\"/collections/ferris-mowers\" title=\"Ferris Mowers in-stock\">Mowers</a>  |  <a href=\"/collections/ferris-stand-on-blower\" title=\"Ferris Stand-On Blower\">Stand-On Blower</a></h6>"
+          }
+        }
+      },
+      "block_order": [
+        "text_bVi8X8"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "dynamic_html_XrKafx": {
+      "type": "dynamic-html",
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+      }
+    },
+    "featured_collection_qTDxpR": {
+      "type": "featured-collection",
+      "custom_css": [
+        ".collection__title {text-align: center;}"
+      ],
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "ferris-mowers",
+        "products_to_show": 5,
+        "title": "Ferris Mowers",
+        "heading_size": "h1",
+        "description": "",
+        "hide_no_products": false,
+        "use_russo_pickup": true,
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_sku": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 0,
+        "padding_bottom": 8
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "use_russo_pickup": true,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_html_JHxhMe": {
+      "type": "dynamic-html",
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+      }
+    },
+    "recently_viewed_dRWrXf": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "name": "Russo Recently Viewed",
+      "settings": {
+        "heading": "Recently viewed",
+        "heading_size": "h1",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_dPLR38": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_mjYwBj": {
+          "type": "heading",
+          "settings": {
+            "heading": "About Ferris",
+            "heading_size": "h1"
+          }
+        },
+        "text_AMtbPr": {
+          "type": "text",
+          "settings": {
+            "text": "<p>For 115 years, the history of Ferris has been marked by innovation, leadership, and invention. Known today for superior turf equipment, Ferris prides itself on delivering mowers with full suspension, industry-leading dealer support and meeting the needs of commercial landscapers.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_mjYwBj",
+        "text_AMtbPr"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "video_HrDf7p": {
+      "type": "video",
+      "custom_css": [
+        ".video-section {max-width: 800px;}"
+      ],
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_video_looping": true,
+        "video_url": "https://youtu.be/SwBlaUmE0L4?si=JcsdcHUynBZ_XSF8",
+        "description": "",
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_exT8DN": {
+      "type": "rich-text",
+      "blocks": {
+        "text_CNDwHR": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Aches and pains aren’t trophies – they’re just barriers keeping pros like you from getting the work done. You know better than anyone that this business can be back-breaking, but that’s all the more reason to partner with someone who has your back.<br/><br/>We’re about helping you finish strong and feel good doing it. That’s why we’ve built our equipment for unmatched comfort, durability, and quality of cut. And we build you up with world-class customer support. So you can get more jobs done, with more peace of mind, and have more energy to take on tomorrow.<br/><br/>Let the other guys keep suffering for the job. It’s time for you to finish one more day of hard work feeling good.<br/><br/>See more Ferris Equipment in Action ➡ ➡ <a href=\"https://www.youtube.com/user/MowWithFerris\" target=\"_blank\" title=\"See more Ferris in Action\">https://www.youtube.com/user/MowWithFerris</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_CNDwHR"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "dynamic_logo_list_m7U7kV",
+    "rich_text_ziENUc",
+    "dynamic_html_XrKafx",
+    "featured_collection_qTDxpR",
+    "banner",
+    "product-grid",
+    "dynamic_html_JHxhMe",
+    "recently_viewed_dRWrXf",
+    "rich_text_dPLR38",
+    "video_HrDf7p",
+    "rich_text_exT8DN"
+  ]
+}
