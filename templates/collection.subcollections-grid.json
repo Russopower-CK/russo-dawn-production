@@ -56,7 +56,7 @@
       "type": "subcollections-grid",
       "name": "Subcollections grid",
       "settings": {
-        "heading": "Shop by category",
+        "heading": "",
         "text": "",
         "menu": "",
         "use_collection_handle_menu": true,
