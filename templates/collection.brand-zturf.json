@@ -1,0 +1,330 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "dynamic_logo_list_m7U7kV": {
+      "type": "dynamic-logo-list",
+      "blocks": {
+        "logo_BMaGA7": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/ZTurfEquipment-Logo.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_BMaGA7"
+      ],
+      "name": "t:sections.logo_list.presets.logo_list.name",
+      "settings": {
+        "title": ""
+      }
+    },
+    "rich_text_ziENUc": {
+      "type": "rich-text",
+      "blocks": {
+        "text_bVi8X8": {
+          "type": "text",
+          "settings": {
+            "text": "<h6>Z Turf Equipment: <a href=\"https://collections/aerators?filter.p.vendor=Z+Turf+Equipment\" title=\"Stand-On Aerator\">Aerator</a>  |  <a href=\"https://russopower.com/collections/stand-on-spreader-sprayers?filter.p.vendor=Z+Turf+Equipment\" title=\"Stand-On Spreader Sprayers\">Spreader Sprayer</a>  |  <a href=\"https://russopower.com/collections/overseeders?filter.p.vendor=Z+Turf+Equipment\" title=\"Seeder\">Overseeder</a>  |  <a href=\"https://russopower.com/collections/power-brooms?filter.p.vendor=Z+Turf+Equipment\" title=\"Power Broom\">Walk-Behind Broom</a></h6>"
+          }
+        }
+      },
+      "block_order": [
+        "text_bVi8X8"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "dynamic_html_XrKafx": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-top: 2em; margin-bottom: 2em;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid page-width\">"
+      }
+    },
+    "dynamic_shoppable_image_rR9PJa": {
+      "type": "dynamic-shoppable-image",
+      "blocks": {
+        "hotspot_4WE6AY": {
+          "type": "hotspot",
+          "settings": {
+            "product": "z-turf-equipment-z-spray-mid-zsx4640-stand-on-spreader-sprayer",
+            "x_axis": 18,
+            "y_axis": 65
+          }
+        },
+        "hotspot_AfGUXF": {
+          "type": "hotspot",
+          "settings": {
+            "product": "z-turf-equipment-z-spray-max-zsx5260-stand-on-spreader-sprayer",
+            "x_axis": 79,
+            "y_axis": 30
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_4WE6AY",
+        "hotspot_AfGUXF"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "Shoppable image",
+        "image": "shopify://shop_images/Z-Turf-Equipment-Z-Spray-Mid-Max.jpg",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "Stand-On Spreader Sprayers",
+        "textbox_subheading": "<p>Z Turf Equipment raises the bar with its redesigned zero-turn stand-on spreader sprayers. The machines feature a low center-of-gravity design that optimizes machine balance to provide enhanced stability and control in a wide range of application conditions. These Z-Spray machines also offers corrosion-resistant stainless steel, enhanced ergonomics, larger drive tires, and a tank design that empties more completely and features a tools-free drain. </p><p>• Z-Spray Max<br/>• Z-Spray Mid<br/>• Z-Spray Junior<br/>• Z-Spray LTS</p>",
+        "textbox_button_label": "SHOP Z-SPRAY",
+        "textbox_button_link": "https://russopower.com/collections/stand-on-spreader-sprayers?filter.p.vendor=Z+Turf+Equipment",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "right"
+      }
+    },
+    "dynamic_shoppable_image_AdUJx9": {
+      "type": "dynamic-shoppable-image",
+      "blocks": {
+        "hotspot_GKUDAw": {
+          "type": "hotspot",
+          "settings": {
+            "product": "z-turf-equipment-z-aerate-24-in-stand-on-aerator-za3624",
+            "x_axis": 30,
+            "y_axis": 50
+          }
+        },
+        "hotspot_zm3J9f": {
+          "type": "hotspot",
+          "settings": {
+            "product": "z-turf-z-aerate-30-stand-on-aerator-za4830",
+            "x_axis": 80,
+            "y_axis": 82
+          }
+        },
+        "hotspot_JQREj3": {
+          "type": "hotspot",
+          "settings": {
+            "product": "z-turf-z-aerate-40-stand-on-aerator-za4640",
+            "x_axis": 85,
+            "y_axis": 24
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_GKUDAw",
+        "hotspot_zm3J9f",
+        "hotspot_JQREj3"
+      ],
+      "name": "t:sections.shoppable_image.presets.shoppable_image.name",
+      "settings": {
+        "title": "",
+        "image": "shopify://shop_images/Z-Turf-Equipment-Z-Aerate-24-30-40.jpg",
+        "image_width": "half",
+        "link_text": "View product",
+        "textbox_title": "Stand-On Aerators",
+        "textbox_subheading": "<p>Productivity is the key to profitability for your business, and Z Turf aerators cover from one to two acres per hour with intuitive controls, maneuverability and straightforward operation. With the unmatched productivity of their stand-on aerators, Z Turf Equipment delivers top-notch performance, durability and ease of use.</p><p>• Z-Aerate 24<br/>• Z-Aerate 30<br/>• Z-Aerate 40</p>",
+        "textbox_button_label": "SHOP Z-AERATE",
+        "textbox_button_link": "https://russopower.com/collections/aerators?filter.p.vendor=Z+Turf+Equipment",
+        "textbox_button_style": "primary",
+        "textbox_text_alignment": "left",
+        "textbox_text_position": "left"
+      }
+    },
+    "featured_collection_qTDxpR": {
+      "type": "featured-collection",
+      "custom_css": [
+        ".collection__title {text-align: center;}"
+      ],
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "z-turf-equipment",
+        "products_to_show": 11,
+        "title": "Turf Management Equipment",
+        "heading_size": "h1",
+        "description": "",
+        "hide_no_products": false,
+        "use_russo_pickup": true,
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "russo_end",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 28,
+        "padding_bottom": 8
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "disabled": true,
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "use_russo_pickup": true,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_html_JHxhMe": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-top: 2em; margin-bottom: 2em;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid page-width\">"
+      }
+    },
+    "recently_viewed_dRWrXf": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "name": "Russo Recently Viewed",
+      "settings": {
+        "heading": "Recently viewed",
+        "heading_size": "h1",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_dPLR38": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_mjYwBj": {
+          "type": "heading",
+          "settings": {
+            "heading": "About Z Turf Equipment",
+            "heading_size": "h1"
+          }
+        },
+        "text_AMtbPr": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Z Turf Equipment is part of the Exmark family of products.</p><p>At Z Turf Equipment, we’re committed to helping you be more productive and profitable in your lawn care operations. Our machines are easy to operate, durable and simple to maintain, so your equipment is up, running and making money more of the time.</p><p>To build the best commercial lawn care equipment, we seek input from our customers. We use this feedback to guide the development of new features, as well as the evolution of existing designs. Then, we leverage our decades of experience and world class domestic manufacturing to make our industry-leading products reality. Each is tested exhaustively, both in the lab and in the field, to ensure they’ll reliably exceed your expectations every day.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_mjYwBj",
+        "text_AMtbPr"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "left",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "video_HrDf7p": {
+      "type": "video",
+      "custom_css": [
+        ".video-section {max-width: 800px;}"
+      ],
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_video_looping": true,
+        "video_url": "https://www.youtube.com/watch?v=LzSNVob6khQ",
+        "description": "",
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_exT8DN": {
+      "type": "rich-text",
+      "blocks": {
+        "text_CNDwHR": {
+          "type": "text",
+          "settings": {
+            "text": "<p>The dependable, durable lineup of Z Turf Equipment Spreader-Sprayers, Aerators, and Slicer Seeders are ready to tackle any job, on any day, in any condition. Paired with the fleet of Exmark Zero-Turn, Stand-On, and Walk-Behind mowers, no parcel of land is out of reach.<br/><br/>See more Z Turf Equipment in Action ➡ ➡ <a href=\"https://www.youtube.com/c/ZTurfEquipment\" target=\"_blank\" title=\"See more Z Turf Equipment in Action\"><strong>https://www.youtube.com/c/ZTurfEquipment</strong></a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_CNDwHR"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "dynamic_logo_list_m7U7kV",
+    "rich_text_ziENUc",
+    "dynamic_html_XrKafx",
+    "dynamic_shoppable_image_rR9PJa",
+    "dynamic_shoppable_image_AdUJx9",
+    "featured_collection_qTDxpR",
+    "banner",
+    "product-grid",
+    "dynamic_html_JHxhMe",
+    "recently_viewed_dRWrXf",
+    "rich_text_dPLR38",
+    "video_HrDf7p",
+    "rich_text_exT8DN"
+  ]
+}
