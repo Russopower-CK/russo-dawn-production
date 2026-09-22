@@ -1,0 +1,252 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "use_russo_pickup": true,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "recently_viewed_dRWrXf": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "name": "Russo Recently Viewed",
+      "settings": {
+        "heading": "Recently viewed",
+        "heading_size": "h1",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_D7xacP": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_eQCj4a": {
+          "type": "heading",
+          "settings": {
+            "heading": "Maximize Your Productivity with Toro Dingo Mini Skid Steers",
+            "heading_size": "h1"
+          }
+        },
+        "text_dPxpRe": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every job site has those challenging heavy-duty tasks in tight spaces where larger equipment simply won't fit. That's where the <strong>Toro® Dingo® compact utility loader</strong> excels, delivering powerful performance in compact spaces while dramatically reducing manual labor time.</p><p>At Russo, we're proud to offer Toro's Dingo lineup, giving you more options to find the perfect match for your specific needs.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_eQCj4a",
+        "text_dPxpRe"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Toro-dingo-sw21_4738s_22370_tx1300_grapple_22577_2520_proof.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "image_behavior": "zoom-in",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_Fw3KAR": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_QkH7tN": {
+          "type": "heading",
+          "settings": {
+            "heading": "Choose Your Configuration:",
+            "heading_size": "h1"
+          }
+        },
+        "text_fYDyXa": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li>Wheeled or tracked models for different terrain requirements</li><li>Electric, gas, or diesel power options to suit your work environment</li><li>Radial lift or vertical lift capabilities, depending on your application needs</li></ul><p><br/>Whether you're a landscaper working in tight residential spaces, a contractor tackling confined job sites, or a property manager maintaining facilities, there's a Dingo model that will transform how efficiently you work.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_QkH7tN",
+        "text_fYDyXa"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/TORO-dingo_SW18_4058s_dg22328_tx1000_bucket_22340_041.jpg",
+        "height": "medium",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collapsible_content_ehtYnW": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_WhiXrD": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What is a compact utility loader used for?",
+            "icon": "none",
+            "row_content": "<p>Toro's compact utility loader is used for a variety of landscaping and lawn care tasks. Common uses include:</p><ul><li>Moving dirt, mulch, gravel, or debris</li><li>Digging holes or trenches</li><li>Grading and leveling land</li><li>Installing sod or trees</li><li>Preparing soil for planting</li></ul><p>The ability to perform heavy-duty tasks in confined spaces makes Toro's compact utility loaders ideal for both residential and commercial landscaping projects.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_MTH8Qp": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What are the benefits of using a compact utility loader?",
+            "icon": "none",
+            "row_content": "<p>Compact utility loaders have several benefits:</p><ul><li>Compact size allows access in tight spaces.</li><li>Multi-functionality with a wide range of attachments.</li><li>Increased efficiency for tasks like digging, hauling, and grading.</li></ul><p>The versatility and power of Toro's compact utility loaders make them a valuable addition.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_y3Hfmt": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How to choose the right compact utility loader?",
+            "icon": "none",
+            "row_content": "<p>Choosing the right Toro compact utility loader depends on your project needs, property size, and the types of tasks you perform. Consider factors like fuel type, engine power, lift capacity, machine width, and terrain compatibility. Match the model to your task needs and space limitations, and always confirm compatibility with the attachments you plan to use.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_BVchqU": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What attachments are available for compact utility loaders?",
+            "icon": "none",
+            "row_content": "<p>Toro's compact utility loaders support a wide variety of attachments, making them extremely versatile for lawn and landscape work. Attachments include buckets, forks, augers, trenchers, rakes, and more. Boost productivity and efficiency for your next job and <a href=\"/collections/compact-utility-loader-attachments\" title=\"Compact Utility Loader Attachments\">find an attachment here.</a></p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_WhiXrD",
+        "collapsible_row_MTH8Qp",
+        "collapsible_row_y3Hfmt",
+        "collapsible_row_BVchqU"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Compact Utility Loaders FAQs",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "container_color_scheme": "",
+        "color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_wERaCn": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_UHUynJ": {
+          "type": "heading",
+          "settings": {
+            "heading": "Ready to see how a Toro Dingo can revolutionize your productivity?",
+            "heading_size": "h1"
+          }
+        },
+        "text_ngaqYr": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Contact the Russo team today to discuss which model is right for your operation, or visit our showroom to see these versatile machines in action.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_fJpFtH": {
+          "type": "button",
+          "settings": {
+            "button_label": "CONTACT US",
+            "button_link": "shopify://pages/contact-us",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_UHUynJ",
+        "text_ngaqYr",
+        "button_fJpFtH"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Haltom-showroom-toro-dingo-cul-20230921.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid",
+    "recently_viewed_dRWrXf",
+    "image_with_text_D7xacP",
+    "image_with_text_Fw3KAR",
+    "collapsible_content_ehtYnW",
+    "image_with_text_wERaCn"
+  ]
+}

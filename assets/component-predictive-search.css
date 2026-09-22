@@ -245,3 +245,8 @@ div.predictive-search.predictive-search--header {
 .predictive-search__heading{
   color: black;
 }
+
+/*russo*/
+.predictive-search__item-content {
+  gap: .5rem;
+}
