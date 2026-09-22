@@ -173,6 +173,24 @@
             "text_alignment_mobile": "center",
             "color_scheme": "scheme-3"
           }
+        },
+        "slide_UfWBDB": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/1434929_KTC_OrangeDays_2026_WebsiteBanners_KODHero_1814x600_15b149a9-f98e-49bc-aa5c-0a15a5e192da.jpg",
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://collections/kubota",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "bottom-right",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
         }
       },
       "block_order": [
@@ -184,7 +202,8 @@
         "slide_xTxXVX",
         "slide_Mephzj",
         "slide_GwVcWP",
-        "slide_hfmrxN"
+        "slide_hfmrxN",
+        "slide_UfWBDB"
       ],
       "custom_css": [],
       "name": "t:sections.slideshow.presets.name",
