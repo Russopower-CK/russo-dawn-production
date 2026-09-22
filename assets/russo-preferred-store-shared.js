@@ -48,7 +48,10 @@
         .then(function (res) {
           var contentType = (res.headers && res.headers.get && res.headers.get('content-type')) || '';
           return res.text().then(function (raw) {
-            var bodySnippet = String(raw || '').slice(0, 220).replace(/\s+/g, ' ').trim();
+            var bodySnippet = String(raw || '')
+              .slice(0, 220)
+              .replace(/\s+/g, ' ')
+              .trim();
 
             if (!res.ok) {
               if (includeBodySnippet) {
@@ -68,7 +71,7 @@
           });
         })
         .catch(function (err) {
-          failures.push(err && err.message ? err.message : (url + ' -> request failed'));
+          failures.push(err && err.message ? err.message : url + ' -> request failed');
           return attempt(index + 1);
         });
     }
@@ -87,27 +90,18 @@
     if (Array.isArray(levels.nodes)) return levels.nodes;
     if (Array.isArray(levels.edges)) {
       return levels.edges
-        .map(function (edge) { return edge && edge.node ? edge.node : null; })
+        .map(function (edge) {
+          return edge && edge.node ? edge.node : null;
+        })
         .filter(Boolean);
     }
     return [];
   }
 
   function extractVariantNodes(data) {
-    if (!data || typeof data !== 'object') return [];
-    if (data.data && data.data.data) return extractVariantNodes(data.data.data);
-    if (data.data && Array.isArray(data.data.nodes)) return data.data.nodes;
-    if (Array.isArray(data.nodes)) return data.nodes;
-    if (data.data && data.data.productVariant) return [data.data.productVariant];
-    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.nodes)) {
-      return data.data.productVariants.nodes;
-    }
-    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.edges)) {
-      return data.data.productVariants.edges
-        .map(function (edge) { return edge && edge.node ? edge.node : null; })
-        .filter(Boolean);
-    }
-    return [];
+    console.log(data);
+    if (!data || !data.data || !Array.isArray(data.data.nodes)) return [];
+    return data.data.nodes;
   }
 
   function toLocationNameFromStockItem(item) {
@@ -115,7 +109,9 @@
     if (item.location && typeof item.location === 'object' && item.location.name) {
       return item.location.name;
     }
-    return item.locationName || item.location_name || item.location || item.name || item.storeName || item.store_name || null;
+    return (
+      item.locationName || item.location_name || item.location || item.name || item.storeName || item.store_name || null
+    );
   }
 
   function toAvailableQtyFromStockItem(item) {
@@ -219,7 +215,7 @@
       if (Object.prototype.hasOwnProperty.call(mapped.stockMap, candidate)) {
         return {
           inStock: !!mapped.stockMap[candidate],
-          qty: mapped.qtyMap[candidate]
+          qty: mapped.qtyMap[candidate],
         };
       }
     }
@@ -241,7 +237,9 @@
   }
 
   function stripRussoPrefix(name) {
-    return String(name || '').replace(/^russo\s+/i, '').trim();
+    return String(name || '')
+      .replace(/^russo\s+/i, '')
+      .trim();
   }
 
   function buildPreferredStoreStatusLabel(options) {
@@ -257,7 +255,7 @@
         showSpecialOrder: false,
         specialOrderLabel: '',
         specialOrderTitle: '',
-        specialOrderBody: ''
+        specialOrderBody: '',
       };
     }
 
@@ -267,7 +265,7 @@
         showSpecialOrder: false,
         specialOrderLabel: '',
         specialOrderTitle: '',
-        specialOrderBody: ''
+        specialOrderBody: '',
       };
     }
 
@@ -277,7 +275,7 @@
         showSpecialOrder: false,
         specialOrderLabel: '',
         specialOrderTitle: '',
-        specialOrderBody: ''
+        specialOrderBody: '',
       };
     }
 
@@ -290,13 +288,15 @@
         showSpecialOrder: false,
         specialOrderLabel: '',
         specialOrderTitle: '',
-        specialOrderBody: ''
+        specialOrderBody: '',
       };
     }
 
     var unavailableLabel = String(opts.unavailableLabel || 'Special Order');
     var tooltipTitle = String(opts.unavailableTooltipTitle || unavailableLabel);
-    var tooltipTemplate = String(opts.unavailableTooltipBody || 'Unavailable at {store}. Typical Lead Time is 2-5 Business days.');
+    var tooltipTemplate = String(
+      opts.unavailableTooltipBody || 'Unavailable at {store}. Typical Lead Time is 2-5 Business days.',
+    );
     var tooltipBody = tooltipTemplate.replace(/\{store\}/gi, compactStoreName || selectedName);
 
     return {
@@ -304,7 +304,7 @@
       showSpecialOrder: true,
       specialOrderLabel: unavailableLabel,
       specialOrderTitle: tooltipTitle,
-      specialOrderBody: tooltipBody
+      specialOrderBody: tooltipBody,
     };
   }
 
@@ -323,6 +323,6 @@
     getStockLookupCandidates: getStockLookupCandidates,
     getLiveStockForSelectedStore: getLiveStockForSelectedStore,
     buildInStockSetFromLocations: buildInStockSetFromLocations,
-    buildPreferredStoreStatusLabel: buildPreferredStoreStatusLabel
+    buildPreferredStoreStatusLabel: buildPreferredStoreStatusLabel,
   };
 })();

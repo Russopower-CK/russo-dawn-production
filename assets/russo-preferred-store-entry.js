@@ -207,10 +207,6 @@
     return shared.toUniqueList(items);
   }
 
-  function buildStockEndpointCandidates(primary) {
-    return shared.buildProxyCandidates(primary, 'getStockLevels');
-  }
-
   function fetchJsonWithFallback(urls, requestInit) {
     return shared.fetchJsonWithFallback(urls, requestInit, { errorPrefix: 'Batch stock request failed' });
   }
@@ -420,7 +416,7 @@
   }
 
   function mergeBatchResponseIntoVariantCache(data) {
-    var variantNodes = extractVariantNodes(data);
+    var variantNodes = data.data.nodes;
     if (!variantNodes.length) return;
 
     var cache = window.__PreferredStoreVariantStockCache || {};
@@ -456,7 +452,7 @@
     window.__PreferredStoreBatchProbeState = state;
 
     var cfg = window.__PreferredStoreConfig || {};
-    var endpoints = buildStockEndpointCandidates(cfg.stockLevelsEndpoint || '/apps/russoAPI/v1/getStockLevels');
+    var endpoints = [cfg.stockLevelsEndpoint || '/apps/russoAPI/v2/getStockLevels'];
     var requestInit = {
       method: 'POST',
       headers: {
