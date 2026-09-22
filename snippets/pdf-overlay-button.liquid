@@ -1,0 +1,297 @@
+{% comment %}
+  PDF Overlay Button
+
+  Usage:
+  {% render 'pdf-overlay-button',
+    url: 'https://cdn.shopify.com/s/files/.../brochure.pdf',
+    label: 'View brochure'
+  %}
+
+  Optional:
+  button_class: Additional CSS classes for the trigger button
+  title: Accessible title shown at the top of the overlay
+{% endcomment %}
+
+{% liquid
+  assign pdf_url = url | default: ''
+  assign button_label = label | default: 'View PDF'
+  assign modal_title = title | default: button_label
+  assign unique_id = 'pdf-overlay-' | append: section.id | append: '-' | append: block.id
+%}
+
+{% if pdf_url != blank %}
+  <pdf-overlay class="pdf-overlay">
+    <button
+      type="button"
+      class="pdf-overlay__trigger button{% if button_class != blank %} {{ button_class }}{% endif %}"
+      aria-haspopup="dialog"
+      aria-controls="{{ unique_id }}"
+      data-pdf-overlay-open
+    >
+      {{ button_label | escape }}
+    </button>
+
+    <dialog
+      id="{{ unique_id }}"
+      class="pdf-overlay__dialog"
+      aria-labelledby="{{ unique_id }}-title"
+      data-pdf-overlay-dialog
+    >
+      <div class="pdf-overlay__window">
+        <header class="pdf-overlay__header">
+          <h2
+            id="{{ unique_id }}-title"
+            class="pdf-overlay__title"
+          >
+            {{ modal_title | escape }}
+          </h2>
+
+          <div class="pdf-overlay__actions">
+            <a
+              class="pdf-overlay__external-link"
+              href="{{ pdf_url | escape }}"
+              target="_blank"
+              rel="noopener"
+            >
+              Open in new tab
+            </a>
+
+            <button
+              type="button"
+              class="pdf-overlay__close"
+              aria-label="Close PDF viewer"
+              data-pdf-overlay-close
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="pdf-overlay__content">
+          <iframe
+            class="pdf-overlay__frame"
+            title="{{ modal_title | escape }}"
+            data-pdf-overlay-frame
+            data-src="{{ pdf_url | escape }}"
+          ></iframe>
+
+          <noscript>
+            <p class="pdf-overlay__fallback">
+              <a href="{{ pdf_url | escape }}" target="_blank" rel="noopener"> Open {{ button_label | escape }} </a>
+            </p>
+          </noscript>
+        </div>
+      </div>
+    </dialog>
+  </pdf-overlay>
+
+  <style>
+    .pdf-overlay__dialog {
+      width: min(1200px, calc(100vw - 32px));
+      height: min(900px, calc(100vh - 32px));
+      max-width: none;
+      max-height: none;
+      margin: auto;
+      padding: 0;
+      border: 0;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #121212;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+
+    .pdf-overlay__dialog::backdrop {
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(2px);
+    }
+
+    .pdf-overlay__window {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      width: 100%;
+      height: 100%;
+    }
+
+    .pdf-overlay__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 64px;
+      padding: 10px 16px 10px 20px;
+      border-bottom: 1px solid rgba(18, 18, 18, 0.12);
+      background: #ffffff;
+    }
+
+    .pdf-overlay__title {
+      margin: 0;
+      font: inherit;
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .pdf-overlay__actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .pdf-overlay__external-link {
+      color: currentColor;
+      font-size: 1.3rem;
+      text-underline-offset: 3px;
+    }
+
+    .pdf-overlay__close {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #eeeeee;
+      color: #121212;
+      font: inherit;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .pdf-overlay__close:hover {
+      background: #dddddd;
+    }
+
+    .pdf-overlay__close:focus-visible,
+    .pdf-overlay__trigger:focus-visible,
+    .pdf-overlay__external-link:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 3px;
+    }
+
+    .pdf-overlay__content {
+      min-height: 0;
+      background: #525659;
+    }
+
+    .pdf-overlay__frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #ffffff;
+    }
+
+    .pdf-overlay__fallback {
+      padding: 24px;
+      text-align: center;
+    }
+
+    @media screen and (max-width: 749px) {
+      .pdf-overlay__dialog {
+        width: 100vw;
+        height: 100dvh;
+        border-radius: 0;
+      }
+
+      .pdf-overlay__header {
+        min-height: 58px;
+        padding: 8px 10px 8px 14px;
+      }
+
+      .pdf-overlay__title {
+        font-size: 1.4rem;
+      }
+
+      .pdf-overlay__external-link {
+        font-size: 1.2rem;
+      }
+
+      .pdf-overlay__close {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .pdf-overlay__dialog[open] {
+        animation: pdf-overlay-enter 160ms ease-out;
+      }
+
+      @keyframes pdf-overlay-enter {
+        from {
+          opacity: 0;
+          transform: translateY(8px) scale(0.99);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+    }
+  </style>
+
+  <script>
+    if (!customElements.get('pdf-overlay')) {
+      class PdfOverlay extends HTMLElement {
+        connectedCallback() {
+          if (this.dataset.initialized === 'true') return;
+          this.dataset.initialized = 'true';
+
+          this.openButton = this.querySelector('[data-pdf-overlay-open]');
+          this.closeButton = this.querySelector('[data-pdf-overlay-close]');
+          this.dialog = this.querySelector('[data-pdf-overlay-dialog]');
+          this.frame = this.querySelector('[data-pdf-overlay-frame]');
+
+          if (!this.openButton || !this.closeButton || !this.dialog) return;
+
+          this.openButton.addEventListener('click', () => this.open());
+          this.closeButton.addEventListener('click', () => this.close());
+
+          this.dialog.addEventListener('click', (event) => {
+            if (event.target === this.dialog) {
+              this.close();
+            }
+          });
+
+          this.dialog.addEventListener('close', () => {
+            document.documentElement.classList.remove('pdf-overlay-is-open');
+            this.openButton.focus();
+          });
+        }
+
+        open() {
+          if (this.frame && !this.frame.src) {
+            this.frame.src = this.frame.dataset.src;
+          }
+
+          document.documentElement.classList.add('pdf-overlay-is-open');
+
+          if (typeof this.dialog.showModal === 'function') {
+            this.dialog.showModal();
+          } else {
+            window.open(this.frame.dataset.src, '_blank', 'noopener');
+          }
+        }
+
+        close() {
+          if (this.dialog.open) {
+            this.dialog.close();
+          }
+        }
+      }
+
+      customElements.define('pdf-overlay', PdfOverlay);
+    }
+  </script>
+
+  <style>
+    html.pdf-overlay-is-open {
+      overflow: hidden;
+    }
+  </style>
+{% endif %}
