@@ -1,0 +1,283 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "disabled": true,
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": true,
+        "show_sku": true,
+        "show_rating": true,
+        "quick_add": "standard",
+        "use_russo_pickup": true,
+        "enable_filtering": true,
+        "filter_type": "vertical",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "recently_viewed_dRWrXf": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "name": "Russo Recently Viewed",
+      "settings": {
+        "heading": "Recently viewed",
+        "heading_size": "h1",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_logo_list_nA3fbr": {
+      "type": "dynamic-logo-list",
+      "blocks": {
+        "logo_nwi36z": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Landpride-logo.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_nwi36z"
+      ],
+      "custom_css": [
+        ".logolist--image {object-fit: contain; object-position: 50% 50%;}"
+      ],
+      "name": "t:sections.logo_list.presets.logo_list.name",
+      "settings": {
+        "title": ""
+      }
+    },
+    "image_with_text_DnW4gQ": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_JQfGCe": {
+          "type": "heading",
+          "settings": {
+            "heading": "OVER 500 PRODUCTS",
+            "heading_size": "h1"
+          }
+        },
+        "text_UHFYdU": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Land Pride, a Division of Great Plains Mfg., Inc., has been a leader in grounds maintenance equipment since 1986. Not only are they know as a leader in turf equipment, but also recognized across North America as a leader in tractor-mounted implements and Kubota-branded attachments that include Buckets, Grapples, Hitches, Post Hole Diggers, Rotary Cutters, Rotary Tillers, Scrapers, Spreaders, Snow Blowers, Snow Pushers, Snow Plow Blade, and much more.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_NQxpmU": {
+          "type": "button",
+          "settings": {
+            "button_label": "VIEW PRODUCT LINE",
+            "button_link": "https://kubota.russopower.com/equipment/land-pride",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_JQfGCe",
+        "text_UHFYdU",
+        "button_NQxpmU"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Land-Pride-Circle_BXTractor.jpg",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_4V7Mzj": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_XdcWtw": {
+          "type": "heading",
+          "settings": {
+            "heading": "TRUSTED ATTACHMENTS",
+            "heading_size": "h1"
+          }
+        },
+        "text_rjVUFk": {
+          "type": "text",
+          "settings": {
+            "text": "<p>You can trust Land Pride implements to complete task after task with the reliability and performance you demand. Whether your tasks are your hobby or your job, Land Pride will be a trusted companion. BONUS: they work great on Kubota Tractors!</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_XdcWtw",
+        "text_rjVUFk"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Land-Pride-22_SBP1674_MX5400_8.jpg",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "mosaic_grid_jKLqaA": {
+      "type": "mosaic-grid",
+      "blocks": {
+        "tile_TjDhHc": {
+          "type": "tile",
+          "settings": {
+            "size": "large",
+            "image": "shopify://shop_images/Land-Pride-Quick-Hitch-19_QH05_BX2680_049-1200x800.jpg",
+            "heading": "Quick Hitches",
+            "text": "<p>Not all 3-point products are quick-hitch adaptable, especially older units of any brand. Land Pride's hitches have a better chance of fitting older 3-point attachments allowing you to easily hook on to implements, some without ever leaving the tractor seat.</p>",
+            "button_label": "SHOP QUICK HITCHES",
+            "button_link": "https://kubota.russopower.com/equipment/land-pride",
+            "overlay_style": "solid",
+            "overlay_color": "#000000",
+            "overlay_opacity": 55,
+            "text_shadow": true,
+            "text_color": "",
+            "button_background": "",
+            "button_text_color": "",
+            "open_by_default": false
+          }
+        },
+        "tile_aLLpmR": {
+          "type": "tile",
+          "settings": {
+            "size": "tall",
+            "image": "shopify://shop_images/Land-Pride_SBD35-695x450.jpg",
+            "heading": "Snow Blowers",
+            "text": "<p>Land Pride's SBD3596 & SBD35108 3-point Snow Blowers are designed to fit tractors in the 85 to 180 HP range. One look at the aggressive dual augers, manufactured from 3/8\" plate steel, and you'll know the SBD35 is built to withstand the rigors of snow and ice removal in tough conditions. Beyond the dual 16\" augers, the SBD35 is manufactured with 1/4\" side plates and utilizes four paddles on the augers to direct snow into the 34\", 4-blade impeller.</p>",
+            "button_label": "SHOP SBD35",
+            "button_link": "https://kubota.russopower.com/equipment/land-pride",
+            "overlay_style": "gradient_top",
+            "overlay_color": "#000000",
+            "overlay_opacity": 70,
+            "text_shadow": true,
+            "text_color": "",
+            "button_background": "",
+            "button_text_color": "",
+            "open_by_default": false
+          }
+        },
+        "tile_GBKHw8": {
+          "type": "tile",
+          "settings": {
+            "size": "small",
+            "image": "shopify://shop_images/Land-Pride-22_PD15_LX3310_9-600x480.jpg",
+            "heading": "Post Hole Diggers",
+            "text": "<p>Kubota by Land Pride: SA20 Augers can drill holes from 9\" to 36\" in diameter and up to 48\" deep or deeper with available auger extensions. Various auger in standard or heavy duty configurations include 7 double flight augers from 9\" to 36\" and 3 tree augers in 24\", 30\", and 36\" sizes.</p>",
+            "button_label": "SHOP SA20",
+            "button_link": "https://kubota.russopower.com/equipment/land-pride",
+            "overlay_style": "solid",
+            "overlay_color": "#000000",
+            "overlay_opacity": 40,
+            "text_shadow": true,
+            "text_color": "",
+            "button_background": "",
+            "button_text_color": "",
+            "open_by_default": false
+          }
+        },
+        "tile_rpEgXP": {
+          "type": "tile",
+          "settings": {
+            "size": "wide",
+            "image": "shopify://shop_images/Land-Pride-Rotary-Cutter-18_RCR1860_L2501DT_rear.jpg",
+            "heading": "Rotary Cutter",
+            "text": "<p>The RTR1872 Rotary Cutter is ideal for light-duty maintenance on gentle slopes or slightly contoured right-of-ways. A fully welded deck adds additional strength while the floating 3-point permits the deck to hug the terrain for a quality cut.</p>",
+            "button_label": "SHOP RCR18",
+            "button_link": "https://kubota.russopower.com/equipment/land-pride",
+            "overlay_style": "solid",
+            "overlay_color": "#000000",
+            "overlay_opacity": 70,
+            "text_shadow": true,
+            "text_color": "",
+            "button_background": "",
+            "button_text_color": "",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "tile_TjDhHc",
+        "tile_aLLpmR",
+        "tile_GBKHw8",
+        "tile_rpEgXP"
+      ],
+      "name": "Russo Mosaic grid",
+      "settings": {
+        "title": "",
+        "columns": 3,
+        "row_height": 280,
+        "gap": 12,
+        "corner_radius": 0,
+        "content_position": "flex-start",
+        "content_padding": 40,
+        "heading_size": 48,
+        "body_size": 22,
+        "body_weight": "500",
+        "text_max_width": 56,
+        "text_color": "#ffffff",
+        "button_background": "#c8102e",
+        "button_text_color": "#ffffff",
+        "button_radius": 2,
+        "collapse_on_mobile": true,
+        "mobile_panel_color": "#1a1a1a",
+        "mobile_min_height": 240
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid",
+    "recently_viewed_dRWrXf",
+    "dynamic_logo_list_nA3fbr",
+    "image_with_text_DnW4gQ",
+    "image_with_text_4V7Mzj",
+    "mosaic_grid_jKLqaA"
+  ]
+}
