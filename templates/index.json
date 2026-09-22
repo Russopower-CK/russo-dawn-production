@@ -79,26 +79,8 @@
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
-        "slide_ECbQFf": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/OnlineUsedAuction.jpg",
-            "image_overlay_opacity": 40,
-            "heading": "September 16, 2026 | Click. Bid. Win!",
-            "heading_size": "h1",
-            "subheading": "Don’t miss our upcoming used equipment auction—quality equipment, great deals, and plenty of opportunities to add value to your operation.",
-            "button_label": "Learn More!",
-            "link": "shopify://pages/online-used-equipment-auctions",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-right",
             "text_alignment": "right",
-            "text_alignment_mobile": "center",
+            "text_alignment_mobile": "right",
             "color_scheme": "scheme-3"
           }
         },
@@ -198,7 +180,6 @@
         "slide_VJ3ktV",
         "slide_N3884K",
         "slide_8AYhjw",
-        "slide_ECbQFf",
         "slide_hJGYwx",
         "slide_xTxXVX",
         "slide_Mephzj",
