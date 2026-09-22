@@ -176,6 +176,7 @@
         },
         "slide_UfWBDB": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/1434929_KTC_OrangeDays_2026_WebsiteBanners_KODHero_1814x600_15b149a9-f98e-49bc-aa5c-0a15a5e192da.jpg",
             "image_overlay_opacity": 0,
