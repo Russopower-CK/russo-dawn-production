@@ -19,6 +19,7 @@
     },
     "product-grid": {
       "type": "main-collection-product-grid",
+      "disabled": true,
       "settings": {
         "products_per_page": 24,
         "columns_desktop": 4,
@@ -50,11 +51,28 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "subcollections_grid_GUQWMc": {
+      "type": "subcollections-grid",
+      "name": "Subcollections grid",
+      "settings": {
+        "heading": "Shop by category",
+        "text": "",
+        "menu": "",
+        "use_collection_handle_menu": true,
+        "show_images": true,
+        "image_ratio": "square",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     }
   },
   "order": [
     "banner",
     "product-grid",
-    "recently_viewed_dRWrXf"
+    "recently_viewed_dRWrXf",
+    "subcollections_grid_GUQWMc"
   ]
 }
