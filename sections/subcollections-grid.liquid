@@ -1,0 +1,350 @@
+{%- liquid
+  assign subcollections_menu = section.settings.menu
+
+  if subcollections_menu == blank and section.settings.use_collection_handle_menu and collection != blank
+    assign subcollections_menu = linklists[collection.handle]
+  endif
+
+  assign has_menu_items = false
+
+  if subcollections_menu != blank and subcollections_menu.links != blank
+    if subcollections_menu.links.size > 0
+      assign has_menu_items = true
+    endif
+  endif
+-%}
+
+<section
+  id="SubcollectionsGrid-{{ section.id }}"
+  class="subcollections-grid subcollections-grid--{{ section.settings.image_ratio }}"
+  style="
+    --subcollections-grid-columns: {{ section.settings.columns_desktop }};
+    --subcollections-grid-columns-mobile: {{ section.settings.columns_mobile }};
+    --subcollections-grid-padding-top: {{ section.settings.padding_top }}px;
+    --subcollections-grid-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="subcollections-grid__container page-width">
+    {% if section.settings.heading != blank or section.settings.text != blank %}
+      <div class="subcollections-grid__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="subcollections-grid__heading">
+            {{ section.settings.heading | escape }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <div class="subcollections-grid__text rte">
+            {{ section.settings.text }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if has_menu_items %}
+      <div class="subcollections-grid__items">
+        {% for link in subcollections_menu.links %}
+          {%- liquid
+            assign tile_image = blank
+            assign tile_alt = link.title
+
+            if link.object != blank
+              if link.object.image != blank
+                assign tile_image = link.object.image
+                if link.object.image.alt != blank
+                  assign tile_alt = link.object.image.alt
+                endif
+              elsif link.object.featured_image != blank
+                assign tile_image = link.object.featured_image
+                if link.object.featured_image.alt != blank
+                  assign tile_alt = link.object.featured_image.alt
+                endif
+              endif
+            endif
+          -%}
+
+          <a
+            class="subcollections-grid__tile"
+            href="{{ link.url }}"
+            aria-label="{{ link.title | escape }}"
+          >
+            <div class="subcollections-grid__media">
+              {% if section.settings.show_images and tile_image != blank %}
+                <img
+                  class="subcollections-grid__image"
+                  src="{{ tile_image | image_url: width: 900 }}"
+                  srcset="
+                    {{ tile_image | image_url: width: 360 }} 360w,
+                    {{ tile_image | image_url: width: 540 }} 540w,
+                    {{ tile_image | image_url: width: 720 }} 720w,
+                    {{ tile_image | image_url: width: 900 }} 900w
+                  "
+                  sizes="
+                    (max-width: 749px) calc(100vw / {{ section.settings.columns_mobile }}),
+                    calc(100vw / {{ section.settings.columns_desktop }})
+                  "
+                  width="{{ tile_image.width }}"
+                  height="{{ tile_image.height }}"
+                  alt="{{ tile_alt | escape }}"
+                  loading="lazy"
+                >
+              {% else %}
+                <div class="subcollections-grid__placeholder">
+                  <span>{{ link.title | escape }}</span>
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="subcollections-grid__label">
+              <span>{{ link.title | escape }}</span>
+              <span class="subcollections-grid__arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% elsif request.design_mode %}
+      <div class="subcollections-grid__empty">
+        <strong>No menu items found.</strong>
+        <span>
+          Select a menu in this section’s settings, or create a menu whose handle matches the current collection handle.
+        </span>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  #SubcollectionsGrid-{{ section.id }} {
+    padding-top: var(--subcollections-grid-padding-top);
+    padding-bottom: var(--subcollections-grid-padding-bottom);
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__container {
+    margin: 0 auto;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__header {
+    margin-bottom: 2rem;
+    max-width: 720px;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__heading {
+    margin: 0 0 0.75rem;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__text {
+    margin: 0;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__items {
+    display: grid;
+    grid-template-columns: repeat(var(--subcollections-grid-columns), minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__tile {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: var(--color-background, #fff);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__media {
+    position: relative;
+    overflow: hidden;
+    background: #f3f3f3;
+  }
+
+  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--square .subcollections-grid__media {
+    aspect-ratio: 1 / 1;
+  }
+
+  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--portrait .subcollections-grid__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--landscape .subcollections-grid__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 250ms ease;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__tile:hover .subcollections-grid__image {
+    transform: scale(1.04);
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    padding: 1rem;
+    color: rgba(0, 0, 0, 0.55);
+    text-align: center;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    font-weight: 600;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__arrow {
+    flex: 0 0 auto;
+    font-size: 1.2em;
+    transition: transform 180ms ease;
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__tile:hover .subcollections-grid__arrow {
+    transform: translateX(4px);
+  }
+
+  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 2rem;
+    border: 1px dashed rgba(0, 0, 0, 0.25);
+    text-align: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    #SubcollectionsGrid-{{ section.id }} .subcollections-grid__items {
+      grid-template-columns: repeat(var(--subcollections-grid-columns-mobile), minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    #SubcollectionsGrid-{{ section.id }} .subcollections-grid__label {
+      padding: 0.8rem;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Subcollections grid",
+  "tag": "section",
+  "class": "section-subcollections-grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by category"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Introductory text"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Subcollection menu",
+      "info": "Choose the menu containing this collection's subcollections."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_collection_handle_menu",
+      "label": "Automatically use a menu matching the collection handle",
+      "default": true,
+      "info": "For example, the Power Equipment collection uses a menu with the handle power-equipment."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_images",
+      "label": "Show collection images",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "default": "square",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Mobile columns",
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Subcollections grid"
+    }
+  ]
+}
+{% endschema %}
