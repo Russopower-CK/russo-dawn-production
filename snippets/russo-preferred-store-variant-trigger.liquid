@@ -293,15 +293,14 @@
       if (!variantId || !preferredLocationId) return;
 
       try {
-        const response = await fetch('/apps/russoAPI/v1/getStockLevels', {
+        const response = await fetch('/apps/russoAPI/v2/getStockLevels', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ variantId })
         });
 
         const result = await response.json();
-
-        const variant = result.data.data.nodes.find(
+        const variant = result.data.nodes.find(
           x => x.id === `gid://shopify/ProductVariant/${variantId}`
         );
 
@@ -314,7 +313,6 @@
         )?.quantity;
 
         const inStock = quantity > 0;
-
         setStatusIcon(inStock);
 
         setButtonLabelContent(buildPreferredStoreStatusLabel({

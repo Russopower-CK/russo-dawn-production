@@ -18,7 +18,7 @@ var storeLocationChanged = false; // Starts as false when the page loads
     return {
       // Geo
       locationsEndpoint: cfg.locationsEndpoint || `${API_BASE}/pickuplocations`,
-      stockLevelsEndpoint: cfg.stockLevelsEndpoint || `${API_BASE}/getStockLevels`,
+      stockLevelsEndpoint: cfg.stockLevelsEndpoint || `/apps/russoAPI/v2/getStockLevels`,
       geoipEndpoint: cfg.geoipEndpoint || `https://russo-worker.ckim-3d5.workers.dev/v1/geoip`,
       geocodeZipEndpoint: cfg.geocodeZipEndpoint || `${API_BASE}/geocode-zip`,
 
@@ -422,56 +422,24 @@ var storeLocationChanged = false; // Starts as false when the page loads
     return variantId ? String(variantId) : null;
   }
 
-  function extractStockItems(data) {
-    function inventoryLevelNodes(levels) {
-      return shared.inventoryLevelNodes(levels);
-    }
+function extractStockItems(data) {
+  console.log("extract", data);
+  if (!data || !Array.isArray(data.data.nodes)) return [];
 
-    function nodesFromVariant(variantNode) {
-      if (!variantNode || typeof variantNode !== 'object') return [];
-      if (!variantNode.inventoryItem || !variantNode.inventoryItem.inventoryLevels) return [];
-      return inventoryLevelNodes(variantNode.inventoryItem.inventoryLevels);
-    }
-
-    if (!data) return [];
-    if (data.data && data.data.data) return extractStockItems(data.data.data);
-    if (Array.isArray(data)) return data;
-    if (data.data && Array.isArray(data.data.nodes)) {
-      return data.data.nodes.reduce(function (all, variantNode) {
-        return all.concat(nodesFromVariant(variantNode));
-      }, []);
-    }
-    if (Array.isArray(data.nodes)) {
-      return data.nodes.reduce(function (all, variantNode) {
-        return all.concat(nodesFromVariant(variantNode));
-      }, []);
-    }
+  return data.data.nodes.reduce(function (all, variantNode) {
     if (
-      data.data &&
-      data.data.productVariant &&
-      data.data.productVariant.inventoryItem &&
-      data.data.productVariant.inventoryItem.inventoryLevels
+      variantNode &&
+      variantNode.inventoryItem &&
+      variantNode.inventoryItem.inventoryLevels
     ) {
-      return nodesFromVariant(data.data.productVariant);
+      return all.concat(
+        shared.inventoryLevelNodes(variantNode.inventoryItem.inventoryLevels)
+      );
     }
-    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.nodes)) {
-      return data.data.productVariants.nodes.reduce(function (all, variantNode) {
-        return all.concat(nodesFromVariant(variantNode));
-      }, []);
-    }
-    if (data.data && data.data.productVariants && Array.isArray(data.data.productVariants.edges)) {
-      return data.data.productVariants.edges.reduce(function (all, edge) {
-        return all.concat(nodesFromVariant(edge && edge.node ? edge.node : null));
-      }, []);
-    }
-    if (Array.isArray(data.data)) return data.data;
-    if (data.data && Array.isArray(data.data.stockLevels)) return data.data.stockLevels;
-    if (data.data && Array.isArray(data.data.getStockLevels)) return data.data.getStockLevels;
-    if (Array.isArray(data.stockLevels)) return data.stockLevels;
-    if (Array.isArray(data.getStockLevels)) return data.getStockLevels;
-    if (Array.isArray(data.locations)) return data.locations;
-    return [];
-  }
+
+    return all;
+  }, []);
+}
 
   function toLocationNameFromStockItem(item) {
     return shared.toLocationNameFromStockItem(item);
@@ -501,7 +469,7 @@ var storeLocationChanged = false; // Starts as false when the page loads
     }
 
     var cfg = getConfig();
-    var endpoints = buildProxyCandidates(cfg.stockLevelsEndpoint, 'getStockLevels');
+    var endpoints = [cfg.stockLevelsEndpoint||'/apps/russoAPI/v2/getStockLevels'];
     var requestInit = {
       method: 'POST',
       headers: {
