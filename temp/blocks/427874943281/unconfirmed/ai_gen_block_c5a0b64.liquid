@@ -1,6 +1,171 @@
+{% doc %}
+  @prompt
+    Update the existing Subcollections grid tile label styling only. Place each subcollection title centered beneath its image, using a small bold dark-red font similar to the attached reference’s “Aerators” label. Keep the image, collection link, grid layout, and all other section styling unchanged. Avoid an overlay, card background, border, or extra caption area. Apply this specifically to the Subcollections grid on collection pages.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-subcollections-grid-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+  }
+
+  .ai-subcollections-grid-{{ ai_gen_id }}__items {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns }}, minmax(0, 1fr));
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .ai-subcollections-grid-{{ ai_gen_id }}__item {
+    min-width: 0;
+    text-align: center;
+  }
+
+  .ai-subcollections-grid-{{ ai_gen_id }}__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ai-subcollections-grid-{{ ai_gen_id }}__image,
+  .ai-subcollections-grid-{{ ai_gen_id }}__placeholder {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .ai-subcollections-grid-{{ ai_gen_id }}__placeholder {
+    background: #f3f3f3;
+  }
+
+  .ai-subcollections-grid-{{ ai_gen_id }}__placeholder svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-subcollections-grid-{{ ai_gen_id }}__title {
+    margin: 10px 0 0;
+    color: {{ block.settings.title_color }};
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-subcollections-grid-{{ ai_gen_id }}__items {
+      grid-template-columns: repeat({{ block.settings.mobile_columns }}, minmax(0, 1fr));
+    }
+  }
+{% endstyle %}
+
+<div class="ai-subcollections-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-subcollections-grid-{{ ai_gen_id }}__items">
+    {% for subcollection in block.settings.subcollections %}
+      <div class="ai-subcollections-grid-{{ ai_gen_id }}__item">
+        <a class="ai-subcollections-grid-{{ ai_gen_id }}__link" href="{{ subcollection.url }}" aria-label="View {{ subcollection.title | escape }}">
+          {% if subcollection.featured_image %}
+            <img
+              class="ai-subcollections-grid-{{ ai_gen_id }}__image"
+              src="{{ subcollection.featured_image | image_url: width: 900 }}"
+              alt="{{ subcollection.featured_image.alt | default: subcollection.title | escape }}"
+              loading="lazy"
+              width="{{ subcollection.featured_image.width }}"
+              height="{{ subcollection.featured_image.height }}"
+            >
+          {% else %}
+            <div class="ai-subcollections-grid-{{ ai_gen_id }}__placeholder">
+              {{ 'collection-apparel-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+          <h3 class="ai-subcollections-grid-{{ ai_gen_id }}__title">{{ subcollection.title }}</h3>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Subcollections grid",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "subcollections",
+      "label": "Subcollections",
+      "limit": 24
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 4,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#7A1F24"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Subcollections grid"
+    }
+  ],
+  "tag": null,
+  "class": "subcollections-grid-block"
+}
 {% endschema %}
