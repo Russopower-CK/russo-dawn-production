@@ -1,13 +1,14 @@
 {%- liquid
   assign subcollections_menu = section.settings.menu
-
-  if subcollections_menu == blank and section.settings.use_collection_handle_menu and collection != blank
-    assign subcollections_menu = linklists[collection.handle]
-  endif
-
   assign has_menu_items = false
 
-  if subcollections_menu != blank and subcollections_menu.links != blank
+  if subcollections_menu == blank
+    if section.settings.use_collection_handle_menu and collection != blank
+      assign subcollections_menu = linklists[collection.handle]
+    endif
+  endif
+
+  if subcollections_menu != blank
     if subcollections_menu.links.size > 0
       assign has_menu_items = true
     endif
@@ -18,10 +19,17 @@
   id="SubcollectionsGrid-{{ section.id }}"
   class="subcollections-grid subcollections-grid--{{ section.settings.image_ratio }}"
   style="
-    --subcollections-grid-columns: {{ section.settings.columns_desktop }};
-    --subcollections-grid-columns-mobile: {{ section.settings.columns_mobile }};
-    --subcollections-grid-padding-top: {{ section.settings.padding_top }}px;
-    --subcollections-grid-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --subcollections-columns-desktop: {{ section.settings.columns_desktop }};
+    --subcollections-columns-mobile: {{ section.settings.columns_mobile }};
+    --subcollections-column-gap: {{ section.settings.grid_gap }}px;
+    --subcollections-mobile-gap: {{ section.settings.mobile_grid_gap }}px;
+    --subcollections-row-gap: {{ section.settings.row_gap }}px;
+    --subcollections-padding-top: {{ section.settings.padding_top }}px;
+    --subcollections-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --subcollections-image-radius: {{ section.settings.image_radius }}px;
+    --subcollections-label-size: {{ section.settings.label_size }}px;
+    --subcollections-label-color: {{ section.settings.label_color }};
+    --subcollections-label-spacing: {{ section.settings.label_spacing }}px;
   "
 >
   <div class="subcollections-grid__container page-width">
@@ -47,47 +55,45 @@
           {%- liquid
             assign tile_image = blank
             assign tile_alt = link.title
+            assign linked_object = link.object
 
-            if link.object != blank
-              if link.object.image != blank
-                assign tile_image = link.object.image
-                if link.object.image.alt != blank
-                  assign tile_alt = link.object.image.alt
-                endif
-              elsif link.object.featured_image != blank
-                assign tile_image = link.object.featured_image
-                if link.object.featured_image.alt != blank
-                  assign tile_alt = link.object.featured_image.alt
-                endif
+            if linked_object != blank
+              if linked_object.image != blank
+                assign tile_image = linked_object.image
+              elsif linked_object.featured_image != blank
+                assign tile_image = linked_object.featured_image
               endif
             endif
+
+            if tile_image != blank and tile_image.alt != blank
+              assign tile_alt = tile_image.alt
+            endif
+
+            capture image_sizes
+              echo '(max-width: 749px) calc((100vw - 4rem) / '
+              echo section.settings.columns_mobile
+              echo '), calc((100vw - 10rem) / '
+              echo section.settings.columns_desktop
+              echo ')'
+            endcapture
           -%}
 
           <a
-            class="subcollections-grid__tile"
             href="{{ link.url }}"
-            aria-label="{{ link.title | escape }}"
+            class="subcollections-grid__tile"
           >
             <div class="subcollections-grid__media">
               {% if section.settings.show_images and tile_image != blank %}
-                <img
-                  class="subcollections-grid__image"
-                  src="{{ tile_image | image_url: width: 900 }}"
-                  srcset="
-                    {{ tile_image | image_url: width: 360 }} 360w,
-                    {{ tile_image | image_url: width: 540 }} 540w,
-                    {{ tile_image | image_url: width: 720 }} 720w,
-                    {{ tile_image | image_url: width: 900 }} 900w
-                  "
-                  sizes="
-                    (max-width: 749px) calc(100vw / {{ section.settings.columns_mobile }}),
-                    calc(100vw / {{ section.settings.columns_desktop }})
-                  "
-                  width="{{ tile_image.width }}"
-                  height="{{ tile_image.height }}"
-                  alt="{{ tile_alt | escape }}"
-                  loading="lazy"
-                >
+                {{
+                  tile_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    class: 'subcollections-grid__image',
+                    widths: '240, 360, 480, 600, 750, 900, 1200',
+                    sizes: image_sizes,
+                    loading: 'lazy',
+                    alt: tile_alt
+                }}
               {% else %}
                 <div class="subcollections-grid__placeholder">
                   <span>{{ link.title | escape }}</span>
@@ -95,9 +101,8 @@
               {% endif %}
             </div>
 
-            <div class="subcollections-grid__label">
+            <div class="subcollections-grid__label subcollections-grid__label--{{ section.settings.label_alignment }}">
               <span>{{ link.title | escape }}</span>
-              <span class="subcollections-grid__arrow" aria-hidden="true">→</span>
             </div>
           </a>
         {% endfor %}
@@ -105,73 +110,96 @@
     {% elsif request.design_mode %}
       <div class="subcollections-grid__empty">
         <strong>No menu items found.</strong>
+
         <span>
-          Select a menu in this section’s settings, or create a menu whose handle matches the current collection handle.
+          Select a menu in the section settings or create a menu whose handle
+          matches the current collection handle.
         </span>
       </div>
     {% endif %}
   </div>
 </section>
 
-<style>
+{% style %}
   #SubcollectionsGrid-{{ section.id }} {
-    padding-top: var(--subcollections-grid-padding-top);
-    padding-bottom: var(--subcollections-grid-padding-bottom);
+    padding-top: var(--subcollections-padding-top);
+    padding-bottom: var(--subcollections-padding-bottom);
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__container {
-    margin: 0 auto;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__header {
-    margin-bottom: 2rem;
-    max-width: 720px;
+    max-width: 72rem;
+    margin-bottom: {{ section.settings.heading_spacing }}px;
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__heading {
-    margin: 0 0 0.75rem;
+    margin: 0;
+    color: {{ section.settings.heading_color }};
+    font-size: {{ section.settings.heading_size }}px;
+    font-weight: {{ section.settings.heading_weight }};
+    line-height: 1.2;
+    letter-spacing: normal;
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__text {
-    margin: 0;
+    margin-top: 1rem;
+  }
+
+  #SubcollectionsGrid-{{ section.id }}
+    .subcollections-grid__text
+    > :first-child {
+    margin-top: 0;
+  }
+
+  #SubcollectionsGrid-{{ section.id }}
+    .subcollections-grid__text
+    > :last-child {
+    margin-bottom: 0;
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__items {
     display: grid;
-    grid-template-columns: repeat(var(--subcollections-grid-columns), minmax(0, 1fr));
-    gap: 1.25rem;
+    grid-template-columns:
+      repeat(var(--subcollections-columns-desktop), minmax(0, 1fr));
+    column-gap: var(--subcollections-column-gap);
+    row-gap: var(--subcollections-row-gap);
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__tile {
     display: block;
+    min-width: 0;
     color: inherit;
     text-decoration: none;
-    overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    background: var(--color-background, #fff);
-    transition: transform 180ms ease, box-shadow 180ms ease;
-  }
-
-  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__tile:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__media {
     position: relative;
+    width: 100%;
     overflow: hidden;
-    background: #f3f3f3;
+    background-color: #f3f3f3;
+    border-radius: var(--subcollections-image-radius);
   }
 
-  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--square .subcollections-grid__media {
+  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--square
+    .subcollections-grid__media {
     aspect-ratio: 1 / 1;
   }
 
-  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--portrait .subcollections-grid__media {
+  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--portrait
+    .subcollections-grid__media {
     aspect-ratio: 4 / 5;
   }
 
-  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--landscape .subcollections-grid__media {
+  #SubcollectionsGrid-{{ section.id }}.subcollections-grid--landscape
+    .subcollections-grid__media {
     aspect-ratio: 4 / 3;
   }
 
@@ -179,42 +207,80 @@
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: {{ section.settings.image_fit }};
+    object-position: {{ section.settings.image_position }};
     transition: transform 250ms ease;
   }
 
-  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__tile:hover .subcollections-grid__image {
-    transform: scale(1.04);
-  }
+  {% if section.settings.enable_image_zoom %}
+    #SubcollectionsGrid-{{ section.id }}
+      .subcollections-grid__tile:hover
+      .subcollections-grid__image {
+      transform: scale(1.04);
+    }
+  {% endif %}
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__placeholder {
     display: grid;
     place-items: center;
     width: 100%;
     height: 100%;
-    min-height: 180px;
+    min-height: 18rem;
     padding: 1rem;
-    color: rgba(0, 0, 0, 0.55);
+    color: rgba(var(--color-foreground), 0.55);
     text-align: center;
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__label {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1.1rem;
-    font-weight: 600;
+    width: 100%;
+    margin-top: var(--subcollections-label-spacing);
+    padding: 0;
+    color: var(--subcollections-label-color);
+    font-size: var(--subcollections-label-size);
+    font-weight: {{ section.settings.label_weight }};
+    line-height: 1.3;
   }
 
-  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__arrow {
-    flex: 0 0 auto;
-    font-size: 1.2em;
-    transition: transform 180ms ease;
+  #SubcollectionsGrid-{{ section.id }}
+    .subcollections-grid__label--left {
+    justify-content: flex-start;
+    text-align: left;
   }
 
-  #SubcollectionsGrid-{{ section.id }} .subcollections-grid__tile:hover .subcollections-grid__arrow {
-    transform: translateX(4px);
+  #SubcollectionsGrid-{{ section.id }}
+    .subcollections-grid__label--center {
+    justify-content: center;
+    text-align: center;
+  }
+
+  #SubcollectionsGrid-{{ section.id }}
+    .subcollections-grid__label--right {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  #SubcollectionsGrid-{{ section.id }}
+    .subcollections-grid__label
+    span {
+    display: inline-block;
+  }
+
+  {% if section.settings.underline_on_hover %}
+    #SubcollectionsGrid-{{ section.id }}
+      .subcollections-grid__tile:hover
+      .subcollections-grid__label
+      span {
+      text-decoration: underline;
+      text-underline-offset: 0.2rem;
+    }
+  {% endif %}
+
+  #SubcollectionsGrid-{{ section.id }}
+    .subcollections-grid__tile:focus-visible {
+    outline: 0.2rem solid currentColor;
+    outline-offset: 0.4rem;
   }
 
   #SubcollectionsGrid-{{ section.id }} .subcollections-grid__empty {
@@ -222,22 +288,47 @@
     flex-direction: column;
     gap: 0.5rem;
     padding: 2rem;
-    border: 1px dashed rgba(0, 0, 0, 0.25);
+    border: 0.1rem dashed rgba(var(--color-foreground), 0.25);
     text-align: center;
   }
 
   @media screen and (max-width: 749px) {
+    #SubcollectionsGrid-{{ section.id }} .subcollections-grid__header {
+      margin-bottom: calc(
+        {{ section.settings.heading_spacing }}px * 0.75
+      );
+    }
+
+    #SubcollectionsGrid-{{ section.id }} .subcollections-grid__heading {
+      font-size: calc(
+        {{ section.settings.heading_size }}px * 0.8
+      );
+    }
+
     #SubcollectionsGrid-{{ section.id }} .subcollections-grid__items {
-      grid-template-columns: repeat(var(--subcollections-grid-columns-mobile), minmax(0, 1fr));
-      gap: 0.75rem;
+      grid-template-columns:
+        repeat(var(--subcollections-columns-mobile), minmax(0, 1fr));
+      column-gap: var(--subcollections-mobile-gap);
+      row-gap: var(--subcollections-row-gap);
     }
 
     #SubcollectionsGrid-{{ section.id }} .subcollections-grid__label {
-      padding: 0.8rem;
-      font-size: 0.9rem;
+      font-size: calc(var(--subcollections-label-size) * 0.9);
     }
   }
-</style>
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    #SubcollectionsGrid-{{ section.id }} .subcollections-grid__image {
+      transition: none;
+    }
+
+    #SubcollectionsGrid-{{ section.id }}
+      .subcollections-grid__tile:hover
+      .subcollections-grid__image {
+      transform: none;
+    }
+  }
+{% endstyle %}
 
 {% schema %}
 {
@@ -260,14 +351,18 @@
       "type": "link_list",
       "id": "menu",
       "label": "Subcollection menu",
-      "info": "Choose the menu containing this collection's subcollections."
+      "info": "Choose a menu containing direct links to collections."
     },
     {
       "type": "checkbox",
       "id": "use_collection_handle_menu",
-      "label": "Automatically use a menu matching the collection handle",
+      "label": "Use menu matching collection handle",
       "default": true,
-      "info": "For example, the Power Equipment collection uses a menu with the handle power-equipment."
+      "info": "If no menu is selected, use a menu whose handle matches the current collection handle."
+    },
+    {
+      "type": "header",
+      "content": "Images"
     },
     {
       "type": "checkbox",
@@ -296,13 +391,93 @@
       ]
     },
     {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fitting",
+      "default": "cover",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Crop to fill"
+        },
+        {
+          "value": "contain",
+          "label": "Show complete image"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "default": "center center",
+      "options": [
+        {
+          "value": "left top",
+          "label": "Top left"
+        },
+        {
+          "value": "center top",
+          "label": "Top center"
+        },
+        {
+          "value": "right top",
+          "label": "Top right"
+        },
+        {
+          "value": "left center",
+          "label": "Center left"
+        },
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "right center",
+          "label": "Center right"
+        },
+        {
+          "value": "left bottom",
+          "label": "Bottom left"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom center"
+        },
+        {
+          "value": "right bottom",
+          "label": "Bottom right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "Zoom image on hover",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
       "type": "range",
       "id": "columns_desktop",
       "label": "Desktop columns",
       "min": 2,
       "max": 6,
       "step": 1,
-      "default": 4
+      "default": 5
     },
     {
       "type": "select",
@@ -319,6 +494,170 @@
           "label": "2"
         }
       ]
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Desktop column spacing",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "default": 18,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_grid_gap",
+      "label": "Mobile column spacing",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "row_gap",
+      "label": "Row spacing",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "default": 30,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Category labels"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Label color",
+      "default": "#d71920"
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Label font size",
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "label_weight",
+      "label": "Label font weight",
+      "default": "700",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "label_alignment",
+      "label": "Label alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "label_spacing",
+      "label": "Space above label",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 18,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "underline_on_hover",
+      "label": "Underline label on hover",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading font size",
+      "min": 20,
+      "max": 56,
+      "step": 2,
+      "default": 34,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading font weight",
+      "default": "700",
+      "options": [
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Space below heading",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
     },
     {
       "type": "range",
