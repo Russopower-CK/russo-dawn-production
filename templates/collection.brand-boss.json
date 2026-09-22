@@ -73,12 +73,12 @@
     "dynamic_html_9WxfrB": {
       "type": "dynamic-html",
       "custom_css": [
-        ".custom-html--container {margin-bottom: 2em;}"
+        ".custom-html--container {margin-bottom: 2em; margin-top: 2em;}"
       ],
       "name": "t:sections.custom-html.presets.custom-html.name",
       "settings": {
         "title": "",
-        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid page-width\">"
       }
     },
     "product-grid": {
@@ -369,7 +369,7 @@
         "tile_cnbDV9"
       ],
       "custom_css": [
-        ".mosaic{margin-top: 1.75rem;}"
+        ".mosaic {margin-top: 1.75rem;}"
       ],
       "name": "Russo Mosaic grid",
       "settings": {
@@ -467,12 +467,12 @@
     "dynamic_html_K34yaL": {
       "type": "dynamic-html",
       "custom_css": [
-        ".custom-html--container {margin-bottom: 2em;}"
+        ".custom-html--container {margin-bottom: 2em; margin-top: 2em;}"
       ],
       "name": "t:sections.custom-html.presets.custom-html.name",
       "settings": {
         "title": "",
-        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid page-width\">"
       }
     },
     "rich_text_JKT9ay": {

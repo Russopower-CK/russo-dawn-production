@@ -53,10 +53,13 @@
     },
     "dynamic_html_XrKafx": {
       "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-top: 2em; margin-bottom: 2em;}"
+      ],
       "name": "t:sections.custom-html.presets.custom-html.name",
       "settings": {
         "title": "",
-        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid page-width\">"
       }
     },
     "featured_collection_qTDxpR": {
@@ -126,10 +129,13 @@
     },
     "dynamic_html_JHxhMe": {
       "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-top: 2em; margin-bottom: 2em;}"
+      ],
       "name": "t:sections.custom-html.presets.custom-html.name",
       "settings": {
         "title": "",
-        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid page-width\">"
       }
     },
     "recently_viewed_dRWrXf": {

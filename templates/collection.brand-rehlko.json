@@ -103,12 +103,12 @@
     "dynamic_html_wtb8Mm": {
       "type": "dynamic-html",
       "custom_css": [
-        ".custom-html--container {margin-bottom: 1.75rem;}"
+        ".custom-html--container {margin-top: 2em; margin-bottom: 2em;}"
       ],
       "name": "t:sections.custom-html.presets.custom-html.name",
       "settings": {
         "title": "",
-        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid page-width\">"
       }
     },
     "image_banner_Tmagwq": {
@@ -213,7 +213,7 @@
     "featured_collection_XtTcEG": {
       "type": "featured-collection",
       "custom_css": [
-        ".collection__title{text-align: center;}"
+        ".collection__title {text-align: center;}"
       ],
       "name": "t:sections.featured-collection.presets.name",
       "settings": {
@@ -248,12 +248,12 @@
     "dynamic_html_heUBMa": {
       "type": "dynamic-html",
       "custom_css": [
-        ".custom-html--container {margin-bottom: 1.75rem;}"
+        ".custom-html--container {margin-top: 2em; margin-bottom: 2em;}"
       ],
       "name": "t:sections.custom-html.presets.custom-html.name",
       "settings": {
         "title": "",
-        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid\">"
+        "custom_html": "<style>\nhr.solid {\n  border-top: 1.5px solid #ccc;\n}\n</style>\n<hr class=\"solid page-width\">"
       }
     },
     "rich_text_x74pPt": {
