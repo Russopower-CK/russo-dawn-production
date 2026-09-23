@@ -908,7 +908,7 @@
 
 .continue-selling-tooltip {
   position: absolute;
-  right: 0;
+  right: -50%;
   bottom: calc(100% + 0.8rem);
   width: min(20rem, 80vw);
   background: rgb(74, 74, 74);
