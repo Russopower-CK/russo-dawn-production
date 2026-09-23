@@ -296,8 +296,14 @@
 
                 if link.type == 'collection_link' and link.object != blank
                   assign subcollection = link.object
+
                   if subcollection.image != blank
                     assign item_image = subcollection.image
+                  elsif subcollection.all_products_count > 0
+                    assign first_product = subcollection.products | first
+                    if first_product != nil and first_product.featured_image != blank
+                      assign item_image = first_product.featured_image
+                    endif
                   endif
                 endif
               -%}
@@ -446,6 +452,11 @@
                   assign item_image = custom_image
                 elsif subcollection != blank and subcollection.image != blank
                   assign item_image = subcollection.image
+                elsif subcollection != blank and subcollection.all_products_count > 0
+                  assign first_product = subcollection.products | first
+                  if first_product != nil and first_product.featured_image != blank
+                    assign item_image = first_product.featured_image
+                  endif
                 else
                   assign item_image = blank
                 endif
