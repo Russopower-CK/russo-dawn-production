@@ -173,7 +173,7 @@
                       {%- if settings.predictive_search_show_sku -%}
                         <span class="visually-hidden">{{ 'accessibility.sku' | t }}</span>
                         <div class="predictive-search__item-sku caption-with-letter-spacing">
-                          {{ product.selected_or_first_available_variant.sku }}
+                          SKU {{ product.selected_or_first_available_variant.sku }}
                         </div>
                       {%- endif -%}
                       {%- if settings.predictive_search_show_price -%}
