@@ -48,6 +48,24 @@
             "color_scheme": "scheme-3"
           }
         },
+        "slide_rc3f4z": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/WinterCatalog-Drop-Edit.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>The Wait Is Over!</strong>",
+            "heading_size": "h1",
+            "subheading": "The Russo 2026 Winter Catalog is now available! Click below to download!",
+            "button_label": "WINTER CATALOG",
+            "link": "shopify://pages/seasonal-catalog",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
         "slide_N3884K": {
           "type": "slide",
           "settings": {
@@ -197,6 +215,7 @@
       "block_order": [
         "slide_K76BnM",
         "slide_VJ3ktV",
+        "slide_rc3f4z",
         "slide_N3884K",
         "slide_8AYhjw",
         "slide_hJGYwx",
