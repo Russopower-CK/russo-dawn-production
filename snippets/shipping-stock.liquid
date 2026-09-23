@@ -40,136 +40,54 @@
 {% endif %}
 
 <style>
-      .shipping-stock {
-        margin: 0;
-        display: flex;
-        align-items: center;
-        width: 100%;
-      }
-      .pickup-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-        width: 100%;
-        margin: 0;
-        min-width: 0;
-        text-align: left;
-      }
+  .shipping-stock {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  .pickup-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    margin: 0;
+    min-width: 0;
+    text-align: left;
+  }
 
-      .label {
-        flex: 0 0 auto; /* do not shrink */
-        margin: 0;
-        font-size: 1.3rem;
-        white-space: nowrap;
-      }
+  .label {
+    flex: 0 0 auto; /* do not shrink */
+    margin: 0;
+    font-size: 1.3rem;
+    white-space: nowrap;
+  }
 
-      .product__inventory_status {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-auto-rows: auto;
-        row-gap: 1px;
-      }
+  .product__inventory_status {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    row-gap: 1px;
+  }
 
-      .product__inventory_status > * {
-        margin: 0;
-      }
+  .product__inventory_status > * {
+    margin: 0;
+  }
 
-      .shipping-stock .product__inventory {
-        margin: 0;
-      }
-      .product__inventory .svg-wrapper {
-        align-content: center;
-        margin-left;
-        width: 10px;
-        height: 10px;
-      }
-      .shipping-stock .svg-wrapper{
-      width: 10px;
+  .shipping-stock .product__inventory {
+    margin: 0;
+  }
+  .product__inventory .svg-wrapper {
+    align-content: center;
+    margin-left;
+    width: 10px;
     height: 10px;
-  margin: 5px;}
-
-      .continue-selling-note {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-weight: 600;
-        cursor: help;
-        z-index: 2;
-        padding: 5px;
-      }
-
-      .continue-selling-tooltip {
-        position: absolute;
-        left: 0;
-        bottom: calc(100% + 0.8rem);
-        width: min(28rem, 80vw);
-        background: rgb(74, 74, 74);
-        color: rgb(255, 255, 255);
-        border-radius: 0.8rem;
-        box-shadow: 0 10px 24px rgb(0 0 0 / 24%);
-        opacity: 0;
-        padding: 5px;
-        visibility: hidden;
-        transform: translateY(6px);
-        transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
-        pointer-events: auto;
-        z-index: 2;
-      }
-
-      .continue-selling-note:hover .continue-selling-tooltip,
-      .continue-selling-note:focus-visible .continue-selling-tooltip,
-      .continue-selling-note:focus-within .continue-selling-tooltip {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-      }
-
-      /* Elevates the grid item's own stacking context (created by the scroll-trigger slide-in animation) above sibling cards while the tooltip is open. */
-      .grid__item:has(.continue-selling-note:hover),
-      .grid__item:has(.continue-selling-note:focus-within) {
-        position: relative;
-        z-index: 2;
-      }
-
-      .card-wrapper:has(.continue-selling-note:hover),
-      .card-wrapper:has(.continue-selling-note:focus-within) {
-        z-index: 3;
-      }
-
-      .continue-selling-tooltip__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.8rem;
-        padding: 1rem 1.2rem;
-        border-bottom: 1px solid rgb(255 255 255 / 16%);
-        font-size: 1.5rem;
-      }
-
-      .continue-selling-tooltip__close {
-        line-height: 1;
-        font-size: 2.1rem;
-      }
-
-      .continue-selling-tooltip__body {
-        margin: 0;
-        padding: 1.2rem;
-        font-size: 1.2rem;
-        line-height: 1.45;
-      }
-
-      .continue-selling-tooltip::after {
-        content: '';
-        position: absolute;
-        left: 2rem;
-        top: 100%;
-        width: 0;
-        height: 0;
-        border-left: 0.7rem solid transparent;
-        border-right: 0.7rem solid transparent;
-        border-top: 0.7rem solid rgb(74, 74, 74);
-      }
+  }
+  .shipping-stock .svg-wrapper{
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+  }
 </style>
 <div class="product__inventory_status">
   <div class="shipping-stock">
