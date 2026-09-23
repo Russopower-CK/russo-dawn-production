@@ -225,7 +225,9 @@
         "slide_hfmrxN",
         "slide_UfWBDB"
       ],
-      "custom_css": [],
+      "custom_css": [
+        ".slideshow__text.banner__box {max-width: 900px;}"
+      ],
       "name": "t:sections.slideshow.presets.name",
       "settings": {
         "layout": "full_bleed",
