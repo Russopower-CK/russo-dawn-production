@@ -168,13 +168,14 @@
                           {{ product.vendor }}
                         </div>
                       {%- endif -%}
+                      <p class="predictive-search__item-heading h5">{{ product.title | escape }}</p>
+
                       {%- if settings.predictive_search_show_sku -%}
                         <span class="visually-hidden">{{ 'accessibility.sku' | t }}</span>
                         <div class="predictive-search__item-sku caption-with-letter-spacing">
                           {{ product.selected_or_first_available_variant.sku }}
                         </div>
                       {%- endif -%}
-                      <p class="predictive-search__item-heading h5">{{ product.title | escape }}</p>
                       {%- if settings.predictive_search_show_price -%}
                         {% render 'price', product: product, use_variant: true, show_badges: false %}
                       {%- endif -%}
