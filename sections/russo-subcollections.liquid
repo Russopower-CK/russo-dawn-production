@@ -276,7 +276,126 @@
     {%- endif -%}
 
     <div class="russo-subcollections__wrapper">
-      {%- if section.blocks.size > 0 -%}
+      {%- assign nav = linklists[section.settings.menu] -%}
+
+      {%- if nav.links.size > 0 -%}
+        <div class="russo-subcollections__viewport">
+          <ul
+            id="RussoSubcollectionsTrack-{{ section.id }}"
+            class="russo-subcollections__track"
+            data-russo-track
+            role="list"
+          >
+            {%- for link in nav.links -%}
+              {%- liquid
+                assign subcollection = blank
+                assign item_image = blank
+
+                assign item_title = link.title
+                assign item_url = link.url
+
+                if link.type == 'collection_link' and link.object != blank
+                  assign subcollection = link.object
+                  if subcollection.image != blank
+                    assign item_image = subcollection.image
+                  endif
+                endif
+              -%}
+
+              <li class="russo-subcollections__item">
+                <a
+                  href="{{ item_url }}"
+                  class="russo-subcollections__link"
+                >
+                  <div class="russo-subcollections__image-wrapper">
+                    {%- if item_image != blank -%}
+                      {{
+                        item_image
+                        | image_url: width: 600
+                        | image_tag:
+                          class: 'russo-subcollections__image',
+                          loading: 'lazy',
+                          widths: '120, 160, 200, 240, 320, 400, 500, 600',
+                          sizes: '(max-width: 989px) 120px, 165px',
+                          alt: item_title
+                      }}
+                    {%- else -%}
+                      <div class="russo-subcollections__placeholder">
+                        {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  <span class="russo-subcollections__title">
+                    {{ item_title | escape }}
+                  </span>
+
+                  {%- if section.settings.show_product_count and subcollection != blank -%}
+                    <span class="russo-subcollections__count">
+                      {{ subcollection.all_products_count }}
+                      {%- if subcollection.all_products_count == 1 -%}
+                        &nbsp;product
+                      {%- else -%}
+                        &nbsp;products
+                      {%- endif -%}
+                    </span>
+                  {%- endif -%}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        {%- if section.settings.show_arrows -%}
+          <button
+            class="russo-subcollections__arrow russo-subcollections__arrow--previous"
+            type="button"
+            aria-label="View previous subcollections"
+            aria-controls="RussoSubcollectionsTrack-{{ section.id }}"
+            data-russo-previous
+            disabled
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M15 5L8 12L15 19"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+
+          <button
+            class="russo-subcollections__arrow russo-subcollections__arrow--next"
+            type="button"
+            aria-label="View next subcollections"
+            aria-controls="RussoSubcollectionsTrack-{{ section.id }}"
+            data-russo-next
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M9 5L16 12L9 19"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+        {%- endif -%}
+
+      {%- elsif section.blocks.size > 0 -%}
         {%- if section.settings.show_arrows -%}
           <button
             class="russo-subcollections__arrow russo-subcollections__arrow--previous"
@@ -411,7 +530,7 @@
         {%- endif -%}
       {%- else -%}
         <p class="russo-subcollections__empty">
-          Add subcollection blocks to display collection links.
+          Add a menu or subcollection blocks to display collection links.
         </p>
       {%- endif -%}
     </div>
@@ -543,6 +662,12 @@
         }
       ],
       "default": "h2"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Subcollections menu",
+      "info": "Optional. If set, links in this menu will be used instead of manual blocks."
     },
     {
       "type": "checkbox",
