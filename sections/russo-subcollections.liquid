@@ -276,9 +276,32 @@
     {%- endif -%}
 
     <div class="russo-subcollections__wrapper">
-      {%- assign nav = linklists[section.settings.menu] -%}
+      {%- assign nav_links = nil -%}
 
-      {%- if nav.links.size > 0 -%}
+      {%- if section.settings.menu != blank -%}
+        {%- assign nav = linklists[section.settings.menu] -%}
+        {%- assign nav_links = nav.links -%}
+
+        {%- if nav_links.size > 0 and collection != blank -%}
+          {%- for parent_link in nav_links -%}
+            {%- if parent_link.type == 'collection_link'
+              and parent_link.object
+              and parent_link.object.handle == collection.handle
+            -%}
+              {%- if parent_link.links.size > 0 -%}
+                {%- assign nav_links = parent_link.links -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- elsif collection != blank -%}
+        {%- assign auto_nav = linklists[collection.handle] -%}
+        {%- if auto_nav and auto_nav.links.size > 0 -%}
+          {%- assign nav_links = auto_nav.links -%}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if nav_links and nav_links.size > 0 -%}
         <div class="russo-subcollections__viewport">
           <ul
             id="RussoSubcollectionsTrack-{{ section.id }}"
@@ -286,7 +309,7 @@
             data-russo-track
             role="list"
           >
-            {%- for link in nav.links -%}
+            {%- for link in nav_links -%}
               {%- liquid
                 assign subcollection = blank
                 assign item_image = blank
@@ -678,7 +701,7 @@
       "type": "link_list",
       "id": "menu",
       "label": "Subcollections menu",
-      "info": "Optional. If set, links in this menu will be used instead of manual blocks."
+      "info": "Optional. If set, this menu is used. If left blank, a menu with handle matching the collection handle will be used when available."
     },
     {
       "type": "checkbox",
