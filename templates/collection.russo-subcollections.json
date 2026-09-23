@@ -17,6 +17,31 @@
         "color_scheme": "scheme-1"
       }
     },
+    "russo_subcollections_VVPJeP": {
+      "type": "russo-subcollections",
+      "name": "Russo subcollections",
+      "settings": {
+        "heading": "",
+        "heading_size": "h2",
+        "menu": "irrigation",
+        "show_product_count": false,
+        "show_arrows": true,
+        "image_fit": "contain",
+        "image_background": "#ffffff",
+        "image_size": 165,
+        "image_size_mobile": 120,
+        "gap": 32,
+        "gap_mobile": 18,
+        "title_color": "#e21b23",
+        "title_size": 15,
+        "title_size_mobile": 14,
+        "title_weight": "600",
+        "arrow_color": "#555555",
+        "arrow_background": "#ffffff",
+        "padding_top": 24,
+        "padding_bottom": 32
+      }
+    },
     "product-grid": {
       "type": "main-collection-product-grid",
       "settings": {
@@ -54,6 +79,7 @@
   },
   "order": [
     "banner",
+    "russo_subcollections_VVPJeP",
     "product-grid",
     "recently_viewed_dRWrXf"
   ]
