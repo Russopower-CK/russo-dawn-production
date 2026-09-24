@@ -62,7 +62,7 @@
 </style>
 {% comment %} Quantity rules if b2b use those breaks, else use metafield {% endcomment %}
 {% if product.selected_or_first_available_variant.price > 0 %}
-  {% if customer.b2b %}
+  {% if customer.b2b? %}
     {% comment %}
     {% if product.quantity_price_breaks_configured? %}
       {% assign breaks = product.selected_or_first_available_variant.quantity_price_breaks %}
