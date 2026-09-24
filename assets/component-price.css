@@ -87,8 +87,12 @@
 
 .price--on-sale .price-item--regular {
   text-decoration: line-through;
-  color: rgba(var(--color-foreground), 1);
+  color: black;
   font-size: 1.3rem;
+}
+
+.price--on-sale .price-item--sale{
+  color: var(--russo-red-dark);
 }
 
 .unit-price {
@@ -98,4 +102,8 @@
   line-height: calc(1 + 0.2 / var(--font-body-scale));
   margin-top: 0.2rem;
   color: rgba(var(--color-foreground), 0.7);
+}
+
+.price__sale .price-item .price-item--regular{
+  color: green;
 }
