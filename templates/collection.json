@@ -17,6 +17,11 @@
         "color_scheme": "scheme-1"
       }
     },
+    "sub_collection_bubbles_FCbMGh": {
+      "type": "sub-collection-bubbles",
+      "name": "Russo Sub Col. Bubbles",
+      "settings": {}
+    },
     "product-grid": {
       "type": "main-collection-product-grid",
       "settings": {
@@ -54,6 +59,7 @@
   },
   "order": [
     "banner",
+    "sub_collection_bubbles_FCbMGh",
     "product-grid",
     "recently_viewed_dRWrXf"
   ]
