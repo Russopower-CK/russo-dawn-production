@@ -138,6 +138,18 @@
     }
 
     @media screen and (max-width: 749px) {
+      /* Hide desktop Quick Add when the dedicated mobile action is enabled. */
+      .has-mobile-card-action .card__actions {
+        display: none !important;
+      }
+
+      /* The shared hover panel is desktop-only. */
+      #product-hover-panel {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
       .card-mobile-action {
         display: block;
         width: 100%;
@@ -219,6 +231,7 @@
       product-card-wrapper
       underline-links-hover
       {% if enable_hover_actions %}hover-actions-enabled{% endif %}
+      {% if show_mobile_add_to_cart %}has-mobile-card-action{% endif %}
     "
   >
     {% if settings.use_russo_favorites %}
