@@ -56,15 +56,6 @@
       >
         {{- tooltip_heading | escape -}}
       </span>
-
-      <button
-        type="button"
-        class="continue-selling-tooltip__close"
-        aria-label="Close {{ tooltip_heading | escape }} information"
-        data-continue-selling-close
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
     </span>
 
     <span
@@ -130,7 +121,6 @@
 
     document.addEventListener('click', (event) => {
       const trigger = event.target.closest('[data-continue-selling-trigger]');
-      const closeButton = event.target.closest('[data-continue-selling-close]');
 
       if (trigger) {
         const note = trigger.closest(noteSelector);
@@ -142,12 +132,6 @@
         trigger.setAttribute('aria-expanded', String(willOpen));
         tooltip?.setAttribute('aria-hidden', String(!willOpen));
         if (willOpen) positionTooltip(note);
-        event.preventDefault();
-        return;
-      }
-
-      if (closeButton) {
-        closeNote(closeButton.closest(noteSelector), true);
         event.preventDefault();
         return;
       }
