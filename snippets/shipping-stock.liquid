@@ -99,11 +99,30 @@
     z-index: 2;
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
     max-width: 100%;
-    padding: 5px;
     font-weight: 600;
+  }
+
+  .continue-selling-note__trigger {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    line-height: inherit;
+    text-align: left;
+    background: transparent;
+    border: 0;
     cursor: help;
+  }
+
+  .continue-selling-note__trigger:focus-visible {
+    outline: 0.2rem solid currentColor;
+    outline-offset: 0.2rem;
   }
 
   .continue-selling-tooltip {
@@ -111,43 +130,46 @@
     left: 0;
     bottom: calc(100% + 0.8rem);
     z-index: 20;
+    display: none;
     box-sizing: border-box;
-    width: min(28rem, calc(100vw - 2.4rem));
-    max-width: calc(100vw - 2.4rem);
+    width: 28rem;
+    max-width: calc(100vw - 3.2rem);
     min-width: 0;
     padding: 0;
-    overflow-wrap: anywhere;
     color: rgb(255, 255, 255);
     white-space: normal;
-    background: rgb(74, 74, 74);
+    background: rgb(65, 65, 65);
+    border: 1px solid rgb(255 255 255 / 12%);
     border-radius: 0.8rem;
-    box-shadow: 0 10px 24px rgb(0 0 0 / 24%);
+    box-shadow: 0 1.2rem 3rem rgb(0 0 0 / 30%);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(6px);
-    transition:
-      opacity 0.18s ease,
-      transform 0.18s ease,
-      visibility 0.18s ease;
-    pointer-events: auto;
+    transform: translate(var(--tooltip-shift-x, 0px), 0.6rem);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+    pointer-events: none;
   }
 
   .continue-selling-note:hover .continue-selling-tooltip,
-  .continue-selling-note:focus-visible .continue-selling-tooltip,
-  .continue-selling-note:focus-within .continue-selling-tooltip {
+  .continue-selling-note:focus-within .continue-selling-tooltip,
+  .continue-selling-note.is-open .continue-selling-tooltip {
+    display: block;
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translate(var(--tooltip-shift-x, 0px), 0);
+    pointer-events: auto;
   }
 
   .grid__item:has(.continue-selling-note:hover),
-  .grid__item:has(.continue-selling-note:focus-within) {
+  .grid__item:has(.continue-selling-note:focus-within),
+  .grid__item:has(.continue-selling-note.is-open) {
     position: relative;
     z-index: 20;
   }
 
   .card-wrapper:has(.continue-selling-note:hover),
-  .card-wrapper:has(.continue-selling-note:focus-within) {
+  .card-wrapper:has(.continue-selling-note:focus-within),
+  .card-wrapper:has(.continue-selling-note.is-open) {
+    position: relative;
     z-index: 21;
   }
 
@@ -155,25 +177,58 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.8rem;
-    padding: 1rem 1.2rem;
+    gap: 1rem;
+    min-width: 0;
+    min-height: 4.4rem;
+    padding: 0.8rem 1.2rem;
     border-bottom: 1px solid rgb(255 255 255 / 16%);
     font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  .continue-selling-tooltip__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .continue-selling-tooltip__close {
-    flex: 0 0 auto;
+    display: inline-flex;
+    flex: 0 0 3.2rem;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    margin: -0.2rem -0.4rem -0.2rem 0;
     padding: 0;
+    color: inherit;
+    font: inherit;
     font-size: 2.1rem;
     line-height: 1;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .continue-selling-tooltip__close:hover,
+  .continue-selling-tooltip__close:focus-visible {
+    background: rgb(255 255 255 / 12%);
+    outline: none;
   }
 
   .continue-selling-tooltip__body {
+    display: block;
     margin: 0;
-    padding: 1.2rem;
-    overflow-wrap: anywhere;
+    padding: 1rem 1.2rem 1.2rem;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
     font-size: 1.2rem;
-    line-height: 1.45;
+    font-weight: 500;
+    line-height: 1.5;
     white-space: normal;
   }
 
@@ -181,43 +236,66 @@
     content: '';
     position: absolute;
     top: 100%;
-    left: 2rem;
+    left: clamp(1.4rem, calc(2rem - var(--tooltip-shift-x, 0px)), calc(100% - 2.8rem));
     width: 0;
     height: 0;
     border-right: 0.7rem solid transparent;
     border-left: 0.7rem solid transparent;
-    border-top: 0.7rem solid rgb(74, 74, 74);
+    border-top: 0.7rem solid rgb(65, 65, 65);
   }
 
   @media screen and (max-width: 749px) {
     .continue-selling-note,
-    .continue-selling-note .label {
+    .continue-selling-note__trigger {
       max-width: 100%;
       white-space: normal;
     }
 
     .grid__item:has(.continue-selling-note:hover),
-    .grid__item:has(.continue-selling-note:focus-within) {
+    .grid__item:has(.continue-selling-note:focus-within),
+    .grid__item:has(.continue-selling-note.is-open) {
+      position: relative;
+      z-index: 50;
       transform: none !important;
+    }
+
+    .card-wrapper:has(.continue-selling-note:hover),
+    .card-wrapper:has(.continue-selling-note:focus-within),
+    .card-wrapper:has(.continue-selling-note.is-open) {
+      position: relative;
+      z-index: 51;
     }
 
     .continue-selling-tooltip {
       position: fixed;
-      top: 6.8rem;
-      right: 1.2rem;
+      top: 7.2rem;
+      right: 1.6rem;
       bottom: auto;
-      left: 1.2rem;
+      left: 1.6rem;
+      --tooltip-shift-x: 0px;
       width: auto;
-      max-width: none;
+      max-width: 32rem;
       min-width: 0;
       margin: 0 auto;
-      transform: translateY(6px);
+      transform: translateY(0.6rem);
     }
 
     .continue-selling-note:hover .continue-selling-tooltip,
-    .continue-selling-note:focus-visible .continue-selling-tooltip,
-    .continue-selling-note:focus-within .continue-selling-tooltip {
+    .continue-selling-note:focus-within .continue-selling-tooltip,
+    .continue-selling-note.is-open .continue-selling-tooltip {
       transform: translateY(0);
+    }
+
+    .continue-selling-tooltip__header {
+      min-height: 4.4rem;
+      padding: 0.8rem 1.2rem;
+      font-size: 1.4rem;
+    }
+
+    .continue-selling-tooltip__body {
+      padding: 1rem 1.2rem 1.2rem;
+      font-size: 1.2rem;
+      line-height: 1.5;
     }
 
     .continue-selling-tooltip::after {
