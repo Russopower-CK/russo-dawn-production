@@ -27,7 +27,7 @@
       "settings": {
         "products_per_page": 24,
         "columns_desktop": 4,
-        "columns_mobile": "1",
+        "columns_mobile": "2",
         "color_scheme": "",
         "image_ratio": "square",
         "image_shape": "default",
@@ -36,6 +36,7 @@
         "show_sku": true,
         "show_rating": true,
         "quick_add": "standard",
+        "show_mobile_add_to_cart": true,
         "use_russo_pickup": true,
         "enable_filtering": true,
         "filter_type": "vertical",
