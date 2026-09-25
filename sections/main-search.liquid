@@ -152,7 +152,7 @@
           </form>
         </main-search>
 
-        {%- if section.settings.predictive_search_enabled -%}
+        {%- if settings.predictive_search_enabled -%}
           </predictive-search>
         {%- endif -%}
       </div>
@@ -321,9 +321,6 @@
                     {%- case item.object_type -%}
 
                       {%- when 'product' -%}
-                        {%- capture product_settings -%}
-                          {%- if section.settings.product_show_vendor -%}vendor,{%- endif -%}title,price
-                        {%- endcapture -%}
 
                         {% render 'card-product',
                           card_product: item,
@@ -336,6 +333,7 @@
                           lazy_load: lazy_load,
                           skip_styles: skip_card_product_styles,
                           quick_add: 'standard',
+                          section_id: section.id,
                           show_stock: true,
                           pickup_availability_components: 'headline',
                           use_russo_pickup: section.settings.use_russo_pickup,

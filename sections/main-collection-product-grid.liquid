@@ -23,7 +23,7 @@
   <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
-{%- if section.settings.show_mobile_add_to_cart and section.settings.quick_add == 'none' -%}
+{%- if section.settings.show_mobile_add_to_cart and section.settings.quick_add != 'standard' -%}
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
@@ -177,7 +177,14 @@
                 {% if section.settings.quick_add == 'bulk' %}collection-quick-add-bulk{% endif %}
               "
             >
-              {% assign skip_card_product_styles = false %}
+              {%- liquid
+                assign skip_card_product_styles = false
+                assign enable_card_hover_actions = false
+
+                if section.settings.quick_add == 'standard'
+                  assign enable_card_hover_actions = true
+                endif
+              -%}
 
               {%- for product in collection.products -%}
                 {% assign lazy_load = false %}
@@ -207,7 +214,7 @@
                     section_id: section.id,
                     show_stock: true,
                     pickup_availability_components: 'headline',
-                    enable_hover_actions: true,
+                    enable_hover_actions: enable_card_hover_actions,
                     use_russo_pickup: section.settings.use_russo_pickup,
                     auto_status_fetch: false,
                     show_mobile_add_to_cart: section.settings.show_mobile_add_to_cart

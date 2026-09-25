@@ -192,11 +192,21 @@
     endif
 
     assign card_media = card_product.featured_media | default: settings.default_product_image
+    assign card_product_url = card_product.url
+
+    if collection
+      assign card_product_url = card_product.url | within: collection
+    endif
+
     assign product_form_id = 'quick-add-' | append: section_id | append: '-' | append: card_product.id
     assign mobile_product_form_id = 'mobile-card-form-' | append: section_id | append: '-' | append: card_product.id
 
     assign qty_rules = false
     assign selected_variant = card_product.selected_or_first_available_variant
+
+    if selected_variant == null
+      assign selected_variant = card_product.variants.first
+    endif
 
     if selected_variant.quantity_rule.min > 1 or selected_variant.quantity_rule.max != null or selected_variant.quantity_rule.increment > 1
       assign qty_rules = true
@@ -295,7 +305,7 @@
               {% endif %}
             >
               <a
-                href="{% if collection %}{{ card_product.url | within: collection }}{% else %}{{ card_product.url }}{% endif %}"
+                href="{{ card_product_url }}"
                 class="full-unstyled-link"
               >
                 {{ card_product.title | escape }}
@@ -338,7 +348,7 @@
             {% endif %}
           >
             <a
-              href="{% if collection %}{{ card_product.url | within: collection }}{% else %}{{ card_product.url }}{% endif %}"
+              href="{{ card_product_url }}"
               class="full-unstyled-link"
             >
               {{ card_product.title | escape }}
@@ -548,7 +558,7 @@
         <div class="card-mobile-action">
           {%- if card_product.price <= 0 -%}
             <a
-              href="{{ card_product.url }}"
+              href="{{ card_product_url }}"
               class="button button--full-width button--primary card-mobile-action__button card-mobile-action__link"
             >
               Request Quote
@@ -556,13 +566,13 @@
 
           {%- elsif card_product.variants_count > 1 or qty_rules -%}
             <a
-              href="{{ card_product.url }}"
+              href="{{ card_product_url }}"
               class="button button--full-width button--primary card-mobile-action__button card-mobile-action__link"
             >
               {{ 'products.product.choose_options' | t }}
             </a>
 
-          {%- else -%}
+          {%- elsif selected_variant != null -%}
             <product-form data-section-id="{{ section_id }}">
               {%- form 'product',
                 card_product,
@@ -608,6 +618,14 @@
                 </button>
               {%- endform -%}
             </product-form>
+          {%- else -%}
+            <button
+              type="button"
+              class="button button--full-width button--primary card-mobile-action__button"
+              disabled
+            >
+              {{ 'products.product.sold_out' | t }}
+            </button>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -865,7 +883,7 @@
                           {%- endif -%}
 
                           <a
-                            href="{{ card_product.url }}"
+                            href="{{ card_product_url }}"
                             class="link underlined-link"
                           >
                             {{ 'products.product.view_full_details' | t }}
@@ -875,7 +893,7 @@
 
                         <div class="quick-add-modal__content-info--bulk-details large-up-hide">
                           <a
-                            href="{{ card_product.url }}"
+                            href="{{ card_product_url }}"
                             class="full-unstyled-link"
                           >
                             <h3>{{ card_product.title | escape }}</h3>
@@ -892,7 +910,7 @@
                       <div>
                         <div class="quick-add-modal__content-info--bulk-details small-hide medium-hide">
                           <a
-                            href="{{ card_product.url }}"
+                            href="{{ card_product_url }}"
                             class="full-unstyled-link"
                           >
                             <h3 class="h2">
@@ -933,7 +951,7 @@
         {% else %}
           <div class="quick-add no-js-hidden">
             <a
-              href="{{ card_product.url }}"
+              href="{{ card_product_url }}"
               class="quick-add__submit button button--full-width button--primary quick-add__request_quote"
             >
               Request Quote
