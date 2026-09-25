@@ -2,3 +2,5 @@ MatchingTranslations:
   enabled: false
 TemplateLength:
   enabled: false
+HardcodedRoutes:
+  enabled: false

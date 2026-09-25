@@ -1970,7 +1970,6 @@
         // After fetch completes, check if count increased
         setTimeout(function () {
           if (window.__mloHistoryCount > countAtSubmit) {
-            console.log('[MLO] New entry detected, stopping poll');
             clearInterval(pollTimer);
             pollTimer = null;
           }

@@ -23,10 +23,6 @@
 
       if (currentAttrValue === preferredStore.name) {
         // Already in sync; nothing to do
-        console.log(
-          "Preferred store already synced to cart attribute:",
-          currentAttrValue
-        );
         return;
       }
 
@@ -55,10 +51,6 @@
     })
     .then(function (data) {
       if (!data) return;
-      console.log(
-        "Cart attributes updated with preferred store:",
-        data.attributes
-      );
     })
     .catch(function (err) {
       console.error("Error syncing preferred store to cart attributes", err);
