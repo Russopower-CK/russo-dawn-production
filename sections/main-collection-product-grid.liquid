@@ -13,7 +13,7 @@
 {%- if section.settings.quick_add == 'standard' -%}
   <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'product-hover-panel.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-hover-panel.js'  | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- if section.settings.quick_add == 'bulk' -%}
@@ -21,10 +21,6 @@
   <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
-
-{%- if section.settings.show_mobile_add_to_cart and section.settings.quick_add != 'standard' -%}
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- style -%}
@@ -43,14 +39,11 @@
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
-    {% comment %}
-      Sort is the first tabbable element when filter type is vertical.
-    {% endcomment %}
+    {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
 
-    <div class="{% if section.settings.filter_type == 'vertical' %}facets-vertical page-width{% endif %}">
+    <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
-
       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside
           aria-labelledby="verticalTitle"
@@ -76,16 +69,11 @@
         {% endif %}
       >
         {%- if paginate.items == 0 -%}
-          <div
-            class="collection collection--empty page-width"
-            id="product-grid"
-            data-id="{{ section.id }}"
-          >
+          <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
             <div class="loading-overlay gradient"></div>
-
             <div class="title-wrapper center">
               <h2 class="title title--primary">
-                {{ 'sections.collection_template.empty' | t }}
+                {{ 'sections.collection_template.empty' | t -}}
                 <br>
                 {{
                   'sections.collection_template.use_fewer_filters_html'
@@ -95,21 +83,19 @@
             </div>
           </div>
         {%- else -%}
-          <div class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}">
+          <div
+            class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+          >
             {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
               <facet-filters-form class="facets facets-vertical-sort page-width small-hide">
                 <form class="facets-vertical-form" id="FacetSortForm">
                   <div class="facet-filters sorting caption">
                     <div class="facet-filters__field">
                       <h2 class="facet-filters__label caption-large text-body">
-                        <label for="SortBy">
-                          {{ 'products.facets.sort_by_label' | t }}
-                        </label>
+                        <label for="SortBy">{{ 'products.facets.sort_by_label' | t }}</label>
                       </h2>
-
                       <div class="select">
                         {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
-
                         <select
                           name="sort_by"
                           class="facet-filters__sort select__select caption-large"
@@ -127,7 +113,6 @@
                             </option>
                           {%- endfor -%}
                         </select>
-
                         <span class="svg-wrapper">
                           {{- 'icon-caret.svg' | inline_asset_content -}}
                         </span>
@@ -144,55 +129,36 @@
                             | t: terms: collection.terms, count: collection.results_count
                           }}
                         {%- elsif collection.products_count == collection.all_products_count -%}
-                          {{
-                            'products.facets.product_count_simple'
-                            | t: count: collection.products_count
-                          }}
+                          {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
                         {%- else -%}
                           {{
                             'products.facets.product_count'
-                            | t:
-                              product_count: collection.products_count,
-                              count: collection.all_products_count
+                            | t: product_count: collection.products_count, count: collection.all_products_count
                           }}
                         {%- endif -%}
                       </span>
                     </h2>
-
                     {%- render 'loading-spinner' -%}
                   </div>
                 </form>
               </facet-filters-form>
             {%- endif -%}
-
             <div class="loading-overlay gradient"></div>
-
             <ul
               id="product-grid"
               data-id="{{ section.id }}"
               class="
-                grid product-grid
-                grid--{{ section.settings.columns_mobile }}-col-tablet-down
+                grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
                 grid--{{ section.settings.columns_desktop }}-col-desktop
-                {% if section.settings.quick_add == 'bulk' %}collection-quick-add-bulk{% endif %}
+                {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
               "
             >
-              {%- liquid
-                assign skip_card_product_styles = false
-                assign enable_card_hover_actions = false
-
-                if section.settings.quick_add == 'standard'
-                  assign enable_card_hover_actions = true
-                endif
-              -%}
-
+              {% assign skip_card_product_styles = false %}
               {%- for product in collection.products -%}
                 {% assign lazy_load = false %}
-
                 {%- if forloop.index > 2 -%}
                   {%- assign lazy_load = true -%}
                 {%- endif -%}
-
                 <li
                   class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                   {% if settings.animations_reveal_on_scroll %}
@@ -214,13 +180,11 @@
                     section_id: section.id,
                     show_stock: true,
                     pickup_availability_components: 'headline',
-                    enable_hover_actions: enable_card_hover_actions,
+                    enable_hover_actions: true,
                     use_russo_pickup: section.settings.use_russo_pickup,
-                    auto_status_fetch: false,
-                    show_mobile_add_to_cart: section.settings.show_mobile_add_to_cart
+                    auto_status_fetch: false
                   %}
                 </li>
-
                 {%- assign skip_card_product_styles = true -%}
               {%- endfor -%}
             </ul>
@@ -233,10 +197,9 @@
       </div>
     </div>
   {%- endpaginate -%}
-
   {% if section.settings.image_shape == 'arch' %}
     {{ 'mask-arch.svg' | inline_asset_content }}
-  {%- endif %}
+  {%- endif -%}
 </div>
 
 {% schema %}
@@ -365,7 +328,7 @@
       "type": "checkbox",
       "id": "show_sku",
       "default": false,
-      "label": "Show SKU"
+      "label": "t:sections.main-collection-product-grid.settings.show_sku.label"
     },
     {
       "type": "checkbox",
@@ -393,13 +356,6 @@
           "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
         }
       ]
-    },
-    {
-      "type": "checkbox",
-      "id": "show_mobile_add_to_cart",
-      "label": "Show mobile Add to Cart button",
-      "default": true,
-      "info": "Shows Add to Cart, Choose Options, Sold Out, or Request Quote on mobile product cards."
     },
     {
       "type": "checkbox",
