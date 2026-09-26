@@ -213,9 +213,11 @@ cart-items {
     justify-content: flex-end;
   }
 
+
+}
+
   .cart__ctas {
     display: grid;
     grid-template-columns: auto auto;
     gap: 1rem;
   }
-}
