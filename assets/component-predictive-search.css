@@ -222,7 +222,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
 
 div.predictive-search.predictive-search--header {
     position: absolute !important;
-    min-width: 500px;
+    min-width: 0;
     max-width: 800px !important; /* Caps the max-width so it looks clean on desktop */
 }
 
@@ -262,5 +262,8 @@ div.predictive-search.predictive-search--header {
   color: var(--russo-red-dark);
   font-size: 1.6rem;
   font-weight: 400;
+}
+.predictive-search__list-item{
+  text-wrap: balance;
 }
 

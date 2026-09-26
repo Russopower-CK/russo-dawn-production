@@ -30,19 +30,21 @@
     flex: 0 1 auto;
     min-width: 0;
     grid-column: 2;
+    flex-shrink: 1;
     grid-row: 1;
     padding-right: 1rem;
   }
 
   .header__custom-promo {
-    display: flex;
+    display: block;
     align-items: center;
+    max-width: 180px;
     width: 100%;
   }
 
   .header__custom-promo-logo {
     display: block;
-    max-width: 250px;
+    width: 100%;
     height: auto;
   }
   .header__menu-item:hover {
