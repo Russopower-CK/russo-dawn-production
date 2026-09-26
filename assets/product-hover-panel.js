@@ -194,5 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 80);
   };
 
+  if (window.matchMedia('(min-width: 750px) and (hover: hover)').matches) {
   new ProductActionsFlyout().init();
+}
 });
