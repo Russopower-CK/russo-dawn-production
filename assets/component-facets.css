@@ -455,7 +455,6 @@
   font-size: 1.2rem;
   display: flex;
   word-break: break-word;
-  white-space: nowrap;
 }
 
 /* Hover, active, and focus states */
