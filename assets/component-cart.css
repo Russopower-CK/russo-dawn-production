@@ -155,9 +155,6 @@ cart-items {
   width: 100%;
 }
 
-.cart__checkout-button.clear-cart{
-  background: var(--russo-red);
-}
 
 
 .cart__update-button {
@@ -217,7 +214,8 @@ cart-items {
   }
 
   .cart__ctas {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto;
     gap: 1rem;
   }
 }
