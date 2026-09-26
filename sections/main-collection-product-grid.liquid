@@ -8,6 +8,8 @@
 
 {%- unless section.settings.quick_add == 'none' -%}
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
 {%- if section.settings.quick_add == 'standard' -%}
@@ -16,7 +18,7 @@
 {%- endif -%}
 
 {%- if section.settings.quick_add == 'russo-buy-button' -%}
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-hover-panel.js'  | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
