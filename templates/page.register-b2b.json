@@ -134,12 +134,27 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "russo_features_BrQyCX": {
+      "type": "russo-features",
+      "name": "Russo features",
+      "settings": {
+        "heading": "Features",
+        "heading_size": "h1",
+        "introduction": "",
+        "open_first": true,
+        "show_required_tiers": true,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "main",
     "rich_text_Dq9AQd",
     "rich_text_C4wArE",
-    "1790099460621aaab0"
+    "1790099460621aaab0",
+    "russo_features_BrQyCX"
   ]
 }
