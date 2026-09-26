@@ -221,3 +221,15 @@ cart-items {
     grid-template-columns: auto auto;
     gap: 1rem;
   }
+
+.clear-cart {
+background-color: var(--russo-red-dark);
+}
+.clear-cart::after {
+
+  box-shadow: none;
+
+}
+.cart__checkout-button.clear-cart.button::after {
+ --color-button: 178, 18, 23;
+}
