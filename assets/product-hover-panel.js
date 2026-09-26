@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
       function () {
         self.schedulePosition();
       },
-      { passive: true, capture: true }
+      { passive: true, capture: true },
     );
 
     window.addEventListener(
@@ -84,27 +84,22 @@ document.addEventListener('DOMContentLoaded', function () {
       function () {
         self.schedulePosition();
       },
-      { passive: true }
+      { passive: true },
     );
   };
 
   ProductActionsFlyout.prototype.position = function () {
     if (!this.activeCard) return;
 
-    const cardBox =
-      this.activeCard.querySelector('.card') ||
-      this.activeCard;
+    const cardBox = this.activeCard.querySelector('.card') || this.activeCard;
 
     const rect = cardBox.getBoundingClientRect();
 
-    this.panel.style.left =
-      rect.left + window.scrollX + 'px';
+    this.panel.style.left = rect.left + window.scrollX + 'px';
 
-    this.panel.style.top =
-      rect.bottom + window.scrollY + 'px';
+    this.panel.style.top = rect.bottom + window.scrollY + 'px';
 
-    this.panel.style.width =
-      rect.width + 'px';
+    this.panel.style.width = rect.width + 'px';
   };
 
   ProductActionsFlyout.prototype.open = function (card) {
@@ -118,8 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     this.close();
 
-    const actions =
-      card.querySelector('.card__actions');
+    const actions = card.querySelector('.card__actions');
 
     if (!actions || !actions.parentNode) return;
 
@@ -128,15 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     card.classList.add('is-hover-active');
 
-    this.placeholder =
-      document.createComment(
-        'card-actions-placeholder'
-      );
+    this.placeholder = document.createComment('card-actions-placeholder');
 
-    actions.parentNode.insertBefore(
-      this.placeholder,
-      actions
-    );
+    actions.parentNode.insertBefore(this.placeholder, actions);
 
     this.panel.appendChild(actions);
     this.panel.style.display = 'block';
@@ -150,23 +138,14 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   ProductActionsFlyout.prototype.close = function () {
-    if (
-      this.activeActions &&
-      this.placeholder &&
-      this.placeholder.parentNode
-    ) {
-      this.placeholder.parentNode.insertBefore(
-        this.activeActions,
-        this.placeholder
-      );
+    if (this.activeActions && this.placeholder && this.placeholder.parentNode) {
+      this.placeholder.parentNode.insertBefore(this.activeActions, this.placeholder);
 
       this.placeholder.remove();
     }
 
     if (this.activeCard) {
-      this.activeCard.classList.remove(
-        'is-hover-active'
-      );
+      this.activeCard.classList.remove('is-hover-active');
     }
 
     this.panel.classList.remove('is-revealing');
@@ -195,6 +174,6 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   if (window.matchMedia('(min-width: 750px) and (hover: hover)').matches) {
-  new ProductActionsFlyout().init();
-}
+    new ProductActionsFlyout().init();
+  }
 });
