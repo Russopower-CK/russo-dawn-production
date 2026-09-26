@@ -501,7 +501,7 @@
         "show_vendor": false,
         "show_sku": true,
         "show_rating": true,
-        "quick_add": "buy-button",
+        "quick_add": "russo-buy-button",
         "columns_mobile": "1",
         "swipe_on_mobile": true,
         "padding_top": 0,
