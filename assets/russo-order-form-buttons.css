@@ -10,13 +10,9 @@
 }
 
 .orderform-btn.of-add {
-  background-color: var(--russo-green, #0a7d36);
+  background-color: rgba(var(--color-button), var(--alpha-button-background));
   border: 0;
   width: 100%;
-}
-
-.orderform-btn.of-add:hover:not(:disabled) {
-  background-color: var(--russo-green-dark, #08612a);
 }
 
 .orderform-btn.of-remove {
