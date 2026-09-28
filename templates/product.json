@@ -111,6 +111,7 @@
         },
         "russo_favorites_KrAW8X": {
           "type": "russo-favorites",
+          "disabled": true,
           "settings": {}
         },
         "collapsible-row-0": {
