@@ -109,6 +109,12 @@
             "show_gift_card_recipient": true
           }
         },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        },
         "russo_favorites_KrAW8X": {
           "type": "russo-favorites",
           "disabled": true,
@@ -136,12 +142,6 @@
             "image_ratio": "square",
             "enable_quick_add": true
           }
-        },
-        "share": {
-          "type": "share",
-          "settings": {
-            "share_label": "Share"
-          }
         }
       },
       "block_order": [
@@ -160,10 +160,10 @@
         "quantity_selector",
         "description",
         "buy_buttons",
+        "share",
         "russo_favorites_KrAW8X",
         "collapsible-row-0",
-        "complementary_96fkpz",
-        "share"
+        "complementary_96fkpz"
       ],
       "settings": {
         "enable_sticky_info": true,
