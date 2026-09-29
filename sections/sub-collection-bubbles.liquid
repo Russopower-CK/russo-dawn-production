@@ -58,9 +58,19 @@
 
   .collection-subcollections__grid {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-start;
     gap: 3rem;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .collection-subcollections__grid::-webkit-scrollbar {
+    display: none;
   }
 
   .collection-subcollections__item {
