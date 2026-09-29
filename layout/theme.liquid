@@ -307,22 +307,25 @@
     </script>
 
     {%- if settings.show_kenect_widget -%}
-      <style>
-        /* Hide Kenect widget while cart drawer is active */
-        body:has(cart-drawer.active) [id*='kenect'],
-        body:has(cart-drawer.active) iframe[src*='kenect'],
-        body:has(cart-drawer.active) [class*='kenect'],
-        body.overflow-hidden [id*='kenect'],
-        body.overflow-hidden iframe[src*='kenect'],
-        body.overflow-hidden [class*='kenect'] {
-          display: none !important;
-          opacity: 0 !important;
-          visibility: hidden !important;
-          pointer-events: none !important;
-          z-index: -1 !important;
-        }
-      </style>
-    {%- endif -%}
+  <style>
+    body:has(cart-drawer.active) [id*='kenect'],
+    body:has(cart-drawer.active) iframe[src*='kenect'],
+    body:has(cart-drawer.active) [class*='kenect'],
+    body.overflow-hidden [id*='kenect'],
+    body.overflow-hidden iframe[src*='kenect'],
+    body.overflow-hidden [class*='kenect'] {
+      display: none !important;
+    }
+
+    @media (max-width: 749px) {
+      body:has(menu-drawer[open]) [id*='kenect'],
+      body:has(menu-drawer[open]) iframe[src*='kenect'],
+      body:has(menu-drawer[open]) [class*='kenect'] {
+        display: none !important;
+      }
+    }
+  </style>
+{%- endif -%}
   {% include 'pagefly-app-header' %}</head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
