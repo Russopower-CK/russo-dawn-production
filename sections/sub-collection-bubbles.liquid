@@ -5,10 +5,16 @@
     <div class="collection-subcollections__grid">
       {%- for subcollection in subcollections -%}
         <a href="{{ subcollection.url }}" class="collection-subcollections__item">
-          {%- if subcollection.image != blank -%}
+          {%- assign subcollection_image = subcollection.image -%}
+
+          {%- if subcollection_image == blank and subcollection.products.first != blank -%}
+            {%- assign subcollection_image = subcollection.products.first.featured_image -%}
+          {%- endif -%}
+
+          {%- if subcollection_image != blank -%}
             <div class="collection-subcollections__image">
               {{
-                subcollection.image
+                subcollection_image
                 | image_url: width: 600
                 | image_tag:
                   loading: 'lazy',
@@ -100,11 +106,11 @@
     font-size: 1.8rem;
     font-weight: 700;
     line-height: 1.2;
+    color: var(--russo-red-dark);
   }
 
   .collection-subcollections__item:hover .collection-subcollections__title {
-    text-decoration: underline;
-    text-underline-offset: 0.3rem;
+    text-decoration: none;
   }
 
   @media screen and (max-width: 749px) {
