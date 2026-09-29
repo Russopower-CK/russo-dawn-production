@@ -17,7 +17,7 @@
         "heading": "Russo Multi-Location Order Form",
         "description": "Select quantities per destination location, then generate the JSON payload.",
         "source_collection": "",
-        "location_input_mode": "location_rows",
+        "location_input_mode": "auto",
         "location_column_threshold": 3,
         "enable_location_freight_charge": false,
         "location_freight_metafield": "custom.salt_zone_charge",
