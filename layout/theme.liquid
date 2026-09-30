@@ -308,7 +308,7 @@
 
     {%- if settings.show_kenect_widget -%}
   <style>
-    /* DESKTOP – unchanged */
+    /* DESKTOP */
     body:has(cart-drawer.active) [id*='kenect'],
     body:has(cart-drawer.active) iframe[src*='kenect'],
     body:has(cart-drawer.active) [class*='kenect'],
@@ -319,12 +319,11 @@
     }
 
     /* MOBILE */
-    @media (max-width: 749px) {
-      /* Hide the entire Kenect widget container when a menu drawer is open */
-      body:has(menu-drawer[open])
-        div[id^="widget-"][class*="widget-container"]:has(iframe[src*="widget.kenect.com"]),
-      /* Hide the iframes*/
-      body:has(menu-drawer[open]) iframe[src*="widget.kenect.com"] {
+    @media screen and (max-width: 749px) {
+      body:has(.mobile-facets__disclosure[open])
+        div[id^='widget-'][class*='widget-container']:has(
+          iframe[src*='widget.kenect.com']
+        ) {
         display: none !important;
       }
     }
