@@ -308,21 +308,27 @@
 
     {%- if settings.show_kenect_widget -%}
   <style>
-    body:has(cart-drawer.active) [id*='kenect'],
-    body:has(cart-drawer.active) iframe[src*='kenect'],
-    body:has(cart-drawer.active) [class*='kenect'],
-    body.overflow-hidden [id*='kenect'],
-    body.overflow-hidden iframe[src*='kenect'],
-    body.overflow-hidden [class*='kenect'] {
+    /* When cart drawer is open */
+    body:has(cart-drawer[open]) iframe[src*='widget.kenect.com'],
+    body:has(cart-drawer[open]) button:has(> iframe[src*='widget.kenect.com']),
+    body:has(cart-drawer[open]) div:has(> iframe[src*='widget.kenect.com']) {
       display: none !important;
     }
 
+    /* When any menu drawer (incl. mobile filter/sort) is open on mobile */
     @media (max-width: 749px) {
-      body:has(menu-drawer[open]) [id*='kenect'],
-      body:has(menu-drawer[open]) iframe[src*='kenect'],
-      body:has(menu-drawer[open]) [class*='kenect'] {
+      body:has(menu-drawer[open]) iframe[src*='widget.kenect.com'],
+      body:has(menu-drawer[open]) button:has(> iframe[src*='widget.kenect.com']),
+      body:has(menu-drawer[open]) div:has(> iframe[src*='widget.kenect.com']) {
         display: none !important;
       }
+    }
+
+    /* Extra safety: whenever Dawn locks scroll (any drawer/modal) */
+    body.overflow-hidden iframe[src*='widget.kenect.com'],
+    body.overflow-hidden button:has(> iframe[src*='widget.kenect.com']),
+    body.overflow-hidden div:has(> iframe[src*='widget.kenect.com']) {
+      display: none !important;
     }
   </style>
 {%- endif -%}
