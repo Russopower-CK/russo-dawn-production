@@ -307,7 +307,8 @@
     </script>
 
     {%- if settings.show_kenect_widget -%}
-    <style>
+  <style>
+    /* DESKTOP – unchanged */
     body:has(cart-drawer.active) [id*='kenect'],
     body:has(cart-drawer.active) iframe[src*='kenect'],
     body:has(cart-drawer.active) [class*='kenect'],
@@ -317,10 +318,13 @@
       display: none !important;
     }
 
+    /* MOBILE */
     @media (max-width: 749px) {
-      body:has(menu-drawer[open]) [id*='kenect'],
-      body:has(menu-drawer[open]) iframe[src*='kenect'],
-      body:has(menu-drawer[open]) [class*='kenect'] {
+      /* Hide the entire Kenect widget container when a menu drawer is open */
+      body:has(menu-drawer[open])
+        div[id^="widget-"][class*="widget-container"]:has(iframe[src*="widget.kenect.com"]),
+      /* Hide the iframes*/
+      body:has(menu-drawer[open]) iframe[src*="widget.kenect.com"] {
         display: none !important;
       }
     }
