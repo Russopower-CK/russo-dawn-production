@@ -308,14 +308,14 @@
 
     {%- if settings.show_kenect_widget -%}
   <style>
-    /* When cart drawer is open */
+    /* Cart drawer open */
     body:has(cart-drawer[open]) iframe[src*='widget.kenect.com'],
     body:has(cart-drawer[open]) button:has(> iframe[src*='widget.kenect.com']),
     body:has(cart-drawer[open]) div:has(> iframe[src*='widget.kenect.com']) {
       display: none !important;
     }
 
-    /* When any menu drawer (incl. mobile filter/sort) is open on mobile */
+    /* Any menu drawer (mobile nav, filter/sort, etc.) on mobile */
     @media (max-width: 749px) {
       body:has(menu-drawer[open]) iframe[src*='widget.kenect.com'],
       body:has(menu-drawer[open]) button:has(> iframe[src*='widget.kenect.com']),
@@ -324,7 +324,7 @@
       }
     }
 
-    /* Any drawer/modal) */
+    /* Whenever body is scroll-locked */
     body.overflow-hidden iframe[src*='widget.kenect.com'],
     body.overflow-hidden button:has(> iframe[src*='widget.kenect.com']),
     body.overflow-hidden div:has(> iframe[src*='widget.kenect.com']) {
