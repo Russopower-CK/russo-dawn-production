@@ -67,6 +67,22 @@
         "id": "predictive_search_fields",
         "label": "Predictive Search Fields",
         "default": "title,tag,variants.sku"
+      },
+      {
+        "type": "select",
+        "id": "russo_store_selector_version",
+        "label": "Store Selector Version",
+        "options": [
+          {
+            "label": "legacy",
+            "value":"legacy"
+          },
+          {
+            "label": "Modern",
+            "value": "modern"
+          }
+        ],
+        "default":"modern"
       }
     ] 
   },

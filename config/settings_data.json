@@ -17,6 +17,7 @@
     "use_russo_favorites": true,
     "show_kenect_widget": true,
     "kenect_url": "https://resource.kenect.com/api/v1/widget/client-data/iIYr15CB66nTKB9sHmL5kJ",
+    "russo_store_selector_version": "modern",
     "type_header_font": "roboto_n6",
     "heading_scale": 100,
     "type_body_font": "roboto_n4",

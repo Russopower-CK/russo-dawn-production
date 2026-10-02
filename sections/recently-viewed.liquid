@@ -57,6 +57,10 @@
               item.classList.add('slider-slide--mobile');
               container.appendChild(item);
             });
+            // THEN call this ONCE
+            if (typeof loadMissingPickupInventory === 'function') {
+              loadMissingPickupInventory();
+            }
           } else {
             // Fallback layout removal if strings don't parse properly
             const parentSection = container.closest('.recently-viewed-section-wrapper');
@@ -85,16 +89,13 @@
       <h2 class="recently-viewed__heading product-recommendations__heading inline-richtext {{ section.settings.heading_size }}">
         {{ section.settings.heading }}
       </h2>
-      <a href="#" id="clear-recently-viewed" class="recently-viewed__clear-btn link">
-        Clear recently viewed
-      </a>
+      <a href="#" id="clear-recently-viewed" class="recently-viewed__clear-btn link"> Clear recently viewed </a>
     </div>
     <ul
       id="recently-viewed-products"
-      class="grid product-grid grid--2-col grid--5-col-desktop slider--mobile-carousel" 
+      class="grid product-grid grid--2-col grid--5-col-desktop slider--mobile-carousel"
       role="list"
-    >
-    </ul>
+    ></ul>
   </div>
 </div>
 
@@ -113,14 +114,14 @@
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       scrollbar-width: none; /* Firefox */
-      margin-left: 0; 
+      margin-left: 0;
     }
     .section-{{ section.id }}-padding .slider--mobile-carousel::-webkit-scrollbar {
       display: none; /* Chrome/Safari */
     }
     /* Fixed at 2 items visible at a time */
     .section-{{ section.id }}-padding .slider-slide--mobile {
-      flex: 0 0 calc(100% / 2 - 1rem); 
+      flex: 0 0 calc(100% / 2 - 1rem);
       scroll-snap-align: start;
     }
     .section-{{ section.id }}-padding .card-wrapper {
