@@ -1,0 +1,22 @@
+<style>
+  .preferred-store-trigger {
+    color: white;
+    font-size: 1rem;
+  }
+  .preferred-store-trigger:hover {
+    color: var(--russo-red-dark);
+    font-size: 1rem;
+  }
+  .preferred-store-trigger::before:hover {
+    color: var(--russo-red-dark);
+  }
+</style>
+
+<button
+  type="button"
+  class="preferred-store-trigger preferred-store-trigger--side-tab"
+  data-store-selector-label
+  data-preferred-store-open
+>
+  {{- cart.attributes.preferred_store_location_name | default: 'Choose Store' -}}
+</button>

@@ -155,9 +155,6 @@ cart-items {
   width: 100%;
 }
 
-.cart__checkout-button.clear-cart{
-  background: var(--russo-red);
-}
 
 
 .cart__update-button {
@@ -216,8 +213,23 @@ cart-items {
     justify-content: flex-end;
   }
 
+
+}
+
   .cart__ctas {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto;
     gap: 1rem;
   }
+
+.clear-cart {
+background-color: var(--russo-red-dark);
+}
+.clear-cart::after {
+
+  box-shadow: none;
+
+}
+.cart__checkout-button.clear-cart.button::after {
+ --color-button: 178, 18, 23;
 }

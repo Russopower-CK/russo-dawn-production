@@ -308,7 +308,7 @@
 
     {%- if settings.show_kenect_widget -%}
       <style>
-        /* Hide Kenect widget while cart drawer is active */
+        /* DESKTOP */
         body:has(cart-drawer.active) [id*='kenect'],
         body:has(cart-drawer.active) iframe[src*='kenect'],
         body:has(cart-drawer.active) [class*='kenect'],
@@ -316,14 +316,19 @@
         body.overflow-hidden iframe[src*='kenect'],
         body.overflow-hidden [class*='kenect'] {
           display: none !important;
-          opacity: 0 !important;
-          visibility: hidden !important;
-          pointer-events: none !important;
-          z-index: -1 !important;
+        }
+
+        /* MOBILE */
+        @media screen and (max-width: 749px) {
+          body:has(.mobile-facets__disclosure[open])
+            div[id^='widget-'][class*='widget-container']:has(iframe[src*='widget.kenect.com']) {
+            display: none !important;
+          }
         }
       </style>
     {%- endif -%}
-  {% include 'pagefly-app-header' %}</head>
+    {% include 'pagefly-app-header' %}
+  </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
@@ -410,6 +415,15 @@
         src="{{ settings.kenect_url }}"
         type="text/javascript"
       ></script>
+    {% endif %}
+
+    {% if settings.russo_store_selector_version == 'modern' %}
+      <script>
+        console.log('MODERN STORE SELECTOR ACTIVE');
+      </script>
+      <script src="{{ 'russo-store-experience.js' | asset_url }}" defer="defer"></script>
+      <script src="{{'russo-pickup-availability.js' | asset_url}}" defer="defer"></script>
+      <script src="{{ 'russo-store-selector-drawer.js' | asset_url }}" defer="defer"></script>
     {% endif %}
   </body>
 </html>

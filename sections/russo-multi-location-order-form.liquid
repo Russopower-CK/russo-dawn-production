@@ -100,6 +100,7 @@
   endif
 -%}
 
+{{ 'russo-multi-location-order-form.css' | asset_url | stylesheet_tag }}
 <section class="b2b-russo-order-form section-{{ section.id }}">
   <div class="page-width">
     <header class="b2b-russo-order-form__header">
@@ -187,6 +188,7 @@
                     <tr>
                       {%- if use_location_rows_input -%}
                         <th scope="col">Location</th>
+                        <th scope="col">{{ section.settings.purchase_order_label }}</th>
                         {%- for product in source_collection.products -%}
                           {%- for order_variant in product.variants -%}
                             {%- liquid
@@ -264,6 +266,26 @@
                           <th scope="row" class="b2b-russo-order-form__location-heading">
                             <span class="b2b-russo-order-form__location-title">{{ location.name }}</span>
                           </th>
+                          <td
+                            class="b2b-russo-order-form__quantity-cell"
+                            data-label="{{ section.settings.purchase_order_label | escape }}"
+                          >
+                            {%- liquid
+                              assign location_purchase_order_id = 'location-purchase-order-' | append: section.id | append: '-' | append: location.id
+                              assign location_purchase_order_label = location.name | append: ' - ' | append: section.settings.purchase_order_label
+                            -%}
+                            <label class="visually-hidden" for="{{ location_purchase_order_id }}">
+                              {{- location_purchase_order_label -}}
+                            </label>
+                            <input
+                              id="{{ location_purchase_order_id }}"
+                              type="text"
+                              class="purchase-order-number-input"
+                              data-location-purchase-order
+                              data-location-id="{{ location.id }}"
+                              data-location-name="{{ location.name | escape }}"
+                            >
+                          </td>
                           {%- for product in source_collection.products -%}
                             {%- for order_variant in product.variants -%}
                               {%- liquid
@@ -487,6 +509,7 @@
             <input
               id="purchase-order-{{ section.id }}"
               type="text"
+              class="purchase-order-number-input"
               data-purchase-order-number
             >
           </div>
@@ -510,12 +533,12 @@
         </div>
 
         <div class="b2b-russo-order-form__top-actions">
+          <p class="b2b-russo-order-form__submit-status" data-submit-status aria-live="polite"></p>
           <modal-opener data-modal="#OrderSubmitConfirmModal-{{ section.id }}">
             <button type="button" class="button button--primary" data-submit-order aria-haspopup="dialog">
               {{ section.settings.submit_button_label }}
             </button>
           </modal-opener>
-          <p class="b2b-russo-order-form__submit-status" data-submit-status aria-live="polite"></p>
         </div>
 
         {%- assign submit_confirm_modal_id = 'OrderSubmitConfirmModal-' | append: section.id -%}
@@ -544,598 +567,21 @@
             readonly>{}</textarea>
         {%- endif -%}
       </form>
+      <hr
+        style="
+          border: none;
+          border-top: 1px solid rgba(var(--color-foreground), 0.2);
+          margin: 3rem auto;
+          width: 100%;
+          max-width: var(--page-width);
+          padding: 0 5rem;
+        "
+      >
 
-      {% render 'multi-location-order-form-history', form_id: target_form_business_id %}
+      {% render 'multi-location-order-form-history', form_id: target_form_entry_id %}
     {%- endif -%}
   </div>
 </section>
-
-{% stylesheet %}
-  .location-rows-product-heading {
-    display: flex;
-    align-items: center;
-  }
-  .b2b-russo-order-form__table-header {
-    display: table-header-group;
-  }
-  .b2b-russo-order-form__header {
-    margin-bottom: 1.5rem;
-  }
-
-  .b2b-russo-order-form__entry-layout {
-    display: block;
-  }
-
-  .b2b-russo-order-form__top-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .b2b-russo-order-form__submit-status {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.35;
-    padding: 0.65rem 0.85rem;
-    border-radius: 0.6rem;
-    border: 1px solid transparent;
-    background: transparent;
-  }
-
-  .b2b-russo-order-form__submit-status[data-status-state='pending'] {
-    color: rgba(var(--color-foreground), 0.9);
-    background: rgba(var(--color-foreground), 0.06);
-    border-color: rgba(var(--color-foreground), 0.16);
-  }
-
-  .b2b-russo-order-form__submit-status[data-status-state='success'] {
-    color: rgb(10, 94, 46);
-    background: rgba(10, 94, 46, 0.12);
-    border-color: rgba(10, 94, 46, 0.32);
-  }
-
-  .b2b-russo-order-form__submit-status[data-status-state='error'] {
-    color: rgb(152, 21, 24);
-    background: rgba(218, 54, 51, 0.14);
-    border-color: rgba(218, 54, 51, 0.44);
-  }
-
-  .b2b-russo-order-form__entry-layout--with-summary {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 30rem;
-    gap: 1.2rem;
-    align-items: start;
-  }
-
-  .b2b-russo-order-form__location-picker {
-    margin-bottom: 0.9rem;
-    display: grid;
-    gap: 0.4rem;
-    max-width: 42rem;
-  }
-
-  .b2b-russo-order-form__location-picker select {
-    padding: 0.8rem;
-    width: 100%;
-  }
-
-  .b2b-russo-order-form__table thead th {
-    background-color: rgba(var(--color-foreground), 0.02);
-  }
-
-  .b2b-russo-order-form__summary-pane {
-    border: 1px solid rgba(var(--color-foreground), 0.1);
-    border-radius: 0.8rem;
-    padding: 1rem;
-    background: rgba(var(--color-foreground), 0.02);
-    position: sticky;
-    top: calc(var(--header-height, 0px) + 1rem);
-  }
-
-  .b2b-russo-order-form__summary-pane h3 {
-    margin: 0 0 0.8rem;
-  }
-
-  .b2b-russo-order-form__summary-list {
-    display: grid;
-    gap: 0.6rem;
-  }
-
-  .b2b-russo-order-form__summary-item {
-    border: 1px solid rgba(var(--color-foreground), 0.1);
-    border-radius: 0.6rem;
-    background: rgb(var(--color-background));
-    overflow: hidden;
-  }
-
-  .b2b-russo-order-form__summary-header {
-    list-style: none;
-    cursor: pointer;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    gap: 0.8rem;
-    align-items: center;
-    padding: 0.75rem;
-  }
-
-  .b2b-russo-order-form__summary-header::-webkit-details-marker {
-    display: none;
-  }
-
-  .b2b-russo-order-form__summary-caret {
-    font-size: 1.1rem;
-    transform: rotate(0deg);
-    transition: transform 0.2s ease;
-  }
-
-  .b2b-russo-order-form__summary-item[open] .b2b-russo-order-form__summary-caret {
-    transform: rotate(90deg);
-  }
-
-  .b2b-russo-order-form__summary-item-name {
-    font-weight: 600;
-  }
-
-  .b2b-russo-order-form__summary-item-meta {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.8rem;
-    font-size: 1.3rem;
-    white-space: nowrap;
-  }
-
-  .b2b-russo-order-form__summary-item-freight {
-    margin: 0;
-    padding: 0 0.75rem 0.65rem;
-    font-size: 1.2rem;
-    color: rgba(var(--color-foreground), 0.75);
-  }
-  .b2b-russo-order-form__location-picker select:focus-visible {
-    outline: 0 !important;
-
-    outline-offset: 0;
-
-    box-shadow: none;
-  }
-
-  .b2b-russo-order-form__summary-product-list {
-    margin: 0;
-    padding: 0.1rem 0.75rem 0.75rem;
-    list-style: none;
-    display: grid;
-    gap: 0.25rem;
-    font-size: 1.2rem;
-    border-top: 1px solid rgba(var(--color-foreground), 0.08);
-  }
-
-  .b2b-russo-order-form__summary-product-list li {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.8rem;
-  }
-
-  .b2b-russo-order-form__summary-empty {
-    color: rgba(var(--color-foreground), 0.7);
-  }
-
-  .b2b-russo-order-form__table-wrap {
-    overflow-x: auto;
-    border: 1px solid rgba(var(--color-foreground), 0.1);
-    border-radius: 0.8rem;
-  }
-
-  .b2b-russo-order-form__table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 48rem;
-  }
-
-  .b2b-russo-order-form__table th,
-  .b2b-russo-order-form__table td {
-    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
-    padding: 1rem;
-    vertical-align: middle;
-  }
-
-  .b2b-russo-order-form__location-heading {
-    vertical-align: top;
-    min-width: 16rem;
-    text-align: left;
-    overflow: visible;
-  }
-  .b2b-russo-order-form__product-heading {
-    text-align: left;
-    align-content: center;
-  }
-
-  .b2b-russo-order-form__numeric-heading {
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  .b2b-russo-order-form__location-title {
-    padding: 0.45rem 0.9rem;
-    border-radius: 999px;
-    border: 1px solid rgba(var(--color-foreground), 0.12);
-    background: rgba(var(--color-foreground), 0.04);
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.3;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    text-wrap: balance;
-    justify-content: left;
-  }
-
-  .b2b-russo-order-form__product-cell {
-    display: flex;
-    align-items: left;
-    gap: 0.75rem;
-  }
-
-  .b2b-russo-order-form__product-image {
-    border-radius: 0.4rem;
-    width: 4rem;
-    height: 4rem;
-    object-fit: cover;
-  }
-
-  .b2b-russo-order-form__qty {
-    width: 7rem;
-    max-width: 100%;
-  }
-
-  .b2b-russo-order-form__qty-control {
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid rgba(var(--color-foreground), 0.24);
-    border-radius: 0.6rem;
-    overflow: hidden;
-    background: rgb(var(--color-background));
-  }
-
-  .b2b-russo-order-form__qty-button {
-    border: 0;
-    border-right: 1px solid rgba(var(--color-foreground), 0.16);
-    background: rgba(var(--color-foreground), 0.04);
-    color: rgb(var(--color-foreground));
-    width: 3rem;
-    min-height: 3.6rem;
-    font-size: 1.8rem;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .b2b-russo-order-form__qty-control .b2b-russo-order-form__qty-button:last-child {
-    border-right: 0;
-    border-left: 1px solid rgba(var(--color-foreground), 0.16);
-  }
-
-  .b2b-russo-order-form__qty-control .b2b-russo-order-form__qty {
-    width: 5.2rem;
-    border: 0;
-    text-align: center;
-    padding: 0.8rem 0.35rem;
-    margin: 0;
-    background: transparent;
-    appearance: textfield;
-    -moz-appearance: textfield;
-  }
-
-  .b2b-russo-order-form__qty-control .b2b-russo-order-form__qty::-webkit-outer-spin-button,
-  .b2b-russo-order-form__qty-control .b2b-russo-order-form__qty::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  .b2b-russo-order-form__quantity-heading,
-  .b2b-russo-order-form__quantity-cell {
-    text-align: center;
-  }
-
-  .b2b-russo-order-form__quantity-cell .b2b-russo-order-form__qty {
-    display: block;
-    margin: 0 auto;
-  }
-
-  .b2b-russo-order-form__quantity-cell .b2b-russo-order-form__qty-control {
-    margin: 0 auto;
-  }
-
-  .b2b-russo-order-form__money {
-    text-align: right;
-    white-space: nowrap;
-    font-weight: 600;
-  }
-
-  .b2b-russo-order-form__grand-total {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: flex-end;
-    align-items: baseline;
-    gap: 0.8rem;
-    font-size: 1.7rem;
-  }
-
-  .b2b-russo-order-form__actions {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-  }
-
-  .b2b-russo-order-form__order-meta {
-    margin-top: 1.25rem;
-    display: grid;
-    gap: 0.9rem;
-    width: 100%;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .b2b-russo-order-form__order-meta-field {
-    display: grid;
-    gap: 0.4rem;
-  }
-
-  .b2b-russo-order-form__field-label-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.4rem;
-    flex-wrap: nowrap;
-  }
-
-  .b2b-russo-order-form__field-label-row label {
-    margin: 0;
-  }
-
-  .b2b-russo-order-form__field-label-row .b2b-russo-order-form__field-help {
-    margin-left: auto;
-    white-space: nowrap;
-  }
-
-  .b2b-russo-order-form__order-meta-field input {
-    width: 100%;
-    padding: 0.8rem;
-  }
-
-  .b2b-russo-order-form__field-help {
-    margin: 0;
-    font-size: 1.1rem;
-    color: rgba(var(--color-foreground), 0.7);
-    line-height: 1.4;
-  }
-
-  .b2b-russo-order-form__payload {
-    width: 100%;
-    margin-top: 0.75rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-    font-size: 1.3rem;
-  }
-
-  @media screen and (max-width: 989px) {
-    .b2b-russo-order-form__entry-layout--with-summary {
-      grid-template-columns: 1fr;
-    }
-
-    .b2b-russo-order-form__summary-pane {
-      position: static;
-    }
-
-    .b2b-russo-order-form__order-meta {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media screen and (max-width: 749px) {
-    .b2b-russo-order-form .page-width {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-
-    .b2b-russo-order-form__top-actions {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.8rem;
-    }
-
-    .b2b-russo-order-form__top-actions .button {
-      width: 100%;
-    }
-
-    .b2b-russo-order-form__submit-status {
-      font-size: 1.2rem;
-      text-align: center;
-    }
-
-    .b2b-russo-order-form__location-picker {
-      max-width: none;
-    }
-
-    .b2b-russo-order-form__table-wrap {
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table {
-      min-width: 0;
-      border-collapse: separate;
-      border-spacing: 0;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table tr > *:first-child {
-      text-align: left !important;
-      display: block;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table {
-      min-width: 0;
-      border-collapse: separate;
-      border-spacing: 0;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table thead {
-      display: none;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table tbody {
-      display: grid;
-      gap: 0.8rem;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table tr {
-      display: block;
-      border: 1px solid rgba(var(--color-foreground), 0.1);
-      border-radius: 0.8rem;
-      background: rgb(var(--color-background));
-      overflow: hidden;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table th,
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table td {
-      border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
-      padding: 0.8rem;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table th {
-      display: block;
-      text-align: left;
-      border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table td {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 0.8rem;
-      text-align: left;
-      white-space: normal;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table td::before {
-      content: attr(data-label);
-      font-size: 1.2rem;
-      color: rgba(var(--color-foreground), 0.7);
-      font-weight: 500;
-      line-height: 1.3;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows']
-      .b2b-russo-order-form__quantity-cell
-      .b2b-russo-order-form__qty-control {
-      margin: 0 0 0 auto;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='location_rows'] .b2b-russo-order-form__table tr td:last-child {
-      border-bottom: 0;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table thead {
-      display: none;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table tbody {
-      display: grid;
-      gap: 0.8rem;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table tr {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      border: 1px solid rgba(var(--color-foreground), 0.1);
-      border-radius: 0.8rem;
-      background: rgb(var(--color-background));
-      overflow: hidden;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table th,
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table td {
-      border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
-      padding: 0.8rem;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__product-row-heading {
-      grid-column: 1 / -1;
-      border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__product-cell {
-      align-items: flex-start;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__product-image {
-      width: 3.2rem;
-      height: 3.2rem;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table td {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.8rem;
-      text-align: left;
-      white-space: nowrap;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown'] .b2b-russo-order-form__table td::before {
-      content: attr(data-label);
-      font-size: 1.2rem;
-      color: rgba(var(--color-foreground), 0.7);
-      font-weight: 500;
-      white-space: normal;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown']
-      .b2b-russo-order-form__quantity-cell
-      .b2b-russo-order-form__qty {
-      width: 5.2rem;
-      margin: 0;
-    }
-
-    .b2b-russo-order-form__form[data-location-mode='dropdown']
-      .b2b-russo-order-form__quantity-cell
-      .b2b-russo-order-form__qty-control {
-      margin: 0;
-    }
-
-    .b2b-russo-order-form__summary-header {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
-      align-items: start;
-    }
-
-    .b2b-russo-order-form__summary-item-meta {
-      width: 100%;
-    }
-
-    .b2b-russo-order-form__summary-caret {
-      display: none;
-    }
-
-    .b2b-russo-order-form__grand-total {
-      justify-content: space-between;
-      font-size: 1.5rem;
-    }
-
-    .b2b-russo-order-form__actions .button {
-      width: 100%;
-    }
-
-    .b2b-russo-order-form__payload {
-      font-size: 1.2rem;
-    }
-
-    .b2b-russo-order-form__field-label-row {
-      flex-wrap: wrap;
-    }
-
-    .b2b-russo-order-form__field-label-row .b2b-russo-order-form__field-help {
-      margin-left: 0;
-      white-space: normal;
-    }
-  }
-{% endstylesheet %}
 
 {% javascript %}
   (() => {
@@ -1166,6 +612,7 @@
       const submitButton = root.querySelector('[data-submit-order]');
       const submitStatus = root.querySelector('[data-submit-status]');
       const purchaseOrderInput = root.querySelector('[data-purchase-order-number]');
+      const locationPurchaseOrderInputs = Array.from(root.querySelectorAll('[data-location-purchase-order]'));
       const requestedDeliveryDateInput = root.querySelector('[data-requested-delivery-date]');
       const noteInput = root.querySelector('[data-order-note]');
       if (!submitButton || !submitStatus || !purchaseOrderInput) return;
@@ -1183,6 +630,7 @@
       const allocations = {};
       const locationNamesById = {};
       const locationFreightCentsById = {};
+      const locationPurchaseOrderInputsById = {};
       const storageKey = root.dataset.storageKey;
       const submitEndpoint = root.dataset.submitEndpoint || '/apps/russoAPI/v1/submit-order-form';
       const submitConfirmModalId = root.dataset.submitConfirmModalId;
@@ -1221,6 +669,12 @@
         });
       }
 
+      locationPurchaseOrderInputs.forEach((input) => {
+        const locationId = input.dataset.locationId;
+        if (!locationId) return;
+        locationPurchaseOrderInputsById[locationId] = input;
+      });
+
       const getFreightCentsForLocation = (locationId) => {
         if (!useFreightCharge) return 0;
         return Number(locationFreightCentsById[locationId] || 0);
@@ -1234,6 +688,22 @@
           id: option.dataset.locationId,
           name: option.dataset.locationName,
         };
+      };
+
+      const getLocationPurchaseOrderValues = () => {
+        const values = {};
+        locationPurchaseOrderInputs.forEach((input) => {
+          const locationId = input.dataset.locationId;
+          if (!locationId) return;
+          values[locationId] = input.value.trim();
+        });
+        return values;
+      };
+
+      const getPurchaseOrderNumberForLocation = (locationId) => {
+        const locationPurchaseOrderInput = locationPurchaseOrderInputsById[String(locationId)];
+        const locationPurchaseOrderNumber = locationPurchaseOrderInput ? locationPurchaseOrderInput.value.trim() : '';
+        return locationPurchaseOrderNumber || purchaseOrderInput.value.trim();
       };
 
       const getRowAllocations = (row) => {
@@ -1258,6 +728,7 @@
           selectedLocationId: locationSelect ? locationSelect.value : null,
           mode: isDropdownMode ? 'dropdown' : 'columns',
           payload,
+          locationPurchaseOrders: getLocationPurchaseOrderValues(),
         };
 
         if (isDropdownMode) {
@@ -1279,6 +750,9 @@
         clearAllocations();
         qtyInputs.forEach((input) => {
           input.value = 0;
+        });
+        locationPurchaseOrderInputs.forEach((input) => {
+          input.value = '';
         });
         purchaseOrderInput.value = '';
         if (requestedDeliveryDateInput) {
@@ -1351,6 +825,16 @@
             const key = `${lineKey}:${input.dataset.locationId}`;
             if (Object.prototype.hasOwnProperty.call(draft.columnQuantities, key)) {
               input.value = Number(draft.columnQuantities[key] || 0);
+            }
+          });
+        }
+
+        if (draft.locationPurchaseOrders && typeof draft.locationPurchaseOrders === 'object') {
+          locationPurchaseOrderInputs.forEach((input) => {
+            const locationId = input.dataset.locationId;
+            if (!locationId) return;
+            if (Object.prototype.hasOwnProperty.call(draft.locationPurchaseOrders, locationId)) {
+              input.value = String(draft.locationPurchaseOrders[locationId] || '');
             }
           });
         }
@@ -1740,7 +1224,7 @@
             location_name: locationGroup.locationName,
             customer_email: basePayload.customer_email,
             company_id: basePayload.company_id,
-            purchase_order_number: basePayload.purchase_order_number,
+            purchase_order_number: getPurchaseOrderNumberForLocation(locationGroup.locationId),
             requested_delivery_date: basePayload.requested_delivery_date,
             note: basePayload.note,
             includes_location_freight_charge: basePayload.includes_location_freight_charge,
@@ -1759,6 +1243,7 @@
           form_id: basePayload.form_id,
           form_metaobject_id: basePayload.form_metaobject_id,
           form_metaobject_handle: basePayload.form_metaobject_handle,
+          purchase_order_number: basePayload.purchase_order_number,
           OrdersToMake: ordersToMake,
         };
       };
@@ -1829,6 +1314,11 @@
             }
           }
           writePayload();
+          return;
+        }
+
+        if (event.target.matches('[data-location-purchase-order]')) {
+          writePayload();
         }
       });
 
@@ -1859,14 +1349,27 @@
         submitConfirmModal.removeAttribute('open');
       };
 
+      let submitStatusTimer;
+
       const setSubmitStatus = (message, state) => {
         if (!submitStatus) return;
+
+        clearTimeout(submitStatusTimer);
+
         submitStatus.textContent = message;
+        submitStatus.hidden = false;
+
         if (state) {
           submitStatus.dataset.statusState = state;
         } else {
           delete submitStatus.dataset.statusState;
         }
+
+        submitStatusTimer = setTimeout(() => {
+          submitStatus.hidden = true;
+          submitStatus.textContent = '';
+          delete submitStatus.dataset.statusState;
+        }, 5000);
       };
 
       const payloadHasLineItems = (payload) => {
@@ -1970,7 +1473,6 @@
         // After fetch completes, check if count increased
         setTimeout(function () {
           if (window.__mloHistoryCount > countAtSubmit) {
-            console.log('[MLO] New entry detected, stopping poll');
             clearInterval(pollTimer);
             pollTimer = null;
           }

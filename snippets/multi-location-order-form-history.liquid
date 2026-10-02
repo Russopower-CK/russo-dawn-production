@@ -4,39 +4,13 @@
 {% endcomment %}
 
 <style>
-  @media screen and (max-width: 749px) {
-    .mlo-form__history-table {
-      table-layout: fixed;
-    }
-
-    .mlo-form__history-table th,
-    .mlo-form__history-table td {
-      padding: 0.5rem;
-      font-size: 1.1rem;
-      word-break: break-word;
-    }
-
-    .mlo-form__history-table th:nth-child(4),
-    .mlo-form__history-table td:nth-child(4) {
-      display: none;
-    }
-
-    .mlo-history-modal__content {
-      width: 100vw;
-      height: 100vh;
-      max-height: none;
-      border-radius: 0;
-      padding: 1rem;
-    }
-  }
   .mlo-history-preview {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
     padding: 1.5rem;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
+    margin: 2rem 0;
     border: 1px solid rgba(var(--color-foreground), 0.1);
     border-radius: 8px;
     background: rgb(var(--color-background));
@@ -45,38 +19,54 @@
   .mlo-history-preview__summary h3 {
     margin: 0 0 0.5rem;
   }
-
   .mlo-sortable {
     cursor: pointer;
     user-select: none;
     white-space: nowrap;
   }
-
   .mlo-sortable:hover {
     background-color: rgba(var(--color-foreground), 0.05);
   }
-
   .mlo-sort-indicator {
     margin-left: 0.25rem;
     opacity: 0.5;
+  }
+
+  .mlo-history-filter {
+    flex-shrink: 0;
+    margin-bottom: 1.5rem;
+  }
+  .mlo-history-filter__input {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 40rem;
+    min-height: 4.5rem;
+    padding: 0 1.5rem;
+    border: 1px solid rgba(var(--color-foreground), 0.55);
+    border-radius: 4px;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    font-family: inherit;
+    font-size: 1.6rem;
+  }
+  .mlo-history-filter__input:focus {
+    outline: 1px solid rgb(var(--color-foreground));
+    outline-offset: 1px;
   }
 
   .mlo-form__history-table {
     width: 100%;
     border-collapse: collapse;
   }
-
   .mlo-form__history-table th {
-    background-color: rgba(var(--color-foreground), 0.02);
+    background-color: rgb(var(--color-background));
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
   }
-
   .mlo-form__history-table td {
     font-size: 1.2rem;
   }
-
   .mlo-form__history-table th,
   .mlo-form__history-table td {
     text-align: left;
@@ -84,7 +74,6 @@
     padding: 0.75rem;
     vertical-align: top;
   }
-
   .mlo-form__history-table tbody tr:hover {
     background-color: #f5f5f5;
   }
@@ -95,38 +84,41 @@
     z-index: 9999;
     display: none;
   }
-
   .mlo-history-modal.active {
     display: block;
   }
-
   .mlo-history-modal__backdrop {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
   }
-
   .mlo-history-modal__content {
     position: absolute;
     top: 50%;
     left: 50%;
     width: min(1400px, 95vw);
-    max-height: 85vh;
-    overflow: auto;
+    height: 85vh;
+    overflow: hidden;
     transform: translate(-50%, -50%);
     background: rgb(var(--color-background));
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
   }
-
   .mlo-history-modal__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    flex-shrink: 0;
   }
-
+  .mlo-form-history {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
   .mlo-history-modal__close {
     background: none;
     border: none;
@@ -135,69 +127,73 @@
     line-height: 1;
     padding: 0;
   }
+  .mlo-history-load-more {
+    text-align: center;
+    padding: 1.5rem 0;
+  }
 
   @media screen and (max-width: 749px) {
+    .mlo-form__history-table {
+      table-layout: fixed;
+    }
+    .mlo-form__history-table th,
+    .mlo-form__history-table td {
+      padding: 0.5rem;
+      font-size: 1.1rem;
+      word-break: break-word;
+    }
+    .mlo-form__history-table th:nth-child(4),
+    .mlo-form__history-table td:nth-child(4) {
+      display: none;
+    }
     .mlo-history-preview {
       flex-direction: column;
       align-items: flex-start;
     }
-
     .mlo-history-modal__content {
       width: 100vw;
       height: 100vh;
       max-height: none;
       border-radius: 0;
+      padding: 1rem;
+    }
+    .mlo-history-filter__input {
+      max-width: none;
+    }
+    .mlo-view-history {
+      align-self: center;
     }
   }
 </style>
 
 <div class="mlo-history-preview">
   <div class="mlo-history-preview__summary">
-    <h3>Order History</h3>
-
-    <div id="mlo-history-summary">
-      <p>Loading order history...</p>
-    </div>
+    <h3>Confirmed Submission History</h3>
+    <div id="mlo-history-summary"><p>Loading order history...</p></div>
   </div>
-
-  <button
-    type="button"
-    id="mlo-history-open"
-    class="button button--primary"
-  >
-    View Full History
-  </button>
+  <button type="button" id="mlo-history-open" class="mlo-view-history button button--primary">View Full History</button>
 </div>
 
-<div
-  class="mlo-history-modal"
-  id="mlo-history-modal"
-  aria-hidden="true"
->
-  <div
-    class="mlo-history-modal__backdrop"
-    id="mlo-history-backdrop"
-  ></div>
-
+<div class="mlo-history-modal" id="mlo-history-modal" aria-hidden="true">
+  <div class="mlo-history-modal__backdrop" id="mlo-history-backdrop"></div>
   <div class="mlo-history-modal__content">
     <div class="mlo-history-modal__header">
-      <h2>Order History</h2>
-
-      <button
-        type="button"
-        id="mlo-history-close"
-        class="mlo-history-modal__close"
-        aria-label="Close"
-      >
-        ×
-      </button>
+      <h2>Confirmed Submission History</h2>
+      <button type="button" id="mlo-history-close" class="mlo-history-modal__close" aria-label="Close">×</button>
     </div>
 
-    <div
-      class="mlo-form-history"
-      id="mlo-history-container"
-      data-form-id="{{ form_id | escape }}"
-    >
+    <div class="mlo-history-filter">
+      <label class="visually-hidden" for="mlo-history-filter">Filter order history</label>
+      <input
+        type="text"
+        id="mlo-history-filter"
+        class="mlo-history-filter__input"
+        placeholder="Filter loaded order history..."
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="mlo-form-history" id="mlo-history-container" data-form-id="{{ form_id | escape }}">
       <p>Loading order history...</p>
     </div>
   </div>
@@ -205,7 +201,6 @@
 
 <script>
 (function () {
-
   const formId = {{ form_id | json }};
 
   {% if customer and customer.b2b? %}
@@ -216,43 +211,64 @@
 
   const container = document.getElementById('mlo-history-container');
   const summaryContainer = document.getElementById('mlo-history-summary');
-
   const modal = document.getElementById('mlo-history-modal');
   const openBtn = document.getElementById('mlo-history-open');
   const closeBtn = document.getElementById('mlo-history-close');
   const backdrop = document.getElementById('mlo-history-backdrop');
+  const filterInput = document.getElementById('mlo-history-filter');
 
   let historyEntries = [];
-
+  let currentFilter = '';
   let currentSort = 'confirmation_number';
   let currentDirection = 'desc';
+  let nextCursor = null;
+  let hasNextPage = false;
+  let isLoadingMore = false;
 
-  function openModal() {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+function openModal() {
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modal.classList.remove('active');
+
+  // Move focus outside the modal before hiding it from accessibility
+  openBtn.focus();
+
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+openBtn.addEventListener('click', openModal);
+closeBtn.addEventListener('click', closeModal);
+
+modal.addEventListener('click', (event) => {
+  if (event.target === modal) {
+    closeModal();
   }
+});
 
-  function closeModal() {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
+filterInput.addEventListener('input', function() {
+  currentFilter = this.value.trim().toLowerCase();
+  renderHistory();
+});
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape' && modal.classList.contains('active')) {
+    closeModal();
   }
+});
 
-  openBtn.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', closeModal);
-
-  document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-      closeModal();
-    }
-  });
-
-
-    function fetchHistory() {
-    if (!formId) {
-      container.innerHTML = '<p>No form specified.</p>';
+  function fetchHistory(cursor = null, append = false) {
+    if (!formId || !companyId) {
+      container.innerHTML = '<p>No form or company specified.</p>';
       return;
     }
+
+    if (append && isLoadingMore) return;
+    isLoadingMore = append;
 
     fetch('/apps/russoAPI/v1/order-form-history', {
       method: 'POST',
@@ -260,104 +276,91 @@
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
       },
-      body: JSON.stringify({ form_id: formId, company_id: companyId })
+      body: JSON.stringify({
+        form_id: formId,
+        company_id: companyId,
+        cursor: cursor
+      })
     })
     .then(res => {
       if (!res.ok) throw new Error('API responded with status ' + res.status);
       return res.json();
     })
     .then(data => {
-      historyEntries =
-        (data && Array.isArray(data.entries) && data.entries) ||
-        (data && data.data && Array.isArray(data.data.entries) && data.data.entries) ||
+      const newEntries =
+        (Array.isArray(data?.entries) && data.entries) ||
+        (Array.isArray(data?.data?.entries) && data.data.entries) ||
         [];
+
+      const pageInfo =
+        data?.page_info ??
+        data?.data?.page_info ??
+        {};
+
+      historyEntries = append ? historyEntries.concat(newEntries) : newEntries;
+      nextCursor = pageInfo.endCursor ?? null;
+      hasNextPage = pageInfo.hasNextPage === true;
+
       renderHistory();
-       window.__mloHistoryCount = historyEntries.length;
+      window.__mloHistoryCount = historyEntries.length;
     })
     .catch(err => {
       console.error('[MLO] History fetch failed:', err);
-      container.innerHTML = '<p>Unable to load order history.</p>';
-      summaryContainer.innerHTML = '<p>Unable to load order history.</p>';
+      if (!append) {
+        container.innerHTML = '<p>Unable to load order history.</p>';
+        summaryContainer.innerHTML = '<p>Unable to load order history.</p>';
+      }
+    })
+    .finally(() => {
+      isLoadingMore = false;
     });
   }
 
   function renderHistory() {
-
     if (!historyEntries.length) {
-
-      summaryContainer.innerHTML =
-        '<p>No previous submissions found.</p>';
-
-      container.innerHTML =
-        '<p>No submissions found for this form.</p>';
-
+      summaryContainer.innerHTML = '<p>No previous submissions found.</p>';
+      container.innerHTML = '<p>No submissions found for this form.</p>';
       return;
     }
 
     sortEntries();
 
     const latest = historyEntries[0];
+    const filteredEntries = getFilteredEntries();
 
     summaryContainer.innerHTML = `
       <p>
-        <strong>${historyEntries.length}</strong> previous orders<br>
+        <strong>${historyEntries.length}</strong> loaded orders${hasNextPage ? ' (more available)' : ''}<br>
         Last Order: ${escapeHtml(latest.confirmation_number || '')}<br>
         ${escapeHtml(latest.company_location_name || '')}<br>
         ${escapeHtml(latest.submitted_date || '')}
       </p>
     `;
 
+    if (!filteredEntries.length) {
+      container.innerHTML = '<p>No loaded orders match your filter.</p>' + getLoadMoreHtml();
+      attachLoadMoreEvent();
+      return;
+    }
+
     let html = `
       <table class="mlo-form__history-table">
         <thead>
           <tr>
-            <th
-              class="mlo-sortable"
-              data-sort="confirmation_number"
-            >
-              Confirmation #
-              <span class="mlo-sort-indicator">
-                ${getSortIndicator('confirmation_number')}
-              </span>
-            </th>
-
-            <th
-              class="mlo-sortable"
-              data-sort="company_location_name"
-            >
-              Company Location
-              <span class="mlo-sort-indicator">
-                ${getSortIndicator('company_location_name')}
-              </span>
-            </th>
-
-            <th
-              class="mlo-sortable"
-              data-sort="submitted_date"
-            >
-              Submitted Date
-              <span class="mlo-sort-indicator">
-                ${getSortIndicator('submitted_date')}
-              </span>
-            </th>
-
-            <th>
-              Line Items
-            </th>
+            <th class="mlo-sortable" data-sort="confirmation_number">Confirmation # <span class="mlo-sort-indicator">${getSortIndicator('confirmation_number')}</span></th>
+            <th class="mlo-sortable" data-sort="company_location_name">Company Location <span class="mlo-sort-indicator">${getSortIndicator('company_location_name')}</span></th>
+            <th class="mlo-sortable" data-sort="submitted_date">Submitted Date <span class="mlo-sort-indicator">${getSortIndicator('submitted_date')}</span></th>
+            <th class="mlo-sortable" data-sort="purchase_order">Purchase Order <span class="mlo-sort-indicator">${getSortIndicator('purchase_order')}</span></th>
+            <th>Line Items</th>
           </tr>
         </thead>
         <tbody>
     `;
 
-    historyEntries.forEach(function(row) {
-
+    filteredEntries.forEach(function(row) {
       const lineItems = Array.isArray(row.line_items)
         ? row.line_items.map(function(li) {
-            return (
-              escapeHtml(li.line_title || '') +
-              ' x' +
-              (li.quantity || 0)
-            );
+            return escapeHtml(li.line_title || '') + ' x' + (li.quantity || 0);
           }).join('<br>')
         : '';
 
@@ -366,117 +369,122 @@
           <td>${escapeHtml(row.confirmation_number || '')}</td>
           <td>${escapeHtml(row.company_location_name || '')}</td>
           <td>${escapeHtml(row.submitted_date || '')}</td>
+          <td>${escapeHtml(row.purchase_order || '')}</td>
           <td>${lineItems}</td>
         </tr>
       `;
     });
 
-    html += `
-        </tbody>
-      </table>
-    `;
-
+    html += `</tbody></table>${getLoadMoreHtml()}`;
     container.innerHTML = html;
-
     attachSortEvents();
+    attachLoadMoreEvent();
+  }
+
+  function getLoadMoreHtml() {
+    if (!hasNextPage || !nextCursor) return '';
+    return `
+      <div class="mlo-history-load-more">
+        <button type="button" class="button button--primary" id="mlo-history-load-more">Load More</button>
+      </div>
+    `;
+  }
+
+  function attachLoadMoreEvent() {
+    const loadMoreBtn = document.getElementById('mlo-history-load-more');
+    if (!loadMoreBtn) return;
+
+    loadMoreBtn.addEventListener('click', function() {
+      if (!nextCursor || isLoadingMore) return;
+      this.disabled = true;
+      this.textContent = 'Loading...';
+      fetchHistory(nextCursor, true);
+    });
+  }
+
+  function getFilteredEntries() {
+    if (!currentFilter) return historyEntries;
+
+    return historyEntries.filter(function(row) {
+      const lineItems = Array.isArray(row.line_items)
+        ? row.line_items.map(function(li) {
+            return `${li.line_title || ''} ${li.quantity || ''}`;
+          }).join(' ')
+        : '';
+
+      return [
+        row.confirmation_number,
+        row.company_location_name,
+        row.submitted_date,
+        row.purchase_order,
+        lineItems
+      ].join(' ').toLowerCase().includes(currentFilter);
+    });
   }
 
   function attachSortEvents() {
+    container.querySelectorAll('[data-sort]').forEach(function(header) {
+      header.addEventListener('click', function() {
+        const field = this.dataset.sort;
 
-    container
-      .querySelectorAll('[data-sort]')
-      .forEach(function(header) {
+        if (currentSort === field) {
+          currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          currentSort = field;
+          currentDirection = 'asc';
+        }
 
-        header.addEventListener('click', function() {
-
-          const field = this.dataset.sort;
-
-          if (currentSort === field) {
-            currentDirection =
-              currentDirection === 'asc'
-                ? 'desc'
-                : 'asc';
-          } else {
-            currentSort = field;
-            currentDirection = 'asc';
-          }
-
-          renderHistory();
-
-        });
-
+        renderHistory();
       });
-
+    });
   }
 
   function sortEntries() {
-
     historyEntries.sort(function(a, b) {
-
       let aVal = a[currentSort] || '';
       let bVal = b[currentSort] || '';
 
       if (currentSort === 'confirmation_number') {
-
-        aVal =
-          parseInt(
-            String(aVal).replace(/\D/g, ''),
-            10
-          ) || 0;
-
-        bVal =
-          parseInt(
-            String(bVal).replace(/\D/g, ''),
-            10
-          ) || 0;
-      }
-      else {
+        aVal = parseInt(String(aVal).replace(/\D/g, ''), 10) || 0;
+        bVal = parseInt(String(bVal).replace(/\D/g, ''), 10) || 0;
+      } else {
         aVal = String(aVal).toLowerCase();
         bVal = String(bVal).toLowerCase();
       }
 
       if (currentDirection === 'asc') {
-
         if (aVal > bVal) return 1;
         if (aVal < bVal) return -1;
         return 0;
-
       }
 
       if (aVal < bVal) return 1;
       if (aVal > bVal) return -1;
       return 0;
-
     });
-
   }
 
   function getSortIndicator(field) {
-
-    if (field !== currentSort) {
-      return '⇅';
-    }
-
-    return currentDirection === 'asc'
-      ? '▲'
-      : '▼';
-
+    if (field !== currentSort) return '⇅';
+    return currentDirection === 'asc' ? '▲' : '▼';
   }
 
   function escapeHtml(str) {
-
     return String(str)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
-
   }
- // Listen for external refresh trigger from section polling
-  document.addEventListener('mlo-history:refresh', fetchHistory);
 
-  // Initial load
+  document.addEventListener('mlo-history:refresh', function() {
+    historyEntries = [];
+    nextCursor = null;
+    hasNextPage = false;
+    fetchHistory();
+  });
+
   fetchHistory();
 })();
 </script>

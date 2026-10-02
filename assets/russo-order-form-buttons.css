@@ -10,29 +10,25 @@
 }
 
 .orderform-btn.of-add {
-  background-color: var(--russo-green, #0a7d36);
+  background-color: rgba(var(--color-button), var(--alpha-button-background));
   border: 0;
   width: 100%;
 }
-
-.orderform-btn.of-add:hover:not(:disabled) {
-  background-color: var(--russo-green-dark, #08612a);
+.orderform-btn:after{
+  box-shadow: 0 0 0 calc(var(--buttons-border-width) + var(--border-offset))
+      rgba(var(--color-button-text), var(--border-opacity)),
+    0 0 0 var(--buttons-border-width) rgba(var(--russo-red-dark), var(--alpha-button-background));
 }
 
 .orderform-btn.of-remove {
-  background-color: var(--russo-red, #e31e24);
+  background-color: var(--russo-red-dark);
   width: 100%;
+  display: flex !important;
+  opacity: 1;
 }
 
-.orderform-btn.of-remove:hover:not(:disabled) {
-  background-color: var(--russo-red-dark, #b21217);
-}
 
-.orderform-btn:disabled {
-  background-color: #e5e5e5;
-  color: #999;
-  cursor: not-allowed;
-}
+
 
 .orderform-msg {
   grid-column: 1 / -1;

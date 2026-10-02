@@ -1,0 +1,85 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "1790888131236dba5d": {
+      "type": "apps",
+      "blocks": {
+        "klaviyo_email_marketing_sms_form_embed_block_7TNMBa": {
+          "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/form-embed-block/2632fe16-c075-4321-a88b-50b567f42507",
+          "settings": {
+            "formId": "WLTN7f"
+          }
+        }
+      },
+      "block_order": [
+        "klaviyo_email_marketing_sms_form_embed_block_7TNMBa"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "rich_text_GBfEag": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_R8TaBq": {
+          "type": "heading",
+          "settings": {
+            "heading": "&nbsp;With So Much Going on, You Can't Miss Out!&nbsp;",
+            "heading_size": "h1"
+          }
+        },
+        "text_Y4ide8": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Russo has always offered some of the newest, best, and most innovative products & services, but there's no need to scour through our website to try and find out about these things. Our email newsletter is your one-stop shop for all the information you need regarding industry news, new products, and exciting technological advancements!</p><p><strong>Here are some of the many benefits you can expect:</strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_R8TaBq",
+        "text_Y4ide8"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "dynamic_html_QcgUdT": {
+      "type": "dynamic-html",
+      "custom_css": [
+        ".custom-html--container {margin-top: 0px;}"
+      ],
+      "name": "t:sections.custom-html.presets.custom-html.name",
+      "settings": {
+        "title": "",
+        "custom_html": "<div class=\"page-width\">\n<img src=\"https://cdn.shopify.com/s/files/1/0691/3340/2417/files/icon-Seasonal-Catalog.png?v=1687980034\" alt=\"Seasonal Catalog icon\" float=\"left\">\n\n<strong>Learn about our business</strong> - Russo Power has grown a lot over the last decade, and as we continue to expand, you can hear about all of our exciting new developments!<p></p>\n\n<p><img src=\"https://cdn.shopify.com/s/files/1/0691/3340/2417/files/icon-Event_Calendar.png?v=1687980034\" alt=\"Event Calendar icon\">\n\n<strong>Find out about upcoming events</strong> - Learn about events like open houses, live auctions, seminars, demos, and more that we host throughout the year.</p>\n\n<p><img src=\"https://cdn.shopify.com/s/files/1/0691/3340/2417/files/icon-New.png?v=1687980035\" alt=\"New icon\">\n\n<strong>Discover the latest products</strong> - At our stores, we only carry brands that are trusted &amp; proven by landscape professionals like you. Don't miss out when products hit our shelves!</p>\n\n<p><img src=\"https://cdn.shopify.com/s/files/1/0691/3340/2417/files/icon-Russo_Resources.png?v=1687980034\" alt=\"Russo Resources icon\">\n\n<strong>New technology news</strong> - The brands we carry constantly release innovative equipment that is more efficient &amp; productive than ever, so don't miss out on the latest advancements!</p>\n\n<p><img src=\"https://cdn.shopify.com/s/files/1/0691/3340/2417/files/icon-Demos_Rentals_Leases.png?v=1687980035\" alt=\"Demos Rentals and Leases icon\">\n\n<strong>Useful recommendations</strong> - Our knowledgeable employees love providing tips &amp; tricks that will make your life easier and your crew more productive than ever!</p>\n</div>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1790888131236dba5d",
+    "rich_text_GBfEag",
+    "dynamic_html_QcgUdT"
+  ]
+}

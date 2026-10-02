@@ -34,7 +34,8 @@
         "snapchat": "Snapchat",
         "youtube": "YouTube",
         "vimeo": "Vimeo",
-        "tiktok": "TikTok"
+        "tiktok": "TikTok",
+        "linkdin": "LinkedIn"
       }
     },
     "continue_shopping": "Seguir comprando",
@@ -64,6 +65,13 @@
       "next_slide": "Diapositiva a la derecha",
       "previous_slide": "Diapositiva a la izquierda",
       "name": "Carrusel"
+    },
+    "equipment_list": {
+      "search": "Buscar un activo..."
+    },
+    "back_to_top_button": {
+      "desktop_button_label": "Arriba",
+      "mobile_button_label": "Volver arriba"
     }
   },
   "newsletter": {
@@ -87,7 +95,9 @@
     "total_reviews": "reseñas totales",
     "star_reviews_info": "{{ rating_value }} de {{ rating_max }} estrellas",
     "collapsible_content_title": "Contenido desplegable",
-    "complementary_products": "Productos complementarios"
+    "complementary_products": "Productos complementarios",
+    "sku": "SKU",
+    "rss": "RSS"
   },
   "blogs": {
     "article": {
@@ -107,12 +117,37 @@
       "back_to_blog": "Regresar al blog",
       "share": "Compartir este artículo",
       "success": "Tu comentario se publicó correctamente. ¡Gracias!",
-      "success_moderated": "Tu comentario se publicó correctamente. Lo publicaremos en breve, cuando se modere nuestro blog."
+      "success_moderated": "Tu comentario se publicó correctamente. Lo publicaremos en breve, cuando se modere nuestro blog.",
+      "previous_article": "Artículo anterior",
+      "next_article": "Próximo artículo"
     }
   },
   "onboarding": {
     "product_title": "Ejemplo de nombre del producto",
-    "collection_title": "Nombre de tu colección"
+    "collection_title": "Nombre de tu colección",
+    "article": {
+      "title": "Título del artículo",
+      "author_name": "Nombre del autor"
+    },
+    "collection": {
+      "title": "Título de la colección"
+    },
+    "featured_collection": {
+      "title": "Colección",
+      "subtitle": "Ver todo"
+    },
+    "menu_list": {
+      "title": "Lista del menú",
+      "link_text": "Enlace"
+    },
+    "product": {
+      "title": "Título del producto",
+      "vendor": "Proveedor de productos",
+      "by_vendor": "por Proveedor del producto"
+    },
+    "page": {
+      "title": "Título de la página"
+    }
   },
   "products": {
     "product": {
@@ -153,7 +188,8 @@
         "pick_up_available_at_html": "Retiro disponible en <span class=\"color-foreground\">{{ location_name }}</span>",
         "pick_up_unavailable_at_html": "Retiro no disponible actualmente en <span class=\"color-foreground\">{{ location_name }}</span>",
         "unavailable": "No se pudo cargar la disponibilidad de retiro",
-        "refresh": "Actualizar"
+        "refresh": "Actualizar",
+        "pick_up_unavailable": "Recogida no disponible"
       },
       "media": {
         "open_media": "Abrir elemento multimedia {{ index }} en una ventana modal",
@@ -189,7 +225,13 @@
       "product_variants": "Variantes de producto",
       "taxes_included": "Impuestos incluidos.",
       "duties_included": "Aranceles incluidos.",
-      "duties_and_taxes_included": "Aranceles e impuestos incluidos."
+      "duties_and_taxes_included": "Aranceles e impuestos incluidos.",
+      "by_vendor": "by {{ vendor }}",
+      "by_vendor_html": "por {{ vendor_link }}",
+      "sku_html": "<strong>SKU</strong> <span data-product-sku>{{ sku }}</span>",
+      "selected_or_first_available_variant": {
+        "sku": "SKU"
+      }
     },
     "modal": {
       "label": "Galería multimedia"
@@ -394,7 +436,8 @@
       "min_error": "Este artículo tiene un mínimo de {{ min }}.",
       "max_error": "Este artículo tiene un máximo de {{ max }}.",
       "step_error": "Solo puedes agregar este artículo en incrementos de {{ step }}"
-    }
+    },
+    "custom_html": "HTML personalizado"
   },
   "localization": {
     "country_label": "País/región",
@@ -590,6 +633,20 @@
       "signup_form_email_label": "Email",
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
+    }
+  },
+  "store_availability": {
+    "general": {
+      "in_stock": "En existencia",
+      "out_of_stock": "Agotado",
+      "view_store_info": "Ver información de la tienda",
+      "check_other_stores": "Consultar disponibilidad en otras tiendas",
+      "available_for_pick_up_at_html": "Recogida disponible en <b>{{ location_name }}</b>",
+      "unavailable_for_pick_up_at_html": "Recogida no disponible actualmente en <b>{{ location_name }}</b>",
+      "available_for_pick_up_at_time_html": "Recogida disponible, {{ pick_up_time }}",
+      "unavailable_for_pick_up_at_time_html": "Recogida no disponible actualmente",
+      "kilometers": "km",
+      "miles": "mi"
     }
   }
 }

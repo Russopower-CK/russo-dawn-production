@@ -99,7 +99,6 @@
   }
 
   function extractVariantNodes(data) {
-    console.log(data);
     if (!data || !data.data || !Array.isArray(data.data.nodes)) return [];
     return data.data.nodes;
   }

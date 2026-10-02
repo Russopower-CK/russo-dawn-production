@@ -423,7 +423,6 @@ var storeLocationChanged = false; // Starts as false when the page loads
   }
 
 function extractStockItems(data) {
-  console.log("extract", data);
   if (!data || !Array.isArray(data.data.nodes)) return [];
 
   return data.data.nodes.reduce(function (all, variantNode) {

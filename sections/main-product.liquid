@@ -300,8 +300,9 @@
               {%- when 'share' -%}
                 {% liquid
                   assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin
-                  render 'share-button', block: block, share_link: share_url
+                  render 'share-button', block: block, share_link: share_url, card_product: product, show_favorites: block.settings.show_favorites_icon
                 %}
+
               {% when 'vendor' %}
                 {% if product.vendor != blank %}
                   <div class="product-vendor">
@@ -1095,6 +1096,12 @@
           "id": "share_label",
           "label": "t:sections.main-product.blocks.share.settings.text.label",
           "default": "t:sections.main-product.blocks.share.settings.text.default"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_favorites_icon",
+          "label": "Show Favorites Icon",
+          "default": true
         }
       ]
     },

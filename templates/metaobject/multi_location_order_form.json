@@ -18,7 +18,7 @@
         "description": "Select quantities per destination location, then generate the JSON payload.",
         "source_collection": "",
         "location_input_mode": "location_rows",
-        "location_column_threshold": 3,
+        "location_column_threshold": 2,
         "enable_location_freight_charge": false,
         "location_freight_metafield": "custom.salt_zone_charge",
         "allow_note": false,

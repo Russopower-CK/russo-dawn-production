@@ -17,7 +17,7 @@
         "color_scheme": "scheme-1"
       }
     },
-    "russo_subcollections_hd7UKB": {
+    "russo_subcollections_VVPJeP": {
       "type": "russo-subcollections",
       "name": "Russo subcollections",
       "settings": {
@@ -32,7 +32,7 @@
         "image_size_mobile": 120,
         "gap": 32,
         "gap_mobile": 18,
-        "title_color": "#B71414",
+        "title_color": "#e21b23",
         "title_size": 15,
         "title_size_mobile": 14,
         "title_weight": "600",
@@ -48,14 +48,14 @@
         "products_per_page": 24,
         "columns_desktop": 4,
         "columns_mobile": "2",
-        "color_scheme": "scheme-ad29dc3d-63b3-4b1a-9e1a-3051bcce8d65",
+        "color_scheme": "",
         "image_ratio": "square",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": true,
         "show_sku": true,
         "show_rating": true,
-        "quick_add": "russo-buy-button",
+        "quick_add": "standard",
         "use_russo_pickup": true,
         "enable_filtering": true,
         "filter_type": "vertical",
@@ -79,7 +79,7 @@
   },
   "order": [
     "banner",
-    "russo_subcollections_hd7UKB",
+    "russo_subcollections_VVPJeP",
     "product-grid",
     "recently_viewed_dRWrXf"
   ]
