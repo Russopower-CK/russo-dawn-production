@@ -306,27 +306,6 @@
       window.predictiveSearchFields = '{{ settings.predictive_search_fields | escape }}';
     </script>
 
-    {%- if settings.show_kenect_widget -%}
-      <style>
-        /* DESKTOP */
-        body:has(cart-drawer.active) [id*='kenect'],
-        body:has(cart-drawer.active) iframe[src*='kenect'],
-        body:has(cart-drawer.active) [class*='kenect'],
-        body.overflow-hidden [id*='kenect'],
-        body.overflow-hidden iframe[src*='kenect'],
-        body.overflow-hidden [class*='kenect'] {
-          display: none !important;
-        }
-
-        /* MOBILE */
-        @media screen and (max-width: 749px) {
-          body:has(.mobile-facets__disclosure[open])
-            div[id^='widget-'][class*='widget-container']:has(iframe[src*='widget.kenect.com']) {
-            display: none !important;
-          }
-        }
-      </style>
-    {%- endif -%}
     {% include 'pagefly-app-header' %}
   </head>
 
@@ -410,6 +389,25 @@
     <script src="{{ 'russo-sidebar-mega-menu.js' | asset_url }}" defer="defer"></script>
 
     {% if settings.show_kenect_widget and settings.kenect_url != blank %}
+      <style>
+        /* DESKTOP */
+        body:has(cart-drawer.active) [id*='kenect'],
+        body:has(cart-drawer.active) iframe[src*='kenect'],
+        body:has(cart-drawer.active) [class*='kenect'],
+        body.overflow-hidden [id*='kenect'],
+        body.overflow-hidden iframe[src*='kenect'],
+        body.overflow-hidden [class*='kenect'] {
+          display: none !important;
+        }
+
+        /* MOBILE */
+        @media screen and (max-width: 749px) {
+          body:has(.mobile-facets__disclosure[open])
+            div[id^='widget-'][class*='widget-container']:has(iframe[src*='widget.kenect.com']) {
+            display: none !important;
+          }
+        }
+      </style>
       <script
         async
         src="{{ settings.kenect_url }}"
