@@ -1,7 +1,7 @@
 // assets/russo-pickup-availability.js
 
 let pickupInventoryByVariant = {};
-
+let pickupLocationNameByVariant = {};
 // Collect every unique variant ID declared by pickup availability snippets on the page.
 function getPickupVariantIdsOnPage() {
   const triggers = document.querySelectorAll('[data-preferred-store-variant-trigger][data-preferred-store-variant-id]');
@@ -22,18 +22,19 @@ function getIdFromGid(gid) {
   return String(gid).split('/').pop() || null;
 }
 
-// Convert the raw Shopify GraphQL response into a fast lookup object:
+// Normalize inventory while keeping the original quantity lookup intact.
 // pickupInventoryByVariant[variantId][locationId] = quantity
+// pickupLocationNameByVariant[variantId][locationId] = location name
 function normalizePickupInventory(nodes) {
   const inventory = {};
-
+  const locationNames = {};
   nodes.forEach((variant) => {
     const variantId = getIdFromGid(variant?.id);
 
     if (!variantId) return;
 
     inventory[variantId] = {};
-
+    locationNames[variantId] = {};
     const inventoryLevels = variant?.inventoryItem?.inventoryLevels?.nodes || [];
 
     inventoryLevels.forEach((level) => {
@@ -44,8 +45,15 @@ function normalizePickupInventory(nodes) {
       const availableQuantity = level?.quantities?.find((quantity) => quantity?.name === 'available')?.quantity;
 
       inventory[variantId][locationId] = typeof availableQuantity === 'number' ? availableQuantity : null;
+
+      locationNames[variantId][locationId] = level?.location?.name || '';
     });
   });
+
+  pickupLocationNameByVariant = {
+    ...pickupLocationNameByVariant,
+    ...locationNames,
+  };
 
   return inventory;
 }
@@ -56,6 +64,7 @@ async function loadPickupInventory() {
 
   if (!variantIds.length) {
     pickupInventoryByVariant = {};
+    pickupLocationNameByVariant = {};
     return pickupInventoryByVariant;
   }
 
@@ -66,9 +75,7 @@ async function loadPickupInventory() {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({
-        variantIds,
-      }),
+      body: JSON.stringify({ variantIds }),
     });
 
     if (!response.ok) {
@@ -78,12 +85,14 @@ async function loadPickupInventory() {
     const result = await response.json();
     const nodes = result?.data?.nodes || [];
 
+    pickupLocationNameByVariant = {};
     pickupInventoryByVariant = normalizePickupInventory(nodes);
 
     return pickupInventoryByVariant;
   } catch (error) {
     console.error('Unable to load pickup inventory:', error);
     pickupInventoryByVariant = {};
+    pickupLocationNameByVariant = {};
     return pickupInventoryByVariant;
   }
 }
@@ -124,8 +133,9 @@ function renderPickupAvailability() {
     const specialOrderNote = trigger.querySelector('[data-preferred-store-special-order-note]');
     const specialOrderLabel = trigger.querySelector('[data-preferred-store-special-order-label]');
     const tooltipTitle = trigger.querySelector('[data-preferred-store-special-order-tooltip-title]');
-    const tooltipBody = trigger.querySelector('[data-preferred-store-special-order-tooltip-body]'); // Reset the previous state first.
+    const tooltipBody = trigger.querySelector('[data-preferred-store-special-order-tooltip-body]');
 
+    // Reset the previous state first.
     if (icon) {
       icon.classList.remove(
         'preffered-store-pickup__status-icon--in-stock',
@@ -140,11 +150,30 @@ function renderPickupAvailability() {
 
     if (label) {
       label.hidden = false;
-    }
+    } 
+    // No inventory level exists for the preferred store.
+    // If this variant is stocked at exactly one other location, show that location.
 
     if (!inventoryKnown) {
+      const normalizedVariantId = getIdFromGid(variantId);
+      const variantInventory = pickupInventoryByVariant?.[normalizedVariantId] || {};
+
+      const availableLocationIds = Object.entries(variantInventory)
+        .filter(([, locationQuantity]) => typeof locationQuantity === 'number' && locationQuantity > 0)
+        .map(([locationId]) => locationId);
+      if (availableLocationIds.length === 1) {
+        const availableLocationId = availableLocationIds[0];
+        const availableLocationName = pickupLocationNameByVariant?.[normalizedVariantId]?.[availableLocationId];
+
+        if (label && availableLocationName) {
+          label.textContent = `Only available at ${availableLocationName.replace(/^Russo\s+/i, '')}`;
+        }
+
+        return;
+      }
+
       if (label) {
-        label.textContent = trigger.dataset.preferredStoreDefaultLabel || '';
+        label.textContent = '';
       }
       return;
     }
@@ -165,8 +194,7 @@ function renderPickupAvailability() {
     const unavailableLabel = trigger.dataset.preferredStoreUnavailableLabel || 'Special Order';
     const unavailableTitle = trigger.dataset.preferredStoreUnavailableTooltipTitle || unavailableLabel;
     const unavailableTemplate = trigger.dataset.preferredStoreUnavailableTooltipBody || 'Unavailable at {store}.';
-    const unavailableBody = unavailableTemplate.replace(/\{store\}/g, preferredStore.name); // The Special Order tooltip becomes the visible unavailable label,
-    // so hide the normal pickup label to avoid showing two labels.
+    const unavailableBody = unavailableTemplate.replace(/\{store\}/g, preferredStore.name);
 
     if (label) {
       label.textContent = '';
@@ -217,9 +245,7 @@ async function loadMissingPickupInventory() {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({
-        variantIds: missingVariantIds,
-      }),
+      body: JSON.stringify({ variantIds: missingVariantIds }),
     });
 
     if (!response.ok) {
