@@ -12,24 +12,6 @@
     "slideshow_9myT39": {
       "type": "slideshow",
       "blocks": {
-        "slide_rc3f4z": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/WinterCatalog-Drop-Edit.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>The Wait Is Over!</strong>",
-            "heading_size": "h1",
-            "subheading": "The Russo 2026 Winter Catalog is now available! Click below to download!",
-            "button_label": "WINTER CATALOG",
-            "link": "https://indd.adobe.com/view/aae3322a-4014-402b-b8c2-7f1e425b59f0",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_K76BnM": {
           "type": "slide",
           "settings": {
@@ -40,6 +22,24 @@
             "subheading": "Save up to $100 on Select Power Equipment! | Now thru Nov. 16, 2026",
             "button_label": "SHOP ECHO",
             "link": "shopify://collections/echo-national-sales-event",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_rc3f4z": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/WinterCatalog-Drop-Edit.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>The Wait Is Over!</strong>",
+            "heading_size": "h1",
+            "subheading": "The Russo 2026 Winter Catalog is now available! Click below to download!",
+            "button_label": "WINTER CATALOG",
+            "link": "https://indd.adobe.com/view/aae3322a-4014-402b-b8c2-7f1e425b59f0",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -214,8 +214,8 @@
         }
       },
       "block_order": [
-        "slide_rc3f4z",
         "slide_K76BnM",
+        "slide_rc3f4z",
         "slide_VJ3ktV",
         "slide_N3884K",
         "slide_8AYhjw",
