@@ -60,6 +60,7 @@ function normalizePickupInventory(nodes) {
 
 // Fetch all variant inventory needed by the current page in one request.
 async function loadPickupInventory() {
+  if (window.isBotAgent()) return;
   const variantIds = getPickupVariantIdsOnPage();
 
   if (!variantIds.length) {
@@ -118,6 +119,7 @@ function getPickupStockState(variantId, locationId) {
 
 // Update every pickup availability snippet on the page for the preferred store.
 function renderPickupAvailability() {
+  if (window.isBotAgent()) return;
   const preferredStore = getPreferredStore();
 
   if (!preferredStore?.id || !preferredStore?.name) return;
@@ -150,7 +152,7 @@ function renderPickupAvailability() {
 
     if (label) {
       label.hidden = false;
-    } 
+    }
     // No inventory level exists for the preferred store.
     // If this variant is stocked at exactly one other location, show that location.
 
@@ -227,6 +229,7 @@ function renderPickupAvailability() {
 // Look for variants that were added to the page after the initial inventory request.
 // Dynamic sections can call this after they finish rendering.
 async function loadMissingPickupInventory() {
+  if (window.isBotAgent()) return;
   const variantIds = getPickupVariantIdsOnPage();
 
   const missingVariantIds = variantIds.filter(
@@ -272,17 +275,9 @@ async function loadMissingPickupInventory() {
 
 // Initial page inventory load.
 async function initPickupAvailability() {
-  console.time('pickup-total');
-
-  console.time('pickup-request');
   await loadPickupInventory();
-  console.timeEnd('pickup-request');
 
-  console.time('pickup-render');
   renderPickupAvailability();
-  console.timeEnd('pickup-render');
-
-  console.timeEnd('pickup-total');
 }
 
 initPickupAvailability();

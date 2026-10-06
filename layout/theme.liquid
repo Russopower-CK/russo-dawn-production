@@ -416,9 +416,9 @@
     {% endif %}
 
     {% if settings.russo_store_selector_version == 'modern' %}
-      <script>
-        console.log('MODERN STORE SELECTOR ACTIVE');
-      </script>
+      {% comment %}
+        experience script must come first so helper functions are loaded.
+      {% endcomment %}
       <script src="{{ 'russo-store-experience.js' | asset_url }}" defer="defer"></script>
       <script src="{{'russo-pickup-availability.js' | asset_url}}" defer="defer"></script>
       <script src="{{ 'russo-store-selector-drawer.js' | asset_url }}" defer="defer"></script>

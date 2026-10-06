@@ -243,8 +243,24 @@ async function syncPreferredStoreToCart(store) {
   }
 }
 
+window.isBotAgent = function () {
+  const userAgent = navigator.userAgent.toLowerCase();
+
+  return [
+    'googlebot',
+    'bingbot',
+    'storebot',
+    'google-inspectiontool',
+    'duckduckbot',
+    'yandexbot',
+    'baiduspider',
+    'applebot'
+  ].some((bot) => userAgent.includes(bot));
+};
+
 // Full initialization of store experience
 async function initStoreExperience() {
+  if (window.isBotAgent()) return;
   const locations = await loadPickupLocations();
 
   if (!locations.length) return; // Restore the user's saved reference location first.
@@ -276,3 +292,5 @@ async function initStoreExperience() {
 }
 
 initStoreExperience();
+
+
