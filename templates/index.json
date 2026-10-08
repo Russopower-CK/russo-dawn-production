@@ -48,20 +48,19 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_VJ3ktV": {
+        "slide_RQaEFN": {
           "type": "slide",
-          "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/redmax-15off-fleet-of-one_slide_a.jpg",
-            "image_overlay_opacity": 40,
-            "heading": "<strong>RedMax Fall Into Savings Event</strong>",
+            "image": "shopify://shop_images/OnlineUsedAuction.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>Online Used Equipment Auction</strong>",
             "heading_size": "h1",
-            "subheading": "Save 15% OFF MSRP on select RedMax Leaf Blowers! | Now thru Sept. 30, 2026",
-            "button_label": "SHOP REDMAX",
-            "link": "shopify://collections/redmax-fall-into-savings",
+            "subheading": "October 14, 2026 | Click below to view our lots and bid!",
+            "button_label": "BID ONLINE",
+            "link": "https://indd.adobe.com/view/aae3322a-4014-402b-b8c2-7f1e425b59f0",
             "button_style_secondary": false,
             "show_text_box": true,
-            "box_align": "middle-right",
+            "box_align": "bottom-right",
             "text_alignment": "right",
             "text_alignment_mobile": "center",
             "color_scheme": "scheme-3"
@@ -216,7 +215,7 @@
       "block_order": [
         "slide_K76BnM",
         "slide_rc3f4z",
-        "slide_VJ3ktV",
+        "slide_RQaEFN",
         "slide_N3884K",
         "slide_8AYhjw",
         "slide_hJGYwx",
