@@ -12,6 +12,24 @@
     "slideshow_9myT39": {
       "type": "slideshow",
       "blocks": {
+        "slide_Mephzj": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Service-12.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>Don't Get Left In The Cold!</strong>",
+            "heading_size": "h1",
+            "subheading": "Take advantage of our snow blower tune up specials! Now through October 31, 2026.",
+            "button_label": "LEARN MORE",
+            "link": "shopify://pages/service-department",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
         "slide_K76BnM": {
           "type": "slide",
           "settings": {
@@ -138,24 +156,6 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_Mephzj": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Service-12.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>Don't Get Left In The Cold!</strong>",
-            "heading_size": "h1",
-            "subheading": "Take advantage of our snow blower tune up specials! Now through October 31, 2026.",
-            "button_label": "LEARN MORE",
-            "link": "shopify://pages/service-department",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_GwVcWP": {
           "type": "slide",
           "settings": {
@@ -213,6 +213,7 @@
         }
       },
       "block_order": [
+        "slide_Mephzj",
         "slide_K76BnM",
         "slide_rc3f4z",
         "slide_RQaEFN",
@@ -220,7 +221,6 @@
         "slide_8AYhjw",
         "slide_hJGYwx",
         "slide_xTxXVX",
-        "slide_Mephzj",
         "slide_GwVcWP",
         "slide_hfmrxN",
         "slide_UfWBDB"
