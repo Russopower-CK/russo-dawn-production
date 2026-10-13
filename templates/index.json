@@ -141,13 +141,13 @@
         "slide_Mephzj": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Russo-KentuckyBluegrass.jpg",
+            "image": "shopify://shop_images/Service-12.jpg",
             "image_overlay_opacity": 30,
-            "heading": "<strong>Step 5: Late Fall</strong>",
+            "heading": "<strong>Don't Get Left In The Cold!</strong>",
             "heading_size": "h1",
-            "subheading": "Winterizer",
+            "subheading": "Take advantage of our snow blower tune up specials! Now through October 31, 2026.",
             "button_label": "LEARN MORE",
-            "link": "shopify://pages/5-step-lawn-program",
+            "link": "shopify://pages/service-department",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "middle-right",
