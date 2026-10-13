@@ -4,6 +4,8 @@ const PICKUP_LOCATIONS_KEY = 'russoPickupLocationsV2';
 const PICKUP_LOCATIONS_CACHE_TIME = 60 * 60 * 1000; // 1 hour
 const PREFERRED_STORE_KEY = 'russoPreferredStoreV2';
 const USER_LOCATION_KEY = 'russoUserLocationV2';
+const MAX_AUTO_STORE_DISTANCE_MILES = 500;
+
 // Fetch/cache pickup locations
 async function loadPickupLocations() {
   try {
@@ -67,6 +69,7 @@ function getCurrentUserLocation() {
   if (currentUserLocation) {
     return currentUserLocation;
   }
+
   try {
     const stored = localStorage.getItem(USER_LOCATION_KEY);
     if (!stored) return null;
@@ -145,7 +148,10 @@ function findClosestStore(locations, lat, lng) {
     }
   });
 
-  return closestStore;
+  return {
+    store: closestStore,
+    distance: closestDistance,
+  };
 }
 
 // Update all store selector labels
@@ -198,6 +204,7 @@ function setPreferredStore(store) {
 
   updateStoreSelectorLabel(preferredStore);
   updatePreferredStoreCartAttributes(preferredStore);
+
   // Refresh any pickup availability already loaded on the page
   if (typeof renderPickupAvailability === 'function') {
     renderPickupAvailability();
@@ -254,18 +261,20 @@ window.isBotAgent = function () {
     'duckduckbot',
     'yandexbot',
     'baiduspider',
-    'applebot'
+    'applebot',
   ].some((bot) => userAgent.includes(bot));
 };
 
 // Full initialization of store experience
 async function initStoreExperience() {
   if (window.isBotAgent()) return;
+
   const locations = await loadPickupLocations();
 
-  if (!locations.length) return; // Restore the user's saved reference location first.
-  // If none exists yet, initialize it from GeoIP and save it.
+  if (!locations.length) return;
 
+  // Restore the user's saved reference location first.
+  // If none exists yet, initialize it from GeoIP and save it.
   let userLocation = getCurrentUserLocation();
 
   if (!userLocation) {
@@ -278,19 +287,26 @@ async function initStoreExperience() {
   if (preferredStore) {
     updateStoreSelectorLabel(preferredStore); // Cart attributes can disappear when the cart changes/reset,
     // so make sure they still match the locally saved preference.
-
     await syncPreferredStoreToCart(preferredStore);
     return;
   } // No preferred store yet. Use the current reference location
   // to automatically choose the closest store.
-
   if (!userLocation) return;
-  preferredStore = findClosestStore(locations, userLocation.lat, userLocation.lng);
-  if (preferredStore) {
-    setPreferredStore(preferredStore);
+
+  const closestStore = findClosestStore(
+    locations,
+    userLocation.lat,
+    userLocation.lng,
+  );
+
+  // Only automatically select a store when it is within 500 miles.
+  // Manual store selection remains unrestricted.
+  if (
+    closestStore.store &&
+    closestStore.distance <= MAX_AUTO_STORE_DISTANCE_MILES
+  ) {
+    setPreferredStore(closestStore.store);
   }
 }
 
 initStoreExperience();
-
-
