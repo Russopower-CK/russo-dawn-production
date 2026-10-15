@@ -191,6 +191,10 @@
         placeholder="Filter loaded order history..."
         autocomplete="off"
       >
+      <label for="mlo-history-invoiced">
+        <input type="checkbox" id="mlo-history-invoiced">
+        Invoiced
+      </label>
     </div>
 
     <div class="mlo-form-history" id="mlo-history-container" data-form-id="{{ form_id | escape }}">
@@ -215,6 +219,7 @@
   const openBtn = document.getElementById('mlo-history-open');
   const closeBtn = document.getElementById('mlo-history-close');
   const backdrop = document.getElementById('mlo-history-backdrop');
+  const invoicedCheckbox = document.getElementById('mlo-history-invoiced');
   const filterInput = document.getElementById('mlo-history-filter');
 
   let historyEntries = [];
@@ -279,7 +284,8 @@ document.addEventListener('keydown', function(event) {
       body: JSON.stringify({
         form_id: formId,
         company_id: companyId,
-        cursor: cursor
+        cursor: cursor,
+        invoicedOnly: invoicedCheckbox.checked
       })
     })
     .then(res => {
@@ -351,6 +357,7 @@ document.addEventListener('keydown', function(event) {
             <th class="mlo-sortable" data-sort="company_location_name">Company Location <span class="mlo-sort-indicator">${getSortIndicator('company_location_name')}</span></th>
             <th class="mlo-sortable" data-sort="submitted_date">Submitted Date <span class="mlo-sort-indicator">${getSortIndicator('submitted_date')}</span></th>
             <th class="mlo-sortable" data-sort="purchase_order">Purchase Order <span class="mlo-sort-indicator">${getSortIndicator('purchase_order')}</span></th>
+            <th>Invoiced</th>
             <th>Line Items</th>
           </tr>
         </thead>
@@ -370,6 +377,7 @@ document.addEventListener('keydown', function(event) {
           <td>${escapeHtml(row.company_location_name || '')}</td>
           <td>${escapeHtml(row.submitted_date || '')}</td>
           <td>${escapeHtml(row.purchase_order || '')}</td>
+          <td>${escapeHtml(row.invoiced || '')}</td>
           <td>${lineItems}</td>
         </tr>
       `;
@@ -417,6 +425,7 @@ document.addEventListener('keydown', function(event) {
         row.company_location_name,
         row.submitted_date,
         row.purchase_order,
+        row.invoiced,
         lineItems
       ].join(' ').toLowerCase().includes(currentFilter);
     });
@@ -484,6 +493,13 @@ document.addEventListener('keydown', function(event) {
     hasNextPage = false;
     fetchHistory();
   });
+
+  invoicedCheckbox.addEventListener('change', function() {
+  historyEntries = [];
+  nextCursor = null;
+  hasNextPage = false;
+  fetchHistory();
+});
 
   fetchHistory();
 })();
