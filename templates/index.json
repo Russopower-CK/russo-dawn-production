@@ -68,6 +68,7 @@
         },
         "slide_RQaEFN": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/OnlineUsedAuction.jpg",
             "image_overlay_opacity": 30,
