@@ -4,7 +4,7 @@ const PICKUP_LOCATIONS_KEY = 'russoPickupLocationsV2';
 const PICKUP_LOCATIONS_CACHE_TIME = 60 * 60 * 1000; // 1 hour
 const PREFERRED_STORE_KEY = 'russoPreferredStoreV2';
 const USER_LOCATION_KEY = 'russoUserLocationV2';
-const MAX_AUTO_STORE_DISTANCE_MILES = 500;
+const MAX_AUTO_STORE_DISTANCE_MILES = 25;
 
 // Fetch/cache pickup locations
 async function loadPickupLocations() {
@@ -192,7 +192,7 @@ async function updatePreferredStoreCartAttributes(store) {
 }
 
 // Set the preferred store everywhere client-side
-function setPreferredStore(store) {
+async function setPreferredStore(store) {
   if (!store?.id || !store?.name) return;
 
   const preferredStore = {
@@ -205,14 +205,18 @@ function setPreferredStore(store) {
   updateStoreSelectorLabel(preferredStore);
   updatePreferredStoreCartAttributes(preferredStore);
 
-  // Refresh any pickup availability already loaded on the page
-  if (typeof renderPickupAvailability === 'function') {
+  if (
+    typeof loadPickupInventory === 'function' &&
+    typeof renderPickupAvailability === 'function'
+  ) {
+    await loadPickupInventory();
     renderPickupAvailability();
   }
 }
 
+
 // Get the currently selected preferred store
-function getPreferredStore() {
+window.getPreferredStore = function () {
   try {
     const stored = localStorage.getItem(PREFERRED_STORE_KEY);
     return stored ? JSON.parse(stored) : null;
@@ -299,7 +303,7 @@ async function initStoreExperience() {
     userLocation.lng,
   );
 
-  // Only automatically select a store when it is within 500 miles.
+  // Only automatically select a store when it is within X miles.
   // Manual store selection remains unrestricted.
   if (
     closestStore.store &&

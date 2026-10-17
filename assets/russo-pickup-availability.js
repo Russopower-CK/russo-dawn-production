@@ -97,7 +97,22 @@ async function loadPickupInventory() {
     return pickupInventoryByVariant;
   }
 }
+async function loadPickupInventoryForVariant(variantId) {
+  if (window.isBotAgent()) return;
 
+  const response = await fetch('/apps/russoAPI/v2/getStockLevels', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      variantIds: [variantId],
+    }),
+  });
+
+  // process response...
+}
 // Return the available quantity for one variant at one location.
 function getPickupQuantity(variantId, locationId) {
   if (!variantId || !locationId) return null;
@@ -230,6 +245,14 @@ function renderPickupAvailability() {
 // Dynamic sections can call this after they finish rendering.
 async function loadMissingPickupInventory() {
   if (window.isBotAgent()) return;
+
+  //called by dynamic sections so shouldnt need to call it if theres not a store selected yet.
+  const preferredStore = window.getPreferredStore();
+
+  if (!preferredStore?.id || !preferredStore?.name) {
+    console.log('no prefered store set');
+    return;
+  }
   const variantIds = getPickupVariantIdsOnPage();
 
   const missingVariantIds = variantIds.filter(
@@ -275,6 +298,12 @@ async function loadMissingPickupInventory() {
 
 // Initial page inventory load.
 async function initPickupAvailability() {
+  const preferredStore = window.getPreferredStore();
+
+  if (!preferredStore?.id || !preferredStore?.name) {
+    console.log('no prefered store set');
+    return;
+  }
   await loadPickupInventory();
 
   renderPickupAvailability();

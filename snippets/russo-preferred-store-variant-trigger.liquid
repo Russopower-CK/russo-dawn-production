@@ -61,7 +61,6 @@
 </style>
 {%- liquid
   assign preferred_store_variant = variant | default: product.selected_or_first_available_variant
-  assign preferred_store_default_label = button_label | default: ' Checking...'
   assign preferred_store_show_status_label = show_status_label | default: true
   assign preferred_store_show_status_display = show_status_display | default: true
   assign preferred_store_show_launcher_button = show_launcher_button | default: false
@@ -73,7 +72,11 @@
   assign preferred_store_unavailable_tooltip_body = unavailable_tooltip_body | default: 'Unavailable at {store}. Typical Lead Time is 2-5 Business days.'
   assign preferred_store_instance_id = 'preferred-store-variant-' | append: section.id | append: '-' | append: preferred_store_variant.id
 -%}
-
+{% if cart.attributes.preferred_store_location_id %}
+  {% assign preferred_store_default_label = button_label | default: 'Checking...' %}
+{% else %}
+  {% assign preferred_store_default_label = button_label | default: 'Select a Store' %}
+{% endif %}
 <div
   class="pickup-availability-preview"
   data-preferred-store-variant-trigger
@@ -290,11 +293,19 @@
      * Fetch inventory and update the PDP status.
      */
     async function updateButtonLabel() {
+        const preferredStore = window.getPreferredStore();
+
+      //select a store first before worrying about the label.
+      if (!preferredStore?.id || !preferredStore?.name) {
+        console.log("no prefered store set");
+        return;
+      }
+      
       const variantId = openBtn.dataset.preferredStoreVariantId;
       if (!variantId || !preferredLocationId) return;
 
       try {
-        const response = await fetch('/apps/russoAPI/v1/getStockLevels', {
+        const response = await fetch('/apps/russoAPI/v2/getStockLevels', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ variantId })

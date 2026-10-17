@@ -248,6 +248,12 @@ async function openPreferredStoreDrawer() {
   if (!dialog) return;
 
   const locations = await loadPickupLocations();
+  const preferredStore = window.getPreferredStore();
+
+  //if they havent selected a store then loadpickupinventory when clicking the button.
+  if (!preferredStore?.id) {
+    await loadPickupInventory();
+  }
   const sortedLocations = sortLocationsByDistance(locations);
 
   renderPickupLocations(sortedLocations);
