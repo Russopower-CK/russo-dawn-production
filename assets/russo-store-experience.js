@@ -100,7 +100,7 @@ function getCurrentUserLocation() {
 // Get approximate connection location for initial store selection
 async function getGeoIpLocation() {
   try {
-    const response = await fetch('/apps/russoAPI/geoip');
+    const response = await fetch('https://cf.eprdistribution.com/geoip');
 
     if (!response.ok) {
       throw new Error(`GeoIP request failed: ${response.status}`);
