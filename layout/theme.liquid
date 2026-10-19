@@ -419,6 +419,57 @@
       {% comment %}
         experience script must come first so helper functions are loaded.
       {% endcomment %}
+      <script>
+        window.pickupLocationsResponse = {
+          data: {
+            locations: {
+              nodes: [
+                {% for location in shop.metaobjects["app--257135706113--location_list"].values %}
+                  {% assign coordinates = location.mf_custom_position | split: ',' %}
+
+                  {
+                    id: {{ location.location_id | json }},
+                    name: {{ location.name | json }},
+
+                    address: {
+                      address1: {{ location.address1 | json }},
+                      city: {{ location.city | json }},
+                      province: {{ location.state | json }},
+                      country: {{ location.country | json }},
+
+                      latitude: {{ coordinates[0] | strip }},
+                      longitude: {{ coordinates[1] | strip }},
+
+                      formatted: [
+                        {{ location.address1 | json }},
+                        {{ location.city | append: ' ' | append: location.state | append: ' ' | append: location.zip | json }},
+                        {{ location.country | json }}
+                      ],
+
+                      phone: {{ location.phone | json }}
+                    },
+
+                    landing_page: {
+                      value: {{ location.mf_custom_landing_page.value | json }},
+                      type: "url"
+                    },
+
+                    google_hours: {
+                      jsonValue: {{ location.mf_custom_google_hours.value | json }}
+                    },
+
+                    google_place_id: {
+                      value: {{ location.mf_custom_google_place_id | json }},
+                      type: "single_line_text_field"
+                    }
+                  }
+                {% unless forloop.last %},{% endunless %}
+                {% endfor %}
+              ]
+            }
+          }
+        };
+      </script>
       <script src="{{ 'russo-store-experience.js' | asset_url }}" defer="defer"></script>
       <script src="{{'russo-pickup-availability.js' | asset_url}}" defer="defer"></script>
       <script src="{{ 'russo-store-selector-drawer.js' | asset_url }}" defer="defer"></script>

@@ -9,6 +9,15 @@ const MAX_AUTO_STORE_DISTANCE_MILES = 25;
 // Fetch/cache pickup locations
 async function loadPickupLocations() {
   try {
+    // Prefer server-rendered locations if available
+    const serverLocations = window.pickupLocationsResponse?.data?.locations?.nodes;
+
+    if (Array.isArray(serverLocations) && serverLocations.length > 0) {
+      console.log("Using Server Locations");
+      return serverLocations;
+    }
+
+    console.log("No locations fetch them");
     let locations;
 
     const cachedData = localStorage.getItem(PICKUP_LOCATIONS_KEY);
@@ -205,15 +214,11 @@ async function setPreferredStore(store) {
   updateStoreSelectorLabel(preferredStore);
   updatePreferredStoreCartAttributes(preferredStore);
 
-  if (
-    typeof loadPickupInventory === 'function' &&
-    typeof renderPickupAvailability === 'function'
-  ) {
+  if (typeof loadPickupInventory === 'function' && typeof renderPickupAvailability === 'function') {
     await loadPickupInventory();
     renderPickupAvailability();
   }
 }
-
 
 // Get the currently selected preferred store
 window.getPreferredStore = function () {
@@ -224,7 +229,7 @@ window.getPreferredStore = function () {
     console.error('Unable to read preferred store:', error);
     return null;
   }
-}
+};
 
 // Make sure the current Shopify cart attributes match the preferred store
 async function syncPreferredStoreToCart(store) {
@@ -297,18 +302,11 @@ async function initStoreExperience() {
   // to automatically choose the closest store.
   if (!userLocation) return;
 
-  const closestStore = findClosestStore(
-    locations,
-    userLocation.lat,
-    userLocation.lng,
-  );
+  const closestStore = findClosestStore(locations, userLocation.lat, userLocation.lng);
 
   // Only automatically select a store when it is within X miles.
   // Manual store selection remains unrestricted.
-  if (
-    closestStore.store &&
-    closestStore.distance <= MAX_AUTO_STORE_DISTANCE_MILES
-  ) {
+  if (closestStore.store && closestStore.distance <= MAX_AUTO_STORE_DISTANCE_MILES) {
     setPreferredStore(closestStore.store);
   }
 }
