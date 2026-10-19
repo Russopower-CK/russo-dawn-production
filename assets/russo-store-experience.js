@@ -3,7 +3,7 @@
 const PICKUP_LOCATIONS_KEY = 'russoPickupLocationsV2';
 const PICKUP_LOCATIONS_CACHE_TIME = 60 * 60 * 1000; // 1 hour
 const PREFERRED_STORE_KEY = 'russoPreferredStoreV2';
-const USER_LOCATION_KEY = 'russoUserLocationV2';
+const USER_LOCATION_KEY = 'russoUserLocationV3'; //change to force new storage on all sessions.
 const MAX_AUTO_STORE_DISTANCE_MILES = 25;
 
 // Fetch/cache pickup locations
@@ -13,11 +13,11 @@ async function loadPickupLocations() {
     const serverLocations = window.pickupLocationsResponse?.data?.locations?.nodes;
 
     if (Array.isArray(serverLocations) && serverLocations.length > 0) {
-      console.log("Using Server Locations");
+      console.log('Using Server Locations');
       return serverLocations;
     }
 
-    console.log("No locations fetch them");
+    console.log('No locations fetch them');
     let locations;
 
     const cachedData = localStorage.getItem(PICKUP_LOCATIONS_KEY);
@@ -68,9 +68,11 @@ function setCurrentUserLocation(lat, lng, source = null) {
     lat,
     lng,
     source,
+    expires: Date.now() + 1 * 24 * 60 * 60 * 1000, // 1 days
   };
 
   localStorage.setItem(USER_LOCATION_KEY, JSON.stringify(currentUserLocation));
+
   return currentUserLocation;
 }
 
@@ -84,7 +86,10 @@ function getCurrentUserLocation() {
     if (!stored) return null;
 
     const location = JSON.parse(stored);
-
+    if (location.expires && Date.now() > location.expires) {
+      localStorage.removeItem(USER_LOCATION_KEY);
+      return null;
+    }
     if (typeof location?.lat !== 'number' || typeof location?.lng !== 'number') {
       return null;
     }
