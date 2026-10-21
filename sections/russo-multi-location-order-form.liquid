@@ -177,6 +177,20 @@
 
         <div class="b2b-russo-order-form__entry-layout{% if use_dropdown_input %} b2b-russo-order-form__entry-layout--with-summary{% endif %}">
           <div class="b2b-russo-order-form__entry-main">
+            {%- if use_location_rows_input -%}
+              <div class="b2b-russo-order-form__location-search">
+                <label for="location-search-{{ section.id }}">Search locations</label>
+                <input
+                  id="location-search-{{ section.id }}"
+                  type="search"
+                  placeholder="Enter a location name"
+                  aria-describedby="location-search-status-{{ section.id }}"
+                  data-location-search
+                  disabled
+                >
+                <span id="location-search-status-{{ section.id }}" role="status" data-location-search-status></span>
+              </div>
+            {%- endif -%}
             <div
               class="b2b-russo-order-form__table-wrap"
               role="region"
@@ -247,7 +261,8 @@
                   </thead>
                   <tbody>
                     {%- if use_location_rows_input -%}
-                      {%- for location in customer.company_available_locations -%}
+                      {%- assign sorted_locations = customer.company_available_locations | sort_natural: 'name' -%}
+                      {%- for location in sorted_locations -%}
                         {%- liquid
                           assign location_freight_charge = 0
                           if use_location_freight_charge and location_freight_metafield_namespace != blank and location_freight_metafield_key != blank
@@ -642,6 +657,27 @@
         ? submitConfirmModal.querySelector('[data-submit-cancel]')
         : root.querySelector('[data-submit-cancel]');
       let summaryInitialized = false;
+
+      const locationSearch = root.querySelector('[data-location-search]');
+      const locationSearchStatus = root.querySelector('[data-location-search-status]');
+      if (isLocationRowsMode && locationSearch && locationSearchStatus) {
+        const searchableLocations = locationRows.map((row) => ({
+          row,
+          name: row.dataset.locationName.toLowerCase(),
+        }));
+        const filterLocations = () => {
+          const query = locationSearch.value.trim().toLowerCase();
+          let matches = 0;
+          searchableLocations.forEach(({ row, name }) => {
+            row.hidden = !name.includes(query);
+            if (!row.hidden) matches += 1;
+          });
+          locationSearchStatus.textContent = matches === 0 ? 'No matching locations.' : '';
+        };
+        locationSearch.addEventListener('input', filterLocations);
+        locationSearch.disabled = false;
+        filterLocations();
+      }
 
       const getTodayIsoDate = () => {
         const now = new Date();

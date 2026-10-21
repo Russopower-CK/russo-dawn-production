@@ -71,6 +71,28 @@
     width: 100%;
   }
 
+  .b2b-russo-order-form__location-search {
+    display: grid;
+    gap: 0.4rem;
+    width: 100%;
+    max-width: 42rem;
+    margin-bottom: 1rem;
+  }
+
+  .b2b-russo-order-form__location-search input {
+    width: 100%;
+    padding: 0.8rem 1.4rem;
+    font: inherit;
+    color: rgb(var(--color-foreground));
+    background: rgb(var(--color-background));
+    border: 0.1rem solid rgba(var(--color-foreground), 0.25);
+    border-radius: 0.6rem;
+  }
+
+  .b2b-russo-order-form .b2b-russo-order-form__table [data-location-row][hidden] {
+    display: none;
+  }
+
   .b2b-russo-order-form__table thead th {
     background-color: rgba(var(--color-foreground), 0.02);
   }

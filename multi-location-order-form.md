@@ -32,6 +32,9 @@ Primary file: `sections/russo-multi-location-order-form.liquid`
 - `location_input_mode = columns`: one quantity input per location column.
 - `location_input_mode = dropdown`: one quantity column + location selector + right summary pane.
 - `location_input_mode = location_rows`: location rows with product quantity columns (transposed matrix view).
+- In `location_rows` mode, location rows are sorted alphabetically by location name ascending, ignoring case.
+- "Search locations" filters rendered location rows immediately by case-insensitive location-name substring in `location_rows` mode only. Clearing the input restores all rendered rows; no matches displays a status message.
+- Filtering only hides rows: quantities, location purchase orders, totals, draft persistence, payload contents, and product pagination remain unchanged. The search input is enabled when its JavaScript handler initializes.
 - `location_input_mode = auto`: switches to dropdown when `company_available_locations_count > location_column_threshold`.
 - On small screens, `location_rows` uses a stacked card layout per location row (header + labeled product quantity rows) to avoid horizontal-only visibility of early columns.
 
