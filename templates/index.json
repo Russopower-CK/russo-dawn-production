@@ -12,6 +12,24 @@
     "slideshow_9myT39": {
       "type": "slideshow",
       "blocks": {
+        "slide_hif4Pf": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/redmax-15off-fleet-of-one_slide_a.jpg",
+            "image_overlay_opacity": 40,
+            "heading": "RedMax One Day Sale",
+            "heading_size": "h1",
+            "subheading": "October 26, 2026. 15% OFF MSRP on all In-Stock RedMax handheld units!",
+            "button_label": "SHOP REDMAX",
+            "link": "shopify://collections/redmax-one-day-sale",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
         "slide_Mephzj": {
           "type": "slide",
           "settings": {
@@ -214,6 +232,7 @@
         }
       },
       "block_order": [
+        "slide_hif4Pf",
         "slide_Mephzj",
         "slide_K76BnM",
         "slide_rc3f4z",
