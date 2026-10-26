@@ -84,6 +84,24 @@
             "color_scheme": "scheme-3"
           }
         },
+        "slide_hfmrxN": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Trailer_Elgin_1.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>Trailer Blowout Sale!</strong>",
+            "heading_size": "h1",
+            "subheading": "...we ordered too many!",
+            "button_label": "BROWSE TRAILERS",
+            "link": "shopify://collections/trailer-blowout-sale",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
         "slide_RQaEFN": {
           "type": "slide",
           "disabled": true,
@@ -193,24 +211,6 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_hfmrxN": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Trailer_Elgin_1.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>Trailer Blowout Sale!</strong>",
-            "heading_size": "h1",
-            "subheading": "...we ordered too many!",
-            "button_label": "BROWSE TRAILERS",
-            "link": "shopify://collections/trailer-blowout-sale",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_UfWBDB": {
           "type": "slide",
           "disabled": true,
@@ -236,13 +236,13 @@
         "slide_Mephzj",
         "slide_K76BnM",
         "slide_rc3f4z",
+        "slide_hfmrxN",
         "slide_RQaEFN",
         "slide_N3884K",
         "slide_8AYhjw",
         "slide_hJGYwx",
         "slide_xTxXVX",
         "slide_GwVcWP",
-        "slide_hfmrxN",
         "slide_UfWBDB"
       ],
       "custom_css": [
