@@ -14,6 +14,7 @@
       "blocks": {
         "slide_hif4Pf": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/redmax-15off-fleet-of-one_slide_a.jpg",
             "image_overlay_opacity": 40,
