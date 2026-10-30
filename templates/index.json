@@ -294,12 +294,6 @@
             "collection": "stinger-equipment"
           }
         },
-        "collection_3CwPhm": {
-          "type": "collection",
-          "settings": {
-            "collection": "redmax"
-          }
-        },
         "collection_ErLjtD": {
           "type": "collection",
           "settings": {
@@ -355,7 +349,6 @@
         "collection_gWkwPy",
         "collection_dGYgnp",
         "collection_tPJGAn",
-        "collection_3CwPhm",
         "collection_ErLjtD",
         "collection_RWXBea",
         "collection_MQqNQx",
