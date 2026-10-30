@@ -282,6 +282,12 @@
             "collection": "stihl"
           }
         },
+        "collection_dGYgnp": {
+          "type": "collection",
+          "settings": {
+            "collection": "exmark"
+          }
+        },
         "collection_tPJGAn": {
           "type": "collection",
           "settings": {
@@ -306,22 +312,16 @@
             "collection": "wright"
           }
         },
-        "collection_dGYgnp": {
-          "type": "collection",
-          "settings": {
-            "collection": "exmark"
-          }
-        },
-        "collection_CLPpwt": {
-          "type": "collection",
-          "settings": {
-            "collection": "mean-green"
-          }
-        },
         "collection_MQqNQx": {
           "type": "collection",
           "settings": {
             "collection": "kawasaki-engines"
+          }
+        },
+        "collection_yTjKEh": {
+          "type": "collection",
+          "settings": {
+            "collection": "redmax"
           }
         },
         "collection_YRLCJb": {
@@ -353,13 +353,13 @@
         "collection_VemmLD",
         "collection_Mnci3Y",
         "collection_gWkwPy",
+        "collection_dGYgnp",
         "collection_tPJGAn",
         "collection_3CwPhm",
         "collection_ErLjtD",
         "collection_RWXBea",
-        "collection_dGYgnp",
-        "collection_CLPpwt",
         "collection_MQqNQx",
+        "collection_yTjKEh",
         "collection_YRLCJb",
         "collection_4tfaTW",
         "collection_hmmeqE",
