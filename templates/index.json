@@ -14,15 +14,14 @@
       "blocks": {
         "slide_hif4Pf": {
           "type": "slide",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/redmax-15off-fleet-of-one_slide_a.jpg",
             "image_overlay_opacity": 40,
-            "heading": "RedMax Fleet Week",
+            "heading": "Fall Clean Up Starts Here!",
             "heading_size": "h1",
-            "subheading": "November 6, 2026 through Novem. 15% OFF MSRP on all In-Stock RedMax handheld units!",
-            "button_label": "SHOP REDMAX",
-            "link": "shopify://collections/redmax-one-day-sale",
+            "subheading": "Don't let your clean-up efforts FALL behind!",
+            "button_label": "SHOP NOW",
+            "link": "shopify://pages/fall-clean-up",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
