@@ -123,24 +123,6 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_N3884K": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/lc20_4758s-zm-4000-myride-PH_DSC2920_proof.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>0% Financing on Select Z Master 4000 Models</strong>",
-            "heading_size": "h1",
-            "subheading": "Special 0% for 42 month financing or $650 off select Z Master 4000 models. Now through 10/31/2026",
-            "button_label": "SHOP NOW",
-            "link": "https://russopower.com/products/toro-72513-grandstand-60-in-stand-on-mower?_pos=3&_psq=72513&_ss=e&_v=1.0",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_8AYhjw": {
           "type": "slide",
           "settings": {
@@ -240,7 +222,6 @@
         "slide_hfmrxN",
         "slide_rc3f4z",
         "slide_RQaEFN",
-        "slide_N3884K",
         "slide_8AYhjw",
         "slide_hJGYwx",
         "slide_xTxXVX",
