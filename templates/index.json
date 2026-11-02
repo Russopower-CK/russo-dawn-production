@@ -17,7 +17,7 @@
           "settings": {
             "image": "shopify://shop_images/redmax-15off-fleet-of-one_slide_a.jpg",
             "image_overlay_opacity": 40,
-            "heading": "Fall Clean Up Starts Here!",
+            "heading": "<strong>Fall Clean Up Starts Here!</strong>",
             "heading_size": "h1",
             "subheading": "Don't let your clean-up efforts FALL behind!",
             "button_label": "SHOP NOW",
@@ -42,7 +42,7 @@
             "link": "shopify://pages/service-department",
             "button_style_secondary": false,
             "show_text_box": true,
-            "box_align": "middle-right",
+            "box_align": "bottom-right",
             "text_alignment": "right",
             "text_alignment_mobile": "center",
             "color_scheme": "scheme-3"
