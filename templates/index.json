@@ -66,6 +66,24 @@
             "color_scheme": "scheme-3"
           }
         },
+        "slide_GwVcWP": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/toro-dingo-tx1000-trencher-slider.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>0% for up to 60mo -OR- 1.99% for 72mo</strong>",
+            "heading_size": "h1",
+            "subheading": "Premium performance, now with better pricing on the powerful Toro Dingo, compact utility loader! Great for digging or hauling!",
+            "button_label": "SHOP DINGOS",
+            "link": "https://russopower.com/collections/compact-utility-loaders?filter.p.vendor=Toro&utm_source=website&utm_medium=slider&utm_campaign=toro-dingo",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
         "slide_hfmrxN": {
           "type": "slide",
           "settings": {
@@ -76,24 +94,6 @@
             "subheading": "...we ordered too many!",
             "button_label": "BROWSE TRAILERS",
             "link": "shopify://collections/trailer-blowout-sale",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
-        "slide_rc3f4z": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/WinterCatalog-Drop-Edit.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>The Wait Is Over!</strong>",
-            "heading_size": "h1",
-            "subheading": "The Russo 2026 Winter Catalog is now available! Click below to download!",
-            "button_label": "WINTER CATALOG",
-            "link": "https://indd.adobe.com/view/aae3322a-4014-402b-b8c2-7f1e425b59f0",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -175,19 +175,19 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_GwVcWP": {
+        "slide_rc3f4z": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/toro-dingo-tx1000-trencher-slider.jpg",
+            "image": "shopify://shop_images/WinterCatalog-Drop-Edit.jpg",
             "image_overlay_opacity": 30,
-            "heading": "<strong>0% for up to 60mo -OR- 1.99% for 72mo</strong>",
+            "heading": "<strong>The Wait Is Over!</strong>",
             "heading_size": "h1",
-            "subheading": "Premium performance, now with better pricing on the powerful Toro Dingo, compact utility loader! Great for digging or hauling!",
-            "button_label": "SHOP DINGOS",
-            "link": "https://russopower.com/collections/compact-utility-loaders?filter.p.vendor=Toro&utm_source=website&utm_medium=slider&utm_campaign=toro-dingo",
+            "subheading": "The Russo 2026 Winter Catalog is now available! Click below to download!",
+            "button_label": "WINTER CATALOG",
+            "link": "https://indd.adobe.com/view/aae3322a-4014-402b-b8c2-7f1e425b59f0",
             "button_style_secondary": false,
             "show_text_box": true,
-            "box_align": "middle-right",
+            "box_align": "bottom-right",
             "text_alignment": "right",
             "text_alignment_mobile": "center",
             "color_scheme": "scheme-3"
@@ -217,13 +217,13 @@
         "slide_hif4Pf",
         "slide_Mephzj",
         "slide_K76BnM",
+        "slide_GwVcWP",
         "slide_hfmrxN",
-        "slide_rc3f4z",
         "slide_RQaEFN",
         "slide_8AYhjw",
         "slide_hJGYwx",
         "slide_xTxXVX",
-        "slide_GwVcWP",
+        "slide_rc3f4z",
         "slide_UfWBDB"
       ],
       "custom_css": [
