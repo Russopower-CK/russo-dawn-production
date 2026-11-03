@@ -35,6 +35,24 @@
           "settings": {
             "image": "shopify://shop_images/Service-12.jpg",
             "image_overlay_opacity": 30,
+            "heading": "<strong>Save $150 Off Select Gas SnowMaster Models!</strong>",
+            "heading_size": "h1",
+            "subheading": "Now through November 30, 2026! Save $150 off MSRP on select Gas SnowMaster Models!",
+            "button_label": "SHOP TORO",
+            "link": "shopify://products/toro-snowmaster-824-qxe-36003-24-in-snow-blower",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_FDEPH7": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Service-12.jpg",
+            "image_overlay_opacity": 30,
             "heading": "<strong>Don't Get Left In The Cold!</strong>",
             "heading_size": "h1",
             "subheading": "Schedule your snow blower tune up today to make sure its ready for the first snowflake!",
@@ -216,6 +234,7 @@
       "block_order": [
         "slide_hif4Pf",
         "slide_Mephzj",
+        "slide_FDEPH7",
         "slide_K76BnM",
         "slide_GwVcWP",
         "slide_hfmrxN",
