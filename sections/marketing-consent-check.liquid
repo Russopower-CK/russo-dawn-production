@@ -1,0 +1,240 @@
+{% comment %}
+  Displays this notice when Pandectes reports that marketing
+  processing is not allowed.
+
+  The notice updates when:
+  - Pandectes finishes initializing
+  - The visitor changes consent
+  - Shopify reloads the section in the theme editor
+{% endcomment %}
+
+<div
+  id="MarketingConsentNotice-{{ section.id }}"
+  class="marketing-consent-notice"
+  hidden
+>
+  <div class="marketing-consent-notice__content rte">
+    {{ section.settings.message }}
+  </div>
+
+  {% if section.settings.show_preferences_button %}
+    <button
+      type="button"
+      class="button marketing-consent-notice__button"
+      data-pandectes-preferences
+    >
+      {{ section.settings.button_label | escape }}
+    </button>
+  {% endif %}
+</div>
+
+<style>
+  #MarketingConsentNotice-{{ section.id }} {
+    margin: {{ section.settings.margin_top }}px auto
+            {{ section.settings.margin_bottom }}px;
+    padding: 20px;
+    max-width: {{ section.settings.max_width }}px;
+    color: {{ section.settings.text_color }};
+    background: {{ section.settings.background_color }};
+    border: 1px solid {{ section.settings.border_color }};
+  }
+
+  #MarketingConsentNotice-{{ section.id }}[hidden] {
+    display: none !important;
+  }
+
+  #MarketingConsentNotice-{{ section.id }}
+  .marketing-consent-notice__content > :first-child {
+    margin-top: 0;
+  }
+
+  #MarketingConsentNotice-{{ section.id }}
+  .marketing-consent-notice__content > :last-child {
+    margin-bottom: 0;
+  }
+
+  #MarketingConsentNotice-{{ section.id }}
+  .marketing-consent-notice__button {
+    margin-top: 15px;
+  }
+</style>
+
+<script>
+  (function () {
+    var sectionId = {{ section.id | json }};
+    var elementId = 'MarketingConsentNotice-' + sectionId;
+    var retryTimer;
+    var retryCount = 0;
+    var maximumRetries = 40;
+
+    function getNotice() {
+      return document.getElementById(elementId);
+    }
+
+    function updateNotice(event) {
+      var notice = getNotice();
+
+      if (!notice) {
+        return;
+      }
+
+      /*
+        PandectesConsentUpdate is documented as:
+        CustomEvent<Permissions>
+
+        If this function was called by that event, event.detail.marketing
+        is the documented Boolean consent value.
+      */
+      if (
+        event &&
+        event.type === 'PandectesConsentUpdate' &&
+        event.detail &&
+        typeof event.detail.marketing === 'boolean'
+      ) {
+        notice.hidden = event.detail.marketing;
+        return;
+      }
+
+      /*
+        marketingAllowed() is the documented Boolean helper.
+        Only call it after the Pandectes global and method exist.
+      */
+      if (
+        window.Pandectes &&
+        typeof window.Pandectes.marketingAllowed === 'function'
+      ) {
+        notice.hidden = window.Pandectes.marketingAllowed();
+        return;
+      }
+
+      /*
+        The section can execute before the Pandectes app embed.
+        Retry for up to 10 seconds so this also works when the
+        initialization event occurred before this section loaded.
+      */
+      if (retryCount < maximumRetries) {
+        retryCount += 1;
+        clearTimeout(retryTimer);
+        retryTimer = setTimeout(updateNotice, 250);
+      }
+    }
+
+    function openPreferences(event) {
+      var button = event.target.closest('[data-pandectes-preferences]');
+
+      if (!button || !getNotice() || !getNotice().contains(button)) {
+        return;
+      }
+
+      if (
+        window.Pandectes &&
+        typeof window.Pandectes.openDialog === 'function'
+      ) {
+        window.Pandectes.openDialog('preferences');
+      }
+    }
+
+    /*
+      The documentation identifies these exact browser events.
+    */
+    window.addEventListener('PandectesInitialized', updateNotice);
+    window.addEventListener('PandectesConsentUpdate', updateNotice);
+    document.addEventListener('click', openPreferences);
+
+    /*
+      Handles the case where Pandectes initialized before this
+      section's script executed.
+    */
+    updateNotice();
+
+    /*
+      Shopify's theme editor can reload a section without reloading
+      the entire preview page.
+    */
+    document.addEventListener('shopify:section:load', function (event) {
+      if (event.detail.sectionId === sectionId) {
+        retryCount = 0;
+        updateNotice();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Marketing consent notice",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "message",
+      "label": "Message",
+      "default": "<p>This form requires marketing cookies. Update your cookie preferences to display the form.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_preferences_button",
+      "label": "Show cookie preferences button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Update cookie preferences"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 400,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#d5d5d5"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Top margin",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marketing consent notice"
+    }
+  ]
+}
+{% endschema %}

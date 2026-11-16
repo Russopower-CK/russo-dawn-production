@@ -148,12 +148,20 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "marketing_consent_check_nDV64D": {
+      "type": "marketing-consent-check",
+      "name": "Marketing Consent Notice",
+      "settings": {
+        "message": "<p>This signup form requires marketing cookies. Please update your cookie preferences to continue.</p>"
+      }
     }
   },
   "order": [
     "main",
     "1794340509878978c6",
     "rich_text_67Mjtx",
-    "featured_product_fJTwXA"
+    "featured_product_fJTwXA",
+    "marketing_consent_check_nDV64D"
   ]
 }
