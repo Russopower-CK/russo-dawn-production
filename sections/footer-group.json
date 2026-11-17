@@ -52,7 +52,15 @@
           "name": "Signup",
           "settings": {
             "heading": "Subscribe",
-            "subtext": "<p>Join our email list to receive the latest news & deals from Russo: <a href=\"https://russopower.com/pages/sign-up\" title=\"Email Newsletter Sign-Up\"><strong>SIGN UP</strong></a></p><p><em>Power'd by Nature's Pros since 1970.</em></p>"
+            "subtext": "<p>Join our email list to receive the latest news & deals from Russo:&nbsp;<a href=\"https://russopower.com/pages/sign-up\" title=\"Email Newsletter Sign-Up\"><strong>SIGN UP</strong></a></p><p><em>Power'd by Nature's Pros since 1970.</em></p>"
+          }
+        },
+        "image_6LaaCa": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Russo-Outdoor-Power-Plus-Logo-Lockup-Compact-Rev-RGB-on-black.svg",
+            "image_width": 150,
+            "alignment": ""
           }
         }
       },
@@ -62,7 +70,8 @@
         "footer-2",
         "footer-0",
         "russo_social_list_49EiTC",
-        "text_7EjWWm"
+        "text_7EjWWm",
+        "image_6LaaCa"
       ],
       "settings": {
         "color_scheme": "scheme-4",
