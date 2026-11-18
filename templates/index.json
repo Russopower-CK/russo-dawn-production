@@ -67,6 +67,24 @@
             "color_scheme": "scheme-3"
           }
         },
+        "slide_rc3f4z": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Hainesville-11.13-11-2.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>The Salt You Trust. The Quality You Count On.</strong>",
+            "heading_size": "h1",
+            "subheading": "Don't get caught empty-handed when the first flakes fall! Contact us today!",
+            "button_label": "Let's Salt About It!",
+            "link": "shopify://pages/russo-salt-supply",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
         "slide_FDEPH7": {
           "type": "slide",
           "settings": {
@@ -85,16 +103,35 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_rc3f4z": {
+        "slide_RQaEFN": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/OnlineUsedAuction.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>Online Used Equipment Auction</strong>",
+            "heading_size": "h1",
+            "subheading": "October 14, 2026 | Click below to view our lots and bid!",
+            "button_label": "BID ONLINE",
+            "link": "https://www.proxibid.com/Obenauf-Auction-Service-Inc/Russo-Used-Landscape-Equipment-Auction/event-catalog/302027",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
+        "slide_xTxXVX": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Hainesville-11.13-11-2.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>The Salt You Trust. The Quality You Count On.</strong>",
+            "image": "shopify://shop_images/IMG_5301.heic",
+            "image_overlay_opacity": 20,
+            "heading": "<strong>Ready For A Test Drive?</strong>",
             "heading_size": "h1",
-            "subheading": "Don't get caught empty-handed when the first flakes fall! Contact us today!",
-            "button_label": "Let's Salt About It!",
-            "link": "shopify://pages/russo-salt-supply",
+            "subheading": "We bring the power to you! Schedule an on-site demo today!",
+            "button_label": "REQUEST A DEMO",
+            "link": "shopify://pages/request-demo",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -121,43 +158,6 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_RQaEFN": {
-          "type": "slide",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/OnlineUsedAuction.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>Online Used Equipment Auction</strong>",
-            "heading_size": "h1",
-            "subheading": "October 14, 2026 | Click below to view our lots and bid!",
-            "button_label": "BID ONLINE",
-            "link": "https://www.proxibid.com/Obenauf-Auction-Service-Inc/Russo-Used-Landscape-Equipment-Auction/event-catalog/302027",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
-        "slide_8AYhjw": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/TrailerFleet10_1.png",
-            "image_overlay_opacity": 40,
-            "heading": "<strong>Power Your Business with a Smarter Fleet</strong>",
-            "heading_size": "h1",
-            "subheading": "Unlock commercial discounts and additional benefits with the Russo Power Fleet Program and keep your crew moving throughout the season!",
-            "button_label": "LEARN MORE",
-            "link": "shopify://pages/power-fleet-program",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_hJGYwx": {
           "type": "slide",
           "settings": {
@@ -176,16 +176,16 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_xTxXVX": {
+        "slide_8AYhjw": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/IMG_5301.heic",
-            "image_overlay_opacity": 20,
-            "heading": "<strong>Ready For A Test Drive?</strong>",
+            "image": "shopify://shop_images/TrailerFleet10_1.png",
+            "image_overlay_opacity": 40,
+            "heading": "<strong>Power Your Business with a Smarter Fleet</strong>",
             "heading_size": "h1",
-            "subheading": "We bring the power to you! Schedule an on-site demo today!",
-            "button_label": "REQUEST A DEMO",
-            "link": "shopify://pages/request-demo",
+            "subheading": "Unlock commercial discounts and additional benefits with the Russo Power Fleet Program and keep your crew moving throughout the season!",
+            "button_label": "LEARN MORE",
+            "link": "shopify://pages/power-fleet-program",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -236,13 +236,13 @@
         "slide_K76BnM",
         "slide_hif4Pf",
         "slide_Mephzj",
-        "slide_FDEPH7",
         "slide_rc3f4z",
-        "slide_GwVcWP",
+        "slide_FDEPH7",
         "slide_RQaEFN",
-        "slide_8AYhjw",
-        "slide_hJGYwx",
         "slide_xTxXVX",
+        "slide_GwVcWP",
+        "slide_hJGYwx",
+        "slide_8AYhjw",
         "slide_hfmrxN",
         "slide_UfWBDB"
       ],
