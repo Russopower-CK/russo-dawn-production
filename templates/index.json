@@ -85,6 +85,24 @@
             "color_scheme": "scheme-3"
           }
         },
+        "slide_rc3f4z": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Hainesville-11.13-11-2.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>The Salt You Trust. The Quality You Count On.</strong>",
+            "heading_size": "h1",
+            "subheading": "Don't get caught empty-handed when the first flakes fall! Contact us today!",
+            "button_label": "Let's Salt About It!",
+            "link": "shopify://pages/russo-salt-supply",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
         "slide_GwVcWP": {
           "type": "slide",
           "settings": {
@@ -143,13 +161,13 @@
         "slide_hJGYwx": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/BeltsValpo_1.jpg",
+            "image": "shopify://shop_images/Snow-Blower-Paddles.jpg",
             "image_overlay_opacity": 50,
-            "heading": "<strong>Don't Let a Snapped Belt Stall Your Crew!</strong>",
+            "heading": "<strong>Is Your Snow Blower Ready?</strong>",
             "heading_size": "h1",
-            "subheading": "Shop Essential Belts & Parts Today!",
-            "button_label": "SHOP MOWER PARTS",
-            "link": "shopify://collections/lawn-mower-parts",
+            "subheading": "Don't get snowed in! We have the parts you need to keep you powering through winter!",
+            "button_label": "SHOP SNOW BLOWER PARTS",
+            "link": "shopify://collections/snow-blower-parts",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -194,24 +212,6 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_rc3f4z": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Hainesville-11.13-11-2.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>The Salt You Trust. The Quality You Count On.</strong>",
-            "heading_size": "h1",
-            "subheading": "Don't get caught empty-handed when the first flakes fall! Contact us today!",
-            "button_label": "Let's Salt About It!",
-            "link": "shopify://pages/russo-salt-supply",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_UfWBDB": {
           "type": "slide",
           "disabled": true,
@@ -237,13 +237,13 @@
         "slide_hif4Pf",
         "slide_Mephzj",
         "slide_FDEPH7",
+        "slide_rc3f4z",
         "slide_GwVcWP",
         "slide_RQaEFN",
         "slide_8AYhjw",
         "slide_hJGYwx",
         "slide_xTxXVX",
         "slide_hfmrxN",
-        "slide_rc3f4z",
         "slide_UfWBDB"
       ],
       "custom_css": [
