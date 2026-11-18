@@ -103,24 +103,6 @@
             "color_scheme": "scheme-3"
           }
         },
-        "slide_hfmrxN": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Trailer_Elgin_1.jpg",
-            "image_overlay_opacity": 30,
-            "heading": "<strong>Trailer Blowout Sale!</strong>",
-            "heading_size": "h1",
-            "subheading": "...we ordered too many!",
-            "button_label": "BROWSE TRAILERS",
-            "link": "shopify://collections/trailer-blowout-sale",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "bottom-right",
-            "text_alignment": "right",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-3"
-          }
-        },
         "slide_RQaEFN": {
           "type": "slide",
           "disabled": true,
@@ -194,16 +176,34 @@
             "color_scheme": "scheme-3"
           }
         },
+        "slide_hfmrxN": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Trailer_Elgin_1.jpg",
+            "image_overlay_opacity": 30,
+            "heading": "<strong>Trailer Blowout Sale!</strong>",
+            "heading_size": "h1",
+            "subheading": "...we ordered too many!",
+            "button_label": "BROWSE TRAILERS",
+            "link": "shopify://collections/trailer-blowout-sale",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "bottom-right",
+            "text_alignment": "right",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-3"
+          }
+        },
         "slide_rc3f4z": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/WinterCatalog-Drop-Edit.jpg",
+            "image": "shopify://shop_images/Hainesville-11.13-11-2.jpg",
             "image_overlay_opacity": 30,
-            "heading": "<strong>The Wait Is Over!</strong>",
+            "heading": "<strong>The Salt You Trust. The Quality You Count On.</strong>",
             "heading_size": "h1",
-            "subheading": "The Russo 2026 Winter Catalog is now available! Click below to download!",
-            "button_label": "WINTER CATALOG",
-            "link": "https://indd.adobe.com/view/aae3322a-4014-402b-b8c2-7f1e425b59f0",
+            "subheading": "Don't get caught empty-handed when the first flakes fall! Contact us today!",
+            "button_label": "Let's Salt About It!",
+            "link": "shopify://pages/russo-salt-supply",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "bottom-right",
@@ -238,11 +238,11 @@
         "slide_Mephzj",
         "slide_FDEPH7",
         "slide_GwVcWP",
-        "slide_hfmrxN",
         "slide_RQaEFN",
         "slide_8AYhjw",
         "slide_hJGYwx",
         "slide_xTxXVX",
+        "slide_hfmrxN",
         "slide_rc3f4z",
         "slide_UfWBDB"
       ],
