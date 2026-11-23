@@ -46,10 +46,21 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "custom_liquid_HjHiLF": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<script>\n(() => {\n  const containerSelector = '[data-forms-id=\"forms-root-177827\"]';\n  const attached = new WeakSet();\n\n  function attach() {\n    const container = document.querySelector(containerSelector);\n    if (!container) return;\n\n    const embed = container.matches('shopify-forms-embed')\n      ? container\n      : container.querySelector('shopify-forms-embed');\n\n    const root = embed?.shadowRoot;\n    if (!root || attached.has(root)) return;\n\n    attached.add(root);\n\n    let email = '';\n    let handled = false;\n\n    function captureEmail() {\n      const input = root.querySelector(\n        'input[type=\"email\"], input[name=\"email\"], input#email'\n      );\n\n      if (input) email = input.value.trim();\n    }\n\n    function checkSuccess() {\n      if (handled) return;\n\n      const success = root.querySelector(\n        '[data-current-step=\"success\"]'\n      );\n\n      if (!success) return;\n\n      if (!email) {\n        console.warn(\n          '[Forms → Klaviyo] Success detected, but no email was captured.'\n        );\n        handled = true;\n        return;\n      }\n\n      if (typeof window.klaviyo?.identify !== 'function') {\n        console.warn(\n          '[Forms → Klaviyo] Klaviyo identify is unavailable. Check its loading and consent settings.'\n        );\n        handled = true;\n        return;\n      }\n\n      handled = true;\n\n      try {\n        Promise.resolve(\n          window.klaviyo.identify({ email })\n        ).catch(error => {\n          console.error('[Forms → Klaviyo] Identify failed:', error);\n        });\n      } catch (error) {\n        console.error('[Forms → Klaviyo] Identify failed:', error);\n      }\n    }\n\n    root.addEventListener('input', captureEmail, true);\n    root.addEventListener('change', captureEmail, true);\n    root.addEventListener('submit', captureEmail, true);\n\n    new MutationObserver(() => {\n      captureEmail();\n      checkSuccess();\n    }).observe(root, {\n      subtree: true,\n      childList: true,\n      attributes: true,\n      attributeFilter: ['data-current-step']\n    });\n\n    captureEmail();\n    checkSuccess();\n  }\n\n  // Forms loads asynchronously, so wait for its shadow root.\n  const discovery = new MutationObserver(attach);\n  discovery.observe(document.documentElement, {\n    childList: true,\n    subtree: true\n  });\n\n  const timer = setInterval(attach, 500);\n\n  setTimeout(() => {\n    clearInterval(timer);\n    discovery.disconnect();\n  }, 60000);\n\n  attach();\n})();\n</script>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
     "main",
-    "1790099214effa56e7"
+    "1790099214effa56e7",
+    "custom_liquid_HjHiLF"
   ]
 }
